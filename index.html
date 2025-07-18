@@ -30,6 +30,84 @@
             position: relative;
         }
 
+
+        .top-nav {
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+            display: flex;
+            gap: 1.5rem;
+            transform: translateY(-5px); 
+        }
+
+        .nav-btn {
+            min-width: 120px;
+            height: 44px; 
+            text-align: center;
+            white-space: nowrap;
+            padding: 0 1.5rem;
+            flex-shrink: 0;
+            background: transparent;
+            border: none;
+            color: #c0c0ff;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            backdrop-filter: blur(5px);
+            background: rgba(15, 15, 40, 0.4);
+            overflow: hidden;
+        }
+
+
+        .nav-btn::after {
+            content: none;
+        }
+
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(0, 243, 255, 0.2) 0%, transparent 70%);
+            transform: scale(0);
+            transition: transform 0.3s ease;
+            border-radius: 30px;
+            z-index: -1;
+        }
+
+        .nav-btn:hover::before {
+            transform: scale(1.5);
+        }
+
+        .nav-btn:hover {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+            box-shadow: 0 0 15px var(--neon-blue);
+            transform: translateY(-5px);
+            background: rgba(0, 243, 255, 0.2);
+        }
+
+        .nav-btn i {
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-btn:hover i {
+            transform: scale(1.2);
+        }
+
         .grid-lines {
             position: fixed;
             top: 0;
@@ -717,6 +795,16 @@
             .tech-specs {
                 padding: 2rem 1.5rem;
             }
+            
+            .top-nav {
+                padding: 1rem;
+                gap: 1rem;
+            }
+            
+            .nav-btn {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.9rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -731,10 +819,28 @@
             .header {
                 padding: 6rem 0 4rem;
             }
+            
+            .top-nav {
+                width: 100%;
+                justify-content: center;
+                padding: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- 顶部导航栏 -->
+    <div class="top-nav">
+        <button class="nav-btn" id="loginBtn">
+            <i class="fas fa-sign-in-alt"></i>
+            Log in
+        </button>
+        <button class="nav-btn" id="langBtn">
+            <i class="fas fa-globe"></i>
+            English
+        </button>
+    </div>
+    
     <div class="grid-lines"></div>
     
     <!-- 粒子背景 -->
@@ -746,7 +852,6 @@
     <div class="floating-element element-3"></div>
     
     <div class="video-container">
-        <!-- 修复视频路径 - 移除空格 -->
         <video id="bg-video" autoplay muted loop playsinline preload="auto">
             <source src="https://airthrix.github.io/background.mp4" type="video/mp4">
             Your browser does not support the video tag.
@@ -883,15 +988,15 @@
     
     <div class="footer">
         <div class="footer-logo">AliceSkyGarden</div>
-        <p>开启智能新纪元 · 探索无限可能</p>
+        <p class="footer-tagline">开启智能新纪元 · 探索无限可能</p>
         
         <div class="footer-links">
-            <a href="#" class="footer-link"><i class="fas fa-home"></i> 首页</a>
-            <a href="#" class="footer-link"><i class="fas fa-code"></i> 开发者</a>
-            <a href="#" class="footer-link"><i class="fas fa-book"></i> 文档</a>
-            <a href="#" class="footer-link"><i class="fas fa-users"></i> 社区</a>
-            <a href="#" class="footer-link"><i class="fas fa-newspaper"></i> 博客</a>
-            <a href="#" class="footer-link"><i class="fas fa-envelope"></i> 联系我们</a>
+            <a href="#" class="footer-link"><i class="fas fa-home"></i> <span class="link-text">首页</span></a>
+            <a href="#" class="footer-link"><i class="fas fa-code"></i> <span class="link-text">开发者</span></a>
+            <a href="#" class="footer-link"><i class="fas fa-book"></i> <span class="link-text">文档</span></a>
+            <a href="#" class="footer-link"><i class="fas fa-users"></i> <span class="link-text">社区</span></a>
+            <a href="#" class="footer-link"><i class="fas fa-newspaper"></i> <span class="link-text">博客</span></a>
+            <a href="#" class="footer-link"><i class="fas fa-envelope"></i> <span class="link-text">联系我们</span></a>
         </div>
         
         <div class="social-icons">
@@ -903,7 +1008,7 @@
         </div>
         
         <p>Contact: airthrix@163.com | +1 (800) AIRTHRIX-AI</p>
-        <p>&copy; 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved</p>
+        <p class="copyright">&copy; 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved</p>
     </div>
     
     <!-- 粒子效果库 -->
@@ -911,8 +1016,263 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+          
+            const langBtn = document.getElementById('langBtn');
+            const loginBtn = document.getElementById('loginBtn');
+            let isEnglish = false;
+            
+          
+            loginBtn.addEventListener('click', function() {
+                const originalText = loginBtn.innerHTML;
+                loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 正在登录...';
+                
+                setTimeout(() => {
+                    loginBtn.innerHTML = '<i class="fas fa-exclamation-circle"></i> 登录失败';
+                    
+                    setTimeout(() => {
+                        loginBtn.innerHTML = originalText;
+                    }, 1500);
+                }, 2000);
+            });
+            
+        
+            langBtn.addEventListener('click', function() {
+                isEnglish = !isEnglish;
+                
+                if (isEnglish) {
+                   
+                    document.querySelector('.subtitle').innerHTML = `
+                        Next-generation AI model, ternary innovation technology and green energy-saving framework
+                        <br>
+                        <span style="display: block; text-align: center;">Redefining the true future of robotics</span>
+                    `;
+                    
+                    document.querySelectorAll('.stat-label').forEach((el, index) => {
+                        const labels = ['Model size reduction', 'Ternary parameter quantization', 'Runtime energy reduction'];
+                        el.textContent = labels[index];
+                    });
+                    
+                    document.querySelector('.left-panel .panel-title-link').innerHTML = `
+                        <i class="fas fa-microchip"></i>
+                        AliceSkyGarden T3
+                    `;
+                    
+                    document.querySelector('.left-panel .panel-content p').textContent = 
+                        "AliceSkyGarden T3 is our first-generation AI model, featuring an advanced ternary sparse activation architecture. The framework is now online with the following features:";
+                    
+                    const leftFeatures = [
+                        "Ternary parameter quantization reduces model size and saves storage space",
+                        "Native support for ternary inference with ultra-low power consumption on ternary chips",
+                        "Minimal loss in overall accuracy ensures model output reliability",
+                        "1100% increase in inference speed, reducing response time to milliseconds",
+                        "Green energy-saving AI with energy consumption close to the human brain",
+                        "Supports trillion-scale parameters for powerful comprehension"
+                    ];
+                    
+                    document.querySelectorAll('.left-panel .features li').forEach((el, index) => {
+                        el.textContent = leftFeatures[index];
+                    });
+                    
+                    document.querySelector('.left-panel .panel-content p:last-child').textContent = 
+                        "The T3 model is a green energy-saving AI that performs well in natural language understanding, creative content generation, and complex problem-solving at low power consumption, providing a green, low-power AI solution.";
+                    
+                    document.querySelector('.right-panel .panel-title-link').innerHTML = `
+                        <i class="fas fa-microchip"></i>
+                        AliceSkyGarden T4
+                    `;
+                    
+                    document.querySelector('.right-panel .panel-content p').textContent = 
+                        "AliceSkyGarden T4 is our next-generation model currently under development, featuring a ternary multimodal super model:";
+                    
+                    const rightFeatures = [
+                        "Sparse ternary architecture based on multidimensional vector energy optimization",
+                        "Cross-modal fusion capabilities seamlessly connecting vision, senses, and sound",
+                        "Self-evolving learning framework for continuous autonomous improvement",
+                        "Real-time emotion recognition and response for natural interactions",
+                        "Ultra-low response time for real-time environmental feedback",
+                        "Aims to approximate human intelligence rather than achieve superintelligence"
+                    ];
+                    
+                    document.querySelectorAll('.right-panel .features li').forEach((el, index) => {
+                        el.textContent = rightFeatures[index];
+                    });
+                    
+                    document.querySelector('.right-panel .panel-content p:last-child').textContent = 
+                        "The T4 model is not only a green multimodal AI but also a digital anthropomorphic system capable of self-distributing energy and interacting with its environment. It enables autonomous learning and creation, opening new frontiers in green, intelligent, low-power multimodal exploration.";
+                    
+                    document.querySelector('.specs-title').textContent = "Technical Specifications & Performance Metrics";
+                    
+                    const specs = [
+                        {
+                            title: "Computing Architecture",
+                            content: "Proprietary ternary architecture for green, low-power computing with maximized efficiency. The T4 multimodal version introduces multidimensional vector energy optimization."
+                        },
+                        {
+                            title: "Training Data",
+                            content: "Supports fusion of multi-source heterogeneous data including scientific literature, historical archives, artistic creations, and real-time web data, totaling over 10PB."
+                        },
+                        {
+                            title: "Energy Efficiency",
+                            content: "Compared to traditional models, T3 achieves 96% higher energy efficiency. T4 with multidimensional vector optimization further reduces energy consumption at equivalent computation levels."
+                        },
+                        {
+                            title: "Security Framework",
+                            content: "Multi-layered security protection including ethical constraint modules, real-time monitoring systems, and adaptive security protocols to ensure controllable AI behavior."
+                        },
+                        {
+                            title: "API Interface",
+                            content: "Comprehensive open API ecosystem supporting RESTful, gRPC, and WebSocket protocols with multi-language SDK support."
+                        },
+                        {
+                            title: "Deployment Options",
+                            content: "Supports cloud, edge computing, and hybrid deployment models with customizable model sizes from 7B to trillion parameters to meet diverse application needs."
+                        }
+                    ];
+                    
+                    document.querySelectorAll('.spec-card h3').forEach((el, index) => {
+                        el.textContent = specs[index].title;
+                    });
+                    
+                    document.querySelectorAll('.spec-card p').forEach((el, index) => {
+                        el.textContent = specs[index].content;
+                    });
+                    
+                    
+                    document.querySelector('.footer-logo').textContent = "AliceSkyGarden";
+                    document.querySelector('.footer-tagline').textContent = "Unlocking a New Era of Intelligence · Exploring Infinite Possibilities";
+                    
+                    const footerLinks = ["Home", "Developers", "Documentation", "Community", "Blog", "Contact Us"];
+                    document.querySelectorAll('.footer-link .link-text').forEach((el, index) => {
+                        el.textContent = footerLinks[index];
+                    });
+                    
+                    document.querySelector('.copyright').textContent = "© 2025 AliceSkyGarden Technology. All rights reserved";
+                    
+                 
+                    langBtn.innerHTML = '<i class="fas fa-globe"></i>&nbsp;&nbsp;中文&nbsp;&nbsp;';
+                    document.querySelector('.video-loading > div:last-child').textContent = "Loading T4 preview...";
+                } else {
+                   
+                    document.querySelector('.subtitle').innerHTML = `
+                        下一代人工智能模型，三元创新技术与绿色节能框架
+                        <br>
+                        <span style="display: block; text-align: center;">重新定义机器人真正的未来</span>
+                    `;
+                    
+                    document.querySelectorAll('.stat-label').forEach((el, index) => {
+                        const labels = ['模型体积减小', '参数三元量化', '运行能耗减小'];
+                        el.textContent = labels[index];
+                    });
+                    
+                    document.querySelector('.left-panel .panel-title-link').innerHTML = `
+                        <i class="fas fa-microchip"></i>
+                        AliceSkyGarden T3
+                    `;
+                    
+                    document.querySelector('.left-panel .panel-content p').textContent = 
+                        "AliceSkyGarden T3 是我们推出的第一代AI模型，采用先进的三元稀疏激活架构，框架已上线，具有以下特点：";
+                    
+                    const leftFeatures = [
+                        "参数三元量化，模型体积减小，节省存储空间",
+                        "框架原生支持三元推理，三进制芯片下功耗极低",
+                        "总精度几乎没有下降，确保了模型输出的准确性",
+                        "推理速度提升1100%，响应时间缩短至毫秒级",
+                        "属于绿色节能型AI，运行能耗接近于人类大脑",
+                        "参数支持万亿超大规模，实现强大的理解能力"
+                    ];
+                    
+                    document.querySelectorAll('.left-panel .features li').forEach((el, index) => {
+                        el.textContent = leftFeatures[index];
+                    });
+                    
+                    document.querySelector('.left-panel .panel-content p:last-child').textContent = 
+                        "T3模型是一款绿色节能型AI，在低功耗下依然可以在自然语言理解、创造性内容生成和复杂问题方面的表现达到不错的水平，是一种绿色低功耗的AI解决方案。";
+                    
+                    document.querySelector('.right-panel .panel-title-link').innerHTML = `
+                        <i class="fas fa-microchip"></i>
+                        AliceSkyGarden T4
+                    `;
+                    
+                    document.querySelector('.right-panel .panel-content p').textContent = 
+                        "AliceSkyGarden T4 是我们面向未来的第二代模型，目前正在开发中，属于三元的多模态超级模型：";
+                    
+                    const rightFeatures = [
+                        "采用基于多维向量能量优化的稀疏激活的三元架构",
+                        "跨模态融合推理能力，无缝连接视觉、感官和声音",
+                        "自我进化学习框架，模型能够持续自主改进",
+                        "实时情感识别与响应，创造更自然的交互体验",
+                        "极低的响应速度，实时与周围环境进行反馈",
+                        "不以超级智能为目标，宗旨是无限接近人类"
+                    ];
+                    
+                    document.querySelectorAll('.right-panel .features li').forEach((el, index) => {
+                        el.textContent = rightFeatures[index];
+                    });
+                    
+                    document.querySelector('.right-panel .panel-content p:last-child').textContent = 
+                        "T4模型不仅是一个绿色多模态AI，还是一个能够自我分配能量和反馈周围环境的能自主学习和创造的数字化拟人系统，开启了全新的绿色智能低功耗多模态的探索。";
+                    
+                    document.querySelector('.specs-title').textContent = "技术规格与性能指标";
+                    
+                    const specs = [
+                        {
+                            title: "计算架构",
+                            content: "采用独家三元技术架构，绿色低功耗，实现计算效率最大化。T4多模态版本引入多维向量能量优化。"
+                        },
+                        {
+                            title: "训练数据",
+                            content: "支持多源异构数据融合，涵盖科学文献、历史档案、艺术创作和实时网络数据，总量可超过10PB。"
+                        },
+                        {
+                            title: "能效比",
+                            content: "相比传统模型，T3能效提升96%，采用多维向量能量优化的T4在同等计算量下能耗会进一步降低。"
+                        },
+                        {
+                            title: "安全框架",
+                            content: "多层安全防护体系，包括道德约束模块、实时监控系统和自适应安全协议，确保AI行为可控。"
+                        },
+                        {
+                            title: "API接口",
+                            content: "全面开放的API生态系统，支持RESTful、gRPC和WebSocket协议，提供多语言SDK支持。"
+                        },
+                        {
+                            title: "部署方式",
+                            content: "支持云端、边缘计算和混合部署模式，可定制化模型大小从7B到万亿参数，适应各种场景需求。"
+                        }
+                    ];
+                    
+                    document.querySelectorAll('.spec-card h3').forEach((el, index) => {
+                        el.textContent = specs[index].title;
+                    });
+                    
+                    document.querySelectorAll('.spec-card p').forEach((el, index) => {
+                        el.textContent = specs[index].content;
+                    });
+                    
+                  
+                    document.querySelector('.footer-logo').textContent = "AliceSkyGarden";
+                    document.querySelector('.footer-tagline').textContent = "开启智能新纪元 · 探索无限可能";
+                    
+                    const footerLinks = ["首页", "开发者", "文档", "社区", "博客", "联系我们"];
+                    document.querySelectorAll('.footer-link .link-text').forEach((el, index) => {
+                        el.textContent = footerLinks[index];
+                    });
+                    
+                    document.querySelector('.copyright').textContent = "© 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved";
+                    
+               
+                    langBtn.innerHTML = '<i class="fas fa-globe"></i> English';
+                    document.querySelector('.video-loading > div:last-child').textContent = "正在加载T4预告...";
+                }
+                
+                
+                langBtn.classList.add('pulse');
+                setTimeout(() => {
+                    langBtn.classList.remove('pulse');
+                }, 500);
+            });
 
-
+        
             if (window.location.hostname !== 'localhost' && 
                 window.location.hostname !== '127.0.0.1' && 
                 window.location.protocol !== "https:") {
@@ -927,7 +1287,6 @@
             video.muted = true; 
             video.volume = 0;
             
-     
             function hideLoadingIndicator() {
                 if (loadingHidden) return;
                 loadingHidden = true;
@@ -938,21 +1297,17 @@
                 }, 500);
             }
 
-         
             function checkVideoStatus() {
-                
                 if (videoPlayed || video.currentTime > 0) {
                     hideLoadingIndicator();
                     return;
                 }
                 
-              
                 if (video.readyState >= 3) { 
                     hideLoadingIndicator();
                     return;
                 }
                 
-             
                 setTimeout(hideLoadingIndicator, 3000);
             }
 
@@ -968,14 +1323,12 @@
                 }
             });
             
-         
             video.addEventListener('click', function() {
                 video.play().catch(error => {
                     console.log("手动播放失败:", error);
                 });
             });
             
-         
             video.addEventListener('error', function() {
                 console.log("视频加载失败，使用CSS背景替代");
                 hideLoadingIndicator();
@@ -990,14 +1343,12 @@
                 errorMsg.style.zIndex = "10";
                 document.querySelector('.video-container').appendChild(errorMsg);
                 
-                
                 document.querySelector('.video-container').style.background = `
                     linear-gradient(135deg, #0f0c29, #302b63, #24243e)
                 `;
                 document.querySelector('.video-overlay').style.display = "block";
             });
             
-       
             const playPromise = video.play();
             
             if (playPromise !== undefined) {
@@ -1027,7 +1378,6 @@
                 });
             }
             
-          
             document.addEventListener('scroll', function() {
                 const panels = document.querySelectorAll('.panel');
                 const specs = document.querySelectorAll('.spec-card');
@@ -1058,28 +1408,23 @@
                 });
             });
             
-       
             window.addEventListener('load', function() {
                 window.dispatchEvent(new Event('scroll'));
                 
-              
                 document.querySelectorAll('.panel').forEach(panel => {
                     panel.style.opacity = "0";
                     panel.style.transform = "translateY(50px)";
                     panel.style.transition = "opacity 0.8s ease, transform 0.8s ease";
                 });
                 
-            
                 document.querySelectorAll('.spec-card').forEach(card => {
                     card.style.opacity = "0";
                     card.style.transform = "translateY(30px)";
                     card.style.transition = "opacity 0.8s ease, transform 0.8s ease, box-shadow 0.3s ease, border-color 0.3s ease";
                 });
                 
-             
                 checkVideoStatus();
             });
-            
             
             particlesJS('particles-js', {
                 "particles": {
@@ -1170,7 +1515,6 @@
                 "retina_detect": true
             });
             
-          
             const title = document.querySelector('.title');
             title.addEventListener('mousemove', (e) => {
                 const rect = title.getBoundingClientRect();
@@ -1184,7 +1528,6 @@
                     inset 0 0 20px rgba(0, 243, 255, 0.5)
                 `;
             });
-            
 
             setTimeout(hideLoadingIndicator, 500);
         });
