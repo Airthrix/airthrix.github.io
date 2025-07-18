@@ -95,6 +95,7 @@
             flex-direction: column;
             align-items: center;
             gap: 1rem;
+            transition: opacity 0.5s ease;
         }
 
         .loading-spinner {
@@ -107,7 +108,7 @@
         }
 
         .header {
-            padding: 8rem 0 6rem;
+            padding: 5rem 0 6rem;
             text-align: center;
             position: relative;
             z-index: 10;
@@ -126,11 +127,31 @@
             -webkit-text-fill-color: transparent;
             animation: glow 2s infinite alternate;
             transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .neon-border {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+
+            border-top: 3px solid var(--neon-blue);
+            border-bottom: 3px solid var(--neon-blue);
+            border-left: none; 
+            border-right: none; 
+            border-radius: 10px;
+            box-shadow: 
+                0 0 15px var(--neon-blue),
+                0 0 30px var(--neon-purple);
+            animation: pulse 3s infinite alternate;
+            z-index: -1;
         }
 
         .subtitle {
             font-size: 1.8rem;
-            margin-top: 1.5rem;
+            margin-top: 3.5rem;
             font-weight: 300;
             letter-spacing: 4px;
             color: #a0a0ff;
@@ -158,6 +179,27 @@
             border: 1px solid rgba(0, 243, 255, 0.2);
             transition: all 0.3s ease;
             backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                transparent 0%, 
+                rgba(0, 243, 255, 0.1) 50%, 
+                transparent 100%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .stat-card:hover::before {
+            transform: translateX(100%);
         }
 
         .stat-card:hover {
@@ -180,7 +222,7 @@
             color: #c0c0ff;
         }
 
-        /* 主内容区域 */
+
         .main-content {
             position: relative;
             z-index: 10;
@@ -189,7 +231,7 @@
             padding: 2rem;
         }
 
-        /* 面板容器 */
+
         .panels-container {
             display: flex;
             justify-content: space-between;
@@ -197,16 +239,34 @@
             margin: 3rem 0;
         }
 
-        /* 面板样式 */
+ 
         .panel {
             flex: 1;
-            background: rgba(15, 15, 40, 0.5); /* 降低透明度 */
+            background: rgba(15, 15, 40, 0.5); 
             border-radius: 15px;
             padding: 2.5rem;
             backdrop-filter: blur(1px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
             border-top: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .panel:hover::after {
+            transform: translateX(0);
         }
 
         .panel:hover {
@@ -231,23 +291,34 @@
             align-items: center;
             justify-content: center;
             gap: 1rem;
+            position: relative;
         }
 
-
         .panel-title-link {
-            text-decoration: none; /* 去掉下划线 */
-            color: inherit; /* 继承父级颜色 */
+            text-decoration: none; 
+            color: inherit; 
             display: flex;
             align-items: center;
             gap: 1rem;
-            font-size: inherit; /* 继承字体大小 */
-            font-weight: inherit; /* 继承字体粗细 */
+            font-size: inherit; 
+            font-weight: inherit; 
+            position: relative;
         }
 
-        .panel-title-link:hover {
-            text-shadow: inherit; /* 悬停时继承原文字阴影 */
+        .panel-title-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--neon-blue);
+            transition: width 0.3s ease;
         }
 
+        .panel-title-link:hover::after {
+            width: 100%;
+        }
 
         .left-panel .panel-title {
             color: var(--neon-green);
@@ -274,6 +345,12 @@
             margin-bottom: 1.2rem;
             position: relative;
             padding-left: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .features li:hover {
+            transform: translateX(10px);
+            color: var(--neon-blue);
         }
 
         .features li:before {
@@ -283,9 +360,15 @@
             left: 0;
             top: 0;
             font-size: 1.2rem;
+            transition: all 0.3s ease;
         }
 
-        /* 技术规格部分 */
+        .features li:hover:before {
+            color: var(--neon-pink);
+            transform: scale(1.5);
+        }
+
+
         .tech-specs {
             background: var(--panel-bg);
             border-radius: 15px;
@@ -320,6 +403,24 @@
             transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .spec-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(0, 243, 255, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .spec-card:hover::before {
+            opacity: 1;
         }
 
         .spec-card:hover {
@@ -333,6 +434,12 @@
             color: var(--neon-green);
             margin-bottom: 1.5rem;
             text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .spec-card:hover .spec-icon {
+            color: var(--neon-blue);
+            transform: scale(1.2);
         }
 
         .spec-card h3 {
@@ -340,6 +447,12 @@
             margin-bottom: 1.2rem;
             font-size: 1.5rem;
             text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .spec-card:hover h3 {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
 
         .spec-card p {
@@ -349,7 +462,7 @@
             flex-grow: 1;
         }
 
-        /* 页脚 */
+
         .footer {
             text-align: center;
             padding: 4rem 0 3rem;
@@ -386,6 +499,22 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            position: relative;
+        }
+
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neon-blue);
+            transition: width 0.3s ease;
+        }
+
+        .footer-link:hover::after {
+            width: 100%;
         }
 
         .footer-link:hover {
@@ -418,6 +547,25 @@
             color: var(--neon-blue);
             transition: all 0.3s ease;
             border: 1px solid rgba(0, 243, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(0, 243, 255, 0.2) 0%, transparent 70%);
+            transform: scale(0);
+            transition: transform 0.3s ease;
+            border-radius: 50%;
+        }
+
+        .social-icon:hover::before {
+            transform: scale(1.5);
         }
 
         .social-icon:hover {
@@ -426,7 +574,7 @@
             box-shadow: 0 0 15px var(--neon-blue);
         }
 
-        /* 装饰元素 */
+
         .floating-element {
             position: absolute;
             border-radius: 50%;
@@ -464,6 +612,16 @@
             animation-delay: 4s;
         }
 
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3;
+        }
+
         @keyframes glow {
             from {
                 text-shadow: 
@@ -492,6 +650,30 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 
+                    0 0 15px var(--neon-blue),
+                    0 0 30px var(--neon-purple);
+                opacity: 0.5;
+            }
+            100% {
+                box-shadow: 
+                    0 0 25px var(--neon-blue),
+                    0 0 50px var(--neon-purple);
+                opacity: 1;
+            }
+        }
+
+        @keyframes hologram {
+            0% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: 100% 100%;
+            }
         }
 
         @media (max-width: 900px) {
@@ -555,15 +737,18 @@
 <body>
     <div class="grid-lines"></div>
     
+    <!-- 粒子背景 -->
+    <div id="particles-js"></div>
+    
     <!-- 装饰元素 -->
     <div class="floating-element element-1"></div>
     <div class="floating-element element-2"></div>
     <div class="floating-element element-3"></div>
     
     <div class="video-container">
-        <!-- 修复视频路径 -->
+        <!-- 修复视频路径 - 移除空格 -->
         <video id="bg-video" autoplay muted loop playsinline preload="auto">
-            <source src="https://airthrix.github.io/background.mp4 " type="video/mp4">
+            <source src="https://airthrix.github.io/background.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
         <div class="video-overlay"></div>
@@ -574,7 +759,9 @@
     </div>
     
     <div class="header">
-        <h1 class="title">AliceSkyGarden</h1>
+        <h1 class="title">AliceSkyGarden
+            <div class="neon-border"></div>
+        </h1>
         <p class="subtitle">
             下一代人工智能模型，三元创新技术与绿色节能框架
             <br>
@@ -602,7 +789,7 @@
             <!-- 左侧面板 -->
             <div class="panel left-panel">
                 <h2 class="panel-title">
-                    <a href="https://github.com/Airthrix/AliceSkyGardenT3 " target="_blank" class="panel-title-link">
+                    <a href="https://github.com/Airthrix/AliceSkyGardenT3" target="_blank" class="panel-title-link">
                         <i class="fas fa-microchip"></i>
                         AliceSkyGarden T3
                     </a>
@@ -624,7 +811,7 @@
             <!-- 右侧面板 -->
             <div class="panel right-panel">
                 <h2 class="panel-title">
-                    <a href="https://github.com/Airthrix/AliceSkyGardenT4 " target="_blank" class="panel-title-link">
+                    <a href="https://github.com/Airthrix/AliceSkyGardenT4" target="_blank" class="panel-title-link">
                         <i class="fas fa-microchip"></i>
                         AliceSkyGarden T4
                     </a>
@@ -719,50 +906,104 @@
         <p>&copy; 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved</p>
     </div>
     
+    <!-- 粒子效果库 -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const video = document.getElementById('bg-video');
-            video.muted = true; // 强制静音
-            video.volume = 0;
-            const loadingIndicator = document.querySelector('.video-loading');
+
+
+            if (window.location.hostname !== 'localhost' && 
+                window.location.hostname !== '127.0.0.1' && 
+                window.location.protocol !== "https:") {
+                window.location.protocol = "https:";
+            }
             
-            // 监听视频加载事件
-            video.addEventListener('loadeddata', function() {
-                console.log("视频数据已加载");
-                // 添加淡出效果
+            const video = document.getElementById('bg-video');
+            const loadingIndicator = document.querySelector('.video-loading');
+            let loadingHidden = false; 
+            let videoPlayed = false; 
+
+            video.muted = true; 
+            video.volume = 0;
+            
+     
+            function hideLoadingIndicator() {
+                if (loadingHidden) return;
+                loadingHidden = true;
+                
                 loadingIndicator.style.opacity = "0";
                 setTimeout(() => {
                     loadingIndicator.style.display = "none";
                 }, 500);
+            }
+
+         
+            function checkVideoStatus() {
+                
+                if (videoPlayed || video.currentTime > 0) {
+                    hideLoadingIndicator();
+                    return;
+                }
+                
+              
+                if (video.readyState >= 3) { 
+                    hideLoadingIndicator();
+                    return;
+                }
+                
+             
+                setTimeout(hideLoadingIndicator, 3000);
+            }
+
+            video.addEventListener('canplay', hideLoadingIndicator);
+            video.addEventListener('playing', function() {
+                videoPlayed = true; 
+                hideLoadingIndicator();
+            });
+            video.addEventListener('timeupdate', function() {
+                if (video.currentTime > 0) {
+                    videoPlayed = true;
+                    hideLoadingIndicator();
+                }
             });
             
-            // 视频加载失败处理
+         
+            video.addEventListener('click', function() {
+                video.play().catch(error => {
+                    console.log("手动播放失败:", error);
+                });
+            });
+            
+         
             video.addEventListener('error', function() {
                 console.log("视频加载失败，使用CSS背景替代");
-                loadingIndicator.innerHTML = "视频加载失败，启用备用背景";
-                loadingIndicator.style.color = "#ff4d4d";
+                hideLoadingIndicator();
                 
-                document.querySelector('.video-container').innerHTML = `
-                    <div style="
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-                        z-index: 0;
-                    "></div>
-                    <div class="video-overlay"></div>
+                const errorMsg = document.createElement('div');
+                errorMsg.innerHTML = "视频加载失败，启用备用背景";
+                errorMsg.style.color = "#ff4d4d";
+                errorMsg.style.position = "absolute";
+                errorMsg.style.top = "60%";
+                errorMsg.style.left = "50%";
+                errorMsg.style.transform = "translate(-50%, -50%)";
+                errorMsg.style.zIndex = "10";
+                document.querySelector('.video-container').appendChild(errorMsg);
+                
+                
+                document.querySelector('.video-container').style.background = `
+                    linear-gradient(135deg, #0f0c29, #302b63, #24243e)
                 `;
+                document.querySelector('.video-overlay').style.display = "block";
             });
             
-            // 确保视频播放
+       
             const playPromise = video.play();
             
             if (playPromise !== undefined) {
                 playPromise.catch(error => {
                     console.log("自动播放被阻止:", error);
-                    // 显示播放按钮
+                    
                     const playButton = document.createElement('div');
                     playButton.innerHTML = '<i class="fas fa-play-circle"></i>';
                     playButton.style.position = 'absolute';
@@ -775,15 +1016,18 @@
                     playButton.style.zIndex = '10';
                     playButton.style.textShadow = '0 0 15px var(--neon-blue)';
                     playButton.addEventListener('click', function() {
-                        video.play();
-                        playButton.style.display = 'none';
+                        video.play().then(() => {
+                            playButton.style.display = 'none';
+                        }).catch(e => {
+                            console.log("手动播放失败:", e);
+                        });
                     });
                     
                     document.querySelector('.video-container').appendChild(playButton);
                 });
             }
             
-            // 添加滚动动画效果
+          
             document.addEventListener('scroll', function() {
                 const panels = document.querySelectorAll('.panel');
                 const specs = document.querySelectorAll('.spec-card');
@@ -814,24 +1058,135 @@
                 });
             });
             
-            // 初始化页面时触发滚动事件以激活动画
+       
             window.addEventListener('load', function() {
                 window.dispatchEvent(new Event('scroll'));
                 
-                // 添加面板初始状态
+              
                 document.querySelectorAll('.panel').forEach(panel => {
                     panel.style.opacity = "0";
                     panel.style.transform = "translateY(50px)";
                     panel.style.transition = "opacity 0.8s ease, transform 0.8s ease";
                 });
                 
-                // 添加规格卡片初始状态
+            
                 document.querySelectorAll('.spec-card').forEach(card => {
                     card.style.opacity = "0";
                     card.style.transform = "translateY(30px)";
                     card.style.transition = "opacity 0.8s ease, transform 0.8s ease, box-shadow 0.3s ease, border-color 0.3s ease";
                 });
+                
+             
+                checkVideoStatus();
             });
+            
+            
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#00f3ff"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 2,
+                            "size_min": 0.3,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#00f3ff",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 1,
+                        "direction": "none",
+                        "random": true,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": true,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+            
+          
+            const title = document.querySelector('.title');
+            title.addEventListener('mousemove', (e) => {
+                const rect = title.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const glow = document.querySelector('.neon-border');
+                glow.style.boxShadow = `
+                    0 0 25px var(--neon-blue),
+                    0 0 50px var(--neon-purple),
+                    inset 0 0 20px rgba(0, 243, 255, 0.5)
+                `;
+            });
+            
+
+            setTimeout(hideLoadingIndicator, 500);
         });
     </script>
 </body>
