@@ -16,6 +16,7 @@
             --neon-purple: #b300ff;
             --neon-pink: #ff00c8;
             --neon-green: #00ff9d;
+            --neon-red: #ff0055;
             --dark-bg: #0a0a12;
             --panel-bg: rgba(15, 15, 40, 0.85);
         }
@@ -35,11 +36,11 @@
             padding: 1.5rem 2rem;
             display: flex;
             gap: 1.5rem;
-            transform: translateY(-5px); 
+            transform: translateY(-5px);
         }
         .nav-btn {
             min-width: 120px;
-            height: 44px; 
+            height: 44px;
             text-align: center;
             white-space: nowrap;
             padding: 0 1.5rem;
@@ -82,8 +83,8 @@
         }
         .nav-btn:hover {
             color: var(--neon-blue);
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.8); 
-            box-shadow: 0 0 20px var(--neon-blue); 
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.8);
+            box-shadow: 0 0 20px var(--neon-blue);
             transform: translateY(-5px);
             background: rgba(0, 243, 255, 0.2);
         }
@@ -100,7 +101,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
+            background:
                 linear-gradient(90deg, rgba(106, 11, 192, 0.03) 1px, transparent 1px),
                 linear-gradient(0deg, rgba(106, 11, 192, 0.03) 1px, transparent 1px);
             background-size: 50px 50px;
@@ -127,9 +128,9 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            filter: 
-                brightness(1.8) 
-                contrast(1.2) 
+            filter:
+                brightness(1.8)
+                contrast(1.2)
                 saturate(1.1)
                 hue-rotate(0deg);
             transition: filter 1s ease;
@@ -176,8 +177,8 @@
             font-weight: 900;
             letter-spacing: 8px;
             margin: 0;
-            text-shadow: 
-                0 0 10px var(--neon-blue), 
+            text-shadow:
+                0 0 10px var(--neon-blue),
                 0 0 20px var(--neon-blue);
             background: linear-gradient(90deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
             -webkit-background-clip: text;
@@ -185,12 +186,10 @@
             animation: glow 2s infinite alternate;
             transition: transform 0.3s ease;
             position: relative;
-   
         }
-     
         .title:hover {
-            animation: none; 
-            text-shadow: 
+            animation: none;
+            text-shadow:
                 0 0 15px var(--neon-green),
                 0 0 30px var(--neon-blue),
                 0 0 45px var(--neon-purple),
@@ -204,19 +203,18 @@
             bottom: -10px;
             border-top: 3px solid var(--neon-blue);
             border-bottom: 3px solid var(--neon-blue);
-            border-left: none; 
-            border-right: none; 
+            border-left: none;
+            border-right: none;
             border-radius: 10px;
-            box-shadow: 
+            box-shadow:
                 0 0 15px var(--neon-blue),
                 0 0 30px var(--neon-purple);
             animation: pulse 3s infinite alternate;
             z-index: -1;
         }
-       
         .title:hover .neon-border {
-            animation: none; 
-            box-shadow: 
+            animation: none;
+            box-shadow:
                 0 0 25px var(--neon-blue),
                 0 0 50px var(--neon-purple),
                 0 0 75px var(--neon-pink),
@@ -252,7 +250,6 @@
             backdrop-filter: blur(5px);
             position: relative;
             overflow: hidden;
-       
         }
         .stat-card::before {
             content: '';
@@ -261,9 +258,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, 
-                transparent 0%, 
-                rgba(0, 243, 255, 0.1) 50%, 
+            background: linear-gradient(45deg,
+                transparent 0%,
+                rgba(0, 243, 255, 0.1) 50%,
                 transparent 100%);
             transform: translateX(-100%);
             transition: transform 0.6s ease;
@@ -273,12 +270,11 @@
         }
         .stat-card:hover {
             transform: translateY(-10px);
-          
-            box-shadow: 
+            box-shadow:
                 0 10px 25px rgba(0, 243, 255, 0.5),
                 0 0 20px var(--neon-blue),
                 0 0 30px var(--neon-green);
-            border-color: transparent; 
+            border-color: transparent;
         }
         .stat-value {
             font-size: 2.5rem;
@@ -287,18 +283,16 @@
             background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            transition: all 0.3s ease; 
+            transition: all 0.3s ease;
         }
-  
         .stat-card:hover .stat-value {
              text-shadow: 0 0 15px var(--neon-blue), 0 0 25px var(--neon-green);
         }
         .stat-label {
             font-size: 1.1rem;
             color: #c0c0ff;
-            transition: all 0.3s ease; 
+            transition: all 0.3s ease;
         }
- 
         .stat-card:hover .stat-label {
              color: var(--neon-blue);
              text-shadow: 0 0 10px rgba(0, 243, 255, 0.8);
@@ -318,7 +312,7 @@
         }
         .panel {
             flex: 1;
-            background: rgba(15, 15, 40, 0.5); 
+            background: rgba(15, 15, 40, 0.5);
             border-radius: 15px;
             padding: 2.5rem;
             backdrop-filter: blur(1px);
@@ -327,7 +321,6 @@
             border-top: 3px solid transparent;
             position: relative;
             overflow: hidden;
- 
         }
         .panel::after {
             content: '';
@@ -345,8 +338,7 @@
         }
         .panel:hover {
             transform: translateY(-10px);
-
-            box-shadow: 
+            box-shadow:
                 0 15px 35px rgba(0, 0, 0, 0.5),
                 0 0 25px rgba(0, 243, 255, 0.4),
                 0 0 35px rgba(179, 0, 255, 0.3);
@@ -370,15 +362,15 @@
             position: relative;
         }
         .panel-title-link {
-            text-decoration: none; 
-            color: inherit; 
+            text-decoration: none;
+            color: inherit;
             display: flex;
             align-items: center;
             gap: 1rem;
-            font-size: inherit; 
-            font-weight: inherit; 
+            font-size: inherit;
+            font-weight: inherit;
             position: relative;
-            transition: all 0.3s ease; 
+            transition: all 0.3s ease;
         }
         .panel-title-link::after {
             content: '';
@@ -393,18 +385,14 @@
         .panel-title-link:hover::after {
             width: 100%;
         }
- 
         .panel-title-link:hover {
             color: var(--neon-blue);
             text-shadow:
                 0 0 10px rgba(0, 243, 255, 0.8),
                 0 0 20px rgba(0, 243, 255, 0.6),
                 0 0 30px rgba(0, 243, 255, 0.4);
-       
             animation: titleGlowPulse 1.5s ease-in-out infinite alternate;
         }
-
-  
         @keyframes titleGlowPulse {
             0% {
                 text-shadow:
@@ -420,8 +408,6 @@
                     0 0 45px rgba(0, 243, 255, 0.4);
             }
         }
-
-
         .left-panel .panel-title {
             color: var(--neon-green);
             text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
@@ -430,31 +416,22 @@
             color: var(--neon-purple);
             text-shadow: 0 0 10px rgba(179, 0, 255, 0.5);
         }
-
-
-     
         .left-panel .panel-title-link:hover {
-            color: var(--neon-green); 
+            color: var(--neon-green);
             text-shadow:
                 0 0 10px rgba(0, 255, 157, 0.8),
                 0 0 20px rgba(0, 255, 157, 0.8),
-                0 0 30px rgba(0, 255, 157, 0.8); 
-     
+                0 0 30px rgba(0, 255, 157, 0.8);
             animation: titleGlowPulseGreen 1.5s ease-in-out infinite alternate;
         }
-
-   
         .right-panel .panel-title-link:hover {
-            color: var(--neon-purple); 
+            color: var(--neon-purple);
             text-shadow:
                 0 0 10px rgba(179, 0, 255, 0.8),
                 0 0 20px rgba(179, 0, 255, 0.8),
                 0 0 30px rgba(179, 0, 255, 0.8);
-   
             animation: titleGlowPulsePurple 1.5s ease-in-out infinite alternate;
         }
-
-   
         @keyframes titleGlowPulseGreen {
             0% {
                 text-shadow:
@@ -470,8 +447,6 @@
                     0 0 45px rgba(0, 255, 157, 0.4);
             }
         }
-
-
         @keyframes titleGlowPulsePurple {
             0% {
                 text-shadow:
@@ -487,28 +462,20 @@
                     0 0 45px rgba(179, 0, 255, 0.4);
             }
         }
-
-    
-    
         .left-panel:hover {
             transform: translateY(-10px);
             box-shadow:
                 0 15px 35px rgba(0, 0, 0, 0.5),
-                0 0 25px rgba(0, 243, 255, 0.7), 
-                0 0 40px rgba(0, 255, 157, 0.9); 
+                0 0 25px rgba(0, 243, 255, 0.7),
+                0 0 40px rgba(0, 255, 157, 0.9);
         }
-
-       
         .right-panel:hover {
             transform: translateY(-10px);
             box-shadow:
                 0 15px 35px rgba(0, 0, 0, 0.5),
-                0 0 25px rgba(179, 0, 255, 0.7), 
-                0 0 40px rgba(0, 243, 255, 0.9); 
+                0 0 25px rgba(179, 0, 255, 0.7),
+                0 0 40px rgba(0, 243, 255, 0.9);
         }
-
-
-
         .panel-content {
             line-height: 1.7;
             color: #c0c0ff;
@@ -523,11 +490,9 @@
             position: relative;
             padding-left: 2rem;
             transition: all 0.3s ease;
-         
         }
         .features li:hover {
             transform: translateX(10px);
-        
             color: var(--neon-blue);
             text-shadow: 0 0 8px rgba(0, 243, 255, 0.8);
         }
@@ -543,7 +508,6 @@
         .features li:hover:before {
             color: var(--neon-pink);
             transform: scale(1.5);
- 
             text-shadow: 0 0 10px var(--neon-pink);
         }
         .tech-specs {
@@ -552,10 +516,9 @@
             padding: 3rem;
             margin: 5rem 0 3rem;
             backdrop-filter: blur(10px);
-            border-top: 3px solid #00ff9d; 
+            border-top: 3px solid #00ff9d;
             position: relative;
             overflow: hidden;
-    
         }
         .specs-title {
             font-size: 2.5rem;
@@ -580,7 +543,6 @@
             flex-direction: column;
             position: relative;
             overflow: hidden;
-  
         }
         .spec-card::before {
             content: '';
@@ -598,12 +560,11 @@
         }
         .spec-card:hover {
             transform: translateY(-8px);
-     
-            box-shadow: 
+            box-shadow:
                 0 10px 25px rgba(0, 243, 255, 0.5),
                 0 0 20px var(--neon-blue),
                 0 0 30px var(--neon-green);
-            border-color: transparent; 
+            border-color: transparent;
         }
         .spec-icon {
             font-size: 2.5rem;
@@ -615,7 +576,6 @@
         .spec-card:hover .spec-icon {
             color: var(--neon-blue);
             transform: scale(1.2);
-        
             text-shadow: 0 0 15px var(--neon-blue);
         }
         .spec-card h3 {
@@ -653,7 +613,6 @@
             background: linear-gradient(90deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-         
         }
         .footer-links {
             display: flex;
@@ -670,7 +629,6 @@
             align-items: center;
             gap: 0.5rem;
             position: relative;
-     
         }
         .footer-link::after {
             content: '';
@@ -687,7 +645,6 @@
         }
         .footer-link:hover {
             color: var(--neon-blue);
-       
             text-shadow: 0 0 10px rgba(0, 243, 255, 0.8);
         }
         .footer p {
@@ -715,7 +672,6 @@
             border: 1px solid rgba(0, 243, 255, 0.3);
             position: relative;
             overflow: hidden;
-        
         }
         .social-icon::before {
             content: '';
@@ -735,7 +691,6 @@
         .social-icon:hover {
             background: rgba(0, 243, 255, 0.2);
             transform: translateY(-5px);
-       
             box-shadow: 0 0 15px var(--neon-blue), 0 0 25px var(--neon-blue);
         }
         .floating-element {
@@ -779,21 +734,19 @@
             height: 100%;
             z-index: -3;
         }
-
         #cursor-particles {
             position: fixed;
-            pointer-events: none; 
+            pointer-events: none;
             z-index: 9999;
         }
-
         @keyframes glow {
             from {
-                text-shadow: 
+                text-shadow:
                     0 0 5px var(--neon-blue),
                     0 0 10px var(--neon-blue);
             }
             to {
-                text-shadow: 
+                text-shadow:
                     0 0 15px var(--neon-blue),
                     0 0 30px var(--neon-blue);
             }
@@ -815,13 +768,13 @@
         }
         @keyframes pulse {
             0% {
-                box-shadow: 
+                box-shadow:
                     0 0 15px var(--neon-blue),
                     0 0 30px var(--neon-purple);
                 opacity: 0.5;
             }
             100% {
-                box-shadow: 
+                box-shadow:
                     0 0 25px var(--neon-blue),
                     0 0 50px var(--neon-purple);
                 opacity: 1;
@@ -833,6 +786,86 @@
             }
             100% {
                 background-position: 100% 100%;
+            }
+        }
+        .laser-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            overflow: hidden;
+        }
+        .laser-beam {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 30vw;
+            opacity: 0;
+            transform-origin: top center;
+            filter: blur(1px);
+
+            background: linear-gradient(
+                to right,
+                rgba(255, 50, 50, 0) 0%,
+                rgba(255, 0, 0, 0) 5%,
+                rgba(255, 0, 0, 0.8) 25%,
+                rgba(255, 50, 50, 0.9) 50%,
+                rgba(255, 0, 0, 0.8) 75%,
+                rgba(255, 0, 0, 0) 95%,
+                rgba(255, 50, 50, 0) 100%
+            );
+            box-shadow:
+                0 0 10px 2px rgba(255, 50, 50, 0.6),
+                0 0 20px 5px rgba(255, 0, 0, 0.5),
+                0 0 40px 10px rgba(200, 0, 0, 0.4),
+                0 0 80px 20px rgba(150, 0, 0, 0.3),
+                0 0 160px 40px rgba(100, 0, 0, 0.2),
+                inset 0 0 10px 2px rgba(255, 200, 200, 0.5);
+        }
+        .laser-beam.left {
+            left: -30vw;
+            animation: laserSweepLeft 3s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        }
+        .laser-beam.right {
+            right: -30vw;
+            animation: laserSweepRight 3s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        }
+        .laser-beam.show {
+
+        }
+        @keyframes laserSweepLeft {
+            0% {
+                opacity: 1;
+                left: -30vw;
+                filter: blur(1px) hue-rotate(0deg);
+            }
+            50% {
+                opacity: 1;
+                filter: blur(0.5px) hue-rotate(10deg);
+            }
+            100% {
+                opacity: 0;
+                left: 0vw;
+                filter: blur(4px) hue-rotate(20deg);
+            }
+        }
+        @keyframes laserSweepRight {
+            0% {
+                opacity: 1;
+                right: -30vw;
+                filter: blur(1px) hue-rotate(0deg);
+            }
+            50% {
+                opacity: 1;
+                filter: blur(0.5px) hue-rotate(-10deg);
+            }
+            100% {
+                opacity: 0;
+                right: 0vw;
+                filter: blur(4px) hue-rotate(-20deg);
             }
         }
         @media (max-width: 900px) {
@@ -876,6 +909,49 @@
                 padding: 0.7rem 1.2rem;
                 font-size: 0.9rem;
             }
+            .laser-beam {
+                width: 50vw;
+            }
+            .laser-beam.left {
+                left: -50vw;
+                animation: laserSweepLeftMobile 3s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+            }
+            .laser-beam.right {
+                right: -50vw;
+                animation: laserSweepRightMobile 3s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+            }
+            @keyframes laserSweepLeftMobile {
+                0% {
+                    opacity: 1;
+                    left: -50vw;
+                    filter: blur(1px) hue-rotate(0deg);
+                }
+                50% {
+                    opacity: 1;
+                    filter: blur(0.5px) hue-rotate(10deg);
+                }
+                100% {
+                    opacity: 0;
+                    left: 0vw;
+                    filter: blur(4px) hue-rotate(20deg);
+                }
+            }
+            @keyframes laserSweepRightMobile {
+                0% {
+                    opacity: 1;
+                    right: -50vw;
+                    filter: blur(1px) hue-rotate(0deg);
+                }
+                50% {
+                    opacity: 1;
+                    filter: blur(0.5px) hue-rotate(-10deg);
+                }
+                100% {
+                    opacity: 0;
+                    right: 0vw;
+                    filter: blur(4px) hue-rotate(-20deg);
+                }
+            }
         }
         @media (max-width: 480px) {
             .title {
@@ -891,6 +967,17 @@
                 width: 100%;
                 justify-content: center;
                 padding: 0.8rem;
+            }
+            .laser-beam {
+                width: 100vw;
+            }
+            .laser-beam.left {
+                left: -100vw;
+                animation: laserSweepLeftMobile 1.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+            }
+            .laser-beam.right {
+                right: -100vw;
+                animation: laserSweepRightMobile 1.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
             }
         }
     </style>
@@ -923,6 +1010,11 @@
         <div class="video-loading">
             <div class="loading-spinner"></div>
             <div>正在加载T4预告...</div>
+        </div>
+         <!-- 激光射线容器 -->
+        <div class="laser-container">
+            <div class="laser-beam left"></div>
+            <div class="laser-beam right"></div>
         </div>
     </div>
     <div class="header">
@@ -1068,18 +1160,13 @@
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-           
             const cursorParticlesContainer = document.createElement('div');
             cursorParticlesContainer.id = 'cursor-particles';
             document.body.appendChild(cursorParticlesContainer);
-
-       
             let mouseX = 0, mouseY = 0;
             let particles = [];
-            const particleCount = 15; 
-            const colors = ['#00f3ff', '#b300ff', '#00ff9d', '#ff00c8']; 
-
-          
+            const particleCount = 15;
+            const colors = ['#00f3ff', '#b300ff', '#00ff9d', '#ff00c8'];
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.style.position = 'absolute';
@@ -1095,55 +1182,38 @@
                     x: 0,
                     y: 0,
                     size: parseFloat(particle.style.width),
-                    speed: Math.random() * 0.5 + 0.1, 
-                    angle: Math.random() * Math.PI * 2, 
-                    distance: Math.random() * 30 + 10, 
+                    speed: Math.random() * 0.5 + 0.1,
+                    angle: Math.random() * Math.PI * 2,
+                    distance: Math.random() * 30 + 10,
                     opacity: 0,
                     targetOpacity: 0
                 });
             }
-
             document.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
-           
                 particles.forEach(p => p.targetOpacity = 0.7);
             });
-
             document.addEventListener('mouseleave', () => {
-             
                 particles.forEach(p => p.targetOpacity = 0);
             });
-
             function animateCursorParticles() {
                 particles.forEach(p => {
-                
                     if (p.opacity < p.targetOpacity) p.opacity += 0.05;
                     if (p.opacity > p.targetOpacity) p.opacity -= 0.05;
-                    p.opacity = Math.max(0, Math.min(1, p.opacity)); 
-
-    
+                    p.opacity = Math.max(0, Math.min(1, p.opacity));
                     const offsetX = Math.cos(p.angle) * p.distance;
                     const offsetY = Math.sin(p.angle) * p.distance;
-
-                
                     p.x += (mouseX + offsetX - p.x) * p.speed;
                     p.y += (mouseY + offsetY - p.y) * p.speed;
-
-                 
                     p.element.style.left = `${p.x}px`;
                     p.element.style.top = `${p.y}px`;
                     p.element.style.opacity = p.opacity;
-
-                  
                     p.angle += 0.02;
                 });
                 requestAnimationFrame(animateCursorParticles);
             }
             animateCursorParticles();
-      
-
-
             const langBtn = document.getElementById('langBtn');
             const loginBtn = document.getElementById('loginBtn');
             let isEnglish = false;
@@ -1173,7 +1243,7 @@
                         <i class="fas fa-microchip"></i>
                         AliceSkyGarden T3
                     `;
-                    document.querySelector('.left-panel .panel-content p').textContent = 
+                    document.querySelector('.left-panel .panel-content p').textContent =
                         "AliceSkyGarden T3 is our first-generation AI model, featuring an advanced ternary sparse activation architecture. The framework is now online with the following features:";
                     const leftFeatures = [
                         "Ternary parameter quantization reduces model size and saves storage space",
@@ -1186,13 +1256,13 @@
                     document.querySelectorAll('.left-panel .features li').forEach((el, index) => {
                         el.textContent = leftFeatures[index];
                     });
-                    document.querySelector('.left-panel .panel-content p:last-child').textContent = 
+                    document.querySelector('.left-panel .panel-content p:last-child').textContent =
                         "The T3 model is a green energy-saving AI that performs well in natural language understanding, creative content generation, and complex problem-solving at low power consumption, providing a green, low-power AI solution.";
                     document.querySelector('.right-panel .panel-title-link').innerHTML = `
                         <i class="fas fa-microchip"></i>
                         AliceSkyGarden T4
                     `;
-                    document.querySelector('.right-panel .panel-content p').textContent = 
+                    document.querySelector('.right-panel .panel-content p').textContent =
                         "AliceSkyGarden T4 is our next-generation model currently under development, featuring a ternary multimodal super model:";
                     const rightFeatures = [
                         "Sparse ternary architecture based on multidimensional vector energy optimization",
@@ -1205,7 +1275,7 @@
                     document.querySelectorAll('.right-panel .features li').forEach((el, index) => {
                         el.textContent = rightFeatures[index];
                     });
-                    document.querySelector('.right-panel .panel-content p:last-child').textContent = 
+                    document.querySelector('.right-panel .panel-content p:last-child').textContent =
                         "The T4 model is not only a green multimodal AI but also a digital anthropomorphic system capable of self-distributing energy and interacting with its environment. It enables autonomous learning and creation, opening new frontiers in green, intelligent, low-power multimodal exploration.";
                     document.querySelector('.specs-title').textContent = "Technical Specifications & Performance Metrics";
                     const specs = [
@@ -1263,7 +1333,7 @@
                         <i class="fas fa-microchip"></i>
                         AliceSkyGarden T3
                     `;
-                    document.querySelector('.left-panel .panel-content p').textContent = 
+                    document.querySelector('.left-panel .panel-content p').textContent =
                         "AliceSkyGarden T3 是我们推出的第一代AI模型，采用先进的三元稀疏激活架构，框架已上线，具有以下特点：";
                     const leftFeatures = [
                         "参数三元量化，模型体积减小，节省存储空间",
@@ -1276,13 +1346,13 @@
                     document.querySelectorAll('.left-panel .features li').forEach((el, index) => {
                         el.textContent = leftFeatures[index];
                     });
-                    document.querySelector('.left-panel .panel-content p:last-child').textContent = 
+                    document.querySelector('.left-panel .panel-content p:last-child').textContent =
                         "T3模型是一款绿色节能型AI，在低功耗下依然可以在自然语言理解、创造性内容生成和复杂问题方面的表现达到不错的水平，是一种绿色低功耗的AI解决方案。";
                     document.querySelector('.right-panel .panel-title-link').innerHTML = `
                         <i class="fas fa-microchip"></i>
                         AliceSkyGarden T4
                     `;
-                    document.querySelector('.right-panel .panel-content p').textContent = 
+                    document.querySelector('.right-panel .panel-content p').textContent =
                         "AliceSkyGarden T4 是我们面向未来的第二代模型，目前正在开发中，属于三元的多模态超级模型：";
                     const rightFeatures = [
                         "采用基于多维向量能量优化的稀疏激活的三元架构",
@@ -1295,7 +1365,7 @@
                     document.querySelectorAll('.right-panel .features li').forEach((el, index) => {
                         el.textContent = rightFeatures[index];
                     });
-                    document.querySelector('.right-panel .panel-content p:last-child').textContent = 
+                    document.querySelector('.right-panel .panel-content p:last-child').textContent =
                         "T4模型不仅是一个绿色多模态AI，还是一个能够自我分配能量和反馈周围环境的能自主学习和创造的数字化拟人系统，开启了全新的绿色智能低功耗多模态的探索。";
                     document.querySelector('.specs-title').textContent = "技术规格与性能指标";
                     const specs = [
@@ -1345,16 +1415,16 @@
                     langBtn.classList.remove('pulse');
                 }, 500);
             });
-            if (window.location.hostname !== 'localhost' && 
-                window.location.hostname !== '127.0.0.1' && 
+            if (window.location.hostname !== 'localhost' &&
+                window.location.hostname !== '127.0.0.1' &&
                 window.location.protocol !== "https:") {
                 window.location.protocol = "https:";
             }
             const video = document.getElementById('bg-video');
             const loadingIndicator = document.querySelector('.video-loading');
-            let loadingHidden = false; 
-            let videoPlayed = false; 
-            video.muted = true; 
+            let loadingHidden = false;
+            let videoPlayed = false;
+            video.muted = true;
             video.volume = 0;
             function hideLoadingIndicator() {
                 if (loadingHidden) return;
@@ -1369,7 +1439,7 @@
                     hideLoadingIndicator();
                     return;
                 }
-                if (video.readyState >= 3) { 
+                if (video.readyState >= 3) {
                     hideLoadingIndicator();
                     return;
                 }
@@ -1377,7 +1447,7 @@
             }
             video.addEventListener('canplay', hideLoadingIndicator);
             video.addEventListener('playing', function() {
-                videoPlayed = true; 
+                videoPlayed = true;
                 hideLoadingIndicator();
             });
             video.addEventListener('timeupdate', function() {
@@ -1572,7 +1642,51 @@
                     inset 0 0 20px rgba(0, 243, 255, 0.5)
                 `;
             });
-            setTimeout(hideLoadingIndicator, 500);
+            setTimeout(hideLoadingIndicator, 1000);
+            const leftLaser = document.querySelector('.laser-beam.left');
+            const rightLaser = document.querySelector('.laser-beam.right');
+            let laserInterval;
+            function triggerLasers() {
+
+                const leftClasses = leftLaser.className;
+                const rightClasses = rightLaser.className;
+
+
+                leftLaser.classList.remove('laser-beam');
+                rightLaser.classList.remove('laser-beam');
+
+          
+                void leftLaser.offsetWidth;
+                void rightLaser.offsetWidth;
+
+           
+                leftLaser.classList.add('laser-beam');
+                rightLaser.classList.add('laser-beam');
+            }
+     
+            function startLaserSequence() {
+               
+                triggerLasers();
+         
+                laserInterval = setInterval(triggerLasers, 7000);
+            }
+
+            function checkAndStartLasers() {
+                
+                 if (leftLaser && rightLaser) {
+               
+                     setTimeout(startLaserSequence, 6000); 
+                 } else {
+                     console.warn("Laser elements not found, cannot start sequence.");
+                 }
+            }
+
+
+            window.addEventListener('load', function() {
+              
+                setTimeout(checkAndStartLasers, 100);
+            });
+    
         });
     </script>
 </body>
