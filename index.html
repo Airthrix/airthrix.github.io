@@ -1850,8 +1850,7 @@
 
                 addMessage(message, true); // 显示用户消息
                 userInput.value = '';
-                // 如果你保留了 showTyping/hideTyping 并希望显示提示，则取消下一行注释
-                // showTyping();
+                showTyping(); // 显示“正在思考...”
                 sendButton.disabled = true; // 禁用发送按钮
 
                 let botMessageDiv = null; // 用于引用机器人的消息 div
@@ -1882,8 +1881,7 @@
                         fullReply = "抱歉，我没有收到回复。";
                     }
 
-                    // 如果你保留了 showTyping/hideTyping 并希望显示提示，则取消下一行注释
-                    // hideTyping();
+                    hideTyping(); // 隐藏“正在思考...”
 
                     // 3. 创建机器人的消息 div
                     botMessageDiv = document.createElement('div');
@@ -1900,6 +1898,12 @@
                         if (i < fullReply.length) {
                             // 添加下一个字符
                             botMessageDiv.textContent += fullReply.charAt(i);
+
+                            // 如果遇到换行符 (\n)，插入 <br> 标签以保持格式
+                            if (fullReply.charAt(i) === '\n') {
+                                botMessageDiv.innerHTML = botMessageDiv.innerHTML.replace(/\n$/, '<br>');
+                            }
+
                             i++;
                             // 滚动到底部以跟随新字符
                             chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -1912,9 +1916,7 @@
 
                 } catch (error) {
                     console.error('Error sending message:', error);
-                    // 如果出错，显示错误信息
-                    // 如果你保留了 showTyping/hideTyping 并希望显示提示，则取消下一行注释
-                    // hideTyping();
+                    hideTyping(); // 如果出错，隐藏“正在思考...”
                     // 如果还没有创建 botMessageDiv，则创建一个来显示错误
                     if (!botMessageDiv) {
                         const errorDiv = document.createElement('div');
