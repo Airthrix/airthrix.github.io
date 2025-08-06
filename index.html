@@ -1267,7 +1267,7 @@
             <h2 class="chat-title">与 AliceSkyGarden 对话</h2>
             <div class="chat-messages" id="chatMessages">
                 <!-- 消息将在这里显示 -->
-                <div class="message bot-message">AliceSkyGarden模型正在休息😊我是Qwen3，有任何问题你都可以问我😊</div>
+                <div class="message bot-message">你好😊我是AliceSkyGarden语言模型，有任何问题你都可以问我😊</div>
             </div>
             <div class="chat-input-area">
                 <textarea id="userInput" class="chat-input" placeholder="输入你的消息..."></textarea>
@@ -1901,48 +1901,58 @@
                         fullReply = "抱歉，我没有收到回复。";
                     }
 
-
+                    // --- 新增/修改部分：处理 Markdown ---
+                    // 将 Markdown 转换为 HTML
                     const markdownToHtml = (markdownText) => {
-          
+                        // 确保 marked 已加载
                         if (typeof marked === 'undefined') {
                             console.warn('marked.js 未加载，无法转换 Markdown');
-                            return markdownText; 
+                            return markdownText; // 如果未加载，则返回原文本
                         }
                         try {
-
+                            // 使用 marked.js 转换 Markdown 为 HTML
+                            // { breaks: true } 使单个换行符也转为 <br>
                             return marked.parse(markdownText, { breaks: true });
                         } catch (e) {
                             console.error('Markdown 转换出错:', e);
-                            return markdownText; 
+                            return markdownText; // 转换失败则返回原文本
                         }
                     };
 
-        
+                    // 转换回复内容
                     fullReply = markdownToHtml(fullReply);
-
+                    // --- 新增/修改部分结束 ---
 
                 
                     botMessageDiv = document.createElement('div');
                     botMessageDiv.classList.add('message', 'bot-message');
                
-    
-                    botMessageDiv.innerHTML = ""; 
-
+                    // --- 修改部分：使用 innerHTML 插入 HTML 内容 ---
+                    botMessageDiv.innerHTML = ""; // 使用 innerHTML 来插入 HTML 内容
+                    // --- 修改部分结束 ---
                     chatMessages.appendChild(botMessageDiv);
               
                     chatMessages.scrollTop = chatMessages.scrollHeight;
 
              
                     let i = 0;
-
+                    // --- 修改部分：打字机效果处理 HTML ---
+                    // 由于我们处理的是 HTML，直接逐字符添加可能会破坏标签
+                    // 更稳健的方法是一次性设置 innerHTML，然后模拟打字效果
+                    // 或者需要一个能处理 HTML 的打字机函数
+                    // 这里采用一次性设置的方式，因为处理 HTML 的逐字打字比较复杂且易出错
+                    // 如果你坚持需要逐字打字效果，需要更复杂的 HTML 解析逻辑
                     const typeWriterHtml = () => {
- 
+                         // 一次性设置 HTML 内容
                          botMessageDiv.innerHTML = fullReply;
                          chatMessages.scrollTop = chatMessages.scrollHeight;
-
+                         // 如果需要简单的逐字效果，可以考虑下面这个更复杂的版本（注释掉上面两行，取消注释下面代码块）
                          /*
                          if (i < fullReply.length) {
-
+                             // 这种方法不适用于 HTML，因为它会把标签也当作文本处理
+                             // botMessageDiv.textContent += fullReply.charAt(i); 
+                             // 需要一种能安全处理 HTML 片段的方法，这很复杂
+                             // 为简化，这里直接设置
                              botMessageDiv.innerHTML = fullReply.substring(0, i+1);
                              i++;
                              chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -1950,8 +1960,8 @@
                          }
                          */
                     };
-                    typeWriterHtml(); 
-
+                    typeWriterHtml(); // 调用新的处理 HTML 的函数
+                    // --- 修改部分结束 ---
 
                 } catch (error) {
                     console.error('Error sending message:', error);
