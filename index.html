@@ -984,7 +984,7 @@
                 animation: laserSweepRightMobile 1.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
             }
         }
-        /* 添加的聊天功能 CSS */
+
         .chat-container {
             background: rgba(15, 15, 40, 0.5);
             border-radius: 15px;
@@ -1004,16 +1004,16 @@
             text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
         .chat-messages {
-            height: 300px; /* 设置固定高度 */
-            overflow-y: auto; /* 超出时滚动 */
+            height: 300px; 
+            overflow-y: auto; 
             padding: 1rem;
             background: rgba(10, 10, 25, 0.3);
             border-radius: 10px;
             margin-bottom: 1rem;
             display: flex;
             flex-direction: column;
-            gap: 1rem; /* 消息间距 */
-            /* 自定义滚动条样式 */
+            gap: 1rem; 
+       
             scrollbar-width: thin;
             scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
         }
@@ -1042,13 +1042,13 @@
         .user-message {
             background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
             color: #0a0a12;
-            align-self: flex-end; /* 用户消息靠右 */
+            align-self: flex-end; 
             border-bottom-right-radius: 5px;
         }
         .bot-message {
             background: rgba(30, 30, 60, 0.8);
             color: #c0c0ff;
-            align-self: flex-start; /* 机器人消息靠左 */
+            align-self: flex-start; 
             border-bottom-left-radius: 5px;
         }
         .chat-input-area {
@@ -1063,9 +1063,9 @@
             background: rgba(10, 10, 25, 0.5);
             color: #e0e0ff;
             font-size: 1rem;
-            resize: none; /* 禁止拖拽调整大小 */
-            min-height: 50px; /* 最小高度 */
-            max-height: 150px; /* 最大高度 */
+            resize: none; 
+            min-height: 50px; 
+            max-height: 150px; 
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
         .chat-input:focus {
@@ -1359,7 +1359,7 @@
             const loginBtn = document.getElementById('loginBtn');
             let isEnglish = false;
 
-            // 获取聊天相关元素
+            
             const chatTitle = document.querySelector('.chat-title');
             const chatInput = document.getElementById('userInput');
             const chatSendBtn = document.getElementById('sendButton');
@@ -1467,10 +1467,10 @@
                     langBtn.innerHTML = '<i class="fas fa-globe"></i>&nbsp;&nbsp;中文&nbsp;&nbsp;';
                     document.querySelector('.video-loading > div:last-child').textContent = "Loading T4 preview...";
 
-                    // 更新聊天功能的中英文切换
+                    
                     chatTitle.textContent = "Talk with AliceSkyGarden";
                     chatInput.placeholder = "Enter your message...";
-                    chatSendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send'; // 保持图标
+                    chatSendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send'; 
 
                 } else {
                     document.querySelector('.subtitle').innerHTML = `
@@ -1563,10 +1563,10 @@
                     langBtn.innerHTML = '<i class="fas fa-globe"></i> English';
                     document.querySelector('.video-loading > div:last-child').textContent = "正在加载T4预告...";
 
-                    // 更新聊天功能的中英文切换
+                   
                     chatTitle.textContent = "与 AliceSkyGarden 对话";
                     chatInput.placeholder = "输入你的消息...";
-                    chatSendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> 发送'; // 保持图标
+                    chatSendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> 发送'; 
                 }
                 langBtn.classList.add('pulse');
                 setTimeout(() => {
@@ -1828,19 +1828,19 @@
             window.addEventListener('load', function() {
                 setTimeout(checkAndStartLasers, 100);
             });
-            // --- 添加的聊天功能 JavaScript ---
+          
             const chatMessages = document.getElementById('chatMessages');
             const userInput = document.getElementById('userInput');
             const sendButton = document.getElementById('sendButton');
-            // *** 重要：你需要将下面的 URL 替换为你实际部署的后端服务地址 ***
-            const API_URL = 'https://qwen-proxy-acqopqqcpc.cn-hangzhou.fcapp.run/invoke'; // <--- 修改这里
+    
+            const API_URL = 'https://qwen-proxy-acqopqqcpc.cn-hangzhou.fcapp.run/invoke'; 
             function addMessage(message, isUser = false) {
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message');
                 messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
                 messageDiv.textContent = message;
                 chatMessages.appendChild(messageDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight; // 滚动到底部
+                chatMessages.scrollTop = chatMessages.scrollHeight; 
             }
             function showTyping() {
                 const typingDiv = document.createElement('div');
@@ -1859,14 +1859,14 @@
             async function sendMessage() {
                 const message = userInput.value.trim();
                 if (!message) return;
-                // 1. 显示用户消息
+                
                 addMessage(message, true);
-                userInput.value = ''; // 清空输入框
-                // 2. 显示“正在输入”指示器
+                userInput.value = ''; 
+                
                 showTyping();
-                sendButton.disabled = true; // 禁用发送按钮
+                sendButton.disabled = true; 
                 try {
-                    // 3. 发送请求到后端
+                    
                     const response = await fetch(API_URL, {
                         method: 'POST',
                         headers: {
@@ -1878,9 +1878,9 @@
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     const data = await response.json();
-                    // 4. 隐藏“正在输入”指示器
+                  
                     hideTyping();
-                    // 5. 显示机器人回复
+                
                     if (data.reply) {
                         addMessage(data.reply, false);
                     } else if (data.error) {
@@ -1890,22 +1890,22 @@
                     }
                 } catch (error) {
                     console.error('Error sending message:', error);
-                    hideTyping(); // 确保隐藏
+                    hideTyping(); 
                     addMessage(`灰度测试中: ${error.message}`, false);
                 } finally {
-                    sendButton.disabled = false; // 重新启用发送按钮
+                    sendButton.disabled = false; 
                 }
             }
-            // 绑定发送按钮点击事件
+           
             sendButton.addEventListener('click', sendMessage);
-            // 绑定回车键发送事件 (Shift+Enter 换行)
+       
             userInput.addEventListener('keydown', function(event) {
                 if (event.key === 'Enter' && !event.shiftKey) {
-                    event.preventDefault(); // 阻止默认的换行行为
+                    event.preventDefault(); 
                     sendMessage();
                 }
             });
-            // --- 聊天功能结束 ---
+           
         });
     </script>
 </body>
