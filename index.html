@@ -1843,14 +1843,30 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight; 
             }
 
-            // --- 新的 sendMessage 函数，实现逐字输出 (非流式) ---
+
+            function showTyping() {
+                const typingDiv = document.createElement('div');
+                typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
+                typingDiv.id = 'typingIndicator';
+                typingDiv.textContent = '正在思考...';
+                chatMessages.appendChild(typingDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            function hideTyping() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+
             async function sendMessage() {
                 const message = userInput.value.trim();
                 if (!message) return;
 
                 addMessage(message, true); // 显示用户消息
                 userInput.value = '';
-                showTyping(); // 显示“正在思考...”
+                // 显示“正在思考...”提示
+                showTyping();
                 sendButton.disabled = true; // 禁用发送按钮
 
                 let botMessageDiv = null; // 用于引用机器人的消息 div
@@ -1872,7 +1888,10 @@
 
                     const data = await response.json();
 
-                    // 2. 处理后端返回的数据
+                    // 2. 隐藏“正在思考...”提示
+                    hideTyping();
+
+                    // 3. 处理后端返回的数据
                     if (data.reply) {
                         fullReply = data.reply;
                     } else if (data.error) {
@@ -1881,9 +1900,7 @@
                         fullReply = "抱歉，我没有收到回复。";
                     }
 
-                    hideTyping(); // 隐藏“正在思考...”
-
-                    // 3. 创建机器人的消息 div
+                    // 4. 创建机器人的消息 div
                     botMessageDiv = document.createElement('div');
                     botMessageDiv.classList.add('message', 'bot-message');
                     // 初始为空，稍后逐字填充
@@ -1892,18 +1909,12 @@
                     // 确保新消息可见
                     chatMessages.scrollTop = chatMessages.scrollHeight;
 
-                    // 4. 实现逐字输出效果
+                    // 5. 实现逐字输出效果
                     let i = 0;
                     const typeWriter = () => {
                         if (i < fullReply.length) {
                             // 添加下一个字符
                             botMessageDiv.textContent += fullReply.charAt(i);
-
-                            // 如果遇到换行符 (\n)，插入 <br> 标签以保持格式
-                            if (fullReply.charAt(i) === '\n') {
-                                botMessageDiv.innerHTML = botMessageDiv.innerHTML.replace(/\n$/, '<br>');
-                            }
-
                             i++;
                             // 滚动到底部以跟随新字符
                             chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -1916,7 +1927,8 @@
 
                 } catch (error) {
                     console.error('Error sending message:', error);
-                    hideTyping(); // 如果出错，隐藏“正在思考...”
+                    // 如果出错，隐藏“正在思考...”提示
+                    hideTyping();
                     // 如果还没有创建 botMessageDiv，则创建一个来显示错误
                     if (!botMessageDiv) {
                         const errorDiv = document.createElement('div');
@@ -1933,15 +1945,6 @@
                     sendButton.disabled = false;
                 }
             }
-
-            // --- 保留原有的事件监听器 ---
-            sendButton.addEventListener('click', sendMessage);
-            userInput.addEventListener('keydown', function(event) {
-                if (event.key === 'Enter' && !event.shiftKey) {
-                    event.preventDefault();
-                    sendMessage();
-                }
-            });
            
         });
     </script>
