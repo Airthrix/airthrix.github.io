@@ -1843,13 +1843,15 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight; 
             }
 
-            // --- 新的 sendMessage 函数，实现逐字输出 ---
+            // --- 新的 sendMessage 函数，实现逐字输出 (非流式) ---
             async function sendMessage() {
                 const message = userInput.value.trim();
                 if (!message) return;
 
                 addMessage(message, true); // 显示用户消息
                 userInput.value = '';
+                // 如果你保留了 showTyping/hideTyping 并希望显示提示，则取消下一行注释
+                // showTyping();
                 sendButton.disabled = true; // 禁用发送按钮
 
                 let botMessageDiv = null; // 用于引用机器人的消息 div
@@ -1880,6 +1882,9 @@
                         fullReply = "抱歉，我没有收到回复。";
                     }
 
+                    // 如果你保留了 showTyping/hideTyping 并希望显示提示，则取消下一行注释
+                    // hideTyping();
+
                     // 3. 创建机器人的消息 div
                     botMessageDiv = document.createElement('div');
                     botMessageDiv.classList.add('message', 'bot-message');
@@ -1908,6 +1913,8 @@
                 } catch (error) {
                     console.error('Error sending message:', error);
                     // 如果出错，显示错误信息
+                    // 如果你保留了 showTyping/hideTyping 并希望显示提示，则取消下一行注释
+                    // hideTyping();
                     // 如果还没有创建 botMessageDiv，则创建一个来显示错误
                     if (!botMessageDiv) {
                         const errorDiv = document.createElement('div');
