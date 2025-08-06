@@ -1266,7 +1266,7 @@
             <h2 class="chat-title">与 AliceSkyGarden 对话</h2>
             <div class="chat-messages" id="chatMessages">
                 <!-- 消息将在这里显示 -->
-                <div class="message bot-message">AliceSkyGarden语言模型正在训练中😊我是Qwen3语言模型，有任何问题你都可以问我😊</div>
+                <div class="message bot-message">你好😊我是AliceSkyGarden语言模型，有任何问题你都可以问我😊</div>
             </div>
             <div class="chat-input-area">
                 <textarea id="userInput" class="chat-input" placeholder="输入你的消息..."></textarea>
@@ -1863,17 +1863,17 @@
                 const message = userInput.value.trim();
                 if (!message) return;
 
-                addMessage(message, true); // 显示用户消息
+                addMessage(message, true); 
                 userInput.value = '';
-                // 显示“正在思考...”提示
+     
                 showTyping();
-                sendButton.disabled = true; // 禁用发送按钮
+                sendButton.disabled = true; 
 
-                let botMessageDiv = null; // 用于引用机器人的消息 div
-                let fullReply = ""; // 存储从后端接收到的完整回复
+                let botMessageDiv = null; 
+                let fullReply = ""; 
 
                 try {
-                    // 1. 发送请求到后端
+                   
                     const response = await fetch(API_URL, {
                         method: 'POST',
                         headers: {
@@ -1888,10 +1888,10 @@
 
                     const data = await response.json();
 
-                    // 2. 隐藏“正在思考...”提示
+                  
                     hideTyping();
 
-                    // 3. 处理后端返回的数据
+                 
                     if (data.reply) {
                         fullReply = data.reply;
                     } else if (data.error) {
@@ -1900,36 +1900,36 @@
                         fullReply = "抱歉，我没有收到回复。";
                     }
 
-                    // 4. 创建机器人的消息 div
+                
                     botMessageDiv = document.createElement('div');
                     botMessageDiv.classList.add('message', 'bot-message');
-                    // 初始为空，稍后逐字填充
+               
                     botMessageDiv.textContent = "";
                     chatMessages.appendChild(botMessageDiv);
-                    // 确保新消息可见
+              
                     chatMessages.scrollTop = chatMessages.scrollHeight;
 
-                    // 5. 实现逐字输出效果
+             
                     let i = 0;
                     const typeWriter = () => {
                         if (i < fullReply.length) {
-                            // 添加下一个字符
+                        
                             botMessageDiv.textContent += fullReply.charAt(i);
                             i++;
-                            // 滚动到底部以跟随新字符
+                           
                             chatMessages.scrollTop = chatMessages.scrollHeight;
-                            // 使用 setTimeout 控制打字速度 (例如 30ms 间隔)
+                      
                             setTimeout(typeWriter, 30);
                         }
                     };
-                    // 启动打字机效果
+                
                     typeWriter();
 
                 } catch (error) {
                     console.error('Error sending message:', error);
-                    // 如果出错，隐藏“正在思考...”提示
+               
                     hideTyping();
-                    // 如果还没有创建 botMessageDiv，则创建一个来显示错误
+                
                     if (!botMessageDiv) {
                         const errorDiv = document.createElement('div');
                         errorDiv.classList.add('message', 'bot-message');
@@ -1937,18 +1937,17 @@
                         chatMessages.appendChild(errorDiv);
                         chatMessages.scrollTop = chatMessages.scrollHeight;
                     } else {
-                        // 如果已经创建了，就更新其内容
+                 
                         botMessageDiv.textContent = `错误: ${error.message}`;
                     }
                 } finally {
-                    // 无论成功与否，最后都启用发送按钮
+                
                     sendButton.disabled = false;
                 }
 
-            } // <-- 这里是 sendMessage 函数的结束大括号
+            }
 
-            // --- 添加以下代码以恢复发送功能 ---
-            // 为发送按钮添加点击事件监听器
+
             sendButton.addEventListener('click', sendMessage);
        
             userInput.addEventListener('keydown', function(event) {
