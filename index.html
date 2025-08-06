@@ -1,812 +1,800 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AliceSkyGarden - 未来模型</title>
-<meta name="description" content="AliceSkyGarden 开源绿色节能AI模型。AliceSkyGardenT3 采用三元稀疏激活架构，AliceSkyGardenT4 为多模态超级模型。了解低功耗、高性能的下一代人工智能技术。">
-<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="shortcut icon" href="/favicon.ico">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    --neon-blue: #00f3ff;
-    --neon-purple: #b300ff;
-    --neon-pink: #ff00c8;
-    --neon-green: #00ff9d;
-    --neon-red: #ff0055;
-    --dark-bg: #0a0a12;
-    --panel-bg: rgba(15, 15, 40, 0.85);
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: var(--dark-bg);
-    color: #e0e0ff;
-    min-height: 100vh;
-    overflow-x: hidden;
-    position: relative;
-}
-
-.top-nav {
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 1000;
-    display: flex;
-    gap: 1rem;
-    padding: 1.5rem 2rem;
-}
-
-.nav-btn {
-    background: rgba(100, 100, 255, 0.1);
-    border: 1px solid rgba(0, 243, 255, 0.3);
-    color: var(--neon-blue);
-    padding: 0.8rem 1.5rem;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.nav-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at center, rgba(0, 243, 255, 0.2) 0%, transparent 70%);
-    transform: scale(0);
-    transition: transform 0.3s ease;
-    border-radius: 30px;
-    z-index: -1;
-}
-
-.nav-btn:hover::before {
-    transform: scale(1.5);
-}
-
-.nav-btn:hover {
-    color: var(--neon-blue);
-    text-shadow: 0 0 10px rgba(0, 243, 255, 0.8);
-    box-shadow: 0 0 20px var(--neon-blue);
-    transform: translateY(-5px);
-    background: rgba(0, 243, 255, 0.2);
-}
-
-.nav-btn i {
-    font-size: 1.1rem;
-    transition: transform 0.3s ease;
-}
-
-.nav-btn:hover i {
-    transform: scale(1.2);
-}
-
-.grid-lines {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image:
-        linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
-    background-size: 30px 30px;
-    pointer-events: none;
-    z-index: -1;
-}
-
-.hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 2rem;
-    position: relative;
-    overflow: hidden;
-}
-
-.hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at center, rgba(0, 243, 255, 0.1) 0%, transparent 70%);
-    pointer-events: none;
-}
-
-.hero h1 {
-    font-size: 4rem;
-    margin-bottom: 1.5rem;
-    background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: 0 0 30px rgba(0, 243, 255, 0.5);
-    animation: glow 2s ease-in-out infinite alternate;
-}
-
-@keyframes glow {
-    from {
-        text-shadow: 0 0 20px rgba(0, 243, 255, 0.5), 0 0 30px rgba(179, 0, 255, 0.5);
-    }
-    to {
-        text-shadow: 0 0 30px rgba(0, 243, 255, 0.8), 0 0 40px rgba(179, 0, 255, 0.8), 0 0 50px rgba(255, 0, 200, 0.8);
-    }
-}
-
-.subtitle {
-    font-size: 1.3rem;
-    margin-bottom: 3rem;
-    color: #a0a0ff;
-    max-width: 800px;
-    line-height: 1.6;
-}
-
-.stats-container {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    margin: 3rem 0;
-}
-
-.stat-item {
-    text-align: center;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s ease;
-}
-
-.stat-item.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.stat-value {
-    font-size: 2.5rem;
-    font-weight: bold;
-    background: linear-gradient(45deg, var(--neon-green), var(--neon-blue));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 0.5rem;
-    text-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
-}
-
-.stat-label {
-    font-size: 1rem;
-    color: #8888ff;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.main-content {
-    padding: 5rem 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-.panels-container {
-    display: flex;
-    gap: 2rem;
-    margin: 3rem 0;
-}
-
-.panel {
-    flex: 1;
-    background: rgba(15, 15, 40, 0.5);
-    border-radius: 15px;
-    padding: 2.5rem;
-    backdrop-filter: blur(1px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-    border-top: 3px solid transparent;
-    position: relative;
-    overflow: hidden;
-    opacity: 0;
-    transform: translateY(50px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-.panel.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.panel::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 5px;
-    background: linear-gradient(90deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
-    transform: translateX(-100%);
-    transition: transform 0.6s ease;
-}
-
-.panel:hover::after {
-    transform: translateX(0);
-}
-
-.panel:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    border-top-color: var(--neon-blue);
-}
-
-.panel h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-    color: var(--neon-blue);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.panel-title-link {
-    color: inherit;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    position: relative;
-    padding-bottom: 5px;
-}
-
-.panel-title-link::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--neon-blue);
-    transition: width 0.3s ease;
-}
-
-.panel-title-link:hover::after {
-    width: 100%;
-}
-
-.panel-title-link:hover {
-    color: var(--neon-blue);
-    text-shadow: 0 0 10px rgba(0, 243, 255, 0.8);
-}
-
-.panel-content p {
-    margin-bottom: 1.5rem;
-    line-height: 1.7;
-    color: #c0c0ff;
-}
-
-.features {
-    list-style: none;
-    margin: 1.5rem 0;
-}
-
-.features li {
-    margin-bottom: 1rem;
-    padding-left: 1.5rem;
-    position: relative;
-    color: #b0b0ff;
-}
-
-.features li::before {
-    content: '▹';
-    position: absolute;
-    left: 0;
-    color: var(--neon-green);
-    font-size: 1.2rem;
-}
-
-.video-section {
-    margin: 5rem 0;
-    text-align: center;
-}
-
-.video-container {
-    position: relative;
-    width: 100%;
-    max-width: 800px;
-    height: 450px;
-    margin: 0 auto;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    background: linear-gradient(45deg, rgba(0, 243, 255, 0.1), rgba(179, 0, 255, 0.1));
-    border: 1px solid rgba(0, 243, 255, 0.2);
-}
-
-.video-container video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.video-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at center, transparent 60%, rgba(10, 10, 18, 0.8) 100%);
-    pointer-events: none;
-}
-
-.laser-beam {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--neon-blue), var(--neon-purple), transparent);
-    box-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-purple);
-    opacity: 0;
-    animation: laserScan 3s ease-in-out infinite;
-}
-
-.laser-beam.left {
-    transform: rotate(-3deg);
-    top: 30%;
-}
-
-.laser-beam.right {
-    transform: rotate(3deg);
-    top: 60%;
-}
-
-@keyframes laserScan {
-    0%, 100% {
-        opacity: 0;
-        transform: rotate(-3deg) translateY(-10px);
-    }
-    50% {
-        opacity: 0.8;
-        transform: rotate(-3deg) translateY(10px);
-    }
-}
-
-.video-loading {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: var(--neon-blue);
-    font-size: 1.2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-}
-
-.video-loading i {
-    font-size: 2rem;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-.specs-section {
-    margin: 5rem 0;
-}
-
-.specs-title {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    color: var(--neon-purple);
-    text-shadow: 0 0 20px rgba(179, 0, 255, 0.5);
-}
-
-.specs-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-}
-
-.spec-card {
-    background: rgba(15, 15, 40, 0.5);
-    border-radius: 15px;
-    padding: 2rem;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-    border: 1px solid rgba(179, 0, 255, 0.2);
-    position: relative;
-    overflow: hidden;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s ease, transform 0.8s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-}
-
-.spec-card.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.spec-card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(179, 0, 255, 0.1) 0%, transparent 70%);
-    transform: rotate(45deg);
-    pointer-events: none;
-}
-
-.spec-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(179, 0, 255, 0.3);
-    border-color: var(--neon-purple);
-}
-
-.spec-card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: var(--neon-green);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.spec-card p {
-    color: #b0b0ff;
-    line-height: 1.6;
-}
-
-.chat-section {
-    margin: 5rem 0;
-    text-align: center;
-}
-
-.chat-container {
-    max-width: 800px;
-    margin: 0 auto;
-    background: rgba(15, 15, 40, 0.5);
-    border-radius: 15px;
-    padding: 2rem;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(0, 243, 255, 0.2);
-}
-
-.chat-title {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-    color: var(--neon-blue);
-}
-
-.chat-messages {
-    height: 400px;
-    overflow-y: auto;
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    background: rgba(10, 10, 30, 0.3);
-    border-radius: 10px;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.message {
-    padding: 1rem;
-    border-radius: 10px;
-    max-width: 80%;
-    word-wrap: break-word;
-    animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.user-message {
-    background: linear-gradient(45deg, rgba(0, 243, 255, 0.2), rgba(179, 0, 255, 0.2));
-    align-self: flex-end;
-    border: 1px solid rgba(0, 243, 255, 0.3);
-}
-
-.bot-message {
-    background: rgba(15, 15, 40, 0.8);
-    align-self: flex-start;
-    border: 1px solid rgba(179, 0, 255, 0.3);
-}
-
-.typing-indicator {
-    color: var(--neon-blue);
-    font-style: italic;
-}
-
-.chat-input-container {
-    display: flex;
-    gap: 1rem;
-}
-
-#userInput {
-    flex: 1;
-    padding: 1rem;
-    border: 1px solid rgba(0, 243, 255, 0.3);
-    border-radius: 30px;
-    background: rgba(10, 10, 30, 0.5);
-    color: #e0e0ff;
-    font-size: 1rem;
-    outline: none;
-    transition: all 0.3s ease;
-}
-
-#userInput:focus {
-    border-color: var(--neon-blue);
-    box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
-}
-
-#userInput::placeholder {
-    color: #6666aa;
-}
-
-#sendButton {
-    padding: 1rem 2rem;
-    background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
-    border: none;
-    border-radius: 30px;
-    color: white;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-#sendButton:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0, 243, 255, 0.3);
-}
-
-#sendButton:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-.footer {
-    background: rgba(5, 5, 15, 0.9);
-    padding: 4rem 2rem 2rem;
-    text-align: center;
-    border-top: 1px solid rgba(0, 243, 255, 0.1);
-}
-
-.footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.footer-logo {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.footer-tagline {
-    color: #8888ff;
-    margin-bottom: 2rem;
-    font-size: 1.1rem;
-}
-
-.footer-links {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 2rem;
-    margin: 2rem 0;
-}
-
-.footer-link {
-    color: #a0a0ff;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    position: relative;
-}
-
-.footer-link::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--neon-blue);
-    transition: width 0.3s ease;
-}
-
-.footer-link:hover::after {
-    width: 100%;
-}
-
-.footer-link:hover {
-    color: var(--neon-blue);
-    text-shadow: 0 0 10px rgba(0, 243, 255, 0.8);
-}
-
-.footer p {
-    margin: 0.5rem 0;
-    font-size: 0.9rem;
-    opacity: 0.8;
-}
-
-.social-icons {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    margin: 1.5rem 0;
-}
-
-.social-icon {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    background: rgba(100, 100, 255, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.3rem;
-    color: var(--neon-blue);
-    transition: all 0.3s ease;
-    border: 1px solid rgba(0, 243, 255, 0.3);
-    position: relative;
-    overflow: hidden;
-}
-
-.social-icon::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at center, rgba(0, 243, 255, 0.2) 0%, transparent 70%);
-    transform: scale(0);
-    transition: transform 0.3s ease;
-    border-radius: 50%;
-}
-
-.social-icon:hover::before {
-    transform: scale(1.5);
-}
-
-.social-icon:hover {
-    background: rgba(0, 243, 255, 0.2);
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 243, 255, 0.3);
-    color: var(--neon-blue);
-}
-
-@media (max-width: 768px) {
-    .hero h1 {
-        font-size: 2.5rem;
-    }
-    
-    .subtitle {
-        font-size: 1.1rem;
-    }
-    
-    .stats-container {
-        flex-direction: column;
-        gap: 2rem;
-    }
-    
-    .panels-container {
-        flex-direction: column;
-    }
-    
-    .chat-messages {
-        height: 300px;
-    }
-    
-    .footer-links {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .top-nav {
-        padding: 1rem;
-    }
-    
-    .nav-btn {
-        padding: 0.6rem 1rem;
-        font-size: 0.9rem;
-    }
-}
-
-#particles-js {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: -1;
-}
-
-#cursor-particles {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 9999;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AliceSkyGarden - 未来模型</title>
+    <meta name="description"
+        content="AliceSkyGarden 开源绿色节能AI模型。AliceSkyGardenT3 采用三元稀疏激活架构，AliceSkyGardenT4 为多模态超级模型。了解低功耗、高性能的下一代人工智能技术。">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入 marked.js 库用于 Markdown 渲染 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-purple: #b300ff;
+            --neon-pink: #ff00c8;
+            --neon-green: #00ff9d;
+            --neon-red: #ff0055;
+            --dark-bg: #0a0a12;
+            --panel-bg: rgba(15, 15, 40, 0.85);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--dark-bg);
+            color: #e0e0ff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .top-nav {
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            gap: 1rem;
+            padding: 1.2rem 2rem;
+            background: rgba(10, 10, 20, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom-left-radius: 20px;
+            box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            color: var(--neon-blue);
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-btn:hover {
+            background: rgba(0, 243, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+            border-radius: 2px;
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            margin-top: 3.5rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            color: #a0a0ff;
+            text-shadow: 0 0 8px rgba(160, 160, 255, 0.5);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 3rem auto;
+            max-width: 1000px;
+        }
+
+        .stat-card {
+            background: rgba(20, 20, 50, 0.6);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            flex: 1;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 0%, rgba(0, 243, 255, 0.1) 50%, transparent 100%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .stat-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 243, 255, 0.5), 0 0 20px var(--neon-blue), 0 0 30px var(--neon-green);
+            border-color: transparent;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .panels-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .panel {
+            flex: 1;
+            background: rgba(15, 15, 40, 0.5);
+            border-radius: 15px;
+            padding: 2.5rem;
+            backdrop-filter: blur(1px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            border-top: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .panel:hover::after {
+            transform: translateX(0);
+        }
+
+        .panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 243, 255, 0.3);
+        }
+
+        .panel-title-link {
+            display: inline-block;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--neon-blue);
+            text-decoration: none;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .panel-title-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--neon-blue);
+            transition: width 0.3s ease;
+        }
+
+        .panel-title-link:hover::after {
+            width: 100%;
+        }
+
+        .panel-title-link:hover {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.8), 0 0 20px rgba(0, 243, 255, 0.6), 0 0 30px rgba(0, 243, 255, 0.4);
+            animation: titleGlowPulse 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlowPulse {
+            0% {
+                text-shadow: 0 0 10px rgba(0, 243, 255, 0.8), 0 0 20px rgba(0, 243, 255, 0.6), 0 0 30px rgba(0, 243, 255, 0.4);
+            }
+
+            100% {
+                text-shadow: 0 0 15px rgba(0, 243, 255, 0.9), 0 0 25px rgba(0, 243, 255, 0.7), 0 0 35px rgba(0, 243, 255, 0.5), 0 0 45px rgba(0, 243, 255, 0.3);
+            }
+        }
+
+        .panel-content p {
+            margin-bottom: 1.2rem;
+            line-height: 1.7;
+        }
+
+        .features {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .features li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .features li::before {
+            content: '▹';
+            color: var(--neon-green);
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 1.2rem;
+        }
+
+        .specs-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            margin: 4rem 0;
+            background: rgba(15, 15, 40, 0.3);
+            border-radius: 20px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .specs-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .specs-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--neon-purple);
+            text-shadow: 0 0 15px rgba(179, 0, 255, 0.5);
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            text-align: left;
+        }
+
+        .spec-card {
+            background: rgba(20, 20, 50, 0.6);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(179, 0, 255, 0.2);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .spec-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .spec-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(179, 0, 255, 0.4), 0 0 15px rgba(179, 0, 255, 0.2);
+            border-color: var(--neon-purple);
+        }
+
+        .spec-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--neon-green);
+        }
+
+        .spec-content {
+            line-height: 1.7;
+            opacity: 0.9;
+        }
+
+        .chat-container {
+            max-width: 800px;
+            margin: 4rem auto;
+            background: rgba(15, 15, 40, 0.7);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .chat-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .chat-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(10, 10, 30, 0.5);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 243, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 0.8rem 1.2rem;
+            border-radius: 15px;
+            line-height: 1.5;
+            position: relative;
+            animation: messageAppear 0.3s ease-out;
+            word-wrap: break-word;
+            /* 确保长单词也能换行 */
+            /* 允许 Markdown 生成的 HTML 元素（如列表、标题）正常显示 */
+            /* 但要限制宽度以适应气泡 */
+        }
+
+        @keyframes messageAppear {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+            color: #0a0a12;
+            border-bottom-right-radius: 5px;
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            background: rgba(30, 30, 60, 0.8);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-bottom-left-radius: 5px;
+        }
+
+        /* 打字机指示器样式 */
+        .typing-indicator {
+            align-self: flex-start;
+            background: rgba(30, 30, 60, 0.8);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-bottom-left-radius: 5px;
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+
+        .chat-input-container {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.8rem 1.2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            background: rgba(10, 10, 30, 0.5);
+            color: #e0e0ff;
+            font-size: 1rem;
+            resize: none;
+            height: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+        }
+
+        .chat-send-btn {
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 0 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .chat-send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 243, 255, 0.4);
+        }
+
+        .chat-send-btn:disabled {
+            background: linear-gradient(90deg, #555, #777);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(10, 10, 20, 0.9);
+            margin-top: 4rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-link {
+            color: #a0a0ff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+        }
+
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neon-blue);
+            transition: width 0.3s ease;
+        }
+
+        .footer-link:hover::after {
+            width: 100%;
+        }
+
+        .footer-link:hover {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.8);
+        }
+
+        .footer p {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(100, 100, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--neon-blue);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(0, 243, 255, 0.2) 0%, transparent 70%);
+            transform: scale(0);
+            transition: transform 0.3s ease;
+            border-radius: 50%;
+        }
+
+        .social-icon:hover::before {
+            transform: scale(1.5);
+        }
+
+        .social-icon:hover {
+            background: rgba(0, 243, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 243, 255, 0.4);
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(106, 11, 192, 0.03) 1px, transparent 1px), linear-gradient(0deg, rgba(106, 11, 192, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #bg-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            filter: brightness(1.8) contrast(1.2);
+            opacity: 0.7;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(10, 10, 20, 0.7) 0%, rgba(10, 10, 20, 0.9) 70%);
+            z-index: 2;
+        }
+
+        .video-loading {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--neon-blue);
+            text-align: center;
+            z-index: 3;
+        }
+
+        .video-loading i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.5;
+            }
+        }
+
+        .laser-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .laser-beam {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-blue), var(--neon-purple), transparent);
+            box-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-purple);
+            top: 30%;
+            width: 0;
+            left: 10%;
+            opacity: 0;
+        }
+
+        .laser-beam.right {
+            top: 70%;
+            left: auto;
+            right: 10%;
+            background: linear-gradient(270deg, transparent, var(--neon-pink), var(--neon-red), transparent);
+            box-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-red);
+        }
+
+        .laser-beam.active {
+            animation: laserFire 0.5s ease-out forwards;
+        }
+
+        @keyframes laserFire {
+            0% {
+                width: 0;
+                opacity: 0;
+            }
+
+            50% {
+                width: 80%;
+                opacity: 1;
+            }
+
+            100% {
+                width: 80%;
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .panels-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .panel {
+                width: 90%;
+            }
+
+            .stats-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .stat-card {
+                width: 90%;
+            }
+
+            .specs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
 </head>
-<body>
-<div id="particles-js"></div>
-<div class="grid-lines"></div>
-<nav class="top-nav">
-    <button class="nav-btn" id="loginBtn">
-        <i class="fas fa-user"></i>
-        登录
-    </button>
-    <button class="nav-btn" id="langBtn">
-        <i class="fas fa-globe"></i> English
-    </button>
-</nav>
 
-<section class="hero">
-    <h1>AliceSkyGarden</h1>
-    <p class="subtitle">下一代人工智能模型，三元创新技术与绿色节能框架<br><span style="display: block; text-align: center;">重新定义机器人真正的未来</span></p>
-    
-    <div class="stats-container">
-        <div class="stat-item">
-            <div class="stat-value">90%</div>
-            <div class="stat-label">模型体积减小</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-value">95%</div>
-            <div class="stat-label">参数三元量化</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-value">96%</div>
-            <div class="stat-label">运行能耗减小</div>
+<body>
+    <div id="particles-js"></div>
+    <div class="video-container">
+        <div class="video-overlay"></div>
+        <video id="bg-video" autoplay muted loop playsinline style="display:none;">
+            <source src="https://aliceskygarden.top/video/AliceSkyGarden.mp4" type="video/mp4">
+            您的浏览器不支持视频标签。
+        </video>
+        <div class="video-loading">
+            <div><i class="fas fa-spinner fa-spin"></i></div>
+            <div>正在加载T4预告...</div>
         </div>
     </div>
-</section>
 
-<div class="main-content">
+    <div class="laser-container">
+        <div class="laser-beam left"></div>
+        <div class="laser-beam right"></div>
+    </div>
+
+    <nav class="top-nav">
+        <button class="nav-btn" id="loginBtn"><i class="fas fa-user-astronaut"></i> 登录/注册</button>
+        <button class="nav-btn" id="langBtn"><i class="fas fa-globe"></i> English</button>
+    </nav>
+
+    <section class="hero">
+        <h1>AliceSkyGarden</h1>
+        <p class="subtitle">下一代人工智能模型，三元创新技术与绿色节能框架<br><span
+                style="display: block; text-align: center;">重新定义机器人真正的未来</span></p>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-value">96%</div>
+                <div class="stat-label">模型体积减小</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">3</div>
+                <div class="stat-label">参数三元量化</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">96%</div>
+                <div class="stat-label">运行能耗减小</div>
+            </div>
+        </div>
+    </section>
+
     <div class="panels-container">
         <div class="panel left-panel">
-            <h2 class="panel-title"><a href="https://github.com/Airthrix/AliceSkyGardenT3" target="_blank" class="panel-title-link"><i class="fas fa-microchip"></i>AliceSkyGarden T3</a></h2>
+            <a href="#" class="panel-title-link"><i class="fas fa-microchip"></i>AliceSkyGarden T3</a>
             <div class="panel-content">
                 <p>AliceSkyGarden T3 是我们推出的第一代AI模型，采用先进的三元稀疏激活架构，框架已上线，具有以下特点：</p>
                 <ul class="features">
@@ -817,12 +805,13 @@ body {
                     <li>属于绿色节能型AI，运行能耗接近于人类大脑</li>
                     <li>参数支持万亿超大规模，实现强大的理解能力</li>
                 </ul>
-                <p>T3模型是一款绿色节能型AI，在低功耗下依然可以在自然语言理解、创造性内容生成和复杂问题方面的表现达到不错的水平，是一种绿色低功耗的AI解决方案。</p>
+                <p>T3模型是一款绿色节能型AI，在低功耗下依然可以在自然语言理解、创造性内容生成和复杂问题方面的表现达到不错的水平，是一种绿色低功耗的AI解决方案。
+                </p>
             </div>
         </div>
-        
+
         <div class="panel right-panel">
-            <h2 class="panel-title"><a href="#" class="panel-title-link"><i class="fas fa-robot"></i>AliceSkyGarden T4</a></h2>
+            <a href="#" class="panel-title-link"><i class="fas fa-microchip"></i>AliceSkyGarden T4</a>
             <div class="panel-content">
                 <p>AliceSkyGarden T4 是我们面向未来的第二代模型，目前正在开发中，属于三元的多模态超级模型：</p>
                 <ul class="features">
@@ -833,638 +822,424 @@ body {
                     <li>极低的响应速度，实时与周围环境进行反馈</li>
                     <li>不以超级智能为目标，宗旨是无限接近人类</li>
                 </ul>
-                <p>T4模型不仅是一个绿色多模态AI，还是一个能够自我分配能量和反馈周围环境的能自主学习和创造的数字化拟人系统，开启了全新的绿色智能低功耗多模态的探索。</p>
+                <p>T4模型不仅是一个绿色多模态AI，还是一个能够自我分配能量和反馈周围环境的能自主学习和创造的数字化拟人系统，开启了全新的绿色智能低功耗多模态的探索。
+                </p>
             </div>
         </div>
     </div>
 
-    <section class="video-section">
-        <div class="video-container">
-            <div class="video-loading">
-                <i class="fas fa-spinner"></i>
-                <div>正在加载T4预告...</div>
-            </div>
-            <video id="promoVideo" muted playsinline style="display: none;">
-                <source src="https://file.musetransfer.com/file/v1/link/09906553-239a-44f9-86a4-995939cf9101?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJodHRwczovL2ZpbGUubXVzZXRyYW5zZmVyLmNvbS9maWxlL3YxL2xpbmsvMDk5MDY1NTMtMjM5YS00NGY5LTg2YTQtOTk1OTM5Y2Y5MTAxIiwiaWF0IjoxNzIyOTM1MTYxfQ.0N5d5Dp2P-140XfG1Vf1bVHJZJz9Jz9Jz9Jz9Jz9Jz9" type="video/mp4">
-                您的浏览器不支持视频播放。
-            </video>
-            <div class="video-overlay"></div>
-            <div class="laser-beam left"></div>
-            <div class="laser-beam right"></div>
-        </div>
-    </section>
-
-    <section class="specs-section">
+    <section class="specs-section" id="specsSection">
         <h2 class="specs-title">技术规格与性能指标</h2>
         <div class="specs-grid">
             <div class="spec-card">
-                <h3><i class="fas fa-microchip"></i> 计算架构</h3>
-                <p>采用独家三元技术架构，绿色低功耗，实现计算效率最大化。T4多模态版本引入多维向量能量优化。</p>
+                <h3 class="spec-title">计算架构</h3>
+                <p class="spec-content">采用独家三元技术架构，绿色低功耗，实现计算效率最大化。T4多模态版本引入多维向量能量优化。</p>
             </div>
             <div class="spec-card">
-                <h3><i class="fas fa-database"></i> 训练数据</h3>
-                <p>支持多源异构数据融合，涵盖科学文献、历史档案、艺术创作和实时网络数据，总量可超过10PB。</p>
+                <h3 class="spec-title">训练数据</h3>
+                <p class="spec-content">支持多源异构数据融合，涵盖科学文献、历史档案、艺术创作和实时网络数据，总量可超过10PB。</p>
             </div>
             <div class="spec-card">
-                <h3><i class="fas fa-bolt"></i> 能效比</h3>
-                <p>相比传统模型，T3能效提升96%，采用多维向量能量优化的T4在同等计算量下能耗会进一步降低。</p>
+                <h3 class="spec-title">能效比</h3>
+                <p class="spec-content">相比传统模型，T3能效提升96%，采用多维向量能量优化的T4在同等计算量下能耗会进一步降低。</p>
             </div>
             <div class="spec-card">
-                <h3><i class="fas fa-shield-alt"></i> 安全框架</h3>
-                <p>多层安全防护体系，包括道德约束模块、实时监控系统和自适应安全协议，确保AI行为可控。</p>
+                <h3 class="spec-title">安全框架</h3>
+                <p class="spec-content">多层安全防护体系，包括道德约束模块、实时监控系统和自适应安全协议，确保AI行为可控。</p>
             </div>
             <div class="spec-card">
-                <h3><i class="fas fa-plug"></i> API接口</h3>
-                <p>提供RESTful API和WebSocket接口，支持多种编程语言SDK，便于快速集成到各类应用中。</p>
+                <h3 class="spec-title">API接口</h3>
+                <p class="spec-content">提供RESTful API和SDK，支持多种编程语言快速集成，简化开发流程。</p>
             </div>
             <div class="spec-card">
-                <h3><i class="fas fa-cloud"></i> 部署方式</h3>
-                <p>支持云端部署、边缘计算和私有化部署，提供Docker镜像和Kubernetes Helm Chart。</p>
+                <h3 class="spec-title">部署方式</h3>
+                <p class="spec-content">支持云端SaaS、私有化部署和边缘计算，满足不同场景需求。</p>
             </div>
         </div>
     </section>
 
-    <section class="chat-section">
-        <div class="chat-container">
-            <h2 class="chat-title">与 AliceSkyGarden 对话</h2>
-            <div class="chat-messages" id="chatMessages">
-                <div class="message bot-message">您好！我是AliceSkyGarden，一个绿色节能的AI助手。请问有什么我可以帮助您的吗？</div>
-            </div>
-            <div class="chat-input-container">
-                <textarea id="userInput" placeholder="输入你的消息..." rows="1"></textarea>
-                <button id="sendButton"><i class="fas fa-paper-plane"></i> 发送</button>
-            </div>
+    <div class="chat-container" id="chatContainer">
+        <h2 class="chat-title" id="chatTitle">与 AliceSkyGarden 对话</h2>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-container">
+            <textarea class="chat-input" id="userInput" placeholder="输入你的消息..."></textarea>
+            <button class="chat-send-btn" id="sendButton"><i class="fas fa-paper-plane"></i> 发送</button>
         </div>
-    </section>
-</div>
-
-<footer class="footer">
-    <div class="footer-content">
-        <div class="footer-logo">AliceSkyGarden</div>
-        <div class="footer-tagline">开启智能新纪元 · 探索无限可能</div>
-        
-        <div class="footer-links">
-            <a href="#" class="footer-link"><i class="fas fa-home"></i> <span class="link-text">首页</span></a>
-            <a href="https://github.com/Airthrix" class="footer-link"><i class="fab fa-github"></i> <span class="link-text">开发者</span></a>
-            <a href="https://github.com/Airthrix/AliceSkyGardenT3" class="footer-link"><i class="fas fa-book"></i> <span class="link-text">文档</span></a>
-            <a href="#" class="footer-link"><i class="fas fa-users"></i> <span class="link-text">社区</span></a>
-            <a href="#" class="footer-link"><i class="fas fa-blog"></i> <span class="link-text">博客</span></a>
-            <a href="#" class="footer-link"><i class="fas fa-envelope"></i> <span class="link-text">联系我们</span></a>
-        </div>
-
-        <div class="social-icons">
-            <a href="https://github.com/Airthrix/AliceSkyGardenT3" class="social-icon" target="_blank">
-                <i class="fab fa-github"></i>
-            </a>
-            <a href="#" class="social-icon">
-                <i class="fab fa-discord"></i>
-            </a>
-            <a href="#" class="social-icon">
-                <i class="fab fa-twitter"></i>
-            </a>
-            <a href="#" class="social-icon">
-                <i class="fab fa-youtube"></i>
-            </a>
-        </div>
-
-        <p class="copyright">&copy; 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved</p>
     </div>
-</footer>
 
-<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const cursorParticlesContainer = document.createElement('div');
-    cursorParticlesContainer.id = 'cursor-particles';
-    document.body.appendChild(cursorParticlesContainer);
+    <footer class="footer">
+        <div class="social-icons">
+            <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
+        </div>
+        <div class="footer-links">
+            <a href="#" class="footer-link"><span class="link-text">首页</span></a>
+            <a href="#" class="footer-link"><span class="link-text">开发者</span></a>
+            <a href="#" class="footer-link"><span class="link-text">文档</span></a>
+            <a href="#" class="footer-link"><span class="link-text">社区</span></a>
+            <a href="#" class="footer-link"><span class="link-text">博客</span></a>
+            <a href="#" class="footer-link"><span class="link-text">联系我们</span></a>
+        </div>
+        <p class="copyright">© 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved</p>
+    </footer>
 
-    let mouseX = 0, mouseY = 0;
-    let particles = [];
-    const particleCount = 15;
-    const colors = ['#00f3ff', '#b300ff', '#00ff9d', '#ff00c8'];
-
-    for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.style.position = 'absolute';
-        particle.style.width = '4px';
-        particle.style.height = '4px';
-        particle.style.borderRadius = '50%';
-        particle.style.backgroundColor = colors[i % colors.length];
-        particle.style.pointerEvents = 'none';
-        particle.style.opacity = '0';
-        particle.style.zIndex = '9999';
-        cursorParticlesContainer.appendChild(particle);
-        
-        particles.push({
-            element: particle,
-            x: 0,
-            y: 0,
-            angle: Math.random() * Math.PI * 2,
-            distance: Math.random() * 30 + 10,
-            size: Math.random() * 3 + 2,
-            opacity: 0,
-            targetOpacity: 0
-        });
-    }
-
-    function updateCursorParticles() {
-        particles.forEach(p => {
-            p.x = mouseX + Math.cos(p.angle) * p.distance;
-            p.y = mouseY + Math.sin(p.angle) * p.distance;
-            p.element.style.left = p.x + 'px';
-            p.element.style.top = p.y + 'px';
-            p.element.style.width = p.size + 'px';
-            p.element.style.height = p.size + 'px';
-            
-            if (p.opacity < p.targetOpacity) p.opacity += 0.05;
-            if (p.opacity > p.targetOpacity) p.opacity -= 0.05;
-            p.opacity = Math.max(0, Math.min(1, p.opacity));
-            p.element.style.opacity = p.opacity;
-        });
-        requestAnimationFrame(updateCursorParticles);
-    }
-    updateCursorParticles();
-
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        particles.forEach(p => p.targetOpacity = 0.7);
-    });
-
-    document.addEventListener('mouseleave', () => {
-        particles.forEach(p => p.targetOpacity = 0);
-    });
-
-    const loginBtn = document.getElementById('loginBtn');
-    const langBtn = document.getElementById('langBtn');
-    let isEnglish = false;
-
-    loginBtn.addEventListener('click', function() {
-        const originalText = loginBtn.innerHTML;
-        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 正在登录...';
-        setTimeout(() => {
-            loginBtn.innerHTML = '<i class="fas fa-exclamation-circle"></i> 登录失败';
-            setTimeout(() => {
-                loginBtn.innerHTML = originalText;
-            }, 1500);
-        }, 2000);
-    });
-
-    langBtn.addEventListener('click', function() {
-        isEnglish = !isEnglish;
-        if (isEnglish) {
-            document.querySelector('.subtitle').innerHTML = `Next-generation AI model, ternary innovation technology and green energy-saving framework<br><span style="display: block; text-align: center;">Redefining the true future of robotics</span>`;
-            document.querySelectorAll('.stat-label').forEach((el, index) => {
-                const labels = ['Model Size Reduction', 'Ternary Quantization', 'Energy Consumption Reduction'];
-                el.textContent = labels[index];
-            });
-            document.querySelector('.left-panel .panel-title-link').innerHTML = `<i class="fas fa-microchip"></i>AliceSkyGarden T3`;
-            document.querySelector('.left-panel .panel-content p').textContent = "AliceSkyGarden T3 is our first-generation AI model, featuring an advanced ternary sparse activation architecture. The framework is now online with the following features:";
-            const leftFeatures = [
-                "Ternary quantization of parameters reduces model size and saves storage space",
-                "Native support for ternary inference with ultra-low power consumption on ternary chips",
-                "Minimal loss in overall accuracy ensures model output reliability",
-                "1100% increase in inference speed, reducing response time to milliseconds",
-                "Green energy-saving AI with energy consumption close to the human brain",
-                "Supports trillion-scale parameters for powerful comprehension"
-            ];
-            document.querySelectorAll('.left-panel .features li').forEach((el, index) => {
-                el.textContent = leftFeatures[index];
-            });
-            document.querySelector('.left-panel .panel-content p:last-child').textContent = "The T3 model is a green, energy-efficient AI that delivers excellent performance in natural language understanding, creative content generation, and complex problem-solving, even under low power consumption. It represents a green, low-power AI solution.";
-            
-            document.querySelector('.right-panel .panel-title-link').innerHTML = `<i class="fas fa-robot"></i>AliceSkyGarden T4`;
-            document.querySelector('.right-panel .panel-content p').textContent = "AliceSkyGarden T4 is our next-generation model, currently under development, and represents a ternary multimodal supermodel:";
-            const rightFeatures = [
-                "Ternary architecture based on multi-dimensional vector energy optimization and sparse activation",
-                "Cross-modal fusion reasoning capabilities for seamless connection between vision, senses, and sound",
-                "Self-evolving learning framework for continuous autonomous model improvement",
-                "Real-time emotion recognition and response for more natural interaction experiences",
-                "Ultra-low response time for real-time environmental feedback",
-                "Aims to approximate human intelligence rather than achieve superintelligence"
-            ];
-            document.querySelectorAll('.right-panel .features li').forEach((el, index) => {
-                el.textContent = rightFeatures[index];
-            });
-            document.querySelector('.right-panel .panel-content p:last-child').textContent = "The T4 model is not just a green, multimodal AI, but also a digital anthropomorphic system capable of self-allocating energy and responding to its environment, learning, and creating autonomously. It opens up new explorations in green, intelligent, low-power, multimodal technologies.";
-            
-            const specs = [
-                {title: "Computing Architecture", content: "Proprietary ternary architecture for green, low-power computing with maximized efficiency. The T4 multimodal version introduces multidimensional vector energy optimization."},
-                {title: "Training Data", content: "Supports fusion of multi-source heterogeneous data including scientific literature, historical archives, artistic creations, and real-time web data, totaling over 10PB."},
-                {title: "Energy Efficiency", content: "Compared to traditional models, T3 improves energy efficiency by 96%. The T4 version with multidimensional vector energy optimization further reduces energy consumption for the same computational load."},
-                {title: "Security Framework", content: "Multi-layered security protection system including ethical constraint modules, real-time monitoring systems, and adaptive security protocols to ensure controllable AI behavior."},
-                {title: "API Interface", content: "Provides RESTful API and WebSocket interfaces, supporting SDKs for multiple programming languages for rapid integration into various applications."},
-                {title: "Deployment Methods", content: "Supports cloud deployment, edge computing, and private deployment, offering Docker images and Kubernetes Helm Charts."}
-            ];
-            
-            document.querySelectorAll('.spec-card').forEach((card, index) => {
-                const spec = specs[index];
-                card.querySelector('h3').innerHTML = `<i class="fas ${card.querySelector('h3 i').className.split(' ')[1]}"></i> ${spec.title}`;
-                card.querySelector('p').textContent = spec.content;
-            });
-            
-            document.querySelector('.specs-title').textContent = "Technical Specifications and Performance Metrics";
-            
-            const footerLinks = ["Home", "Developers", "Documentation", "Community", "Blog", "Contact Us"];
-            document.querySelectorAll('.footer-link .link-text').forEach((el, index) => {
-                el.textContent = footerLinks[index];
-            });
-            
-            document.querySelector('.copyright').textContent = "© 2025 AliceSkyGarden Technology. All rights reserved";
-            langBtn.innerHTML = '<i class="fas fa-globe"></i>&nbsp;&nbsp;中文&nbsp;&nbsp;';
-            document.querySelector('.video-loading > div:last-child').textContent = "Loading T4 preview...";
-            document.querySelector('.chat-title').textContent = "Talk with AliceSkyGarden";
-            document.getElementById('userInput').placeholder = "Enter your message...";
-            document.getElementById('sendButton').innerHTML = '<i class="fas fa-paper-plane"></i> Send';
-        } else {
-            document.querySelector('.subtitle').innerHTML = `下一代人工智能模型，三元创新技术与绿色节能框架<br><span style="display: block; text-align: center;">重新定义机器人真正的未来</span>`;
-            document.querySelectorAll('.stat-label').forEach((el, index) => {
-                const labels = ['模型体积减小', '参数三元量化', '运行能耗减小'];
-                el.textContent = labels[index];
-            });
-            document.querySelector('.left-panel .panel-title-link').innerHTML = `<i class="fas fa-microchip"></i>AliceSkyGarden T3`;
-            document.querySelector('.left-panel .panel-content p').textContent = "AliceSkyGarden T3 是我们推出的第一代AI模型，采用先进的三元稀疏激活架构，框架已上线，具有以下特点：";
-            const leftFeatures = [
-                "参数三元量化，模型体积减小，节省存储空间",
-                "框架原生支持三元推理，三进制芯片下功耗极低",
-                "总精度几乎没有下降，确保了模型输出的准确性",
-                "推理速度提升1100%，响应时间缩短至毫秒级",
-                "属于绿色节能型AI，运行能耗接近于人类大脑",
-                "参数支持万亿超大规模，实现强大的理解能力"
-            ];
-            document.querySelectorAll('.left-panel .features li').forEach((el, index) => {
-                el.textContent = leftFeatures[index];
-            });
-            document.querySelector('.left-panel .panel-content p:last-child').textContent = "T3模型是一款绿色节能型AI，在低功耗下依然可以在自然语言理解、创造性内容生成和复杂问题方面的表现达到不错的水平，是一种绿色低功耗的AI解决方案。";
-            
-            document.querySelector('.right-panel .panel-title-link').innerHTML = `<i class="fas fa-robot"></i>AliceSkyGarden T4`;
-            document.querySelector('.right-panel .panel-content p').textContent = "AliceSkyGarden T4 是我们面向未来的第二代模型，目前正在开发中，属于三元的多模态超级模型：";
-            const rightFeatures = [
-                "采用基于多维向量能量优化的稀疏激活的三元架构",
-                "跨模态融合推理能力，无缝连接视觉、感官和声音",
-                "自我进化学习框架，模型能够持续自主改进",
-                "实时情感识别与响应，创造更自然的交互体验",
-                "极低的响应速度，实时与周围环境进行反馈",
-                "不以超级智能为目标，宗旨是无限接近人类"
-            ];
-            document.querySelectorAll('.right-panel .features li').forEach((el, index) => {
-                el.textContent = rightFeatures[index];
-            });
-            document.querySelector('.right-panel .panel-content p:last-child').textContent = "T4模型不仅是一个绿色多模态AI，还是一个能够自我分配能量和反馈周围环境的能自主学习和创造的数字化拟人系统，开启了全新的绿色智能低功耗多模态的探索。";
-            
-            const specs = [
-                {title: "计算架构", content: "采用独家三元技术架构，绿色低功耗，实现计算效率最大化。T4多模态版本引入多维向量能量优化。"},
-                {title: "训练数据", content: "支持多源异构数据融合，涵盖科学文献、历史档案、艺术创作和实时网络数据，总量可超过10PB。"},
-                {title: "能效比", content: "相比传统模型，T3能效提升96%，采用多维向量能量优化的T4在同等计算量下能耗会进一步降低。"},
-                {title: "安全框架", content: "多层安全防护体系，包括道德约束模块、实时监控系统和自适应安全协议，确保AI行为可控。"},
-                {title: "API接口", content: "提供RESTful API和WebSocket接口，支持多种编程语言SDK，便于快速集成到各类应用中。"},
-                {title: "部署方式", content: "支持云端部署、边缘计算和私有化部署，提供Docker镜像和Kubernetes Helm Chart。"}
-            ];
-            
-            document.querySelectorAll('.spec-card').forEach((card, index) => {
-                const spec = specs[index];
-                card.querySelector('h3').innerHTML = `<i class="fas ${card.querySelector('h3 i').className.split(' ')[1]}"></i> ${spec.title}`;
-                card.querySelector('p').textContent = spec.content;
-            });
-            
-            document.querySelector('.specs-title').textContent = "技术规格与性能指标";
-            
-            const footerLinks = ["首页", "开发者", "文档", "社区", "博客", "联系我们"];
-            document.querySelectorAll('.footer-link .link-text').forEach((el, index) => {
-                el.textContent = footerLinks[index];
-            });
-            
-            document.querySelector('.copyright').textContent = "© 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved";
-            langBtn.innerHTML = '<i class="fas fa-globe"></i> English';
-            document.querySelector('.video-loading > div:last-child').textContent = "正在加载T4预告...";
-            document.querySelector('.chat-title').textContent = "与 AliceSkyGarden 对话";
-            document.getElementById('userInput').placeholder = "输入你的消息...";
-            document.getElementById('sendButton').innerHTML = '<i class="fas fa-paper-plane"></i> 发送';
-        }
-    });
-
-    const video = document.getElementById('promoVideo');
-    const videoContainer = document.querySelector('.video-container');
-    const videoLoading = document.querySelector('.video-loading');
-    
-    function hideLoadingIndicator() {
-        videoLoading.style.display = 'none';
-        video.style.display = 'block';
-        video.play().catch(error => {
-            console.log("手动播放失败:", error);
-        });
-    }
-    
-    function checkVideoStatus() {
-        if (video.readyState >= 3) {
-            hideLoadingIndicator();
-        } else {
-            video.addEventListener('canplay', hideLoadingIndicator);
-        }
-    }
-    
-    video.addEventListener('loadeddata', function() {
-        setTimeout(hideLoadingIndicator, 1000);
-    });
-    
-    const leftLaser = document.querySelector('.laser-beam.left');
-    const rightLaser = document.querySelector('.laser-beam.right');
-    let laserInterval;
-    
-    function triggerLasers() {
-        const leftClasses = leftLaser.className;
-        const rightClasses = rightLaser.className;
-        
-        leftLaser.classList.remove('laser-beam');
-        rightLaser.classList.remove('laser-beam');
-        
-        void leftLaser.offsetWidth;
-        void rightLaser.offsetWidth;
-        
-        leftLaser.classList.add('laser-beam');
-        rightLaser.classList.add('laser-beam');
-    }
-    
-    function startLaserSequence() {
-        triggerLasers();
-        laserInterval = setInterval(triggerLasers, 7000);
-    }
-    
-    function checkAndStartLasers() {
-        if (leftLaser && rightLaser) {
-            setTimeout(startLaserSequence, 6000);
-        } else {
-            console.warn("Laser elements not found, cannot start sequence.");
-        }
-    }
-    
-    window.addEventListener('load', function() {
-        setTimeout(checkAndStartLasers, 100);
-    });
-
-    const chatMessages = document.getElementById('chatMessages');
-    const userInput = document.getElementById('userInput');
-    const sendButton = document.getElementById('sendButton');
-    const API_URL = 'https://qwen-proxy-acqopqqcpc.cn-hangzhou.fcapp.run/invoke';
-
-    function addMessage(message, isUser = false) {
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('message');
-        messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
-        messageDiv.textContent = message;
-        chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    function showTyping() {
-        const typingDiv = document.createElement('div');
-        typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
-        typingDiv.id = 'typingIndicator';
-        typingDiv.textContent = '正在思考...';
-        chatMessages.appendChild(typingDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    function hideTyping() {
-        const typingIndicator = document.getElementById('typingIndicator');
-        if (typingIndicator) {
-            typingIndicator.remove();
-        }
-    }
-
-    async function sendMessage() {
-        const message = userInput.value.trim();
-        if (!message) return;
-
-        addMessage(message, true);
-        userInput.value = '';
-
-        showTyping();
-        sendButton.disabled = true;
-
-        let botMessageDiv = null;
-        let fullReply = "";
-
-        try {
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ message: message })
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-
-            hideTyping();
-
-            if (data.reply) {
-                fullReply = data.reply;
-            } else if (data.error) {
-                fullReply = `错误: ${data.error}`;
-            } else {
-                fullReply = "抱歉，我没有收到回复。";
-            }
-
-            botMessageDiv = document.createElement('div');
-            botMessageDiv.classList.add('message', 'bot-message');
-            botMessageDiv.innerHTML = marked.parse(fullReply);
-            chatMessages.appendChild(botMessageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-
-            let i = 0;
-            const typeWriter = () => {
-                if (i < fullReply.length) {
-                    botMessageDiv.innerHTML = marked.parse(fullReply.slice(0, i));
-                    i++;
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                    setTimeout(typeWriter, 30);
-                }
-            };
-
-            typeWriter();
-
-        } catch (error) {
-            console.error('Error sending message:', error);
-            hideTyping();
-
-            if (!botMessageDiv) {
-                const errorDiv = document.createElement('div');
-                errorDiv.classList.add('message', 'bot-message');
-                errorDiv.textContent = `错误: ${error.message}`;
-                chatMessages.appendChild(errorDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            } else {
-                botMessageDiv.textContent = `错误: ${error.message}`;
-            }
-        } finally {
-            sendButton.disabled = false;
-        }
-    }
-
-    sendButton.addEventListener('click', sendMessage);
-
-    userInput.addEventListener('keydown', function(event) {
-        if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault();
-            sendMessage();
-        }
-    });
-
-    userInput.addEventListener('input', function() {
-        this.style.height = 'auto';
-        this.style.height = (this.scrollHeight) + 'px';
-    });
-
-    window.addEventListener('scroll', function() {
-        const scrollPosition = window.scrollY;
-        const statItems = document.querySelectorAll('.stat-item');
-        const panels = document.querySelectorAll('.panel');
-        const specs = document.querySelectorAll('.spec-card');
-
-        statItems.forEach((item, index) => {
-            const itemPosition = item.offsetTop;
-            const delay = index * 200;
-            if (scrollPosition > itemPosition - window.innerHeight + 200) {
+    <script>
+        // --- 粒子背景和视频加载逻辑 (保持不变) ---
+        document.addEventListener('DOMContentLoaded', function () {
+            const video = document.getElementById('bg-video');
+            const loadingIndicator = document.querySelector('.video-loading');
+            function hideLoadingIndicator() {
+                loadingIndicator.style.opacity = '0';
                 setTimeout(() => {
-                    item.classList.add('visible');
-                }, delay);
+                    loadingIndicator.style.display = 'none';
+                    video.style.display = 'block';
+                    setTimeout(() => {
+                        video.style.opacity = '0.7';
+                    }, 100);
+                }, 500);
             }
-        });
-
-        panels.forEach((panel, index) => {
-            const panelPosition = panel.offsetTop;
-            const delay = index * 100;
-            if (scrollPosition > panelPosition - window.innerHeight + 200) {
-                setTimeout(() => {
-                    panel.classList.add('visible');
-                }, delay);
+            video.addEventListener('canplay', function () {
+                hideLoadingIndicator();
+                video.play().then(() => {
+                    console.log("视频自动播放成功");
+                }).catch(error => {
+                    console.log("自动播放被阻止:", error);
+                });
+            });
+            video.addEventListener('error', function () {
+                console.log("视频加载失败，使用CSS背景替代");
+                hideLoadingIndicator();
+                const errorMsg = document.createElement('div');
+                errorMsg.innerHTML = "视频加载失败，启用备用背景";
+                errorMsg.style.color = "#ff4d4d";
+                errorMsg.style.position = "absolute";
+                errorMsg.style.top = "60%";
+                errorMsg.style.left = "50%";
+                errorMsg.style.transform = "translate(-50%, -50%)";
+                errorMsg.style.zIndex = "10";
+                document.querySelector('.video-container').appendChild(errorMsg);
+                document.querySelector('.video-container').style.background = `radial-gradient(circle at center, #1a0a2e, #0a0a12)`;
+            });
+            // --- 激光动画逻辑 (保持不变) ---
+            const leftLaser = document.querySelector('.laser-beam.left');
+            const rightLaser = document.querySelector('.laser-beam.right');
+            let laserInterval;
+            function triggerLasers() {
+                const leftClasses = leftLaser.className;
+                const rightClasses = rightLaser.className;
+                leftLaser.classList.remove('laser-beam');
+                rightLaser.classList.remove('laser-beam');
+                void leftLaser.offsetWidth;
+                void rightLaser.offsetWidth;
+                leftLaser.classList.add('laser-beam');
+                rightLaser.classList.add('laser-beam');
             }
-        });
-
-        specs.forEach((spec, index) => {
-            const specPosition = spec.offsetTop;
-            const delay = index * 150;
-            if (scrollPosition > specPosition - window.innerHeight + 150) {
-                setTimeout(() => {
-                    spec.classList.add('visible');
-                }, delay);
+            function startLaserSequence() {
+                triggerLasers();
+                laserInterval = setInterval(triggerLasers, 7000);
             }
-        });
-    });
-
-    window.addEventListener('load', function() {
-        window.dispatchEvent(new Event('scroll'));
-        document.querySelectorAll('.panel').forEach(panel => {
-            panel.style.opacity = "0";
-            panel.style.transform = "translateY(50px)";
-            panel.style.transition = "opacity 0.8s ease, transform 0.8s ease";
-        });
-        document.querySelectorAll('.spec-card').forEach(card => {
-            card.style.opacity = "0";
-            card.style.transform = "translateY(30px)";
-            card.style.transition = "opacity 0.8s ease, transform 0.8s ease, box-shadow 0.3s ease, border-color 0.3s ease";
-        });
-        checkVideoStatus();
-    });
-
-    particlesJS('particles-js', {
-        "particles": {
-            "number": {
-                "value": 80,
-                "density": {
-                    "enable": true,
-                    "value_area": 800
-                }
-            },
-            "color": {
-                "value": "#00f3ff"
-            },
-            "shape": {
-                "type": "circle",
-                "stroke": {
-                    "width": 0,
-                    "color": "#000000"
-                },
-                "polygon": {
-                    "nb_sides": 5
-                }
-            },
-            "opacity": {
-                "value": 0.5,
-                "random": false,
-                "anim": {
-                    "enable": false,
-                    "speed": 1,
-                    "opacity_min": 0.1,
-                    "sync": false
-                }
-            },
-            "size": {
-                "value": 3,
-                "random": true,
-                "anim": {
-                    "enable": false,
-                    "speed": 40,
-                    "size_min": 0.1,
-                    "sync": false
-                }
-            },
-            "line_linked": {
-                "enable": true,
-                "distance": 150,
-                "color": "#00f3ff",
-                "opacity": 0.4,
-                "width": 1
-            },
-            "move": {
-                "enable": true,
-                "speed": 2,
-                "direction": "none",
-                "random": false,
-                "straight": false,
-                "out_mode": "out",
-                "bounce": false,
-                "attract": {
-                    "enable": false,
-                    "rotateX": 600,
-                    "rotateY": 1200
+            function checkAndStartLasers() {
+                if (leftLaser && rightLaser) {
+                    setTimeout(startLaserSequence, 6000);
+                } else {
+                    console.warn("Laser elements not found, cannot start sequence.");
                 }
             }
-        },
-        "interactivity": {
-            "detect_on": "canvas",
-            "events": {
-                "onhover": {
-                    "enable": true,
-                    "mode": "grab"
-                },
-                "onclick": {
-                    "enable": true,
-                    "mode": "push"
-                },
-                "resize": true
-            },
-            "modes": {
-                "grab": {
-                    "distance": 140,
-                    "line_linked": {
-                        "opacity": 1
+            window.addEventListener('load', function () {
+                setTimeout(checkAndStartLasers, 100);
+            });
+            // --- 滚动动画逻辑 (保持不变) ---
+            const panels = document.querySelectorAll('.panel');
+            const specsSection = document.getElementById('specsSection');
+            const specCards = document.querySelectorAll('.spec-card');
+            const chatContainer = document.getElementById('chatContainer');
+            window.addEventListener('scroll', function () {
+                const scrollPosition = window.scrollY;
+                panels.forEach((panel, index) => {
+                    const panelPosition = panel.offsetTop;
+                    const delay = index * 100;
+                    if (scrollPosition > panelPosition - window.innerHeight + 200) {
+                        setTimeout(() => {
+                            panel.style.opacity = "1";
+                            panel.style.transform = "translateY(0)";
+                        }, delay);
                     }
-                },
-                "push": {
-                    "particles_nb": 4
+                });
+                if (scrollPosition > specsSection.offsetTop - window.innerHeight + 200) {
+                    specsSection.classList.add('visible');
+                }
+                specCards.forEach((spec, index) => {
+                    const specPosition = spec.offsetTop;
+                    const delay = index * 150;
+                    if (scrollPosition > specPosition - window.innerHeight + 150) {
+                        setTimeout(() => {
+                            spec.classList.add('visible');
+                        }, delay);
+                    }
+                });
+                if (scrollPosition > chatContainer.offsetTop - window.innerHeight + 300) {
+                    chatContainer.classList.add('visible');
+                }
+            });
+            window.addEventListener('load', function () {
+                window.dispatchEvent(new Event('scroll'));
+            });
+            // --- 登录和语言切换逻辑 (保持不变) ---
+            const loginBtn = document.getElementById('loginBtn');
+            const langBtn = document.getElementById('langBtn');
+            loginBtn.addEventListener('click', function () {
+                const originalText = loginBtn.innerHTML;
+                loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 正在登录...';
+                setTimeout(() => {
+                    loginBtn.innerHTML = '<i class="fas fa-exclamation-circle"></i> 登录失败';
+                    setTimeout(() => {
+                        loginBtn.innerHTML = originalText;
+                    }, 1500);
+                }, 2000);
+            });
+            let isEnglish = false;
+            langBtn.addEventListener('click', function () {
+                isEnglish = !isEnglish;
+                if (isEnglish) {
+                    document.querySelector('.subtitle').innerHTML = `Next-generation AI model, ternary innovation technology and green energy-saving framework<br><span style="display: block; text-align: center;">Redefining the true future of robotics</span>`;
+                    document.querySelectorAll('.stat-label').forEach((el, index) => {
+                        const labels = ['Model Size Reduction', 'Ternary Quantization', 'Energy Consumption Reduction'];
+                        el.textContent = labels[index];
+                    });
+                    document.querySelector('.left-panel .panel-title-link').innerHTML = `<i class="fas fa-microchip"></i>AliceSkyGarden T3`;
+                    document.querySelector('.left-panel .panel-content p').textContent = "AliceSkyGarden T3 is our first-generation AI model, featuring an advanced ternary sparse activation architecture. The framework is now online with the following features:";
+                    const leftFeatures = ["Ternary quantization of parameters reduces model size and saves storage space", "Native support for ternary inference with ultra-low power consumption on ternary chips", "Minimal loss in overall accuracy ensures model output reliability", "1100% increase in inference speed, reducing response time to milliseconds", "Green energy-saving AI with energy consumption close to the human brain", "Supports trillion-scale parameters for powerful comprehension"];
+                    document.querySelectorAll('.left-panel .features li').forEach((el, index) => {
+                        el.textContent = leftFeatures[index];
+                    });
+                    document.querySelector('.left-panel .panel-content p:last-child').textContent = "The T3 model is a green, energy-efficient AI that delivers impressive performance in natural language understanding, creative content generation, and complex problem-solving, even under low power consumption. It represents a low-power AI solution.";
+                    document.querySelector('.right-panel .panel-title-link').innerHTML = `<i class="fas fa-microchip"></i>AliceSkyGarden T4`;
+                    document.querySelector('.right-panel .panel-content p').textContent = "AliceSkyGarden T4 is our next-generation model, currently under development. It is a ternary, multimodal supermodel:";
+                    const rightFeatures = ["Ternary architecture based on multi-dimensional vector energy optimization and sparse activation", "Cross-modal fusion reasoning capabilities for seamless connection between vision, senses, and sound", "Self-evolving learning framework for continuous autonomous improvement", "Real-time emotion recognition and response for more natural interaction experiences", "Extremely low response latency for real-time environmental feedback", "Aims not for superintelligence, but to infinitely approach human-like capabilities"];
+                    document.querySelectorAll('.right-panel .features li').forEach((el, index) => {
+                        el.textContent = rightFeatures[index];
+                    });
+                    document.querySelector('.right-panel .panel-content p:last-child').textContent = "The T4 model is not only a green, multimodal AI but also a digital, human-like system capable of self-energy allocation and environmental feedback. It can learn and create autonomously, opening up new explorations in green, intelligent, low-power, and multimodal technologies.";
+                    document.querySelector('.specs-title').textContent = "Technical Specifications and Performance Metrics";
+                    const specs = [{ title: "Computing Architecture", content: "Proprietary ternary architecture for green, low-power computing with maximized efficiency. The T4 multimodal version introduces multidimensional vector energy optimization." }, { title: "Training Data", content: "Supports fusion of multi-source heterogeneous data including scientific literature, historical archives, artistic creations, and real-time web data, totaling over 10PB." }, { title: "Energy Efficiency", content: "96% improvement in energy efficiency compared to traditional models. The T4, with multidimensional vector energy optimization, further reduces energy consumption for equivalent computing tasks." }, { title: "Security Framework", content: "Multi-layered security protection system including ethical constraint modules, real-time monitoring systems, and adaptive security protocols to ensure controllable AI behavior." }, { title: "API Interface", content: "Provides RESTful API and SDK, supporting rapid integration with multiple programming languages to simplify the development process." }, { title: "Deployment Method", content: "Supports cloud SaaS, private deployment, and edge computing to meet the needs of various scenarios." }];
+                    specCards.forEach((card, index) => {
+                        card.querySelector('.spec-title').textContent = specs[index].title;
+                        card.querySelector('.spec-content').textContent = specs[index].content;
+                    });
+                    const footerLinks = ["Home", "Developers", "Documentation", "Community", "Blog", "Contact Us"];
+                    document.querySelectorAll('.footer-link .link-text').forEach((el, index) => {
+                        el.textContent = footerLinks[index];
+                    });
+                    document.querySelector('.copyright').textContent = "© 2025 AliceSkyGarden Technology. All rights reserved";
+                    langBtn.innerHTML = '<i class="fas fa-globe"></i>&nbsp;&nbsp;中文&nbsp;&nbsp;';
+                    document.querySelector('.video-loading > div:last-child').textContent = "Loading T4 preview...";
+                    document.querySelector('#chatTitle').textContent = "Chat with AliceSkyGarden";
+                    document.querySelector('#userInput').placeholder = "Type your message...";
+                    document.querySelector('#sendButton').innerHTML = '<i class="fas fa-paper-plane"></i> Send';
+                } else {
+                    document.querySelector('.subtitle').innerHTML = `下一代人工智能模型，三元创新技术与绿色节能框架<br><span style="display: block; text-align: center;">重新定义机器人真正的未来</span>`;
+                    document.querySelectorAll('.stat-label').forEach((el, index) => {
+                        const labels = ['模型体积减小', '参数三元量化', '运行能耗减小'];
+                        el.textContent = labels[index];
+                    });
+                    document.querySelector('.left-panel .panel-title-link').innerHTML = `<i class="fas fa-microchip"></i>AliceSkyGarden T3`;
+                    document.querySelector('.left-panel .panel-content p').textContent = "AliceSkyGarden T3 是我们推出的第一代AI模型，采用先进的三元稀疏激活架构，框架已上线，具有以下特点：";
+                    const leftFeatures = ["参数三元量化，模型体积减小，节省存储空间", "框架原生支持三元推理，三进制芯片下功耗极低", "总精度几乎没有下降，确保了模型输出的准确性", "推理速度提升1100%，响应时间缩短至毫秒级", "属于绿色节能型AI，运行能耗接近于人类大脑", "参数支持万亿超大规模，实现强大的理解能力"];
+                    document.querySelectorAll('.left-panel .features li').forEach((el, index) => {
+                        el.textContent = leftFeatures[index];
+                    });
+                    document.querySelector('.left-panel .panel-content p:last-child').textContent = "T3模型是一款绿色节能型AI，在低功耗下依然可以在自然语言理解、创造性内容生成和复杂问题方面的表现达到不错的水平，是一种绿色低功耗的AI解决方案。";
+                    document.querySelector('.right-panel .panel-title-link').innerHTML = `<i class="fas fa-microchip"></i>AliceSkyGarden T4`;
+                    document.querySelector('.right-panel .panel-content p').textContent = "AliceSkyGarden T4 是我们面向未来的第二代模型，目前正在开发中，属于三元的多模态超级模型：";
+                    const rightFeatures = ["采用基于多维向量能量优化的稀疏激活的三元架构", "跨模态融合推理能力，无缝连接视觉、感官和声音", "自我进化学习框架，模型能够持续自主改进", "实时情感识别与响应，创造更自然的交互体验", "极低的响应速度，实时与周围环境进行反馈", "不以超级智能为目标，宗旨是无限接近人类"];
+                    document.querySelectorAll('.right-panel .features li').forEach((el, index) => {
+                        el.textContent = rightFeatures[index];
+                    });
+                    document.querySelector('.right-panel .panel-content p:last-child').textContent = "T4模型不仅是一个绿色多模态AI，还是一个能够自我分配能量和反馈周围环境的能自主学习和创造的数字化拟人系统，开启了全新的绿色智能低功耗多模态的探索。";
+                    document.querySelector('.specs-title').textContent = "技术规格与性能指标";
+                    const specs = [{ title: "计算架构", content: "采用独家三元技术架构，绿色低功耗，实现计算效率最大化。T4多模态版本引入多维向量能量优化。" }, { title: "训练数据", content: "支持多源异构数据融合，涵盖科学文献、历史档案、艺术创作和实时网络数据，总量可超过10PB。" }, { title: "能效比", content: "相比传统模型，T3能效提升96%，采用多维向量能量优化的T4在同等计算量下能耗会进一步降低。" }, { title: "安全框架", content: "多层安全防护体系，包括道德约束模块、实时监控系统和自适应安全协议，确保AI行为可控。" }, { title: "API接口", content: "提供RESTful API和SDK，支持多种编程语言快速集成，简化开发流程。" }, { title: "部署方式", content: "支持云端SaaS、私有化部署和边缘计算，满足不同场景需求。" }];
+                    specCards.forEach((card, index) => {
+                        card.querySelector('.spec-title').textContent = specs[index].title;
+                        card.querySelector('.spec-content').textContent = specs[index].content;
+                    });
+                    const footerLinks = ["首页", "开发者", "文档", "社区", "博客", "联系我们"];
+                    document.querySelectorAll('.footer-link .link-text').forEach((el, index) => {
+                        el.textContent = footerLinks[index];
+                    });
+                    document.querySelector('.copyright').textContent = "© 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved";
+                    langBtn.innerHTML = '<i class="fas fa-globe"></i> English';
+                    document.querySelector('.video-loading > div:last-child').textContent = "正在加载T4预告...";
+                    document.querySelector('#chatTitle').textContent = "与 AliceSkyGarden 对话";
+                    document.querySelector('#userInput').placeholder = "输入你的消息...";
+                    document.querySelector('#sendButton').innerHTML = '<i class="fas fa-paper-plane"></i> 发送';
+                }
+            });
+        });
+        // --- 聊天功能 ---
+        document.addEventListener('DOMContentLoaded', function () {
+            const chatMessages = document.getElementById('chatMessages');
+            const userInput = document.getElementById('userInput');
+            const sendButton = document.getElementById('sendButton');
+            // *** 重要：你需要将下面的 URL 替换为你实际部署的后端服务地址 ***
+            const API_URL = 'https://qwen-proxy-acqopqqcpc.cn-hangzhou.fcapp.run/invoke'; // <- 修改这里
+
+            // 配置 marked.js 以增强安全性 (可选但推荐)
+            marked.setOptions({
+                sanitize: false, // 不再推荐使用，新版本默认更安全。对于复杂HTML，应结合DOMPurify。
+                // 如果后端返回的内容可能包含不安全的HTML，建议引入并使用 DOMPurify
+                // 例如: botMessageDiv.innerHTML = DOMPurify.sanitize(marked.parse(fullReply));
+                // 这里我们假设后端返回的是相对安全的Markdown
+                gfm: true,       // 启用 GitHub 风格的 Markdown
+                breaks: false,   // 不将换行符转换为 <br>
+                smartypants: true // 启用智能标点符号替换
+            });
+
+            function addMessage(message, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+                // 为了保持 addMessage 函数的通用性（例如用于显示错误信息），
+                // 我们在这里仍然使用 textContent。对于 bot 的 Markdown 回复，
+                // 我们将在 sendMessage 函数中直接操作 innerHTML。
+                if (!isUser) {
+                     // 如果是机器人消息，先尝试解析为 Markdown，如果不是则作为纯文本
+                     try {
+                         messageDiv.innerHTML = marked.parse(message);
+                     } catch (e) {
+                         console.warn("Failed to parse message as Markdown, displaying as plain text:", message);
+                         messageDiv.textContent = message; // 回退到纯文本
+                     }
+                } else {
+                    messageDiv.textContent = message;
+                }
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function showTyping() {
+                const typingDiv = document.createElement('div');
+                typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
+                typingDiv.id = 'typingIndicator';
+                typingDiv.textContent = '正在思考...';
+                chatMessages.appendChild(typingDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function hideTyping() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
                 }
             }
-        },
-        "retina_detect": true
-    });
-});
-</script>
+
+            async function sendMessage() {
+                const message = userInput.value.trim();
+                if (!message) return;
+
+                addMessage(message, true); // 显示用户消息
+                userInput.value = ''; // 清空输入框
+
+                showTyping(); // 显示“正在输入”指示器
+                sendButton.disabled = true; // 禁用发送按钮
+
+                let botMessageDiv = null; // 用于打字机效果的 DOM 元素
+                let fullReply = ""; // 存储完整的回复
+
+                try {
+                    // 发送请求到后端
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ message: message })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+
+                    hideTyping(); // 隐藏“正在输入”指示器
+
+                    // 处理后端返回的数据
+                    if (data.reply) {
+                        fullReply = data.reply;
+                    } else if (data.error) {
+                        fullReply = `错误: ${data.error}`;
+                    } else {
+                        fullReply = "抱歉，我没有收到回复。";
+                    }
+
+                    // 创建用于显示机器人回复的 div
+                    botMessageDiv = document.createElement('div');
+                    botMessageDiv.classList.add('message', 'bot-message');
+                    // 初始为空，准备用于打字机效果
+                    botMessageDiv.innerHTML = ""; // 使用 innerHTML 以支持 Markdown 转换后的 HTML
+                    chatMessages.appendChild(botMessageDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                    // --- 打字机效果 ---
+                    let i = 0;
+                    const typeWriter = () => {
+                        if (i < fullReply.length) {
+                            // 每次添加一个字符并转换为 HTML
+                            const currentText = fullReply.slice(0, i + 1);
+                            try {
+                                // 将当前累积的文本解析为 Markdown 并设置为 innerHTML
+                                botMessageDiv.innerHTML = marked.parse(currentText);
+                            } catch (e) {
+                                // 如果解析失败（例如，在 Markdown 标记未闭合时），则显示原始文本
+                                console.warn("Typewriter: Failed to parse partial text as Markdown:", currentText, e);
+                                botMessageDiv.textContent = currentText;
+                            }
+                            i++;
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                            // 继续打字机效果
+                            setTimeout(typeWriter, 30);
+                        }
+                    };
+                    typeWriter();
+
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                    hideTyping(); // 确保隐藏
+
+                    // 显示错误信息
+                    if (!botMessageDiv) {
+                        // 如果 botMessageDiv 还没创建，就创建一个新的来显示错误
+                        const errorDiv = document.createElement('div');
+                        errorDiv.classList.add('message', 'bot-message');
+                        errorDiv.textContent = `错误: ${error.message}`; // 错误信息通常不需要 Markdown
+                        chatMessages.appendChild(errorDiv);
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    } else {
+                        // 如果已经创建了，就更新其内容
+                        botMessageDiv.textContent = `错误: ${error.message}`;
+                    }
+                } finally {
+                    // 无论成功与否，最后都启用发送按钮
+                    sendButton.disabled = false;
+                }
+
+            } // <-- 这里是 sendMessage 函数的结束大括号
+
+            // --- 添加以下代码以恢复发送功能 ---
+            // 为发送按钮添加点击事件监听器
+            sendButton.addEventListener('click', sendMessage);
+
+            userInput.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault();
+                    sendMessage();
+                }
+            });
+
+        });
+    </script>
 </body>
+
 </html>
