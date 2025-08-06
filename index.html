@@ -1950,13 +1950,13 @@
             // --- 添加以下代码以恢复发送功能 ---
             // 为发送按钮添加点击事件监听器
             sendButton.addEventListener('click', sendMessage);
-
-            // 为输入框添加回车键发送消息的事件监听器
+       
             userInput.addEventListener('keydown', function(event) {
                 if (event.key === 'Enter' && !event.shiftKey) {
-                    event.preventDefault(); // 阻止默认的换行行为
-                    sendMessage(); // 调用发送消息函数
+                    event.preventDefault(); 
+                    sendMessage();
                 }
+            });
            
         });
     </script>
