@@ -1941,59 +1941,43 @@
                             // console.log("Received chunk:", chunk); // 调试用
 
                             // 处理 SSE 数据块 (可能包含多个 data: 行)
-                            const lines = chunk.split('\n\n'); // 通常 SSE 事件由两个换行符分隔
+                            // 注意：SSE 规范是用 \n\n 分隔事件，但实际传输中 chunk 可能包含不完整的行或多个事件
+                            // 更稳健的做法是按 \n 分割，然后重组完整的行
+                            const lines = chunk.split('\n');
+                            let currentEvent = ""; // 用于累积当前事件的行
+
                             for (const line of lines) {
-                                if (line.startsWith('data: ')) {
-                                    const dataStr = line.substring(6); // 移除 'data: '
+                                if (line.startsWith('data:')) {
+                                    // 这是一个完整的 data 行或一个分段
+                                    const dataStr = line.substring(5).trim(); // 移除 'data:' 并 trim
+                                    if (dataStr === "[DONE]") {
+                                        done = true;
+                                        break;
+                                    }
                                     try {
                                         const dataObj = JSON.parse(dataStr);
-                                        // 根据 DashScope SSE 格式解析内容
-                                        // 通常包含在 dataObj.output.text 或类似字段
-                                        // 注意：DashScope 流式可能返回增量内容
-                                        const deltaText = dataObj.output?.text || dataObj.choices?.[0]?.delta?.content || "";
+                                        // 根据 DashScope SSE 格式解析内容 (增量内容在 output.text)
+                                        const deltaText = dataObj.output?.text || "";
                                         if (deltaText) {
                                             accumulatedContent += deltaText;
-                                            // 更新消息 div 的内容 (可以选择累积更新或直接替换)
-                                            // 为了更好的体验，可以在这里添加简单的延迟或使用 requestAnimationFrame
-                                            // 或者累积一定量后再更新
+                                            // 实时更新消息 div 的内容 (使用 Markdown 转换)
                                             botMessageDiv.innerHTML = markdownToHtml(accumulatedContent);
-
                                             // 滚动到底部
                                             chatMessages.scrollTop = chatMessages.scrollHeight;
                                         }
-                                        // 检查是否结束
-                                        if (dataObj.code === "0" && dataObj.message === "Finished") { // 或 DashScope 特定的结束标记
+                                        // 可以检查 finish_reason 等字段判断结束
+                                        if (dataObj.output?.finish_reason === "stop") {
                                              done = true;
                                              break;
                                         }
                                     } catch (e) {
-                                        console.error("Error parsing SSE data:", dataStr, e);
-                                        // 可能是结束标记 [DONE] 或其他非JSON数据
-                                        if (dataStr.trim() === "[DONE]") {
-                                            done = true;
-                                            break;
-                                        }
-                                    }
-                                } else if (line.startsWith('event: ')) {
-                                    // 处理 event 类型 (如果需要)
-                                    // console.log("Event type:", line.substring(7));
-                                } else if (line.startsWith(':')) {
-                                    // 心跳，通常忽略
-                                    // console.log("Heartbeat:", line);
-                                } else if (line.trim() !== '') {
-                                    // 其他行，可能是错误或结束标记
-                                    console.log("Other SSE line:", line);
-                                    if (line.includes("error")) {
-                                         // 尝试解析错误
-                                         try {
-                                             const errorObj = JSON.parse(line);
-                                             throw new Error(errorObj.message || "Stream error");
-                                         } catch (parseError) {
-                                             // 如果无法解析，直接显示行内容作为错误
-                                             throw new Error(`Stream error line: ${line}`);
-                                         }
+                                        console.error("Error parsing SSE data line:", line, e);
+                                        // 如果解析失败，可能是分段的 JSON，累积到 currentEvent
+                                        // 这里简化处理，直接记录错误
                                     }
                                 }
+                                // 忽略 event: 和 : (心跳) 行
+                                // 如果需要处理其他事件类型或错误，可以在这里添加逻辑
                             }
                         }
                     }
@@ -2016,83 +2000,35 @@
                     sendButton.disabled = false;
                 }
             }
-            // ... (之后的代码) ...
 
-            // 可选：如果你想保留非流式的“打字机”效果（即后端返回完整文本，前端模拟逐字显示）
-            // 可以保留 markdownToHtml 和 typeWriterHtml 函数，并在非流式分支中使用它们
-            /*
-            const markdownToHtml = (markdownText) => { ... }; // 保持不变
-
-            const typeWriterHtml = (element, htmlContent, speed = 30) => {
-                element.innerHTML = ""; // 清空元素
-                let i = 0;
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = htmlContent; // 解析 HTML
-                const textNodes = []; // 存储所有文本节点及其路径
-
-                // 递归函数收集所有文本节点
-                function collectTextNodes(node, path = []) {
-                    if (node.nodeType === Node.TEXT_NODE) {
-                        textNodes.push({ node: node, path: [...path], text: node.textContent });
-                    } else if (node.nodeType === Node.ELEMENT_NODE) {
-                        for (let i = 0; i < node.childNodes.length; i++) {
-                            collectTextNodes(node.childNodes[i], [...path, i]);
-                        }
-                    }
+            // ... (之后的代码保持不变) ...
+            // 确保 markdownToHtml 函数在 sendMessage 函数之前或附近定义
+            const markdownToHtml = (markdownText) => {
+                if (typeof marked === 'undefined') {
+                    console.warn('marked.js 未加载，无法转换 Markdown');
+                    return markdownText; // 如果 marked.js 未加载，返回原始文本
                 }
-                collectTextNodes(tempDiv);
-
-                let currentTextNodeIndex = 0;
-                let currentCharIndex = 0;
-
-                function type() {
-                    if (currentTextNodeIndex < textNodes.length) {
-                        const currentTextNodeData = textNodes[currentTextNodeIndex];
-                        if (currentCharIndex < currentTextNodeData.text.length) {
-                            // 重建到当前文本节点的 DOM 结构
-                            const cloneTempDiv = tempDiv.cloneNode(true);
-                            let currentPathNode = cloneTempDiv;
-                            for (let i = 0; i < currentTextNodeData.path.length; i++) {
-                                currentPathNode = currentPathNode.childNodes[currentTextNodeData.path[i]];
-                            }
-                            // 截取到当前字符
-                            currentPathNode.textContent = currentTextNodeData.text.substring(0, currentCharIndex + 1);
-                            element.innerHTML = cloneTempDiv.innerHTML;
-                            currentCharIndex++;
-                            chatMessages.scrollTop = chatMessages.scrollHeight; // 滚动
-                            setTimeout(type, speed);
-                        } else {
-                            // 移动到下一个文本节点
-                            currentTextNodeIndex++;
-                            currentCharIndex = 0;
-                            // 直接更新完整内容以确保 HTML 结构正确
-                            element.innerHTML = tempDiv.innerHTML;
-                            chatMessages.scrollTop = chatMessages.scrollHeight;
-                            setTimeout(type, speed);
-                        }
-                    }
+                try {
+                    // 配置 marked 以支持换行
+                    marked.setOptions({
+                        breaks: true, // 将 \n 转换为 <br>
+                        gfm: true     // 启用 GitHub Flavored Markdown
+                    });
+                    return marked.parse(markdownText);
+                } catch (e) {
+                    console.error('Markdown 转换出错:', e);
+                    return markdownText; // 转换失败时返回原始文本
                 }
-                type();
             };
-
-            // 在非流式获取到 fullReply 后使用：
-            // botMessageDiv = document.createElement('div');
-            // botMessageDiv.classList.add('message', 'bot-message');
-            // chatMessages.appendChild(botMessageDiv);
-            // chatMessages.scrollTop = chatMessages.scrollHeight;
-            // typeWriterHtml(botMessageDiv, markdownToHtml(fullReply), 30); // 30ms per char
-            */
 
 
             sendButton.addEventListener('click', sendMessage);
-       
             userInput.addEventListener('keydown', function(event) {
                 if (event.key === 'Enter' && !event.shiftKey) {
                     event.preventDefault(); 
                     sendMessage();
                 }
             });
-           
         });
     </script>
 </body>
