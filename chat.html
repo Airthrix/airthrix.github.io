@@ -91,7 +91,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
+            background:
                 linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
             background-size: 30px 30px;
@@ -672,13 +672,14 @@
                 }, 500);
             });
 
-            // --- 修改后的 Chat Functionality (使用 SSE) ---
+            // --- 修改后的 Chat Functionality (使用 fetch 和一次性响应) ---
             const chatMessages = document.getElementById('chatMessages');
             const userInput = document.getElementById('userInput');
             const sendButton = document.getElementById('sendButton');
-            // 确保 API_URL 指向您的后端流式接口，并且支持 GET 方法
-            const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run/invoke'; // 注意添加了 /invoke 路径
-            let currentEventSource = null; // 用于跟踪当前的流
+            // *** 请确保这个 URL 指向您的后端 API 端点 ***
+            // *** 如果您的后端部署在根路径 '/'，请使用 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run' ***
+            // *** 如果您的后端部署在 '/invoke' 路径，请使用 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run/invoke' ***
+            const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run'; // 根据您的实际部署情况修改
 
             function addMessage(message, isUser = false) {
                 const messageDiv = document.createElement('div');
@@ -706,78 +707,27 @@
                 }
             }
 
-            // --- 新增：流式接收和显示函数 ---
-            function streamMessage(message) {
-                // 1. 隐藏思考提示
-                hideTyping();
-                // 2. 添加一个新的机器人消息 div
-                const botMessageDiv = addMessage('', false); // 空内容，稍后填充
-                let fullReply = "";
-                let i = 0;
-                const typingCursor = document.createElement('span');
-                typingCursor.classList.add('typing-cursor');
-                botMessageDiv.appendChild(typingCursor);
+            // --- 新增：逐字显示函数 (打字机效果) ---
+            function typeWriter(messageDiv, fullText, speed = 30) {
+                 let i = 0;
+                 const typingCursor = document.createElement('span');
+                 typingCursor.classList.add('typing-cursor');
+                 messageDiv.appendChild(typingCursor);
 
-                // 3. 构造支持 GET 方法的 EventSource URL
-                // 确保后端 /invoke 路由支持 GET 并能处理 'message' 查询参数
-                const eventSourceUrl = `${API_URL}?message=${encodeURIComponent(message)}`;
-                // 4. 创建 EventSource 连接
-                const eventSource = new EventSource(eventSourceUrl, { withCredentials: false }); // 根据 CORS 设置调整
-
-                eventSource.onmessage = function(event) {
-                    // 假设后端发送的是  ... 格式
-                    const rawData = event.data;
-                    if (rawData === "[DONE]") {
-                        // 流结束
-                        console.log("Stream finished.");
-                        // 移除光标
-                        const cursor = botMessageDiv.querySelector('.typing-cursor');
-                        if (cursor) cursor.remove();
-                        eventSource.close(); // 关闭连接
-                        return;
-                    }
-
-                    try {
-                        const data = JSON.parse(rawData);
-                        if (data.content) {
-                            // 收到内容片段
-                            fullReply += data.content;
-                            // 实时更新消息内容 (逐字或逐块)
-                            // 使用 marked 解析 Markdown
-                            const htmlContent = marked.parse(fullReply, { breaks: true });
-                            botMessageDiv.innerHTML = htmlContent + '<span class="typing-cursor"></span>';
-                            chatMessages.scrollTop = chatMessages.scrollHeight;
-                        } else if (data.error) {
-                            // 收到错误信息
-                            console.error("Stream Error:", data.error);
-                            botMessageDiv.innerHTML = isEnglish ? `Error: ${data.error}` : `错误: ${data.error}`;
-                            const cursor = botMessageDiv.querySelector('.typing-cursor');
-                            if (cursor) cursor.remove();
-                            eventSource.close(); // 关闭连接
-                        }
-                    } catch (e) {
-                        console.error("Failed to parse SSE data:", rawData, e);
-                        // 可以选择在这里关闭连接或显示错误
-                    }
-                };
-
-                eventSource.onerror = function(err) {
-                    console.error("EventSource failed:", err);
-                    hideTyping();
-                    // 确保光标被移除
-                    const cursor = botMessageDiv.querySelector('.typing-cursor');
-                    if (cursor) cursor.remove();
-                    // 如果还没有内容，显示错误
-                    if (!botMessageDiv.textContent || botMessageDiv.textContent.trim() === '') {
-                         botMessageDiv.textContent = isEnglish ? 'Error: Connection failed.' : '错误：连接失败。';
-                    }
-                    eventSource.close(); // 确保关闭连接
-                };
-
-                // 返回 eventSource 对象，以便在需要时（如取消）关闭它
-                return eventSource;
+                 function type() {
+                     if (i < fullText.length) {
+                         messageDiv.innerHTML = fullText.substring(0, i + 1);
+                         messageDiv.appendChild(typingCursor); // 保持光标在末尾
+                         i++;
+                         chatMessages.scrollTop = chatMessages.scrollHeight;
+                         setTimeout(type, speed);
+                     } else {
+                         // 移除光标
+                         typingCursor.remove();
+                     }
+                 }
+                 type();
             }
-
 
             async function sendMessage() {
                 const message = userInput.value.trim();
@@ -794,78 +744,70 @@
                 sendButton.disabled = true;
 
                 try {
-                    // 启动流式接收
-                    if (currentEventSource) {
-                         currentEventSource.close(); // 关闭之前的连接（如果有的话）
+                    // 使用 fetch 发送 POST 请求
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                            // 如果需要认证，可以在这里添加 'Authorization': 'Bearer YOUR_TOKEN'
+                        },
+                        body: JSON.stringify({ message: message })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
                     }
-                    currentEventSource = streamMessage(message);
+
+                    const data = await response.json();
+                    hideTyping(); // 隐藏思考提示
+
+                    let botReply = "";
+                    if (data.reply) {
+                        botReply = data.reply;
+                    } else if (data.error) {
+                        botReply = isEnglish ? `Error: ${data.error}` : `错误: ${data.error}`;
+                    } else {
+                        botReply = isEnglish ? "Sorry, I didn't receive a valid reply." : "抱歉，我没有收到有效的回复。";
+                    }
+
+                    // 使用 marked 解析 Markdown
+                    let htmlReply = "";
+                    try {
+                        htmlReply = marked.parse(botReply, { breaks: true });
+                    } catch (e) {
+                        console.error("Markdown parsing error:", e);
+                        htmlReply = botReply; // Fallback to plain text
+                    }
+
+                    // 添加机器人消息容器
+                    const botMessageDiv = document.createElement('div');
+                    botMessageDiv.classList.add('message', 'bot-message');
+                    botMessageDiv.innerHTML = ""; // 初始为空
+                    chatMessages.appendChild(botMessageDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                    // 启动打字机效果
+                    typeWriter(botMessageDiv, htmlReply);
+
                 } catch (error) {
-                     console.error('Error initiating stream:', error);
-                     hideTyping();
-                     const errorDiv = document.createElement('div');
-                     errorDiv.classList.add('message', 'bot-message');
-                     errorDiv.textContent = isEnglish ? `Error: ${error.message}` : `错误: ${error.message}`;
-                     chatMessages.appendChild(errorDiv);
-                     chatMessages.scrollTop = chatMessages.scrollHeight;
+                    console.error('Error sending message:', error);
+                    hideTyping();
+                    const errorDiv = document.createElement('div');
+                    errorDiv.classList.add('message', 'bot-message');
+                    errorDiv.textContent = isEnglish ? `Error: ${error.message}` : `错误: ${error.message}`;
+                    chatMessages.appendChild(errorDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
                 } finally {
                     // 启用发送按钮
-                    // 注意：发送按钮在流式传输期间保持禁用状态可能更好，
-                    // 或者可以允许发送新消息（这将取消当前流）。
-                    // 这里我们选择在启动流后立即启用它。
                     sendButton.disabled = false;
                 }
             }
 
-            // --- 可选：添加取消流式输出的功能 ---
-            // 例如，用户再次点击发送按钮时，取消上一个流
-            sendButton.addEventListener('click', function() {
-                if (currentEventSource) {
-                    currentEventSource.close();
-                    hideTyping(); // 隐藏上一个思考提示
-                    const typingCursor = document.querySelector('.typing-cursor');
-                    if (typingCursor) typingCursor.remove(); // 移除光标
-                    currentEventSource = null; // 重置引用
-                }
-                sendMessage(); // 发送新消息
-            });
-
-            // 或者添加一个专门的取消按钮 (取消注释下面代码以启用)
-            /*
-            const cancelButton = document.createElement('button');
-            cancelButton.textContent = isEnglish ? 'Cancel' : '取消';
-            cancelButton.style.marginLeft = '10px';
-            cancelButton.classList.add('chat-send-btn'); // 复用样式
-            cancelButton.addEventListener('click', () => {
-                if (currentEventSource) {
-                    currentEventSource.close();
-                    hideTyping();
-                    const typingCursor = document.querySelector('.typing-cursor');
-                    if (typingCursor) typingCursor.remove();
-                    currentEventSource = null;
-                    console.log("Stream cancelled by user.");
-                }
-            });
-            // 需要先获取 chatInputArea 元素
-            const chatInputArea = document.querySelector('.chat-input-area');
-            chatInputArea.appendChild(cancelButton);
-            */
-
-            // 如果使用上面的取消按钮方案，请注释掉下面这行
-            // userInput.addEventListener('keydown', function(event) {
-            //     if (event.key === 'Enter' && !event.shiftKey) {
-            //         event.preventDefault();
-            //         sendMessage();
-            //     }
-            // });
-
-            // 如果不使用取消按钮，保留 Enter 键发送功能
+            sendButton.addEventListener('click', sendMessage);
             userInput.addEventListener('keydown', function(event) {
                 if (event.key === 'Enter' && !event.shiftKey) {
                     event.preventDefault();
-                    // 模拟点击发送按钮，触发取消逻辑（如果已添加）
-                    sendButton.click();
-                    // 或者直接调用 sendMessage();
-                    // sendMessage();
+                    sendMessage();
                 }
             });
 
