@@ -676,11 +676,35 @@
             const chatMessages = document.getElementById('chatMessages');
             const userInput = document.getElementById('userInput');
             const sendButton = document.getElementById('sendButton');
-            // *** 关键修改 1: 确保 URL 指向 /invoke 路径 ***
-            const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run/invoke'; // 注意末尾的 /invoke
+            // 确保 API_URL 指向您的后端流式接口，并且支持 GET 方法
+            const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run/invoke'; // 注意添加了 /invoke 路径
             let currentEventSource = null; // 用于跟踪当前的流
 
-            // ... (addMessage, showTyping, hideTyping 函数保持不变) ...
+            function addMessage(message, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+                messageDiv.textContent = message;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                return messageDiv; // 返回元素以便后续更新
+            }
+
+            function showTyping() {
+                const typingDiv = document.createElement('div');
+                typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
+                typingDiv.id = 'typingIndicator';
+                typingDiv.textContent = isEnglish ? 'Thinking...' : '正在思考...';
+                chatMessages.appendChild(typingDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function hideTyping() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
 
             // --- 新增：流式接收和显示函数 ---
             function streamMessage(message) {
@@ -689,20 +713,20 @@
                 // 2. 添加一个新的机器人消息 div
                 const botMessageDiv = addMessage('', false); // 空内容，稍后填充
                 let fullReply = "";
+                let i = 0;
                 const typingCursor = document.createElement('span');
                 typingCursor.classList.add('typing-cursor');
                 botMessageDiv.appendChild(typingCursor);
 
-                // *** 关键修改 2: 构造正确的 EventSource URL 指向 /invoke ***
+                // 3. 构造支持 GET 方法的 EventSource URL
+                // 确保后端 /invoke 路由支持 GET 并能处理 'message' 查询参数
                 const eventSourceUrl = `${API_URL}?message=${encodeURIComponent(message)}`;
-                console.log("Connecting to EventSource at:", eventSourceUrl); // 调试日志
-                // 3. 创建 EventSource 连接
+                // 4. 创建 EventSource 连接
                 const eventSource = new EventSource(eventSourceUrl, { withCredentials: false }); // 根据 CORS 设置调整
 
                 eventSource.onmessage = function(event) {
                     // 假设后端发送的是  ... 格式
                     const rawData = event.data;
-                    console.log("Received SSE data:", rawData); // 调试日志
                     if (rawData === "[DONE]") {
                         // 流结束
                         console.log("Stream finished.");
@@ -745,7 +769,7 @@
                     if (cursor) cursor.remove();
                     // 如果还没有内容，显示错误
                     if (!botMessageDiv.textContent || botMessageDiv.textContent.trim() === '') {
-                         botMessageDiv.textContent = isEnglish ? 'Error: Connection failed or invalid stream.' : '错误：连接失败或流无效。';
+                         botMessageDiv.textContent = isEnglish ? 'Error: Connection failed.' : '错误：连接失败。';
                     }
                     eventSource.close(); // 确保关闭连接
                 };
