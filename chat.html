@@ -26,13 +26,14 @@
             --neon-red: #ff0055;
             --dark-bg: #0a0a12;
             --panel-bg: rgba(15, 15, 40, 0.85);
+            --glow-color: #00f3ff;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* 使用紫色科幻渐变背景 */
-            background: linear-gradient(135deg, #1a0a2e, #2d0b45, #4a0f6b);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            /* 更加动态和科幻的背景 */
+            background: linear-gradient(270deg, #0a0a2e, #1a0a2e, #2d0b45, #4a0f6b, #1a0a2e);
+            background-size: 600% 600%;
+            animation: gradientBG 30s ease infinite;
             color: #e0e0ff;
             min-height: 100vh;
             overflow-x: hidden;
@@ -43,6 +44,62 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+
+        /* --- 新增：整体粒子容器 --- */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        /* --- 新增：光晕效果 --- */
+        .glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.7;
+            z-index: 1;
+        }
+        .glow-blue {
+            width: 300px;
+            height: 300px;
+            background: var(--neon-blue);
+            top: 10%;
+            left: 10%;
+            animation: float 15s ease-in-out infinite;
+        }
+        .glow-purple {
+            width: 400px;
+            height: 400px;
+            background: var(--neon-purple);
+            bottom: 15%;
+            right: 15%;
+            animation: float 20s ease-in-out infinite reverse;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(20px, 20px); }
+        }
+
+        /* --- 新增：网格背景 --- */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0.3;
+        }
+
         .top-nav {
             position: fixed;
             top: 0;
@@ -76,6 +133,7 @@
             backdrop-filter: blur(5px);
             background: rgba(15, 15, 40, 0.4);
             overflow: hidden;
+            z-index: 10;
         }
         .nav-btn::after {
             content: none;
@@ -226,6 +284,7 @@
             border-top: 3px solid var(--neon-blue);
             position: relative;
             overflow: hidden;
+            z-index: 10;
         }
         .chat-title {
             font-size: 2rem;
@@ -246,6 +305,8 @@
             gap: 1rem;
             scrollbar-width: thin;
             scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+            position: relative;
+            z-index: 10;
         }
         .chat-messages::-webkit-scrollbar {
             width: 8px;
@@ -264,6 +325,8 @@
             max-width: 80%;
             word-wrap: break-word;
             animation: fadeIn 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -280,10 +343,24 @@
             color: #c0c0ff;
             align-self: flex-start;
             border-bottom-left-radius: 5px;
+            /* --- 新增：为机器人消息添加内发光效果 --- */
+            box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.2);
+        }
+         /* --- 新增：打字机光标样式 --- */
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s infinite;
+            color: var(--neon-blue);
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
         .chat-input-area {
             display: flex;
             gap: 0.5rem;
+            z-index: 10;
+            position: relative;
         }
         .chat-input {
             flex-grow: 1;
@@ -337,7 +414,6 @@
             align-self: flex-start;
             padding: 0.5rem 1rem;
         }
-
         /* 响应式调整 */
         @media (max-width: 768px) {
             .top-nav {
@@ -381,6 +457,14 @@
     </style>
 </head>
 <body>
+    <!-- --- 新增：粒子容器 --- -->
+    <div id="particles-js"></div>
+    <!-- --- 新增：动态光晕 --- -->
+    <div class="glow glow-blue"></div>
+    <div class="glow glow-purple"></div>
+    <!-- --- 新增：网格叠加层 --- -->
+    <div class="grid-overlay"></div>
+
     <!-- 顶部导航栏 -->
     <div class="top-nav">
         <button class="nav-btn" id="loginBtn">
@@ -392,7 +476,6 @@
             <span class="btn-text">English</span>
         </button>
     </div>
-
     <div class="main-content">
         <!-- 聊天功能区域 -->
         <div class="chat-container">
@@ -409,7 +492,6 @@
             </div>
         </div>
     </div>
-
     <!-- 底部区域 -->
     <div class="footer">
         <div class="footer-logo">AliceSkyGarden</div>
@@ -432,69 +514,102 @@
         <p>Contact: airthrix@163.com | +1 (800) AIRTHRIX-AI</p>
         <p class="copyright">&copy; 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved</p>
     </div>
-
     <!-- 粒子效果库 -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
-            // --- Cursor Particles ---
-            const cursorParticlesContainer = document.createElement('div');
-            cursorParticlesContainer.id = 'cursor-particles';
-            document.body.appendChild(cursorParticlesContainer);
-            let mouseX = 0, mouseY = 0;
-            let particles = [];
-            const particleCount = 15;
-            const colors = ['#00f3ff', '#b300ff', '#00ff9d', '#ff00c8'];
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.style.position = 'absolute';
-                particle.style.width = `${Math.random() * 4 + 2}px`;
-                particle.style.height = particle.style.width;
-                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                particle.style.borderRadius = '50%';
-                particle.style.pointerEvents = 'none';
-                particle.style.opacity = '0';
-                cursorParticlesContainer.appendChild(particle);
-                particles.push({
-                    element: particle,
-                    x: 0,
-                    y: 0,
-                    size: parseFloat(particle.style.width),
-                    speed: Math.random() * 0.5 + 0.1,
-                    angle: Math.random() * Math.PI * 2,
-                    distance: Math.random() * 30 + 10,
-                    opacity: 0,
-                    targetOpacity: 0
-                });
-            }
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-                particles.forEach(p => p.targetOpacity = 0.7);
+            // --- 初始化 Particles.js ---
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 100, // 增加粒子数量
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#00f3ff"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 2,
+                            "size_min": 0.3,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#00f3ff",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2, // 稍微加快速度
+                        "direction": "none",
+                        "random": true,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": true,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        }
+                    }
+                },
+                "retina_detect": true
             });
-            document.addEventListener('mouseleave', () => {
-                particles.forEach(p => p.targetOpacity = 0);
-            });
-            function animateCursorParticles() {
-                particles.forEach(p => {
-                    if (p.opacity < p.targetOpacity) p.opacity += 0.05;
-                    if (p.opacity > p.targetOpacity) p.opacity -= 0.05;
-                    p.opacity = Math.max(0, Math.min(1, p.opacity));
-                    const offsetX = Math.cos(p.angle) * p.distance;
-                    const offsetY = Math.sin(p.angle) * p.distance;
-                    p.x += (mouseX + offsetX - p.x) * p.speed;
-                    p.y += (mouseY + offsetY - p.y) * p.speed;
-                    p.element.style.left = `${p.x}px`;
-                    p.element.style.top = `${p.y}px`;
-                    p.element.style.opacity = p.opacity;
-                    p.angle += 0.02;
-                });
-                requestAnimationFrame(animateCursorParticles);
-            }
-            animateCursorParticles();
 
-            // --- Language and Login Button Functionality ---
+            // --- Language and Login Button Functionality (保持不变) ---
             const langBtn = document.getElementById('langBtn');
             const loginBtn = document.getElementById('loginBtn');
             const chatTitle = document.querySelector('.chat-title');
@@ -504,7 +619,6 @@
             const footerTagline = document.querySelector('.footer-tagline');
             const footerLinksText = document.querySelectorAll('.link-text');
             const copyrightText = document.querySelector('.copyright');
-
             let isEnglish = false;
 
             loginBtn.addEventListener('click', function() {
@@ -558,11 +672,11 @@
                 }, 500);
             });
 
-            // --- Chat Functionality (Copied from index.html) ---
+            // --- 修改后的 Chat Functionality (使用 SSE) ---
             const chatMessages = document.getElementById('chatMessages');
             const userInput = document.getElementById('userInput');
             const sendButton = document.getElementById('sendButton');
-            const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run';
+            const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run'; // 确保这是您的后端流式接口地址
 
             function addMessage(message, isUser = false) {
                 const messageDiv = document.createElement('div');
@@ -571,6 +685,7 @@
                 messageDiv.textContent = message;
                 chatMessages.appendChild(messageDiv);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
+                return messageDiv; // 返回元素以便后续更新
             }
 
             function showTyping() {
@@ -589,84 +704,117 @@
                 }
             }
 
+            // --- 新增：流式接收和显示函数 ---
+            function streamMessage(message) {
+                // 1. 隐藏思考提示
+                hideTyping();
+                // 2. 添加一个新的机器人消息 div
+                const botMessageDiv = addMessage('', false); // 空内容，稍后填充
+                let fullReply = "";
+                let i = 0;
+                const typingCursor = document.createElement('span');
+                typingCursor.classList.add('typing-cursor');
+                botMessageDiv.appendChild(typingCursor);
+
+                // 3. 创建 EventSource 连接
+                const eventSource = new EventSource(`${API_URL}?message=${encodeURIComponent(message)}`, { withCredentials: true });
+
+                eventSource.onmessage = function(event) {
+                    const data = JSON.parse(event.data);
+                    if (data.content) {
+                        // 收到内容片段
+                        fullReply += data.content;
+                        // 实时更新消息内容 (逐字或逐块)
+                        botMessageDiv.innerHTML = marked.parse(fullReply, { breaks: true }) + '<span class="typing-cursor"></span>';
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    } else if (data.error) {
+                        // 收到错误信息
+                        console.error("Stream Error:", data.error);
+                        botMessageDiv.textContent = isEnglish ? `Error: ${data.error}` : `错误: ${data.error}`;
+                        eventSource.close(); // 关闭连接
+                    } else if (event.data === "[DONE]") {
+                        // 流结束
+                        console.log("Stream finished.");
+                        // 移除光标
+                        const cursor = botMessageDiv.querySelector('.typing-cursor');
+                        if (cursor) cursor.remove();
+                        eventSource.close(); // 关闭连接
+                    }
+                };
+
+                eventSource.onerror = function(err) {
+                    console.error("EventSource failed:", err);
+                    hideTyping();
+                    if (botMessageDiv && !botMessageDiv.textContent) { // 如果消息框是空的
+                         botMessageDiv.textContent = isEnglish ? 'Error: Connection failed.' : '错误：连接失败。';
+                    }
+                    eventSource.close(); // 确保关闭连接
+                };
+
+                // 返回 eventSource 对象，以便在需要时（如取消）关闭它
+                return eventSource;
+            }
+
+
+            let currentEventSource = null; // 用于跟踪当前的流
+
             async function sendMessage() {
                 const message = userInput.value.trim();
                 if (!message) return;
+
+                // 添加用户消息
                 addMessage(message, true);
                 userInput.value = '';
-                showTyping();
-                sendButton.disabled = true;
-                let botMessageDiv = null;
-                let fullReply = "";
-                try {
-                    const response = await fetch(API_URL, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ message: message })
-                    });
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    const data = await response.json();
-                    hideTyping();
-                    if (data.reply) {
-                        fullReply = data.reply;
-                    } else if (data.error) {
-                        fullReply = isEnglish ? `Error: ${data.error}` : `错误: ${data.error}`;
-                    } else {
-                        fullReply = isEnglish ? "Sorry, I didn't receive a reply." : "抱歉，我没有收到回复。";
-                    }
-                    const markdownToHtml = (markdownText) => {
-                        if (typeof marked === 'undefined') {
-                            console.warn('marked.js 未加载，无法转换 Markdown');
-                            return markdownText;
-                        }
-                        try {
-                            return marked.parse(markdownText, { breaks: true });
-                        } catch (e) {
-                            console.error('Markdown 转换出错:', e);
-                            return markdownText;
-                        }
-                    };
-                    fullReply = markdownToHtml(fullReply);
-                    botMessageDiv = document.createElement('div');
-                    botMessageDiv.classList.add('message', 'bot-message');
-                    botMessageDiv.innerHTML = "";
-                    chatMessages.appendChild(botMessageDiv);
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
 
-                    let i = 0;
-                    const typeWriterHtml = () => {
-                         botMessageDiv.innerHTML = fullReply;
-                         chatMessages.scrollTop = chatMessages.scrollHeight;
-                         /*
-                         if (i < fullReply.length) {
-                             botMessageDiv.innerHTML = fullReply.substring(0, i+1);
-                             i++;
-                             chatMessages.scrollTop = chatMessages.scrollHeight;
-                             setTimeout(typeWriterHtml, 30);
-                         }
-                         */
-                    };
-                    typeWriterHtml();
+                // 显示思考提示
+                showTyping();
+
+                // 禁用发送按钮
+                sendButton.disabled = true;
+
+                try {
+                    // 启动流式接收
+                    currentEventSource = streamMessage(message);
                 } catch (error) {
-                    console.error('Error sending message:', error);
-                    hideTyping();
-                    if (!botMessageDiv) {
-                        const errorDiv = document.createElement('div');
-                        errorDiv.classList.add('message', 'bot-message');
-                        errorDiv.textContent = isEnglish ? `Error: ${error.message}` : `错误: ${error.message}`;
-                        chatMessages.appendChild(errorDiv);
-                        chatMessages.scrollTop = chatMessages.scrollHeight;
-                    } else {
-                        botMessageDiv.textContent = isEnglish ? `Error: ${error.message}` : `错误: ${error.message}`;
-                    }
+                     console.error('Error initiating stream:', error);
+                     hideTyping();
+                     const errorDiv = document.createElement('div');
+                     errorDiv.classList.add('message', 'bot-message');
+                     errorDiv.textContent = isEnglish ? `Error: ${error.message}` : `错误: ${error.message}`;
+                     chatMessages.appendChild(errorDiv);
+                     chatMessages.scrollTop = chatMessages.scrollHeight;
                 } finally {
+                    // 启用发送按钮
                     sendButton.disabled = false;
                 }
             }
+
+            // --- 可选：添加取消流式输出的功能 ---
+            // 例如，用户再次点击发送按钮时，取消上一个流
+            // sendButton.addEventListener('click', function() {
+            //     if (currentEventSource) {
+            //         currentEventSource.close();
+            //         hideTyping(); // 隐藏上一个思考提示
+            //         const typingCursor = document.querySelector('.typing-cursor');
+            //         if (typingCursor) typingCursor.remove(); // 移除光标
+            //     }
+            //     sendMessage(); // 发送新消息
+            // });
+
+            // 或者添加一个专门的取消按钮
+            // const cancelButton = document.createElement('button');
+            // cancelButton.textContent = 'Cancel';
+            // cancelButton.style.marginLeft = '10px';
+            // cancelButton.addEventListener('click', () => {
+            //     if (currentEventSource) {
+            //         currentEventSource.close();
+            //         hideTyping();
+            //         const typingCursor = document.querySelector('.typing-cursor');
+            //         if (typingCursor) typingCursor.remove();
+            //         console.log("Stream cancelled by user.");
+            //     }
+            // });
+            // chatInputArea.appendChild(cancelButton); // 需要先获取 chatInputArea 元素
 
             sendButton.addEventListener('click', sendMessage);
             userInput.addEventListener('keydown', function(event) {
@@ -674,95 +822,6 @@
                     event.preventDefault();
                     sendMessage();
                 }
-            });
-
-            particlesJS('particles-js', {
-                "particles": {
-                    "number": {
-                        "value": 80,
-                        "density": {
-                            "enable": true,
-                            "value_area": 800
-                        }
-                    },
-                    "color": {
-                        "value": "#00f3ff"
-                    },
-                    "shape": {
-                        "type": "circle",
-                        "stroke": {
-                            "width": 0,
-                            "color": "#000000"
-                        }
-                    },
-                    "opacity": {
-                        "value": 0.5,
-                        "random": true,
-                        "anim": {
-                            "enable": true,
-                            "speed": 1,
-                            "opacity_min": 0.1,
-                            "sync": false
-                        }
-                    },
-                    "size": {
-                        "value": 3,
-                        "random": true,
-                        "anim": {
-                            "enable": true,
-                            "speed": 2,
-                            "size_min": 0.3,
-                            "sync": false
-                        }
-                    },
-                    "line_linked": {
-                        "enable": true,
-                        "distance": 150,
-                        "color": "#00f3ff",
-                        "opacity": 0.4,
-                        "width": 1
-                    },
-                    "move": {
-                        "enable": true,
-                        "speed": 1,
-                        "direction": "none",
-                        "random": true,
-                        "straight": false,
-                        "out_mode": "out",
-                        "bounce": false,
-                        "attract": {
-                            "enable": true,
-                            "rotateX": 600,
-                            "rotateY": 1200
-                        }
-                    }
-                },
-                "interactivity": {
-                    "detect_on": "canvas",
-                    "events": {
-                        "onhover": {
-                            "enable": true,
-                            "mode": "grab"
-                        },
-                        "onclick": {
-                            "enable": true,
-                            "mode": "push"
-                        },
-                        "resize": true
-                    },
-                    "modes": {
-                        "grab": {
-                            "distance": 140,
-                            "line_linked": {
-                                "opacity": 1
-                            }
-                        },
-                        "push": {
-                            "particles_nb": 4
-                        }
-                    }
-                },
-                "retina_detect": true
             });
 
         });
