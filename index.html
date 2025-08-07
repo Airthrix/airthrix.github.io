@@ -1957,6 +1957,9 @@
                                     }
                                 }
                                 // 忽略 event: 和 : (心跳) 行
+                                else if (line.startsWith("event:") || line.startsWith(":") || !line.trim()) {
+                                    continue;
+                                }
                             }
                         }
                     }
