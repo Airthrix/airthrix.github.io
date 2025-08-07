@@ -1963,6 +1963,7 @@
                             for (const line of lines) {
                                 if (line.startsWith('data:')) {
                                     const dataStr = line.substring(5).trim(); // 移除 'data:' 前缀
+                                    console.log("Received SSE data:", dataStr); // --- 调试日志 ---
                                     if (dataStr === '[DONE]') {
                                         console.log("Received [DONE] signal.");
                                         // 可以在这里添加特殊处理，如果需要的话
@@ -1997,7 +1998,7 @@
                                             }
                                         }
                                     } catch (parseError) {
-                                        console.error("Error parsing SSE data:", dataStr, parseError);
+                                        console.error("Error parsing SSE ", dataStr, parseError);
                                         // 可以选择显示解析错误，但通常不中断流
                                     }
                                 }
@@ -2066,12 +2067,11 @@
                 }
             }
 
-
+            // --- 保留原有的事件监听器 ---
             sendButton.addEventListener('click', sendMessage);
-       
             userInput.addEventListener('keydown', function(event) {
                 if (event.key === 'Enter' && !event.shiftKey) {
-                    event.preventDefault(); 
+                    event.preventDefault();
                     sendMessage();
                 }
             });
