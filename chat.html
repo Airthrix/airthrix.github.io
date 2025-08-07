@@ -706,6 +706,40 @@
                 }
             }
 
+            // --- 修改后的 Chat Functionality (使用 SSE) ---
+            const chatMessages = document.getElementById('chatMessages');
+            const userInput = document.getElementById('userInput');
+            const sendButton = document.getElementById('sendButton');
+            // 确保 API_URL 指向您的后端流式接口，并且支持 GET 方法
+            const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run/invoke'; // 注意添加了 /invoke 路径
+            let currentEventSource = null; // 用于跟踪当前的流
+
+            function addMessage(message, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+                messageDiv.textContent = message;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                return messageDiv; // 返回元素以便后续更新
+            }
+
+            function showTyping() {
+                const typingDiv = document.createElement('div');
+                typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
+                typingDiv.id = 'typingIndicator';
+                typingDiv.textContent = isEnglish ? 'Thinking...' : '正在思考...';
+                chatMessages.appendChild(typingDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function hideTyping() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+
             // --- 新增：流式接收和显示函数 ---
             function streamMessage(message) {
                 // 1. 隐藏思考提示
@@ -758,6 +792,11 @@
                     } catch (e) {
                         console.error("Failed to parse SSE data:", rawData, e);
                         // 可以选择在这里关闭连接或显示错误
+                        // 例如，显示解析错误并关闭连接
+                        botMessageDiv.innerHTML = isEnglish ? `Error: Failed to parse response.` : `错误: 无法解析响应。`;
+                        const cursor = botMessageDiv.querySelector('.typing-cursor');
+                        if (cursor) cursor.remove();
+                        eventSource.close();
                     }
                 };
 
