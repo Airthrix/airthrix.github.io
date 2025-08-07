@@ -1853,87 +1853,12 @@
                 chatMessages.appendChild(typingDiv);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
-
             function hideTyping() {
                 const typingIndicator = document.getElementById('typingIndicator');
                 if (typingIndicator) {
                     typingIndicator.remove();
                 }
             }
-
-            // 确保 markdownToHtml 函数在 sendMessage 函数之前或附近定义
-            const markdownToHtml = (markdownText) => {
-                if (typeof marked === 'undefined') {
-                    console.warn('marked.js 未加载，无法转换 Markdown');
-                    return markdownText; // 如果 marked.js 未加载，返回原始文本
-                }
-                try {
-                    // 配置 marked 以支持换行
-                    marked.setOptions({
-                        breaks: true, // 将 \n 转换为 <br>
-                        gfm: true     // 启用 GitHub Flavored Markdown
-                    });
-                    return marked.parse(markdownText);
-                } catch (e) {
-                    console.error('Markdown 转换出错:', e);
-                    return markdownText; // 转换失败时返回原始文本
-                }
-            };
-
-            // --- 逐字显示函数 ---
-            // 这个函数接收一个 HTML 元素和纯文本内容，逐字符地将其渲染为 HTML（支持 Markdown）
-            const typeWriterHtml = (element, htmlContent, speed = 30) => {
-                element.innerHTML = ""; // 清空元素
-                let i = 0;
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = htmlContent; // 解析 HTML
-                const textNodes = []; // 存储所有文本节点及其路径
-
-                // 递归函数收集所有文本节点
-                function collectTextNodes(node, path = []) {
-                    if (node.nodeType === Node.TEXT_NODE) {
-                        textNodes.push({ node: node, path: [...path], text: node.textContent });
-                    } else if (node.nodeType === Node.ELEMENT_NODE) {
-                        for (let i = 0; i < node.childNodes.length; i++) {
-                            collectTextNodes(node.childNodes[i], [...path, i]);
-                        }
-                    }
-                }
-                collectTextNodes(tempDiv);
-
-                let currentTextNodeIndex = 0;
-                let currentCharIndex = 0;
-
-                function type() {
-                    if (currentTextNodeIndex < textNodes.length) {
-                        const currentTextNodeData = textNodes[currentTextNodeIndex];
-                        if (currentCharIndex < currentTextNodeData.text.length) {
-                            // 重建到当前文本节点的 DOM 结构
-                            const cloneTempDiv = tempDiv.cloneNode(true);
-                            let currentPathNode = cloneTempDiv;
-                            for (let i = 0; i < currentTextNodeData.path.length; i++) {
-                                currentPathNode = currentPathNode.childNodes[currentTextNodeData.path[i]];
-                            }
-                            // 截取到当前字符
-                            currentPathNode.textContent = currentTextNodeData.text.substring(0, currentCharIndex + 1);
-                            element.innerHTML = cloneTempDiv.innerHTML;
-                            currentCharIndex++;
-                            chatMessages.scrollTop = chatMessages.scrollHeight; // 滚动
-                            setTimeout(type, speed);
-                        } else {
-                            // 移动到下一个文本节点
-                            currentTextNodeIndex++;
-                            currentCharIndex = 0;
-                            // 直接更新完整内容以确保 HTML 结构正确
-                            element.innerHTML = tempDiv.innerHTML;
-                            chatMessages.scrollTop = chatMessages.scrollHeight;
-                            setTimeout(type, speed);
-                        }
-                    }
-                }
-                type();
-            };
-            // --- 逐字显示函数结束 ---
 
             async function sendMessage() {
                 const message = userInput.value.trim();
@@ -2000,7 +1925,6 @@
                     chatMessages.scrollTop = chatMessages.scrollHeight;
 
                     let accumulatedContent = ""; // 累积从流中接收到的内容
-                    let isTyping = false; // 标志位，防止重复启动打字机
 
                     // 获取 ReadableStream 的 reader
                     const reader = response.body.getReader();
@@ -2015,15 +1939,16 @@
                             const chunk = decoder.decode(value, { stream: true });
                             // console.log("Received chunk:", chunk); // 调试用
 
-                            // 处理 SSE 数据块 (可能包含多个  行)
+                            // 处理 SSE 数据块 (可能包含多个 data: 行)
                             // 注意：SSE 规范是用 \n\n 分隔事件，但实际传输中 chunk 可能包含不完整的行或多个事件
                             // 更稳健的做法是按 \n 分割，然后重组完整的行
                             const lines = chunk.split('\n');
+                            let currentEvent = ""; // 用于累积当前事件的行
 
                             for (const line of lines) {
-                                if (line.startsWith('')) {
+                                if (line.startsWith('data:')) {
                                     // 这是一个完整的 data 行或一个分段
-                                    const dataStr = line.substring(5).trim(); // 移除 '' 并 trim
+                                    const dataStr = line.substring(5).trim(); // 移除 'data:' 并 trim
                                     if (dataStr === "[DONE]") {
                                         done = true;
                                         break;
@@ -2034,39 +1959,20 @@
                                         const deltaText = dataObj.output?.text || "";
                                         if (deltaText) {
                                             accumulatedContent += deltaText;
-                                            // 启动打字机效果，只启动一次
-                                            if (!isTyping) {
-                                                isTyping = true;
-                                                typeWriterHtml(botMessageDiv, markdownToHtml(accumulatedContent), 30); // 30ms per char
-                                            } else {
-                                                // 如果打字机已在运行，更新其最终目标内容
-                                                // 注意：当前 typeWriterHtml 实现不支持动态更新目标内容。
-                                                // 一种简单方法是停止当前动画并重新开始（可能会闪烁）
-                                                // 或者只在流结束后一次性显示（失去逐字效果）
-                                                // 这里我们选择在流结束后更新内容
-                                            }
+                                            // 实时更新消息 div 的内容 (使用 Markdown 转换)
+                                            botMessageDiv.innerHTML = markdownToHtml(accumulatedContent);
                                             // 滚动到底部
                                             chatMessages.scrollTop = chatMessages.scrollHeight;
                                         }
                                         // 可以检查 finish_reason 等字段判断结束
                                         if (dataObj.output?.finish_reason === "stop") {
                                              done = true;
-                                             // 确保最后内容完整显示
-                                             if (isTyping) {
-                                                 // 如果流结束但打字机还没打完，这里可以强制完成或等待。
-                                                 // 当前逻辑下，打字机会基于 accumulatedContent 打完。
-                                                 // 如果需要立即显示最终结果，可以在这里设置 innerHTML
-                                                 // botMessageDiv.innerHTML = markdownToHtml(accumulatedContent);
-                                             }
                                              break;
                                         }
                                     } catch (e) {
                                         console.error("Error parsing SSE data line:", line, e);
-                                        // 如果解析失败，可能是分段的 JSON 或结束标记
-                                        if (dataStr.trim() === "[DONE]") {
-                                            done = true;
-                                            break;
-                                        }
+                                        // 如果解析失败，可能是分段的 JSON，累积到 currentEvent
+                                        // 这里简化处理，直接记录错误
                                     }
                                 }
                                 // 忽略 event: 和 : (心跳) 行
@@ -2094,11 +2000,31 @@
                 }
             }
 
+            // ... (之后的代码保持不变) ...
+            // 确保 markdownToHtml 函数在 sendMessage 函数之前或附近定义
+            const markdownToHtml = (markdownText) => {
+                if (typeof marked === 'undefined') {
+                    console.warn('marked.js 未加载，无法转换 Markdown');
+                    return markdownText; // 如果 marked.js 未加载，返回原始文本
+                }
+                try {
+                    // 配置 marked 以支持换行
+                    marked.setOptions({
+                        breaks: true, // 将 \n 转换为 <br>
+                        gfm: true     // 启用 GitHub Flavored Markdown
+                    });
+                    return marked.parse(markdownText);
+                } catch (e) {
+                    console.error('Markdown 转换出错:', e);
+                    return markdownText; // 转换失败时返回原始文本
+                }
+            };
+
 
             sendButton.addEventListener('click', sendMessage);
             userInput.addEventListener('keydown', function(event) {
                 if (event.key === 'Enter' && !event.shiftKey) {
-                    event.preventDefault();
+                    event.preventDefault(); 
                     sendMessage();
                 }
             });
