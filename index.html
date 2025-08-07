@@ -1853,13 +1853,13 @@
                 chatMessages.appendChild(typingDiv);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
+
             function hideTyping() {
                 const typingIndicator = document.getElementById('typingIndicator');
                 if (typingIndicator) {
                     typingIndicator.remove();
                 }
             }
-
 
             // 确保 markdownToHtml 函数在 sendMessage 函数之前或附近定义
             const markdownToHtml = (markdownText) => {
@@ -1946,7 +1946,12 @@
                 // let fullReply = ""; // 不再需要累积完整回复
 
                 try {
-                    // 使用 fetch + ReadableStream 来处理 SSE 流
+                    // 修改API_URL为你的新流式端点 (如果用了 /stream)
+                    // const API_URL = 'https://你的后端地址/stream';
+                    const API_URL = 'https://qwen-proxy-acqopqqcpc.cn-hangzhou.fcapp.run/invoke'; // 保持原URL，假设后端已修改
+
+                    // 使用 EventSource 或 fetch + ReadableStream 来处理 SSE 流
+                    // 方法一：使用 fetch 和 ReadableStream (更灵活，兼容性好)
                     const response = await fetch(API_URL, {
                         method: 'POST',
                         headers: {
@@ -2010,7 +2015,7 @@
                             const chunk = decoder.decode(value, { stream: true });
                             // console.log("Received chunk:", chunk); // 调试用
 
-                            // 处理 SSE 数据块 (可能包含多个 data: 行)
+                            // 处理 SSE 数据块 (可能包含多个  行)
                             // 注意：SSE 规范是用 \n\n 分隔事件，但实际传输中 chunk 可能包含不完整的行或多个事件
                             // 更稳健的做法是按 \n 分割，然后重组完整的行
                             const lines = chunk.split('\n');
@@ -2018,7 +2023,7 @@
                             for (const line of lines) {
                                 if (line.startsWith('data:')) {
                                     // 这是一个完整的 data 行或一个分段
-                                    const dataStr = line.substring(5).trim(); // 移除 'data:' 并 trim
+                                    const dataStr = line.substring(5).trim(); // 移除 '' 并 trim
                                     if (dataStr === "[DONE]") {
                                         done = true;
                                         break;
