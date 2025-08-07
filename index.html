@@ -1882,6 +1882,7 @@
 
 
             async function sendMessage() {
+                console.log("sendMessage function called"); // <-- 添加这行
                 const message = userInput.value.trim();
                 if (!message) return;
                 addMessage(message, true);
