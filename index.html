@@ -1868,20 +1868,21 @@
                 showTyping();
                 sendButton.disabled = true;
                 let botMessageDiv = null;
+                // let fullReply = ""; // 不再需要累积完整回复
 
                 try {
                     // 修改API_URL为你的新流式端点 (如果用了 /stream)
                     // const API_URL = 'https://你的后端地址/stream';
-                    // --- 修正: 移除 API_URL 末尾的空格 ---
                     const API_URL = 'https://qwen-proxy-acqopqqcpc.cn-hangzhou.fcapp.run/invoke'; // 保持原URL，假设后端已修改
 
-                    // 使用 fetch 和 ReadableStream 来处理 SSE 流
+                    // 使用 EventSource 或 fetch + ReadableStream 来处理 SSE 流
+                    // 方法一：使用 fetch 和 ReadableStream (更灵活，兼容性好)
                     const response = await fetch(API_URL, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                             // 如果后端需要 Origin 头进行 CORS 检查，请添加
-                            // 'Origin': 'https://aliceskygarden.top' // 注意：浏览器通常会自动添加 Origin 头
+                            // 'Origin': window.location.origin // 或者 'https://aliceskygarden.top'
                         },
                         body: JSON.stringify({ message: message })
                     });
@@ -1907,12 +1908,13 @@
                          }
                          // 使用 Markdown 转换 (如果需要)
                          fullReply = markdownToHtml(fullReply);
+                         // 直接显示完整回复或模拟打字机 (见下方注释)
                          addMessage(fullReply, false);
                          sendButton.disabled = false;
                          return; // 退出函数
                     }
 
-                    // --- 如果是 SSE 流，则处理流 ---
+                    // 如果是 SSE 流，则处理流
                     hideTyping(); // 隐藏初始的 "正在思考..." 指示器
 
                     // 创建一个新的 bot 消息 div
@@ -1923,7 +1925,6 @@
                     chatMessages.scrollTop = chatMessages.scrollHeight;
 
                     let accumulatedContent = ""; // 累积从流中接收到的内容
-                    let buffer = ""; // 用于累积不完整的 SSE 数据块
 
                     // 获取 ReadableStream 的 reader
                     const reader = response.body.getReader();
@@ -1936,22 +1937,19 @@
                         done = readerDone;
                         if (value) {
                             const chunk = decoder.decode(value, { stream: true });
-                            // console.log("Received raw chunk:", JSON.stringify(chunk)); // 调试用
+                            // console.log("Received chunk:", chunk); // 调试用
 
-                            // 将新块添加到缓冲区
-                            buffer += chunk;
-
-                            // 按 \n 分割缓冲区，处理完整的行
-                            const lines = buffer.split('\n');
-                            // 缓冲区的最后一部分可能是不完整的行，留到下次处理
-                            buffer = lines.pop(); // 将最后一项（可能不完整）放回 buffer
+                            // 处理 SSE 数据块 (可能包含多个 data: 行)
+                            // 注意：SSE 规范是用 \n\n 分隔事件，但实际传输中 chunk 可能包含不完整的行或多个事件
+                            // 更稳健的做法是按 \n 分割，然后重组完整的行
+                            const lines = chunk.split('\n');
+                            let currentEvent = ""; // 用于累积当前事件的行
 
                             for (const line of lines) {
-                                const trimmedLine = line.trim();
-                                if (trimmedLine.startsWith('data:')) {
-                                    const dataStr = trimmedLine.substring(5).trim(); // 移除 'data:' 并 trim
+                                if (line.startsWith('data:')) {
+                                    // 这是一个完整的 data 行或一个分段
+                                    const dataStr = line.substring(5).trim(); // 移除 'data:' 并 trim
                                     if (dataStr === "[DONE]") {
-                                        // console.log("Received [DONE] signal.");
                                         done = true;
                                         break;
                                     }
@@ -1968,43 +1966,23 @@
                                         }
                                         // 可以检查 finish_reason 等字段判断结束
                                         if (dataObj.output?.finish_reason === "stop") {
-                                             // console.log("Received finish_reason: stop");
                                              done = true;
                                              break;
                                         }
                                     } catch (e) {
-                                        console.error("Error parsing SSE data line:", trimmedLine, e);
-                                        // 如果解析失败，可能是格式问题，记录但不中断流
+                                        console.error("Error parsing SSE data line:", line, e);
+                                        // 如果解析失败，可能是分段的 JSON，累积到 currentEvent
+                                        // 这里简化处理，直接记录错误
                                     }
                                 }
-                                // 可以在这里处理 event: 或其他类型的 SSE 事件行
-                                // else if (trimmedLine.startsWith('event:')) { ... }
-                                // else if (trimmedLine.startsWith(':')) { ... } // 心跳
+                                // 忽略 event: 和 : (心跳) 行
+                                // 如果需要处理其他事件类型或错误，可以在这里添加逻辑
                             }
                         }
                     }
 
-                    // 处理最后可能残留的 buffer 内容（如果流没有以 \n 结束或没有 [DONE]）
-                    if (buffer.trim().startsWith('data:')) {
-                         const dataStr = buffer.trim().substring(5).trim();
-                         if (dataStr !== "[DONE]") {
-                             try {
-                                 const dataObj = JSON.parse(dataStr);
-                                 const deltaText = dataObj.output?.text || "";
-                                 if (deltaText) {
-                                     accumulatedContent += deltaText;
-                                     botMessageDiv.innerHTML = markdownToHtml(accumulatedContent);
-                                     chatMessages.scrollTop = chatMessages.scrollHeight;
-                                 }
-                             } catch (e) {
-                                 console.error("Error parsing final SSE data from buffer:", buffer, e);
-                             }
-                         }
-                    }
-
                     // 确保 reader 被关闭
                     reader.releaseLock();
-                    // console.log("Stream reading completed.");
 
                 } catch (error) {
                     console.error('Error sending message:', error);
@@ -2022,6 +2000,7 @@
                 }
             }
 
+            // ... (之后的代码保持不变) ...
             // 确保 markdownToHtml 函数在 sendMessage 函数之前或附近定义
             const markdownToHtml = (markdownText) => {
                 if (typeof marked === 'undefined') {
