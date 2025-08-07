@@ -91,7 +91,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
+            background:
                 linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
             background-size: 30px 30px;
@@ -609,7 +609,7 @@
                 "retina_detect": true
             });
 
-            // --- Language and Login Button Functionality (保持不变) ---
+            // --- Language and Login Button Functionality ---
             const langBtn = document.getElementById('langBtn');
             const loginBtn = document.getElementById('loginBtn');
             const chatTitle = document.querySelector('.chat-title');
@@ -673,40 +673,7 @@
             });
 
             // --- 修改后的 Chat Functionality (使用 SSE) ---
-            const chatMessages = document.getElementById('chatMessages');
-            const userInput = document.getElementById('userInput');
-            const sendButton = document.getElementById('sendButton');
-            // 确保 API_URL 指向您的后端流式接口，并且支持 GET 方法
-            const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run/invoke'; // 注意添加了 /invoke 路径
-            let currentEventSource = null; // 用于跟踪当前的流
-
-            function addMessage(message, isUser = false) {
-                const messageDiv = document.createElement('div');
-                messageDiv.classList.add('message');
-                messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
-                messageDiv.textContent = message;
-                chatMessages.appendChild(messageDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                return messageDiv; // 返回元素以便后续更新
-            }
-
-            function showTyping() {
-                const typingDiv = document.createElement('div');
-                typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
-                typingDiv.id = 'typingIndicator';
-                typingDiv.textContent = isEnglish ? 'Thinking...' : '正在思考...';
-                chatMessages.appendChild(typingDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-
-            function hideTyping() {
-                const typingIndicator = document.getElementById('typingIndicator');
-                if (typingIndicator) {
-                    typingIndicator.remove();
-                }
-            }
-
-            // --- 修改后的 Chat Functionality (使用 SSE) ---
+            // 确保这些变量只声明一次
             const chatMessages = document.getElementById('chatMessages');
             const userInput = document.getElementById('userInput');
             const sendButton = document.getElementById('sendButton');
