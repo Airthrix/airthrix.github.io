@@ -2021,7 +2021,7 @@
                             const lines = chunk.split('\n');
 
                             for (const line of lines) {
-                                if (line.startsWith('data:')) {
+                                if (line.startsWith('')) {
                                     // 这是一个完整的 data 行或一个分段
                                     const dataStr = line.substring(5).trim(); // 移除 '' 并 trim
                                     if (dataStr === "[DONE]") {
