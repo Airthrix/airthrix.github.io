@@ -1,0 +1,1161 @@
+好的，这是为您创建的新页面 `chat.html` 的完整代码。
+
+这个页面保留了您网站的顶部导航栏（包括登录和语言切换功能）、聊天功能以及底部区域，并根据您的要求：
+
+1.  **保持风格一致**：复用了原 `index.html` 的大部分 CSS 样式。
+2.  **背景更改**：将背景视频源更改为指定的紫色科幻蜂窝动图 `https://aliceskygarden.oss-cn-beijing.aliyuncs.com/scifi-hexagon.mp4`。
+3.  **内容精简**：移除了主页的标题、统计数据、T3/T4 介绍和技术规格等部分。
+4.  **保留核心功能**：保留了顶部的登录按钮和语言切换按钮，以及底部的所有元素。
+5.  **强化聊天功能**：将聊天区域作为页面的主要内容。
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AliceSkyGarden - 聊天</title>
+    <meta name="description" content="AliceSkyGarden 开源绿色节能AI模型。AliceSkyGardenT3 采用三元稀疏激活架构，AliceSkyGardenT4 为多模态超级模型。了解低功耗、高性能的下一代人工智能技术。">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-purple: #b300ff;
+            --neon-pink: #ff00c8;
+            --neon-green: #00ff9d;
+            --neon-red: #ff0055;
+            --dark-bg: #0a0a12;
+            --panel-bg: rgba(15, 15, 40, 0.85);
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--dark-bg);
+            color: #e0e0ff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        .top-nav {
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+            display: flex;
+            gap: 1.5rem;
+            transform: translateY(-5px);
+        }
+        .nav-btn {
+            min-width: 120px;
+            height: 44px;
+            text-align: center;
+            white-space: nowrap;
+            padding: 0 1.5rem;
+            flex-shrink: 0;
+            background: transparent;
+            border: none;
+            color: #c0c0ff;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            backdrop-filter: blur(5px);
+            background: rgba(15, 15, 40, 0.4);
+            overflow: hidden;
+        }
+        .nav-btn::after {
+            content: none;
+        }
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(0, 243, 255, 0.2) 0%, transparent 70%);
+            transform: scale(0);
+            transition: transform 0.3s ease;
+            border-radius: 30px;
+            z-index: -1;
+        }
+        .nav-btn:hover::before {
+            transform: scale(1.5);
+        }
+        .nav-btn:hover {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.8);
+            box-shadow: 0 0 20px var(--neon-blue);
+            transform: translateY(-5px);
+            background: rgba(0, 243, 255, 0.2);
+        }
+        .nav-btn i {
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+        .nav-btn:hover i {
+            transform: scale(1.2);
+        }
+        .grid-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(90deg, rgba(106, 11, 192, 0.03) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(106, 11, 192, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -2;
+        }
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #bg-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            filter:
+                brightness(1.8)
+                contrast(1.2)
+                saturate(1.1)
+                hue-rotate(0deg);
+            transition: filter 1s ease;
+        }
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(10, 10, 18, 0.9) 0%, rgba(10, 10, 18, 0.3) 50%, rgba(10, 10, 18, 0.9) 100%);
+            z-index: 1;
+        }
+        .video-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--neon-blue);
+            font-size: 1.5rem;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            transition: opacity 0.5s ease;
+        }
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(0, 243, 255, 0.3);
+            border-top: 5px solid var(--neon-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .main-content {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            padding-top: 100px; /* 为固定导航栏留出空间 */
+        }
+        .footer {
+            text-align: center;
+            padding: 4rem 0 3rem;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(100, 100, 255, 0.2);
+            color: #a0a0ff;
+            position: relative;
+            z-index: 10;
+            background: rgba(10, 10, 25, 0.6);
+            backdrop-filter: blur(5px);
+        }
+        .footer-logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        .footer-link {
+            color: #c0c0ff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+        }
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neon-blue);
+            transition: width 0.3s ease;
+        }
+        .footer-link:hover::after {
+            width: 100%;
+        }
+        .footer-link:hover {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.8);
+        }
+        .footer p {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(100, 100, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--neon-blue);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .social-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(0, 243, 255, 0.2) 0%, transparent 70%);
+            transform: scale(0);
+            transition: transform 0.3s ease;
+            border-radius: 50%;
+        }
+        .social-icon:hover::before {
+            transform: scale(1.5);
+        }
+        .social-icon:hover {
+            background: rgba(0, 243, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 0 15px var(--neon-blue), 0 0 25px var(--neon-blue);
+        }
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.3;
+            z-index: -1;
+        }
+        .element-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--neon-purple);
+            top: 10%;
+            left: 5%;
+            animation: float 15s infinite ease-in-out;
+        }
+        .element-2 {
+            width: 200px;
+            height: 200px;
+            background: var(--neon-blue);
+            bottom: 20%;
+            right: 10%;
+            animation: float 12s infinite ease-in-out;
+            animation-delay: 2s;
+        }
+        .element-3 {
+            width: 150px;
+            height: 150px;
+            background: var(--neon-green);
+            top: 40%;
+            right: 20%;
+            animation: float 10s infinite ease-in-out;
+            animation-delay: 4s;
+        }
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3;
+        }
+        #cursor-particles {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        @keyframes glow {
+            from {
+                text-shadow:
+                    0 0 5px var(--neon-blue),
+                    0 0 10px var(--neon-blue);
+            }
+            to {
+                text-shadow:
+                    0 0 15px var(--neon-blue),
+                    0 0 30px var(--neon-blue);
+            }
+        }
+        @keyframes float {
+            0% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(20px, -20px);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes pulse {
+            0% {
+                box-shadow:
+                    0 0 15px var(--neon-blue),
+                    0 0 30px var(--neon-purple);
+                opacity: 0.5;
+            }
+            100% {
+                box-shadow:
+                    0 0 25px var(--neon-blue),
+                    0 0 50px var(--neon-purple);
+                opacity: 1;
+            }
+        }
+        @keyframes hologram {
+            0% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: 100% 100%;
+            }
+        }
+        .laser-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            overflow: hidden;
+        }
+        .laser-beam {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 30vw;
+            opacity: 0;
+            transform-origin: top center;
+            filter: blur(1px);
+            background: linear-gradient(
+                to right,
+                rgba(255, 50, 50, 0) 0%,
+                rgba(255, 0, 0, 0) 5%,
+                rgba(255, 0, 0, 0.8) 25%,
+                rgba(255, 50, 50, 0.9) 50%,
+                rgba(255, 0, 0, 0.8) 75%,
+                rgba(255, 0, 0, 0) 95%,
+                rgba(255, 50, 50, 0) 100%
+            );
+            box-shadow:
+                0 0 10px 2px rgba(255, 50, 50, 0.6),
+                0 0 20px 5px rgba(255, 0, 0, 0.5),
+                0 0 40px 10px rgba(200, 0, 0, 0.4),
+                0 0 80px 20px rgba(150, 0, 0, 0.3),
+                0 0 160px 40px rgba(100, 0, 0, 0.2),
+                inset 0 0 10px 2px rgba(255, 200, 200, 0.5);
+        }
+        .laser-beam.left {
+            left: -30vw;
+            animation: laserSweepLeft 3s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        }
+        .laser-beam.right {
+            right: -30vw;
+            animation: laserSweepRight 3s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        }
+        .laser-beam.show {
+        }
+        @keyframes laserSweepLeft {
+            0% {
+                opacity: 1;
+                left: -30vw;
+                filter: blur(1px) hue-rotate(0deg);
+            }
+            50% {
+                opacity: 1;
+                filter: blur(0.5px) hue-rotate(10deg);
+            }
+            100% {
+                opacity: 0;
+                left: 0vw;
+                filter: blur(4px) hue-rotate(20deg);
+            }
+        }
+        @keyframes laserSweepRight {
+            0% {
+                opacity: 1;
+                right: -30vw;
+                filter: blur(1px) hue-rotate(0deg);
+            }
+            50% {
+                opacity: 1;
+                filter: blur(0.5px) hue-rotate(-10deg);
+            }
+            100% {
+                opacity: 0;
+                right: 0vw;
+                filter: blur(4px) hue-rotate(-20deg);
+            }
+        }
+        /* 聊天区域样式 */
+        .chat-container {
+            background: rgba(15, 15, 40, 0.5);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(1px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-top: 3rem;
+            border-top: 3px solid var(--neon-blue);
+            position: relative;
+            overflow: hidden;
+        }
+        .chat-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+        .chat-messages {
+            height: 500px;
+            overflow-y: auto;
+            padding: 1rem;
+            background: rgba(10, 10, 25, 0.3);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+        }
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+            background-color: transparent;
+        }
+        .chat-messages::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+        .chat-messages::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+        .message {
+            padding: 0.8rem 1.2rem;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .user-message {
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+            color: #0a0a12;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        .bot-message {
+            background: rgba(30, 30, 60, 0.8);
+            color: #c0c0ff;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+        .chat-input-area {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .chat-input {
+            flex-grow: 1;
+            padding: 1rem;
+            border-radius: 30px;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            background: rgba(10, 10, 25, 0.5);
+            color: #e0e0ff;
+            font-size: 1rem;
+            resize: none;
+            min-height: 50px;
+            max-height: 150px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+        .chat-send-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            background: rgba(15, 15, 40, 0.4);
+            color: #c0c0ff;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        .chat-send-btn:hover {
+            background: rgba(0, 243, 255, 0.2);
+            color: var(--neon-blue);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px var(--neon-blue);
+            transform: translateY(-2px);
+        }
+        .chat-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: rgba(50, 50, 80, 0.3);
+            box-shadow: none;
+            transform: none;
+        }
+        .typing-indicator {
+            color: var(--neon-blue);
+            font-style: italic;
+            align-self: flex-start;
+            padding: 0.5rem 1rem;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .top-nav {
+                padding: 1rem;
+                gap: 1rem;
+            }
+            .nav-btn {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.9rem;
+                min-width: 100px; /* 缩小按钮宽度 */
+            }
+            .main-content {
+                padding: 1rem;
+                padding-top: 80px; /* 调整移动端间距 */
+            }
+            .chat-container {
+                padding: 1rem;
+            }
+            .chat-title {
+                font-size: 1.5rem;
+            }
+            .chat-messages {
+                height: 400px; /* 减小移动端高度 */
+            }
+        }
+        @media (max-width: 480px) {
+            .top-nav {
+                width: 100%;
+                justify-content: center;
+                padding: 0.8rem;
+            }
+            .nav-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.8rem;
+                min-width: 90px;
+            }
+            .chat-messages {
+                height: 300px; /* 进一步减小移动端高度 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="top-nav">
+        <button class="nav-btn" id="loginBtn">
+            <i class="fas fa-sign-in-alt"></i>
+            <span class="btn-text">Log in</span>
+        </button>
+        <button class="nav-btn" id="langBtn">
+            <i class="fas fa-globe"></i>
+            <span class="btn-text">English</span>
+        </button>
+    </div>
+    <div class="grid-lines"></div>
+    <!-- 粒子背景 -->
+    <div id="particles-js"></div>
+    <!-- 装饰元素 -->
+    <div class="floating-element element-1"></div>
+    <div class="floating-element element-2"></div>
+    <div class="floating-element element-3"></div>
+    <div class="video-container">
+        <!-- 更改背景视频源 -->
+        <video id="bg-video" autoplay muted loop playsinline preload="auto">
+            <source src="https://aliceskygarden.oss-cn-beijing.aliyuncs.com/scifi-hexagon.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-overlay"></div>
+        <div class="video-loading">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">正在加载背景...</div>
+        </div>
+        <!-- 激光射线容器 -->
+        <div class="laser-container">
+            <div class="laser-beam left"></div>
+            <div class="laser-beam right"></div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <!-- 聊天功能区域 -->
+        <div class="chat-container">
+            <h2 class="chat-title">与 AliceSkyGarden 对话</h2>
+            <div class="chat-messages" id="chatMessages">
+                <!-- 初始欢迎消息 -->
+                <div class="message bot-message">你好！我是 AliceSkyGarden，有什么我可以帮助你的吗？😊</div>
+            </div>
+            <div class="chat-input-area">
+                <textarea id="userInput" class="chat-input" placeholder="输入你的消息..."></textarea>
+                <button id="sendButton" class="chat-send-btn">
+                    <i class="fas fa-paper-plane"></i> <span class="btn-text">发送</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部区域 -->
+    <div class="footer">
+        <div class="footer-logo">AliceSkyGarden</div>
+        <p class="footer-tagline">开启智能新纪元 · 探索无限可能</p>
+        <div class="footer-links">
+            <a href="#" class="footer-link"><i class="fas fa-home"></i> <span class="link-text">首页</span></a>
+            <a href="#" class="footer-link"><i class="fas fa-code"></i> <span class="link-text">开发者</span></a>
+            <a href="#" class="footer-link"><i class="fas fa-book"></i> <span class="link-text">文档</span></a>
+            <a href="#" class="footer-link"><i class="fas fa-users"></i> <span class="link-text">社区</span></a>
+            <a href="#" class="footer-link"><i class="fas fa-newspaper"></i> <span class="link-text">博客</span></a>
+            <a href="#" class="footer-link"><i class="fas fa-envelope"></i> <span class="link-text">联系我们</span></a>
+        </div>
+        <div class="social-icons">
+            <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p>Contact: airthrix@163.com | +1 (800) AIRTHRIX-AI</p>
+        <p class="copyright">&copy; 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved</p>
+    </div>
+
+    <!-- 粒子效果库 -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // --- Cursor Particles ---
+            const cursorParticlesContainer = document.createElement('div');
+            cursorParticlesContainer.id = 'cursor-particles';
+            document.body.appendChild(cursorParticlesContainer);
+            let mouseX = 0, mouseY = 0;
+            let particles = [];
+            const particleCount = 15;
+            const colors = ['#00f3ff', '#b300ff', '#00ff9d', '#ff00c8'];
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = `${Math.random() * 4 + 2}px`;
+                particle.style.height = particle.style.width;
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.borderRadius = '50%';
+                particle.style.pointerEvents = 'none';
+                particle.style.opacity = '0';
+                cursorParticlesContainer.appendChild(particle);
+                particles.push({
+                    element: particle,
+                    x: 0,
+                    y: 0,
+                    size: parseFloat(particle.style.width),
+                    speed: Math.random() * 0.5 + 0.1,
+                    angle: Math.random() * Math.PI * 2,
+                    distance: Math.random() * 30 + 10,
+                    opacity: 0,
+                    targetOpacity: 0
+                });
+            }
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                particles.forEach(p => p.targetOpacity = 0.7);
+            });
+            document.addEventListener('mouseleave', () => {
+                particles.forEach(p => p.targetOpacity = 0);
+            });
+            function animateCursorParticles() {
+                particles.forEach(p => {
+                    if (p.opacity < p.targetOpacity) p.opacity += 0.05;
+                    if (p.opacity > p.targetOpacity) p.opacity -= 0.05;
+                    p.opacity = Math.max(0, Math.min(1, p.opacity));
+                    const offsetX = Math.cos(p.angle) * p.distance;
+                    const offsetY = Math.sin(p.angle) * p.distance;
+                    p.x += (mouseX + offsetX - p.x) * p.speed;
+                    p.y += (mouseY + offsetY - p.y) * p.speed;
+                    p.element.style.left = `${p.x}px`;
+                    p.element.style.top = `${p.y}px`;
+                    p.element.style.opacity = p.opacity;
+                    p.angle += 0.02;
+                });
+                requestAnimationFrame(animateCursorParticles);
+            }
+            animateCursorParticles();
+
+            // --- Language and Login Button Functionality ---
+            const langBtn = document.getElementById('langBtn');
+            const loginBtn = document.getElementById('loginBtn');
+            const btnTexts = document.querySelectorAll('.btn-text'); // 选择所有按钮文本
+            const chatTitle = document.querySelector('.chat-title');
+            const chatInput = document.getElementById('userInput');
+            const chatSendBtn = document.getElementById('sendButton');
+            const loadingText = document.querySelector('.loading-text');
+            const footerTagline = document.querySelector('.footer-tagline');
+            const footerLinksText = document.querySelectorAll('.link-text');
+            const copyrightText = document.querySelector('.copyright');
+
+            let isEnglish = false;
+
+            loginBtn.addEventListener('click', function() {
+                const originalHTML = loginBtn.innerHTML;
+                loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span class="btn-text">正在登录...</span>';
+                setTimeout(() => {
+                    loginBtn.innerHTML = '<i class="fas fa-exclamation-circle"></i> <span class="btn-text">登录失败</span>';
+                    setTimeout(() => {
+                        loginBtn.innerHTML = originalHTML;
+                    }, 1500);
+                }, 2000);
+            });
+
+            langBtn.addEventListener('click', function() {
+                isEnglish = !isEnglish;
+                const btnTextElements = document.querySelectorAll('.btn-text'); // 动态选择，确保新文本也被找到
+                if (isEnglish) {
+                    // 切换为英文
+                    btnTextElements[0].textContent = 'Log in'; // 登录按钮
+                    btnTextElements[1].textContent = '中文';   // 语言按钮
+                    chatTitle.textContent = "Talk with AliceSkyGarden";
+                    chatInput.placeholder = "Enter your message...";
+                    btnTextElements[2].textContent = 'Send'; // 发送按钮
+                    loadingText.textContent = "Loading background...";
+                    footerTagline.textContent = "Unlocking a New Era of Intelligence · Exploring Infinite Possibilities";
+                    const footerLinks = ["Home", "Developers", "Documentation", "Community", "Blog", "Contact Us"];
+                    footerLinksText.forEach((el, index) => {
+                        el.textContent = footerLinks[index];
+                    });
+                    copyrightText.textContent = "© 2025 AliceSkyGarden Technology. All rights reserved";
+                } else {
+                    // 切换为中文
+                    btnTextElements[0].textContent = 'Log in';
+                    btnTextElements[1].textContent = 'English';
+                    chatTitle.textContent = "与 AliceSkyGarden 对话";
+                    chatInput.placeholder = "输入你的消息...";
+                    btnTextElements[2].textContent = '发送';
+                    loadingText.textContent = "正在加载背景...";
+                    footerTagline.textContent = "开启智能新纪元 · 探索无限可能";
+                    const footerLinks = ["首页", "开发者", "文档", "社区", "博客", "联系我们"];
+                    footerLinksText.forEach((el, index) => {
+                        el.textContent = footerLinks[index];
+                    });
+                    copyrightText.textContent = "© 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved";
+                }
+                langBtn.classList.add('pulse');
+                setTimeout(() => {
+                    langBtn.classList.remove('pulse');
+                }, 500);
+            });
+
+            // --- Video Loading and Laser Effects (Copied from index.html) ---
+            if (window.location.hostname !== 'localhost' &&
+                window.location.hostname !== '127.0.0.1' &&
+                window.location.protocol !== "https:") {
+                window.location.protocol = "https:";
+            }
+            const video = document.getElementById('bg-video');
+            const loadingIndicator = document.querySelector('.video-loading');
+            let loadingHidden = false;
+            let videoPlayed = false;
+            video.muted = true;
+            video.volume = 0;
+            function hideLoadingIndicator() {
+                if (loadingHidden) return;
+                loadingHidden = true;
+                loadingIndicator.style.opacity = "0";
+                setTimeout(() => {
+                    loadingIndicator.style.display = "none";
+                }, 500);
+            }
+            function checkVideoStatus() {
+                if (videoPlayed || video.currentTime > 0) {
+                    hideLoadingIndicator();
+                    return;
+                }
+                if (video.readyState >= 3) {
+                    hideLoadingIndicator();
+                    return;
+                }
+                setTimeout(hideLoadingIndicator, 3000);
+            }
+            video.addEventListener('canplay', hideLoadingIndicator);
+            video.addEventListener('playing', function() {
+                videoPlayed = true;
+                hideLoadingIndicator();
+            });
+            video.addEventListener('timeupdate', function() {
+                if (video.currentTime > 0) {
+                    videoPlayed = true;
+                    hideLoadingIndicator();
+                }
+            });
+            video.addEventListener('click', function() {
+                video.play().catch(error => {
+                    console.log("手动播放失败:", error);
+                });
+            });
+            video.addEventListener('error', function() {
+                console.log("视频加载失败，使用CSS背景替代");
+                hideLoadingIndicator();
+                const errorMsg = document.createElement('div');
+                errorMsg.innerHTML = "视频加载失败，启用备用背景";
+                errorMsg.style.color = "#ff4d4d";
+                errorMsg.style.position = "absolute";
+                errorMsg.style.top = "60%";
+                errorMsg.style.left = "50%";
+                errorMsg.style.transform = "translate(-50%, -50%)";
+                errorMsg.style.zIndex = "10";
+                document.querySelector('.video-container').appendChild(errorMsg);
+                document.querySelector('.video-container').style.background = `
+                    linear-gradient(135deg, #0f0c29, #302b63, #24243e)
+                `;
+                document.querySelector('.video-overlay').style.display = "block";
+            });
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("自动播放被阻止:", error);
+                    const playButton = document.createElement('div');
+                    playButton.innerHTML = '<i class="fas fa-play-circle"></i>';
+                    playButton.style.position = 'absolute';
+                    playButton.style.top = '50%';
+                    playButton.style.left = '50%';
+                    playButton.style.transform = 'translate(-50%, -50%)';
+                    playButton.style.fontSize = '5rem';
+                    playButton.style.color = 'var(--neon-blue)';
+                    playButton.style.cursor = 'pointer';
+                    playButton.style.zIndex = '10';
+                    playButton.style.textShadow = '0 0 15px var(--neon-blue)';
+                    playButton.addEventListener('click', function() {
+                        video.play().then(() => {
+                            playButton.style.display = 'none';
+                        }).catch(e => {
+                            console.log("手动播放失败:", e);
+                        });
+                    });
+                    document.querySelector('.video-container').appendChild(playButton);
+                });
+            }
+
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#00f3ff"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 2,
+                            "size_min": 0.3,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#00f3ff",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 1,
+                        "direction": "none",
+                        "random": true,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": true,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+
+            const leftLaser = document.querySelector('.laser-beam.left');
+            const rightLaser = document.querySelector('.laser-beam.right');
+            let laserInterval;
+            function triggerLasers() {
+                const leftClasses = leftLaser.className;
+                const rightClasses = rightLaser.className;
+                leftLaser.classList.remove('laser-beam');
+                rightLaser.classList.remove('laser-beam');
+                void leftLaser.offsetWidth;
+                void rightLaser.offsetWidth;
+                leftLaser.classList.add('laser-beam');
+                rightLaser.classList.add('laser-beam');
+            }
+            function startLaserSequence() {
+                triggerLasers();
+                laserInterval = setInterval(triggerLasers, 7000);
+            }
+            function checkAndStartLasers() {
+                 if (leftLaser && rightLaser) {
+                     setTimeout(startLaserSequence, 6000);
+                 } else {
+                     console.warn("Laser elements not found, cannot start sequence.");
+                 }
+            }
+            window.addEventListener('load', function() {
+                setTimeout(checkAndStartLasers, 100);
+            });
+
+            // --- Chat Functionality (Copied from index.html) ---
+            const chatMessages = document.getElementById('chatMessages');
+            const userInput = document.getElementById('userInput');
+            const sendButton = document.getElementById('sendButton');
+            const API_URL = 'https://qwen-proxy-acqopqqcpc.cn-hangzhou.fcapp.run/invoke';
+
+            function addMessage(message, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+                messageDiv.textContent = message;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function showTyping() {
+                const typingDiv = document.createElement('div');
+                typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
+                typingDiv.id = 'typingIndicator';
+                typingDiv.textContent = isEnglish ? 'Thinking...' : '正在思考...';
+                chatMessages.appendChild(typingDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function hideTyping() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+
+            async function sendMessage() {
+                const message = userInput.value.trim();
+                if (!message) return;
+                addMessage(message, true);
+                userInput.value = '';
+                showTyping();
+                sendButton.disabled = true;
+                let botMessageDiv = null;
+                let fullReply = "";
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ message: message })
+                    });
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    hideTyping();
+                    if (data.reply) {
+                        fullReply = data.reply;
+                    } else if (data.error) {
+                        fullReply = isEnglish ? `Error: ${data.error}` : `错误: ${data.error}`;
+                    } else {
+                        fullReply = isEnglish ? "Sorry, I didn't receive a reply." : "抱歉，我没有收到回复。";
+                    }
+                    const markdownToHtml = (markdownText) => {
+                        if (typeof marked === 'undefined') {
+                            console.warn('marked.js 未加载，无法转换 Markdown');
+                            return markdownText;
+                        }
+                        try {
+                            return marked.parse(markdownText, { breaks: true });
+                        } catch (e) {
+                            console.error('Markdown 转换出错:', e);
+                            return markdownText;
+                        }
+                    };
+                    fullReply = markdownToHtml(fullReply);
+                    botMessageDiv = document.createElement('div');
+                    botMessageDiv.classList.add('message', 'bot-message');
+                    botMessageDiv.innerHTML = "";
+                    chatMessages.appendChild(botMessageDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                    let i = 0;
+                    const typeWriterHtml = () => {
+                         botMessageDiv.innerHTML = fullReply;
+                         chatMessages.scrollTop = chatMessages.scrollHeight;
+                         /*
+                         if (i < fullReply.length) {
+                             botMessageDiv.innerHTML = fullReply.substring(0, i+1);
+                             i++;
+                             chatMessages.scrollTop = chatMessages.scrollHeight;
+                             setTimeout(typeWriterHtml, 30);
+                         }
+                         */
+                    };
+                    typeWriterHtml();
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                    hideTyping();
+                    if (!botMessageDiv) {
+                        const errorDiv = document.createElement('div');
+                        errorDiv.classList.add('message', 'bot-message');
+                        errorDiv.textContent = isEnglish ? `Error: ${error.message}` : `错误: ${error.message}`;
+                        chatMessages.appendChild(errorDiv);
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    } else {
+                        botMessageDiv.textContent = isEnglish ? `Error: ${error.message}` : `错误: ${error.message}`;
+                    }
+                } finally {
+                    sendButton.disabled = false;
+                }
+            }
+
+            sendButton.addEventListener('click', sendMessage);
+            userInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault();
+                    sendMessage();
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>
+```
