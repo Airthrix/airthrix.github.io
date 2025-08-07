@@ -270,6 +270,7 @@
             transform: translateY(-5px);
             box-shadow: 0 0 15px var(--neon-blue), 0 0 25px var(--neon-blue);
         }
+        /* --- 修改：扩大聊天容器宽度 --- */
         .chat-container {
             background: rgba(15, 15, 40, 0.5);
             border-radius: 15px;
@@ -283,6 +284,8 @@
             z-index: 10;
             width: 80%; /* 扩大宽度 */
             max-width: 1200px; /* 最大宽度限制 */
+            margin-left: auto;
+            margin-right: auto;
         }
         .chat-title {
             font-size: 2rem;
@@ -291,9 +294,10 @@
             color: var(--neon-blue);
             text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
+        /* --- 修改：增加聊天消息区域高度并确保滚动 --- */
         .chat-messages {
             height: 600px; /* 增加高度 */
-            overflow-y: auto;
+            overflow-y: auto; /* 确保启用垂直滚动 */
             padding: 1rem;
             background: rgba(10, 10, 25, 0.3);
             border-radius: 10px;
@@ -427,6 +431,7 @@
                 padding: 1rem;
                 padding-top: 80px; /* 调整移动端间距 */
             }
+            /* --- 修改：移动端也调整聊天容器和消息区域 --- */
             .chat-container {
                 padding: 1rem;
                 width: 95%; /* 移动端适应 */
@@ -697,7 +702,7 @@
                 }
             }
             // --- 新增：逐字显示函数 (打字机效果) ---
-            function typeWriter(messageDiv, fullText, speed = 1) {
+            function typeWriter(messageDiv, fullText, speed = 30) {
                  let i = 0;
                  const typingCursor = document.createElement('span');
                  typingCursor.classList.add('typing-cursor');
@@ -789,4 +794,3 @@
     </script>
 </body>
 </html>
-
