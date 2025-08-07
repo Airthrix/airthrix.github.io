@@ -676,9 +676,7 @@
             const chatMessages = document.getElementById('chatMessages');
             const userInput = document.getElementById('userInput');
             const sendButton = document.getElementById('sendButton');
-            // 确保 API_URL 指向您的后端流式接口，并且支持 GET 方法
-            const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run/invoke'; // 注意添加了 /invoke 路径
-            let currentEventSource = null; // 用于跟踪当前的流
+            const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run'; // 确保这是您的后端流式接口地址
 
             function addMessage(message, isUser = false) {
                 const messageDiv = document.createElement('div');
@@ -718,57 +716,36 @@
                 typingCursor.classList.add('typing-cursor');
                 botMessageDiv.appendChild(typingCursor);
 
-                // 3. 构造支持 GET 方法的 EventSource URL
-                // 确保后端 /invoke 路由支持 GET 并能处理 'message' 查询参数
-                const eventSourceUrl = `${API_URL}?message=${encodeURIComponent(message)}`;
-                // 4. 创建 EventSource 连接
-                const eventSource = new EventSource(eventSourceUrl, { withCredentials: false }); // 根据 CORS 设置调整
+                // 3. 创建 EventSource 连接
+                const eventSource = new EventSource(`${API_URL}?message=${encodeURIComponent(message)}`, { withCredentials: true });
 
                 eventSource.onmessage = function(event) {
-                    // 假设后端发送的是  ... 格式
-                    const rawData = event.data;
-                    if (rawData === "[DONE]") {
+                    const data = JSON.parse(event.data);
+                    if (data.content) {
+                        // 收到内容片段
+                        fullReply += data.content;
+                        // 实时更新消息内容 (逐字或逐块)
+                        botMessageDiv.innerHTML = marked.parse(fullReply, { breaks: true }) + '<span class="typing-cursor"></span>';
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    } else if (data.error) {
+                        // 收到错误信息
+                        console.error("Stream Error:", data.error);
+                        botMessageDiv.textContent = isEnglish ? `Error: ${data.error}` : `错误: ${data.error}`;
+                        eventSource.close(); // 关闭连接
+                    } else if (event.data === "[DONE]") {
                         // 流结束
                         console.log("Stream finished.");
                         // 移除光标
                         const cursor = botMessageDiv.querySelector('.typing-cursor');
                         if (cursor) cursor.remove();
                         eventSource.close(); // 关闭连接
-                        return;
-                    }
-
-                    try {
-                        const data = JSON.parse(rawData);
-                        if (data.content) {
-                            // 收到内容片段
-                            fullReply += data.content;
-                            // 实时更新消息内容 (逐字或逐块)
-                            // 使用 marked 解析 Markdown
-                            const htmlContent = marked.parse(fullReply, { breaks: true });
-                            botMessageDiv.innerHTML = htmlContent + '<span class="typing-cursor"></span>';
-                            chatMessages.scrollTop = chatMessages.scrollHeight;
-                        } else if (data.error) {
-                            // 收到错误信息
-                            console.error("Stream Error:", data.error);
-                            botMessageDiv.innerHTML = isEnglish ? `Error: ${data.error}` : `错误: ${data.error}`;
-                            const cursor = botMessageDiv.querySelector('.typing-cursor');
-                            if (cursor) cursor.remove();
-                            eventSource.close(); // 关闭连接
-                        }
-                    } catch (e) {
-                        console.error("Failed to parse SSE data:", rawData, e);
-                        // 可以选择在这里关闭连接或显示错误
                     }
                 };
 
                 eventSource.onerror = function(err) {
                     console.error("EventSource failed:", err);
                     hideTyping();
-                    // 确保光标被移除
-                    const cursor = botMessageDiv.querySelector('.typing-cursor');
-                    if (cursor) cursor.remove();
-                    // 如果还没有内容，显示错误
-                    if (!botMessageDiv.textContent || botMessageDiv.textContent.trim() === '') {
+                    if (botMessageDiv && !botMessageDiv.textContent) { // 如果消息框是空的
                          botMessageDiv.textContent = isEnglish ? 'Error: Connection failed.' : '错误：连接失败。';
                     }
                     eventSource.close(); // 确保关闭连接
@@ -778,6 +755,8 @@
                 return eventSource;
             }
 
+
+            let currentEventSource = null; // 用于跟踪当前的流
 
             async function sendMessage() {
                 const message = userInput.value.trim();
@@ -795,9 +774,6 @@
 
                 try {
                     // 启动流式接收
-                    if (currentEventSource) {
-                         currentEventSource.close(); // 关闭之前的连接（如果有的话）
-                    }
                     currentEventSource = streamMessage(message);
                 } catch (error) {
                      console.error('Error initiating stream:', error);
@@ -809,63 +785,42 @@
                      chatMessages.scrollTop = chatMessages.scrollHeight;
                 } finally {
                     // 启用发送按钮
-                    // 注意：发送按钮在流式传输期间保持禁用状态可能更好，
-                    // 或者可以允许发送新消息（这将取消当前流）。
-                    // 这里我们选择在启动流后立即启用它。
                     sendButton.disabled = false;
                 }
             }
 
             // --- 可选：添加取消流式输出的功能 ---
             // 例如，用户再次点击发送按钮时，取消上一个流
-            sendButton.addEventListener('click', function() {
-                if (currentEventSource) {
-                    currentEventSource.close();
-                    hideTyping(); // 隐藏上一个思考提示
-                    const typingCursor = document.querySelector('.typing-cursor');
-                    if (typingCursor) typingCursor.remove(); // 移除光标
-                    currentEventSource = null; // 重置引用
-                }
-                sendMessage(); // 发送新消息
-            });
-
-            // 或者添加一个专门的取消按钮 (取消注释下面代码以启用)
-            /*
-            const cancelButton = document.createElement('button');
-            cancelButton.textContent = isEnglish ? 'Cancel' : '取消';
-            cancelButton.style.marginLeft = '10px';
-            cancelButton.classList.add('chat-send-btn'); // 复用样式
-            cancelButton.addEventListener('click', () => {
-                if (currentEventSource) {
-                    currentEventSource.close();
-                    hideTyping();
-                    const typingCursor = document.querySelector('.typing-cursor');
-                    if (typingCursor) typingCursor.remove();
-                    currentEventSource = null;
-                    console.log("Stream cancelled by user.");
-                }
-            });
-            // 需要先获取 chatInputArea 元素
-            const chatInputArea = document.querySelector('.chat-input-area');
-            chatInputArea.appendChild(cancelButton);
-            */
-
-            // 如果使用上面的取消按钮方案，请注释掉下面这行
-            // userInput.addEventListener('keydown', function(event) {
-            //     if (event.key === 'Enter' && !event.shiftKey) {
-            //         event.preventDefault();
-            //         sendMessage();
+            // sendButton.addEventListener('click', function() {
+            //     if (currentEventSource) {
+            //         currentEventSource.close();
+            //         hideTyping(); // 隐藏上一个思考提示
+            //         const typingCursor = document.querySelector('.typing-cursor');
+            //         if (typingCursor) typingCursor.remove(); // 移除光标
             //     }
+            //     sendMessage(); // 发送新消息
             // });
 
-            // 如果不使用取消按钮，保留 Enter 键发送功能
+            // 或者添加一个专门的取消按钮
+            // const cancelButton = document.createElement('button');
+            // cancelButton.textContent = 'Cancel';
+            // cancelButton.style.marginLeft = '10px';
+            // cancelButton.addEventListener('click', () => {
+            //     if (currentEventSource) {
+            //         currentEventSource.close();
+            //         hideTyping();
+            //         const typingCursor = document.querySelector('.typing-cursor');
+            //         if (typingCursor) typingCursor.remove();
+            //         console.log("Stream cancelled by user.");
+            //     }
+            // });
+            // chatInputArea.appendChild(cancelButton); // 需要先获取 chatInputArea 元素
+
+            sendButton.addEventListener('click', sendMessage);
             userInput.addEventListener('keydown', function(event) {
                 if (event.key === 'Enter' && !event.shiftKey) {
                     event.preventDefault();
-                    // 模拟点击发送按钮，触发取消逻辑（如果已添加）
-                    sendButton.click();
-                    // 或者直接调用 sendMessage();
-                    // sendMessage();
+                    sendMessage();
                 }
             });
 
