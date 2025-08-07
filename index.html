@@ -1930,8 +1930,8 @@
                             const lines = chunk.split('\n');
 
                             for (const line of lines) {
-                                if (line.startsWith('data:')) {
-                                    const dataStr = line.substring(5).trim(); // 移除 'data:' 并 trim
+                                if (line.startsWith('')) {
+                                    const dataStr = line.substring(5).trim(); // 移除 '' 并 trim
                                     if (dataStr === "[DONE]") {
                                         done = true; // 设置 done 标志
                                         break; // 退出 for 循环
