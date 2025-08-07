@@ -270,7 +270,7 @@
             transform: translateY(-5px);
             box-shadow: 0 0 15px var(--neon-blue), 0 0 25px var(--neon-blue);
         }
-        /* --- 修改：扩大聊天容器宽度 --- */
+        /* --- 修改：扩大聊天容器宽度并居中 --- */
         .chat-container {
             background: rgba(15, 15, 40, 0.5);
             border-radius: 15px;
@@ -284,8 +284,8 @@
             z-index: 10;
             width: 80%; /* 扩大宽度 */
             max-width: 1200px; /* 最大宽度限制 */
-            margin-left: auto;
-            margin-right: auto;
+            margin-left: auto; /* 居中 */
+            margin-right: auto; /* 居中 */
         }
         .chat-title {
             font-size: 2rem;
@@ -296,7 +296,7 @@
         }
         /* --- 修改：增加聊天消息区域高度并确保滚动 --- */
         .chat-messages {
-            height: 600px; /* 增加高度 */
+            height: 700px; /* 增加高度到 700px */
             overflow-y: auto; /* 确保启用垂直滚动 */
             padding: 1rem;
             background: rgba(10, 10, 25, 0.3);
@@ -440,7 +440,7 @@
                 font-size: 1.5rem;
             }
             .chat-messages {
-                height: 400px; /* 减小移动端高度 */
+                height: 500px; /* 减小移动端高度到 500px */
             }
         }
         @media (max-width: 480px) {
@@ -455,7 +455,7 @@
                 min-width: 90px;
             }
             .chat-messages {
-                height: 300px; /* 进一步减小移动端高度 */
+                height: 400px; /* 进一步减小移动端高度到 400px */
             }
         }
     </style>
@@ -702,7 +702,7 @@
                 }
             }
             // --- 新增：逐字显示函数 (打字机效果) ---
-            function typeWriter(messageDiv, fullText, speed = 30) {
+            function typeWriter(messageDiv, fullText, speed = 10) { // 将 speed 默认值改为 10 毫秒
                  let i = 0;
                  const typingCursor = document.createElement('span');
                  typingCursor.classList.add('typing-cursor');
