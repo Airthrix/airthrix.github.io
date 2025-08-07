@@ -835,46 +835,6 @@
                 sendMessage(); // 发送新消息
             });
 
-            // 或者添加一个专门的取消按钮 (取消注释下面代码以启用)
-            /*
-            const cancelButton = document.createElement('button');
-            cancelButton.textContent = isEnglish ? 'Cancel' : '取消';
-            cancelButton.style.marginLeft = '10px';
-            cancelButton.classList.add('chat-send-btn'); // 复用样式
-            cancelButton.addEventListener('click', () => {
-                if (currentEventSource) {
-                    currentEventSource.close();
-                    hideTyping();
-                    const typingCursor = document.querySelector('.typing-cursor');
-                    if (typingCursor) typingCursor.remove();
-                    currentEventSource = null;
-                    console.log("Stream cancelled by user.");
-                }
-            });
-            // 需要先获取 chatInputArea 元素
-            const chatInputArea = document.querySelector('.chat-input-area');
-            chatInputArea.appendChild(cancelButton);
-            */
-
-            // 如果使用上面的取消按钮方案，请注释掉下面这行
-            // userInput.addEventListener('keydown', function(event) {
-            //     if (event.key === 'Enter' && !event.shiftKey) {
-            //         event.preventDefault();
-            //         sendMessage();
-            //     }
-            // });
-
-            // 如果不使用取消按钮，保留 Enter 键发送功能
-            userInput.addEventListener('keydown', function(event) {
-                if (event.key === 'Enter' && !event.shiftKey) {
-                    event.preventDefault();
-                    // 模拟点击发送按钮，触发取消逻辑（如果已添加）
-                    sendButton.click();
-                    // 或者直接调用 sendMessage();
-                    // sendMessage();
-                }
-            });
-
         });
     </script>
 </body>
