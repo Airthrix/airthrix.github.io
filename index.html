@@ -1863,20 +1863,17 @@
             async function sendMessage() {
                 const message = userInput.value.trim();
                 if (!message) return;
+
                 addMessage(message, true);
                 userInput.value = '';
                 showTyping();
                 sendButton.disabled = true;
                 let botMessageDiv = null;
-                // let fullReply = ""; // 不再需要累积完整回复
 
                 try {
-                    // 修改API_URL为你的新流式端点 (如果用了 /stream)
-                    // const API_URL = 'https://你的后端地址/stream';
-                    const API_URL = 'https://qwen-proxy-acqopqqcpc.cn-hangzhou.fcapp.run/invoke'; // 保持原URL，假设后端已修改
+                    // 修复 API_URL 中的尾随空格
+                    const API_URL = 'https://qwen-proxy-acqopqqcpc.cn-hangzhou.fcapp.run/invoke'; 
 
-                    // 使用 EventSource 或 fetch + ReadableStream 来处理 SSE 流
-                    // 方法一：使用 fetch 和 ReadableStream (更灵活，兼容性好)
                     const response = await fetch(API_URL, {
                         method: 'POST',
                         headers: {
@@ -1906,29 +1903,22 @@
                          } else {
                              fullReply = "抱歉，我没有收到回复。";
                          }
-                         // 使用 Markdown 转换 (如果需要)
                          fullReply = markdownToHtml(fullReply);
-                         // 直接显示完整回复或模拟打字机 (见下方注释)
                          addMessage(fullReply, false);
                          sendButton.disabled = false;
-                         return; // 退出函数
+                         return; 
                     }
 
                     // 如果是 SSE 流，则处理流
-                    hideTyping(); // 隐藏初始的 "正在思考..." 指示器
-
-                    // 创建一个新的 bot 消息 div
+                    hideTyping(); 
                     botMessageDiv = document.createElement('div');
                     botMessageDiv.classList.add('message', 'bot-message');
-                    botMessageDiv.innerHTML = ""; // 初始为空
+                    botMessageDiv.innerHTML = ""; 
                     chatMessages.appendChild(botMessageDiv);
                     chatMessages.scrollTop = chatMessages.scrollHeight;
 
-                    let accumulatedContent = ""; // 累积从流中接收到的内容
-
-                    // 获取 ReadableStream 的 reader
+                    let accumulatedContent = ""; 
                     const reader = response.body.getReader();
-                    const decoder = new TextDecoder("utf-8");
                     let done = false;
 
                     // 读取流数据
@@ -1936,22 +1926,15 @@
                         const { value, done: readerDone } = await reader.read();
                         done = readerDone;
                         if (value) {
-                            const chunk = decoder.decode(value, { stream: true });
-                            // console.log("Received chunk:", chunk); // 调试用
-
-                            // 处理 SSE 数据块 (可能包含多个 data: 行)
-                            // 注意：SSE 规范是用 \n\n 分隔事件，但实际传输中 chunk 可能包含不完整的行或多个事件
-                            // 更稳健的做法是按 \n 分割，然后重组完整的行
+                            const chunk = new TextDecoder().decode(value);
                             const lines = chunk.split('\n');
-                            let currentEvent = ""; // 用于累积当前事件的行
 
                             for (const line of lines) {
                                 if (line.startsWith('data:')) {
-                                    // 这是一个完整的 data 行或一个分段
                                     const dataStr = line.substring(5).trim(); // 移除 'data:' 并 trim
                                     if (dataStr === "[DONE]") {
-                                        done = true;
-                                        break;
+                                        done = true; // 设置 done 标志
+                                        break; // 退出 for 循环
                                     }
                                     try {
                                         const dataObj = JSON.parse(dataStr);
@@ -1961,37 +1944,30 @@
                                             accumulatedContent += deltaText;
                                             // 实时更新消息 div 的内容 (使用 Markdown 转换)
                                             botMessageDiv.innerHTML = markdownToHtml(accumulatedContent);
-                                            // 滚动到底部
                                             chatMessages.scrollTop = chatMessages.scrollHeight;
                                         }
-                                        // 可以检查 finish_reason 等字段判断结束
+                                        // 检查 finish_reason 判断结束
                                         if (dataObj.output?.finish_reason === "stop") {
-                                             done = true;
-                                             break;
+                                            done = true; // 设置 done 标志
+                                            break; // 退出 for 循环
                                         }
                                     } catch (e) {
                                         console.error("Error parsing SSE data line:", line, e);
-                                        // 如果解析失败，可能是分段的 JSON，累积到 currentEvent
-                                        // 这里简化处理，直接记录错误
+                                        // 忽略解析错误，继续处理下一行
                                     }
                                 }
                                 // 忽略 event: 和 : (心跳) 行
-                                // 如果需要处理其他事件类型或错误，可以在这里添加逻辑
                             }
                         }
                     }
-
-                    // 确保 reader 被关闭
-                    reader.releaseLock();
-
+                    // 流处理完成后，reader 会自动关闭或在 finally 中处理
+                    
                 } catch (error) {
                     console.error('Error sending message:', error);
-                    hideTyping(); // 确保隐藏
+                    hideTyping(); 
                     if (!botMessageDiv) {
-                        // 如果还没有创建消息 div，则创建一个
                         addMessage(`错误: ${error.message}`, false);
                     } else {
-                        // 如果已有消息 div，则更新其内容
                         botMessageDiv.textContent = `错误: ${error.message}`;
                         chatMessages.scrollTop = chatMessages.scrollHeight;
                     }
@@ -2000,23 +1976,21 @@
                 }
             }
 
-            // ... (之后的代码保持不变) ...
             // 确保 markdownToHtml 函数在 sendMessage 函数之前或附近定义
             const markdownToHtml = (markdownText) => {
                 if (typeof marked === 'undefined') {
                     console.warn('marked.js 未加载，无法转换 Markdown');
-                    return markdownText; // 如果 marked.js 未加载，返回原始文本
+                    return markdownText; 
                 }
                 try {
-                    // 配置 marked 以支持换行
                     marked.setOptions({
-                        breaks: true, // 将 \n 转换为 <br>
-                        gfm: true     // 启用 GitHub Flavored Markdown
+                        breaks: true, 
+                        gfm: true     
                     });
                     return marked.parse(markdownText);
                 } catch (e) {
                     console.error('Markdown 转换出错:', e);
-                    return markdownText; // 转换失败时返回原始文本
+                    return markdownText; 
                 }
             };
 
