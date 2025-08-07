@@ -29,11 +29,19 @@
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--dark-bg);
+            /* 使用紫色科幻渐变背景 */
+            background: linear-gradient(135deg, #1a0a2e, #2d0b45, #4a0f6b);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             color: #e0e0ff;
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         .top-nav {
             position: fixed;
@@ -101,46 +109,6 @@
         }
         .nav-btn:hover i {
             transform: scale(1.2);
-        }
-        .grid-lines {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background:
-                linear-gradient(90deg, rgba(106, 11, 192, 0.03) 1px, transparent 1px),
-                linear-gradient(0deg, rgba(106, 11, 192, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
-            z-index: -2;
-        }
-        /* 紫色科幻背景 */
-        .video-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: -1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-image: url('https://aliceskygarden.oss-cn-beijing.aliyuncs.com/scifi-hexagon.jpg'); /* 替换为您的紫色科幻背景图片 */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            filter: brightness(1.2) contrast(1.1) saturate(1.2);
-        }
-        .video-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(10, 10, 18, 0.9) 0%, rgba(10, 10, 18, 0.3) 50%, rgba(10, 10, 18, 0.9) 100%);
-            z-index: 1;
         }
         .main-content {
             position: relative;
@@ -248,94 +216,6 @@
             transform: translateY(-5px);
             box-shadow: 0 0 15px var(--neon-blue), 0 0 25px var(--neon-blue);
         }
-        .floating-element {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(40px);
-            opacity: 0.3;
-            z-index: -1;
-        }
-        .element-1 {
-            width: 300px;
-            height: 300px;
-            background: var(--neon-purple);
-            top: 10%;
-            left: 5%;
-            animation: float 15s infinite ease-in-out;
-        }
-        .element-2 {
-            width: 200px;
-            height: 200px;
-            background: var(--neon-blue);
-            bottom: 20%;
-            right: 10%;
-            animation: float 12s infinite ease-in-out;
-            animation-delay: 2s;
-        }
-        .element-3 {
-            width: 150px;
-            height: 150px;
-            background: var(--neon-green);
-            top: 40%;
-            right: 20%;
-            animation: float 10s infinite ease-in-out;
-            animation-delay: 4s;
-        }
-        #particles-js {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -3;
-        }
-        #cursor-particles {
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-        }
-        @keyframes glow {
-            from {
-                text-shadow:
-                    0 0 5px var(--neon-blue),
-                    0 0 10px var(--neon-blue);
-            }
-            to {
-                text-shadow:
-                    0 0 15px var(--neon-blue),
-                    0 0 30px var(--neon-blue);
-            }
-        }
-        @keyframes float {
-            0% {
-                transform: translate(0, 0);
-            }
-            50% {
-                transform: translate(20px, -20px);
-            }
-            100% {
-                transform: translate(0, 0);
-            }
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        @keyframes pulse {
-            0% {
-                box-shadow:
-                    0 0 15px var(--neon-blue),
-                    0 0 30px var(--neon-purple);
-                opacity: 0.5;
-            }
-            100% {
-                box-shadow:
-                    0 0 25px var(--neon-blue),
-                    0 0 50px var(--neon-purple);
-                opacity: 1;
-            }
-        }
-        /* 聊天区域样式 */
         .chat-container {
             background: rgba(15, 15, 40, 0.5);
             border-radius: 15px;
@@ -512,17 +392,6 @@
             <span class="btn-text">English</span>
         </button>
     </div>
-    <div class="grid-lines"></div>
-    <!-- 粒子背景 -->
-    <div id="particles-js"></div>
-    <!-- 装饰元素 -->
-    <div class="floating-element element-1"></div>
-    <div class="floating-element element-2"></div>
-    <div class="floating-element element-3"></div>
-    <!-- 紫色科幻背景 -->
-    <div class="video-container">
-        <div class="video-overlay"></div>
-    </div>
 
     <div class="main-content">
         <!-- 聊天功能区域 -->
@@ -530,7 +399,7 @@
             <h2 class="chat-title">与 AliceSkyGarden 对话</h2>
             <div class="chat-messages" id="chatMessages">
                 <!-- 初始欢迎消息 -->
-                <div class="message bot-message">你好！我是 AliceSkyGarden，有什么我可以帮助你的吗？😊</div>
+                <div class="message bot-message" id="initialMessage">你好！我是 AliceSkyGarden，有什么我可以帮助你的吗？😊</div>
             </div>
             <div class="chat-input-area">
                 <textarea id="userInput" class="chat-input" placeholder="输入你的消息..."></textarea>
@@ -628,11 +497,10 @@
             // --- Language and Login Button Functionality ---
             const langBtn = document.getElementById('langBtn');
             const loginBtn = document.getElementById('loginBtn');
-            const btnTexts = document.querySelectorAll('.btn-text'); // 选择所有按钮文本
             const chatTitle = document.querySelector('.chat-title');
             const chatInput = document.getElementById('userInput');
             const chatSendBtn = document.getElementById('sendButton');
-            const loadingText = document.querySelector('.loading-text');
+            const initialMessage = document.getElementById('initialMessage');
             const footerTagline = document.querySelector('.footer-tagline');
             const footerLinksText = document.querySelectorAll('.link-text');
             const copyrightText = document.querySelector('.copyright');
@@ -660,7 +528,8 @@
                     chatTitle.textContent = "Talk with AliceSkyGarden";
                     chatInput.placeholder = "Enter your message...";
                     btnTextElements[2].textContent = 'Send'; // 发送按钮
-                    loadingText.textContent = "Loading background...";
+                    // 更新初始欢迎消息
+                    initialMessage.textContent = "Hello! I'm AliceSkyGarden. How can I assist you? 😊";
                     footerTagline.textContent = "Unlocking a New Era of Intelligence · Exploring Infinite Possibilities";
                     const footerLinks = ["Home", "Developers", "Documentation", "Community", "Blog", "Contact Us"];
                     footerLinksText.forEach((el, index) => {
@@ -674,7 +543,8 @@
                     chatTitle.textContent = "与 AliceSkyGarden 对话";
                     chatInput.placeholder = "输入你的消息...";
                     btnTextElements[2].textContent = '发送';
-                    loadingText.textContent = "正在加载背景...";
+                    // 更新初始欢迎消息
+                    initialMessage.textContent = "你好！我是 AliceSkyGarden，有什么我可以帮助你的吗？😊";
                     footerTagline.textContent = "开启智能新纪元 · 探索无限可能";
                     const footerLinks = ["首页", "开发者", "文档", "社区", "博客", "联系我们"];
                     footerLinksText.forEach((el, index) => {
@@ -786,11 +656,12 @@
                     hideTyping();
                     if (!botMessageDiv) {
                         const errorDiv = document.createElement('div');
-                        errorDiv.innerHTML = "错误: " + error.message;
+                        errorDiv.classList.add('message', 'bot-message');
+                        errorDiv.textContent = isEnglish ? `Error: ${error.message}` : `错误: ${error.message}`;
                         chatMessages.appendChild(errorDiv);
                         chatMessages.scrollTop = chatMessages.scrollHeight;
                     } else {
-                        botMessageDiv.textContent = "错误: " + error.message;
+                        botMessageDiv.textContent = isEnglish ? `Error: ${error.message}` : `错误: ${error.message}`;
                     }
                 } finally {
                     sendButton.disabled = false;
