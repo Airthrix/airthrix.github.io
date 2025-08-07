@@ -1867,7 +1867,7 @@
                 addMessage(message, true);
                 userInput.value = '';
                 showTyping();
-                sendButton.disabled = true;
+                sendButton.disabled = true; // 禁用按钮防止重复点击
                 let botMessageDiv = null;
 
                 try {
@@ -1972,7 +1972,7 @@
                         chatMessages.scrollTop = chatMessages.scrollHeight;
                     }
                 } finally {
-                    sendButton.disabled = false;
+                    sendButton.disabled = false; // 请求完成后重新启用发送按钮
                 }
             }
 
