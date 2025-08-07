@@ -115,6 +115,7 @@
             pointer-events: none;
             z-index: -2;
         }
+        /* 紫色科幻背景 */
         .video-container {
             position: fixed;
             top: 0;
@@ -126,21 +127,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
-        }
-        #bg-video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            filter:
-                brightness(1.8)
-                contrast(1.2)
-                saturate(1.1)
-                hue-rotate(0deg);
-            transition: filter 1s ease;
+            background-image: url('https://aliceskygarden.oss-cn-beijing.aliyuncs.com/scifi-hexagon.jpg'); /* 替换为您的紫色科幻背景图片 */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: brightness(1.2) contrast(1.1) saturate(1.2);
         }
         .video-overlay {
             position: absolute;
@@ -150,28 +141,6 @@
             height: 100%;
             background: linear-gradient(to bottom, rgba(10, 10, 18, 0.9) 0%, rgba(10, 10, 18, 0.3) 50%, rgba(10, 10, 18, 0.9) 100%);
             z-index: 1;
-        }
-        .video-loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: var(--neon-blue);
-            font-size: 1.5rem;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            transition: opacity 0.5s ease;
-        }
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(0, 243, 255, 0.3);
-            border-top: 5px solid var(--neon-blue);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
         }
         .main-content {
             position: relative;
@@ -366,92 +335,6 @@
                 opacity: 1;
             }
         }
-        @keyframes hologram {
-            0% {
-                background-position: 0% 0%;
-            }
-            100% {
-                background-position: 100% 100%;
-            }
-        }
-        .laser-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 100;
-            overflow: hidden;
-        }
-        .laser-beam {
-            position: absolute;
-            top: 0;
-            height: 100%;
-            width: 30vw;
-            opacity: 0;
-            transform-origin: top center;
-            filter: blur(1px);
-            background: linear-gradient(
-                to right,
-                rgba(255, 50, 50, 0) 0%,
-                rgba(255, 0, 0, 0) 5%,
-                rgba(255, 0, 0, 0.8) 25%,
-                rgba(255, 50, 50, 0.9) 50%,
-                rgba(255, 0, 0, 0.8) 75%,
-                rgba(255, 0, 0, 0) 95%,
-                rgba(255, 50, 50, 0) 100%
-            );
-            box-shadow:
-                0 0 10px 2px rgba(255, 50, 50, 0.6),
-                0 0 20px 5px rgba(255, 0, 0, 0.5),
-                0 0 40px 10px rgba(200, 0, 0, 0.4),
-                0 0 80px 20px rgba(150, 0, 0, 0.3),
-                0 0 160px 40px rgba(100, 0, 0, 0.2),
-                inset 0 0 10px 2px rgba(255, 200, 200, 0.5);
-        }
-        .laser-beam.left {
-            left: -30vw;
-            animation: laserSweepLeft 3s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
-        }
-        .laser-beam.right {
-            right: -30vw;
-            animation: laserSweepRight 3s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
-        }
-        .laser-beam.show {
-        }
-        @keyframes laserSweepLeft {
-            0% {
-                opacity: 1;
-                left: -30vw;
-                filter: blur(1px) hue-rotate(0deg);
-            }
-            50% {
-                opacity: 1;
-                filter: blur(0.5px) hue-rotate(10deg);
-            }
-            100% {
-                opacity: 0;
-                left: 0vw;
-                filter: blur(4px) hue-rotate(20deg);
-            }
-        }
-        @keyframes laserSweepRight {
-            0% {
-                opacity: 1;
-                right: -30vw;
-                filter: blur(1px) hue-rotate(0deg);
-            }
-            50% {
-                opacity: 1;
-                filter: blur(0.5px) hue-rotate(-10deg);
-            }
-            100% {
-                opacity: 0;
-                right: 0vw;
-                filter: blur(4px) hue-rotate(-20deg);
-            }
-        }
         /* 聊天区域样式 */
         .chat-container {
             background: rgba(15, 15, 40, 0.5);
@@ -636,22 +519,9 @@
     <div class="floating-element element-1"></div>
     <div class="floating-element element-2"></div>
     <div class="floating-element element-3"></div>
+    <!-- 紫色科幻背景 -->
     <div class="video-container">
-        <!-- 更改背景视频源 -->
-        <video id="bg-video" autoplay muted loop playsinline preload="auto">
-            <source src="https://aliceskygarden.oss-cn-beijing.aliyuncs.com/scifi-hexagon.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
         <div class="video-overlay"></div>
-        <div class="video-loading">
-            <div class="loading-spinner"></div>
-            <div class="loading-text">正在加载背景...</div>
-        </div>
-        <!-- 激光射线容器 -->
-        <div class="laser-container">
-            <div class="laser-beam left"></div>
-            <div class="laser-beam right"></div>
-        </div>
     </div>
 
     <div class="main-content">
@@ -818,213 +688,6 @@
                 }, 500);
             });
 
-            // --- Video Loading and Laser Effects (Copied from index.html) ---
-            if (window.location.hostname !== 'localhost' &&
-                window.location.hostname !== '127.0.0.1' &&
-                window.location.protocol !== "https:") {
-                window.location.protocol = "https:";
-            }
-            const video = document.getElementById('bg-video');
-            const loadingIndicator = document.querySelector('.video-loading');
-            let loadingHidden = false;
-            let videoPlayed = false;
-            video.muted = true;
-            video.volume = 0;
-            function hideLoadingIndicator() {
-                if (loadingHidden) return;
-                loadingHidden = true;
-                loadingIndicator.style.opacity = "0";
-                setTimeout(() => {
-                    loadingIndicator.style.display = "none";
-                }, 500);
-            }
-            function checkVideoStatus() {
-                if (videoPlayed || video.currentTime > 0) {
-                    hideLoadingIndicator();
-                    return;
-                }
-                if (video.readyState >= 3) {
-                    hideLoadingIndicator();
-                    return;
-                }
-                setTimeout(hideLoadingIndicator, 3000);
-            }
-            video.addEventListener('canplay', hideLoadingIndicator);
-            video.addEventListener('playing', function() {
-                videoPlayed = true;
-                hideLoadingIndicator();
-            });
-            video.addEventListener('timeupdate', function() {
-                if (video.currentTime > 0) {
-                    videoPlayed = true;
-                    hideLoadingIndicator();
-                }
-            });
-            video.addEventListener('click', function() {
-                video.play().catch(error => {
-                    console.log("手动播放失败:", error);
-                });
-            });
-            video.addEventListener('error', function() {
-                console.log("视频加载失败，使用CSS背景替代");
-                hideLoadingIndicator();
-                const errorMsg = document.createElement('div');
-                errorMsg.innerHTML = "视频加载失败，启用备用背景";
-                errorMsg.style.color = "#ff4d4d";
-                errorMsg.style.position = "absolute";
-                errorMsg.style.top = "60%";
-                errorMsg.style.left = "50%";
-                errorMsg.style.transform = "translate(-50%, -50%)";
-                errorMsg.style.zIndex = "10";
-                document.querySelector('.video-container').appendChild(errorMsg);
-                document.querySelector('.video-container').style.background = `
-                    linear-gradient(135deg, #0f0c29, #302b63, #24243e)
-                `;
-                document.querySelector('.video-overlay').style.display = "block";
-            });
-            const playPromise = video.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    console.log("自动播放被阻止:", error);
-                    const playButton = document.createElement('div');
-                    playButton.innerHTML = '<i class="fas fa-play-circle"></i>';
-                    playButton.style.position = 'absolute';
-                    playButton.style.top = '50%';
-                    playButton.style.left = '50%';
-                    playButton.style.transform = 'translate(-50%, -50%)';
-                    playButton.style.fontSize = '5rem';
-                    playButton.style.color = 'var(--neon-blue)';
-                    playButton.style.cursor = 'pointer';
-                    playButton.style.zIndex = '10';
-                    playButton.style.textShadow = '0 0 15px var(--neon-blue)';
-                    playButton.addEventListener('click', function() {
-                        video.play().then(() => {
-                            playButton.style.display = 'none';
-                        }).catch(e => {
-                            console.log("手动播放失败:", e);
-                        });
-                    });
-                    document.querySelector('.video-container').appendChild(playButton);
-                });
-            }
-
-            particlesJS('particles-js', {
-                "particles": {
-                    "number": {
-                        "value": 80,
-                        "density": {
-                            "enable": true,
-                            "value_area": 800
-                        }
-                    },
-                    "color": {
-                        "value": "#00f3ff"
-                    },
-                    "shape": {
-                        "type": "circle",
-                        "stroke": {
-                            "width": 0,
-                            "color": "#000000"
-                        }
-                    },
-                    "opacity": {
-                        "value": 0.5,
-                        "random": true,
-                        "anim": {
-                            "enable": true,
-                            "speed": 1,
-                            "opacity_min": 0.1,
-                            "sync": false
-                        }
-                    },
-                    "size": {
-                        "value": 3,
-                        "random": true,
-                        "anim": {
-                            "enable": true,
-                            "speed": 2,
-                            "size_min": 0.3,
-                            "sync": false
-                        }
-                    },
-                    "line_linked": {
-                        "enable": true,
-                        "distance": 150,
-                        "color": "#00f3ff",
-                        "opacity": 0.4,
-                        "width": 1
-                    },
-                    "move": {
-                        "enable": true,
-                        "speed": 1,
-                        "direction": "none",
-                        "random": true,
-                        "straight": false,
-                        "out_mode": "out",
-                        "bounce": false,
-                        "attract": {
-                            "enable": true,
-                            "rotateX": 600,
-                            "rotateY": 1200
-                        }
-                    }
-                },
-                "interactivity": {
-                    "detect_on": "canvas",
-                    "events": {
-                        "onhover": {
-                            "enable": true,
-                            "mode": "grab"
-                        },
-                        "onclick": {
-                            "enable": true,
-                            "mode": "push"
-                        },
-                        "resize": true
-                    },
-                    "modes": {
-                        "grab": {
-                            "distance": 140,
-                            "line_linked": {
-                                "opacity": 1
-                            }
-                        },
-                        "push": {
-                            "particles_nb": 4
-                        }
-                    }
-                },
-                "retina_detect": true
-            });
-
-            const leftLaser = document.querySelector('.laser-beam.left');
-            const rightLaser = document.querySelector('.laser-beam.right');
-            let laserInterval;
-            function triggerLasers() {
-                const leftClasses = leftLaser.className;
-                const rightClasses = rightLaser.className;
-                leftLaser.classList.remove('laser-beam');
-                rightLaser.classList.remove('laser-beam');
-                void leftLaser.offsetWidth;
-                void rightLaser.offsetWidth;
-                leftLaser.classList.add('laser-beam');
-                rightLaser.classList.add('laser-beam');
-            }
-            function startLaserSequence() {
-                triggerLasers();
-                laserInterval = setInterval(triggerLasers, 7000);
-            }
-            function checkAndStartLasers() {
-                 if (leftLaser && rightLaser) {
-                     setTimeout(startLaserSequence, 6000);
-                 } else {
-                     console.warn("Laser elements not found, cannot start sequence.");
-                 }
-            }
-            window.addEventListener('load', function() {
-                setTimeout(checkAndStartLasers, 100);
-            });
-
             // --- Chat Functionality (Copied from index.html) ---
             const chatMessages = document.getElementById('chatMessages');
             const userInput = document.getElementById('userInput');
@@ -1123,12 +786,11 @@
                     hideTyping();
                     if (!botMessageDiv) {
                         const errorDiv = document.createElement('div');
-                        errorDiv.classList.add('message', 'bot-message');
-                        errorDiv.textContent = isEnglish ? `Error: ${error.message}` : `错误: ${error.message}`;
+                        errorDiv.innerHTML = "错误: " + error.message;
                         chatMessages.appendChild(errorDiv);
                         chatMessages.scrollTop = chatMessages.scrollHeight;
                     } else {
-                        botMessageDiv.textContent = isEnglish ? `Error: ${error.message}` : `错误: ${error.message}`;
+                        botMessageDiv.textContent = "错误: " + error.message;
                     }
                 } finally {
                     sendButton.disabled = false;
@@ -1141,6 +803,95 @@
                     event.preventDefault();
                     sendMessage();
                 }
+            });
+
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#00f3ff"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 2,
+                            "size_min": 0.3,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#00f3ff",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 1,
+                        "direction": "none",
+                        "random": true,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": true,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        }
+                    }
+                },
+                "retina_detect": true
             });
 
         });
