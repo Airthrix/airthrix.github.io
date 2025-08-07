@@ -1906,7 +1906,8 @@
 
                     // 3. 检查是否为流式响应
                     const contentType = response.headers.get('Content-Type');
-                    if (!contentType || !contentType.includes('text/event-stream')) {
+                    // --- 修正: 更宽松地检查是否包含 text/event-stream ---
+                    if (!contentType || !contentType.toLowerCase().includes('text/event-stream')) {
                          // 如果不是流式，回退到旧的处理方式 (如果需要)
                          console.warn('Response is not a stream, falling back to JSON handling.');
                          const data = await response.json();
@@ -1957,10 +1958,12 @@
 
                             // 6. 解码并处理数据块
                             buffer += decoder.decode(value, { stream: true });
-                            const lines = buffer.split('\n\n'); // SSE 通常以 \n\n 分隔
+                            // --- 修正: 使用 \n\n 分隔 SSE 事件 ---
+                            const lines = buffer.split('\n\n');
                             buffer = lines.pop(); // 最后一个可能是不完整的，留到下次处理
 
                             for (const line of lines) {
+                                // --- 修正: 更健壮地检查 data 行 ---
                                 if (line.startsWith('data:')) {
                                     const dataStr = line.substring(5).trim(); // 移除 'data:' 前缀
                                     console.log("Received SSE data:", dataStr); // --- 调试日志 ---
@@ -1973,9 +1976,10 @@
                                     try {
                                         const parsedData = JSON.parse(dataStr);
 
-                                        // --- 处理 DashScope 的流式输出格式 ---
-                                        // 假设格式类似: { "output": { "choices": [ { "message": { "content": "增量文本" } } ] } }
-                                        const content = parsedData?.output?.choices?.[0]?.message?.content || '';
+                                        // --- 修正: 根据你后端返回的实际格式解析内容 ---
+                                        // 从你提供的后端日志和前端截图看，格式是 {"output": {"text": "...", ...}}
+                                        // 如果是旧的 choices 格式，这个逻辑也能兼容 (因为 content 会是 undefined)
+                                        const content = parsedData?.output?.text || parsedData?.output?.choices?.[0]?.message?.content || '';
 
                                         if (content || isFirstChunk) { // 即使内容为空，也创建元素
                                             if (isFirstChunk) {
@@ -1998,7 +2002,7 @@
                                             }
                                         }
                                     } catch (parseError) {
-                                        console.error("Error parsing SSE ", dataStr, parseError);
+                                        console.error("Error parsing SSE data:", dataStr, parseError);
                                         // 可以选择显示解析错误，但通常不中断流
                                     }
                                 }
@@ -2007,6 +2011,12 @@
                                     const eventType = line.substring(6).trim();
                                     console.log("Received SSE event type:", eventType);
                                     // 根据 eventType 进行处理（如果需要）
+                                    // --- 特殊处理 event: result ---
+                                    if (eventType === 'result') {
+                                         console.log("Stream is likely ending with event: result");
+                                         // 可以选择在这里 break，或者依赖 [DONE] 数据
+                                         // break;
+                                    }
                                 }
                                 else if (line.startsWith(':')) {
                                     // 忽略注释行 (心跳)
