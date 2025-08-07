@@ -1860,71 +1860,43 @@
                 }
             }
 
-            // --- 新增：用于解析 SSE 格式的辅助函数 ---
-            function parseSSEvent(rawLine) {
-                // 基本的 SSE 解析，假设每行是一个独立的 event 或 data
-                // 更健壮的实现可能需要处理多行 data 等情况
-                if (rawLine.startsWith("data:")) {
-                    const dataStr = rawLine.substring(5).trim(); // 移除 "data:" 前缀并 trim
-                    if (dataStr) {
-                        try {
-                            const dataObj = JSON.parse(dataStr);
-                            return { type: 'data', data: dataObj };
-                        } catch (e) {
-                            console.warn("Failed to parse SSE data payload as JSON:", dataStr, e);
-                            // 可能是纯文本或其他格式，这里简单返回
-                            return { type: 'data', data: { content: dataStr } };
-                        }
-                    }
-                } else if (rawLine.startsWith("event:")) {
-                    const eventType = rawLine.substring(6).trim(); // 移除 "event:" 前缀并 trim
-                    return { type: 'event', event: eventType };
-                } else if (rawLine === "") {
-                    // SSE 用空行分隔事件，这里可以忽略或作为事件结束标记
-                    return { type: 'separator' };
-                } else {
-                    // 可能是注释行 (以 : 开头) 或其他不识别的行，忽略
-                    console.debug("Received unknown or comment SSE line:", rawLine);
-                    return { type: 'unknown', raw: rawLine };
-                }
-            }
 
-
-            // --- 修改后的 sendMessage 函数，支持流式接收 ---
             async function sendMessage() {
                 const message = userInput.value.trim();
                 if (!message) return;
-
-                addMessage(message, true); // 显示用户消息
+                addMessage(message, true);
                 userInput.value = '';
-                showTyping(); // 显示 "正在思考..."
-                sendButton.disabled = true; // 禁用发送按钮
-
-                let botMessageDiv = null; // 用于显示机器人回复的 DOM 元素
-                let accumulatedContent = ""; // 累积从流中接收到的内容
+                showTyping();
+                sendButton.disabled = true;
+                let botMessageDiv = null;
+                // let fullReply = ""; // 不再需要累积完整回复
 
                 try {
-                    // 使用 fetch 发起流式请求，注意 body 和 headers
+                    // 修改API_URL为你的新流式端点 (如果用了 /stream)
+                    // const API_URL = 'https://你的后端地址/stream';
+                    const API_URL = 'https://qwen-proxy-acqopqqcpc.cn-hangzhou.fcapp.run/invoke'; // 保持原URL，假设后端已修改
+
+                    // 使用 EventSource 或 fetch + ReadableStream 来处理 SSE 流
+                    // 方法一：使用 fetch 和 ReadableStream (更灵活，兼容性好)
                     const response = await fetch(API_URL, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
-                            // 如果后端需要特定的 Accept 头来触发流式，可以添加
-                            // 'Accept': 'text/event-stream'
+                            // 如果后端需要 Origin 头进行 CORS 检查，请添加
+                            // 'Origin': window.location.origin // 或者 'https://aliceskygarden.top'
                         },
                         body: JSON.stringify({ message: message })
                     });
 
                     if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                        const errorText = await response.text();
+                        throw new Error(`HTTP error! status: ${response.status}, details: ${errorText}`);
                     }
 
-                    // --- 关键修改：处理流式响应 ---
-                    // 检查 Content-Type 是否为 SSE
-                    const contentType = response.headers.get('Content-Type');
+                    // 检查是否为 SSE 流
+                    const contentType = response.headers.get('content-type');
                     if (!contentType || !contentType.includes('text/event-stream')) {
                          console.warn('Response is not SSE stream, falling back to JSON parsing.');
-                         // 如果不是流，则回退到原来的 JSON 解析逻辑
                          const data = await response.json();
                          hideTyping();
                          let fullReply = "";
@@ -1935,188 +1907,181 @@
                          } else {
                              fullReply = "抱歉，我没有收到回复。";
                          }
-                         const markdownToHtml = (markdownText) => {
-                             if (typeof marked === 'undefined') {
-                                 console.warn('marked.js 未加载，无法转换 Markdown');
-                                 return markdownText;
-                             }
-                             try {
-                                 return marked.parse(markdownText, { breaks: true });
-                             } catch (e) {
-                                 console.error('Markdown 转换出错:', e);
-                                 return markdownText;
-                             }
-                         };
+                         // 使用 Markdown 转换 (如果需要)
                          fullReply = markdownToHtml(fullReply);
-                         botMessageDiv = document.createElement('div');
-                         botMessageDiv.classList.add('message', 'bot-message');
-                         botMessageDiv.innerHTML = "";
-                         chatMessages.appendChild(botMessageDiv);
-                         chatMessages.scrollTop = chatMessages.scrollHeight;
-                         let i = 0;
-                         const typeWriterHtml = () => {
-                             if (i < fullReply.length) {
-                                 botMessageDiv.innerHTML = fullReply.substring(0, i+1);
-                                 i++;
-                                 chatMessages.scrollTop = chatMessages.scrollHeight;
-                                 setTimeout(typeWriterHtml, 30); // 打字机速度
-                             }
-                         };
-                         typeWriterHtml();
-                         return; // 结束函数，不再执行流式处理
+                         // 直接显示完整回复或模拟打字机 (见下方注释)
+                         addMessage(fullReply, false);
+                         sendButton.disabled = false;
+                         return; // 退出函数
                     }
 
-                    // 如果是流，则进行流式处理
-                    const reader = response.body.getReader();
-                    const decoder = new TextDecoder("utf-8"); // DashScope 通常返回 UTF-8
-                    let buffer = ""; // 用于累积接收到的数据块
+                    // 如果是 SSE 流，则处理流
+                    hideTyping(); // 隐藏初始的 "正在思考..." 指示器
 
-                    // 创建一个 DOM 元素来显示机器人回复，并立即添加到聊天记录中
+                    // 创建一个新的 bot 消息 div
                     botMessageDiv = document.createElement('div');
                     botMessageDiv.classList.add('message', 'bot-message');
                     botMessageDiv.innerHTML = ""; // 初始为空
                     chatMessages.appendChild(botMessageDiv);
                     chatMessages.scrollTop = chatMessages.scrollHeight;
-                    hideTyping(); // 隐藏 "正在思考..."，因为现在开始显示内容了
 
+                    let accumulatedContent = ""; // 累积从流中接收到的内容
+
+                    // 获取 ReadableStream 的 reader
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder("utf-8");
                     let done = false;
+
+                    // 读取流数据
                     while (!done) {
-                        // 从流中读取下一个数据块
                         const { value, done: readerDone } = await reader.read();
                         done = readerDone;
-
                         if (value) {
-                            // 将接收到的 Uint8Array 数据块解码为字符串，并追加到缓冲区
-                            buffer += decoder.decode(value, { stream: true });
+                            const chunk = decoder.decode(value, { stream: true });
+                            // console.log("Received chunk:", chunk); // 调试用
 
-                            // SSE 是按行分隔的，处理缓冲区中的完整行
-                            const lines = buffer.split(/\r?\n/);
-                            buffer = lines.pop(); // 最后一个可能是不完整的行，保留在 buffer 中
-
+                            // 处理 SSE 数据块 (可能包含多个 data: 行)
+                            const lines = chunk.split('\n\n'); // 通常 SSE 事件由两个换行符分隔
                             for (const line of lines) {
-                                if (!line) continue; // 跳过空行
+                                if (line.startsWith('data: ')) {
+                                    const dataStr = line.substring(6); // 移除 'data: '
+                                    try {
+                                        const dataObj = JSON.parse(dataStr);
+                                        // 根据 DashScope SSE 格式解析内容
+                                        // 通常包含在 dataObj.output.text 或类似字段
+                                        // 注意：DashScope 流式可能返回增量内容
+                                        const deltaText = dataObj.output?.text || dataObj.choices?.[0]?.delta?.content || "";
+                                        if (deltaText) {
+                                            accumulatedContent += deltaText;
+                                            // 更新消息 div 的内容 (可以选择累积更新或直接替换)
+                                            // 为了更好的体验，可以在这里添加简单的延迟或使用 requestAnimationFrame
+                                            // 或者累积一定量后再更新
+                                            botMessageDiv.innerHTML = markdownToHtml(accumulatedContent);
 
-                                const parsedEvent = parseSSEvent(line);
-
-                                if (parsedEvent.type === 'data') {
-                                    // 处理数据事件
-                                    const dataPayload = parsedEvent.data;
-                                    if (dataPayload.content) {
-                                        // 累积内容
-                                        accumulatedContent += dataPayload.content;
-
-                                        // --- 实现逐字显示 (打字机效果) ---
-                                        // 为了流畅性，我们不逐字添加，而是累积一小块后添加
-                                        // 或者可以按字符逐个添加，但这可能对性能有影响
-                                        // 这里选择累积一定长度或遇到标点后添加
-                                        // 简化处理：累积到一定长度就更新
-                                        // 或者更简单：每次收到新内容就更新 innerHTML (这会比较流畅，但不是严格逐字)
-                                        // 严格逐字：
-                                        /*
-                                        let i = 0;
-                                        const typeChar = () => {
-                                            if (i < accumulatedContent.length) {
-                                                const markdownToHtmlTemp = (text) => {
-                                                    if (typeof marked === 'undefined') return text;
-                                                    try {
-                                                        // marked.parse 通常处理整个块，对片段可能格式不正确
-                                                        // 可以尝试 marked.parseInline 或者累积完整块再转换
-                                                        // 这里简化处理，直接追加
-                                                        return marked.parse(text, { breaks: true });
-                                                    } catch (e) {
-                                                        console.error('Markdown 转换出错 (流):', e);
-                                                        return text;
-                                                    }
-                                                };
-                                                botMessageDiv.innerHTML = markdownToHtmlTemp(accumulatedContent.substring(0, i + 1));
-                                                i++;
-                                                chatMessages.scrollTop = chatMessages.scrollHeight;
-                                                setTimeout(typeChar, 10); // 调整速度
-                                            }
-                                        };
-                                        if (i === 0) typeChar(); // 启动打字机 (只启动一次)
-                                        */
-                                        // --- 更流畅的流式更新方法 (不严格逐字，但体验好) ---
-                                        const markdownToHtmlStream = (markdownText) => {
-                                            if (typeof marked === 'undefined') {
-                                                console.warn('marked.js 未加载，无法转换 Markdown (流)');
-                                                return markdownText;
-                                            }
-                                            try {
-                                                // marked.parse 通常期望完整块。对于流，可能需要更复杂的处理
-                                                // 或者累积完整句子/段落后再转换
-                                                // 简单起见，这里直接转换累积的内容，可能会有格式闪烁
-                                                // 更好的方法是使用 marked 的 lexer/parser 自定义处理或等待块稳定
-                                                // 暂时直接转换
-                                                return marked.parse(markdownText, { breaks: true });
-                                            } catch (e) {
-                                                console.error('Markdown 转换出错 (流):', e);
-                                                // 如果转换失败，至少显示原始文本
-                                                return markdownText;
-                                            }
-                                        };
-                                        // 直接更新内容，这会比较流畅
-                                        botMessageDiv.innerHTML = markdownToHtmlStream(accumulatedContent);
-                                        chatMessages.scrollTop = chatMessages.scrollHeight;
-
-                                    } else if (dataPayload.error) {
-                                        // 处理流中的错误信息
-                                        console.error("Error received in stream:", dataPayload.error);
-                                        botMessageDiv.innerHTML += `<br><strong>流中错误:</strong> ${dataPayload.error}`;
-                                        chatMessages.scrollTop = chatMessages.scrollHeight;
-                                        // 可以选择在此处 break; 停止读取
+                                            // 滚动到底部
+                                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                                        }
+                                        // 检查是否结束
+                                        if (dataObj.code === "0" && dataObj.message === "Finished") { // 或 DashScope 特定的结束标记
+                                             done = true;
+                                             break;
+                                        }
+                                    } catch (e) {
+                                        console.error("Error parsing SSE data:", dataStr, e);
+                                        // 可能是结束标记 [DONE] 或其他非JSON数据
+                                        if (dataStr.trim() === "[DONE]") {
+                                            done = true;
+                                            break;
+                                        }
                                     }
-                                    // 可以检查其他字段，如 usage 等，如果需要
-                                } else if (parsedEvent.type === 'event' && parsedEvent.event === 'done') {
-                                    // 如果收到 done 事件，可以提前结束循环
-                                    console.log("Received 'done' event from stream.");
-                                    done = true;
-                                    break;
+                                } else if (line.startsWith('event: ')) {
+                                    // 处理 event 类型 (如果需要)
+                                    // console.log("Event type:", line.substring(7));
+                                } else if (line.startsWith(':')) {
+                                    // 心跳，通常忽略
+                                    // console.log("Heartbeat:", line);
+                                } else if (line.trim() !== '') {
+                                    // 其他行，可能是错误或结束标记
+                                    console.log("Other SSE line:", line);
+                                    if (line.includes("error")) {
+                                         // 尝试解析错误
+                                         try {
+                                             const errorObj = JSON.parse(line);
+                                             throw new Error(errorObj.message || "Stream error");
+                                         } catch (parseError) {
+                                             // 如果无法解析，直接显示行内容作为错误
+                                             throw new Error(`Stream error line: ${line}`);
+                                         }
+                                    }
                                 }
-                                // 其他事件类型 (separator, unknown) 可以忽略或记录
                             }
                         }
                     }
 
-                    // 处理缓冲区中剩余的不完整行（如果循环正常结束）
-                    if (buffer) {
-                         const parsedEvent = parseSSEvent(buffer.trim());
-                         if (parsedEvent.type === 'data' && parsedEvent.data.content) {
-                              accumulatedContent += parsedEvent.data.content;
-                              const markdownToHtmlStream = (markdownText) => {
-                                  // ... (同上)
-                                  if (typeof marked === 'undefined') return markdownText;
-                                  try { return marked.parse(markdownText, { breaks: true }); } catch (e) { console.error('...', e); return markdownText; }
-                              };
-                              botMessageDiv.innerHTML = markdownToHtmlStream(accumulatedContent);
-                              chatMessages.scrollTop = chatMessages.scrollHeight;
-                         }
-                         // 可以添加对剩余 buffer 中 error 或其他事件的处理
-                    }
-
-
-                    // --- 流结束后的处理 ---
-                    console.log("Stream finished. Final accumulated content length:", accumulatedContent.length);
-                    // 如果需要在流结束后执行某些操作（例如确保滚动到底部、启用按钮等），可以放在这里
-                    // 注意：这些操作在 while 循环结束后已经执行了
+                    // 确保 reader 被关闭
+                    reader.releaseLock();
 
                 } catch (error) {
-                    console.error('Error sending message or processing stream:', error);
-                    hideTyping(); // 确保隐藏 "正在思考..."
+                    console.error('Error sending message:', error);
+                    hideTyping(); // 确保隐藏
                     if (!botMessageDiv) {
-                        // 如果还没有创建 botMessageDiv，创建一个来显示错误
-                        botMessageDiv = document.createElement('div');
-                        botMessageDiv.classList.add('message', 'bot-message');
-                        chatMessages.appendChild(botMessageDiv);
+                        // 如果还没有创建消息 div，则创建一个
+                        addMessage(`错误: ${error.message}`, false);
+                    } else {
+                        // 如果已有消息 div，则更新其内容
+                        botMessageDiv.textContent = `错误: ${error.message}`;
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
                     }
-                    // 显示错误信息
-                    botMessageDiv.innerHTML = `<strong>错误:</strong> ${error.message}`;
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
                 } finally {
-                    // 无论成功还是失败，最后都要启用发送按钮
                     sendButton.disabled = false;
                 }
             }
+            // ... (之后的代码) ...
+
+            // 可选：如果你想保留非流式的“打字机”效果（即后端返回完整文本，前端模拟逐字显示）
+            // 可以保留 markdownToHtml 和 typeWriterHtml 函数，并在非流式分支中使用它们
+            /*
+            const markdownToHtml = (markdownText) => { ... }; // 保持不变
+
+            const typeWriterHtml = (element, htmlContent, speed = 30) => {
+                element.innerHTML = ""; // 清空元素
+                let i = 0;
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = htmlContent; // 解析 HTML
+                const textNodes = []; // 存储所有文本节点及其路径
+
+                // 递归函数收集所有文本节点
+                function collectTextNodes(node, path = []) {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        textNodes.push({ node: node, path: [...path], text: node.textContent });
+                    } else if (node.nodeType === Node.ELEMENT_NODE) {
+                        for (let i = 0; i < node.childNodes.length; i++) {
+                            collectTextNodes(node.childNodes[i], [...path, i]);
+                        }
+                    }
+                }
+                collectTextNodes(tempDiv);
+
+                let currentTextNodeIndex = 0;
+                let currentCharIndex = 0;
+
+                function type() {
+                    if (currentTextNodeIndex < textNodes.length) {
+                        const currentTextNodeData = textNodes[currentTextNodeIndex];
+                        if (currentCharIndex < currentTextNodeData.text.length) {
+                            // 重建到当前文本节点的 DOM 结构
+                            const cloneTempDiv = tempDiv.cloneNode(true);
+                            let currentPathNode = cloneTempDiv;
+                            for (let i = 0; i < currentTextNodeData.path.length; i++) {
+                                currentPathNode = currentPathNode.childNodes[currentTextNodeData.path[i]];
+                            }
+                            // 截取到当前字符
+                            currentPathNode.textContent = currentTextNodeData.text.substring(0, currentCharIndex + 1);
+                            element.innerHTML = cloneTempDiv.innerHTML;
+                            currentCharIndex++;
+                            chatMessages.scrollTop = chatMessages.scrollHeight; // 滚动
+                            setTimeout(type, speed);
+                        } else {
+                            // 移动到下一个文本节点
+                            currentTextNodeIndex++;
+                            currentCharIndex = 0;
+                            // 直接更新完整内容以确保 HTML 结构正确
+                            element.innerHTML = tempDiv.innerHTML;
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                            setTimeout(type, speed);
+                        }
+                    }
+                }
+                type();
+            };
+
+            // 在非流式获取到 fullReply 后使用：
+            // botMessageDiv = document.createElement('div');
+            // botMessageDiv.classList.add('message', 'bot-message');
+            // chatMessages.appendChild(botMessageDiv);
+            // chatMessages.scrollTop = chatMessages.scrollHeight;
+            // typeWriterHtml(botMessageDiv, markdownToHtml(fullReply), 30); // 30ms per char
+            */
 
 
             sendButton.addEventListener('click', sendMessage);
