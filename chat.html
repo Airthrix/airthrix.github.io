@@ -44,7 +44,6 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-
         /* --- 新增：整体粒子容器 --- */
         #particles-js {
             position: fixed;
@@ -54,7 +53,6 @@
             left: 0;
             z-index: 0;
         }
-
         /* --- 新增：光晕效果 --- */
         .glow {
             position: absolute;
@@ -83,7 +81,6 @@
             0%, 100% { transform: translate(0, 0); }
             50% { transform: translate(20px, 20px); }
         }
-
         /* --- 新增：网格背景 --- */
         .grid-overlay {
             position: fixed;
@@ -99,7 +96,6 @@
             z-index: 2;
             opacity: 0.3;
         }
-
         .top-nav {
             position: fixed;
             top: 0;
@@ -285,6 +281,8 @@
             position: relative;
             overflow: hidden;
             z-index: 10;
+            width: 80%; /* 扩大宽度 */
+            max-width: 1200px; /* 最大宽度限制 */
         }
         .chat-title {
             font-size: 2rem;
@@ -294,7 +292,7 @@
             text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
         .chat-messages {
-            height: 500px;
+            height: 600px; /* 增加高度 */
             overflow-y: auto;
             padding: 1rem;
             background: rgba(10, 10, 25, 0.3);
@@ -431,6 +429,7 @@
             }
             .chat-container {
                 padding: 1rem;
+                width: 95%; /* 移动端适应 */
             }
             .chat-title {
                 font-size: 1.5rem;
@@ -464,7 +463,6 @@
     <div class="glow glow-purple"></div>
     <!-- --- 新增：网格叠加层 --- -->
     <div class="grid-overlay"></div>
-
     <!-- 顶部导航栏 -->
     <div class="top-nav">
         <button class="nav-btn" id="loginBtn">
@@ -518,7 +516,6 @@
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-
             // --- 初始化 Particles.js ---
             particlesJS('particles-js', {
                 "particles": {
@@ -608,7 +605,6 @@
                 },
                 "retina_detect": true
             });
-
             // --- Language and Login Button Functionality (保持不变) ---
             const langBtn = document.getElementById('langBtn');
             const loginBtn = document.getElementById('loginBtn');
@@ -620,7 +616,6 @@
             const footerLinksText = document.querySelectorAll('.link-text');
             const copyrightText = document.querySelector('.copyright');
             let isEnglish = false;
-
             loginBtn.addEventListener('click', function() {
                 const originalHTML = loginBtn.innerHTML;
                 loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span class="btn-text">正在登录...</span>';
@@ -631,7 +626,6 @@
                     }, 1500);
                 }, 2000);
             });
-
             langBtn.addEventListener('click', function() {
                 isEnglish = !isEnglish;
                 const btnTextElements = document.querySelectorAll('.btn-text'); // 动态选择，确保新文本也被找到
@@ -671,7 +665,6 @@
                     langBtn.classList.remove('pulse');
                 }, 500);
             });
-
             // --- 修改后的 Chat Functionality (使用 fetch 和一次性响应) ---
             const chatMessages = document.getElementById('chatMessages');
             const userInput = document.getElementById('userInput');
@@ -680,7 +673,6 @@
             // *** 如果您的后端部署在根路径 '/'，请使用 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run' ***
             // *** 如果您的后端部署在 '/invoke' 路径，请使用 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run/invoke' ***
             const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run'; // 根据您的实际部署情况修改
-
             function addMessage(message, isUser = false) {
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message');
@@ -690,7 +682,6 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
                 return messageDiv; // 返回元素以便后续更新
             }
-
             function showTyping() {
                 const typingDiv = document.createElement('div');
                 typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
@@ -699,21 +690,18 @@
                 chatMessages.appendChild(typingDiv);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
-
             function hideTyping() {
                 const typingIndicator = document.getElementById('typingIndicator');
                 if (typingIndicator) {
                     typingIndicator.remove();
                 }
             }
-
             // --- 新增：逐字显示函数 (打字机效果) ---
             function typeWriter(messageDiv, fullText, speed = 30) {
                  let i = 0;
                  const typingCursor = document.createElement('span');
                  typingCursor.classList.add('typing-cursor');
                  messageDiv.appendChild(typingCursor);
-
                  function type() {
                      if (i < fullText.length) {
                          messageDiv.innerHTML = fullText.substring(0, i + 1);
@@ -728,21 +716,16 @@
                  }
                  type();
             }
-
             async function sendMessage() {
                 const message = userInput.value.trim();
                 if (!message) return;
-
                 // 添加用户消息
                 addMessage(message, true);
                 userInput.value = '';
-
                 // 显示思考提示
                 showTyping();
-
                 // 禁用发送按钮
                 sendButton.disabled = true;
-
                 try {
                     // 使用 fetch 发送 POST 请求
                     const response = await fetch(API_URL, {
@@ -753,14 +736,11 @@
                         },
                         body: JSON.stringify({ message: message })
                     });
-
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
-
                     const data = await response.json();
                     hideTyping(); // 隐藏思考提示
-
                     let botReply = "";
                     if (data.reply) {
                         botReply = data.reply;
@@ -769,7 +749,6 @@
                     } else {
                         botReply = isEnglish ? "Sorry, I didn't receive a valid reply." : "抱歉，我没有收到有效的回复。";
                     }
-
                     // 使用 marked 解析 Markdown
                     let htmlReply = "";
                     try {
@@ -778,17 +757,14 @@
                         console.error("Markdown parsing error:", e);
                         htmlReply = botReply; // Fallback to plain text
                     }
-
                     // 添加机器人消息容器
                     const botMessageDiv = document.createElement('div');
                     botMessageDiv.classList.add('message', 'bot-message');
                     botMessageDiv.innerHTML = ""; // 初始为空
                     chatMessages.appendChild(botMessageDiv);
                     chatMessages.scrollTop = chatMessages.scrollHeight;
-
                     // 启动打字机效果
                     typeWriter(botMessageDiv, htmlReply);
-
                 } catch (error) {
                     console.error('Error sending message:', error);
                     hideTyping();
@@ -802,7 +778,6 @@
                     sendButton.disabled = false;
                 }
             }
-
             sendButton.addEventListener('click', sendMessage);
             userInput.addEventListener('keydown', function(event) {
                 if (event.key === 'Enter' && !event.shiftKey) {
@@ -810,7 +785,6 @@
                     sendMessage();
                 }
             });
-
         });
     </script>
 </body>
