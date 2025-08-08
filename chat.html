@@ -545,6 +545,14 @@
             .chat-input {
                 padding-right: 1rem; /* 移除右侧内边距 */
             }
+            .right-buttons {
+                display: flex;
+                justify-content: flex-end; /* 右对齐 */
+                gap: 0.5rem; /* 按钮间距 */
+            }
+            .chat-send-btn {
+                flex-grow: 1; /* 占据剩余空间 */
+            }
         }
         @media (max-width: 480px) {
             .chat-input-area {
@@ -585,6 +593,18 @@
             .chat-messages.expanded {
                 max-height: 600px;
             }
+        }
+        /* Animation for "正在连接服务器" */
+        .typing-indicator span.dots::after {
+            content: ".";
+            animation: blinkDots 1.5s infinite steps(4, end);
+        }
+        @keyframes blinkDots {
+            0% { content: "."; }
+            25% { content: ".."; }
+            50% { content: "..."; }
+            75% { content: "...."; }
+            100% { content: "."; }
         }
     </style>
 </head>
@@ -784,6 +804,7 @@
                     updateFilePreview();
                     fileInput.value = '';
                 }
+            });
             });
             function updateFilePreview() {
                 filePreviewContainer.innerHTML = '';
