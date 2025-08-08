@@ -306,7 +306,6 @@
             flex-direction: column;
             gap: 1rem;
             transition: max-height 0.3s ease; /* 平滑过渡效果 */
-            
             /* 滚动条样式 */
             scrollbar-width: thin;
             scrollbar-color: var(--neon-blue) rgba(255, 255, 255, 0.1);
@@ -315,7 +314,6 @@
         .chat-messages.expanded {
             max-height: 800px; /* 更大的最大高度 */
         }
-        
         /* Webkit 滚动条样式 */
         .chat-messages::-webkit-scrollbar {
             width: 12px;
@@ -372,6 +370,45 @@
             gap: 0.5rem;
             z-index: 10;
             position: relative;
+            align-items: flex-end; /* 底部对齐 */
+        }
+        .chat-input-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-end;
+        }
+        .chat-input-row {
+            display: flex;
+            gap: 0.5rem;
+            width: 100%;
+        }
+        /* 隐藏默认文件输入 */
+        .file-input {
+            display: none;
+        }
+        .file-input-label {
+            padding: 0.8rem 1rem;
+            border-radius: 30px;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            background: rgba(15, 15, 40, 0.4);
+            color: #c0c0ff;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            min-width: 50px; /* 确保图标有足够空间 */
+            height: 50px; /* 与输入框高度一致 */
+        }
+        .file-input-label:hover {
+            background: rgba(0, 243, 255, 0.2);
+            color: var(--neon-blue);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px var(--neon-blue);
+            transform: translateY(-2px);
         }
         .chat-input {
             flex-grow: 1;
@@ -404,6 +441,7 @@
             gap: 0.5rem;
             transition: all 0.3s ease;
             backdrop-filter: blur(5px);
+            height: 50px; /* 与输入框高度一致 */
         }
         .chat-send-btn:hover {
             background: rgba(0, 243, 255, 0.2);
@@ -424,6 +462,43 @@
             font-style: italic;
             align-self: flex-start;
             padding: 0.5rem 1rem;
+        }
+        /* 文件预览区域 */
+        .file-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(20, 20, 50, 0.3);
+            border-radius: 10px;
+            max-width: 100%;
+        }
+        .file-preview-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 0.3rem 0.5rem;
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 15px;
+            font-size: 0.8rem;
+            max-width: calc(100% - 20px); /* 留出删除按钮空间 */
+        }
+        .file-preview-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-right: 5px;
+        }
+        .file-preview-remove {
+            cursor: pointer;
+            color: var(--neon-red);
+            font-size: 0.9rem;
+            padding: 0 2px;
+        }
+        .file-preview-remove:hover {
+            color: #ff5555;
         }
         /* 响应式调整 */
         @media (max-width: 768px) {
@@ -457,6 +532,11 @@
             .chat-messages.expanded {
                 max-height: 700px; /* 移动端更大的最大高度 */
             }
+            .file-input-label, .chat-send-btn {
+                padding: 0.7rem 1rem;
+                font-size: 0.9rem;
+                height: 45px; /* 移动端高度调整 */
+            }
         }
         @media (max-width: 480px) {
             .top-nav {
@@ -475,6 +555,19 @@
             }
             .chat-messages.expanded {
                 max-height: 600px; /* 更小屏幕更大的最大高度 */
+            }
+            .file-input-label, .chat-send-btn {
+                padding: 0.6rem 0.9rem;
+                font-size: 0.8rem;
+                height: 40px; /* 更小屏幕高度调整 */
+            }
+            .chat-input-row {
+                flex-direction: column; /* 小屏时垂直排列 */
+            }
+            .chat-input-controls {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-between;
             }
         }
     </style>
@@ -500,11 +593,22 @@
             <div class="chat-messages" id="chatMessages">
                 <div class="message bot-message" id="initialMessage">你好！我是 AliceSkyGarden，有什么我可以帮助你的吗？😊</div>
             </div>
+            <!-- 文件预览区域 -->
+            <div class="file-preview-container" id="filePreviewContainer" style="display: none;"></div>
             <div class="chat-input-area">
-                <textarea id="userInput" class="chat-input" placeholder="输入你的消息..."></textarea>
-                <button id="sendButton" class="chat-send-btn">
-                    <i class="fas fa-paper-plane"></i> <span class="btn-text">发送</span>
-                </button>
+                 <!-- 文件输入 -->
+                <input type="file" id="fileInput" class="file-input" multiple accept="image/*,.pdf,.txt,.doc,.docx">
+                <label for="fileInput" class="file-input-label" title="上传图片或文件">
+                    <i class="fas fa-paperclip"></i> <!-- 使用 paperclip 图标 -->
+                </label>
+                <div class="chat-input-controls">
+                    <div class="chat-input-row">
+                        <textarea id="userInput" class="chat-input" placeholder="输入你的消息..."></textarea>
+                        <button id="sendButton" class="chat-send-btn">
+                            <i class="fas fa-paper-plane"></i> <span class="btn-text">发送</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -535,7 +639,7 @@
             let scrollLock = false;
             let isTyping = false;
             let isEnglish = false;
-            
+            let selectedFiles = []; // 存储选中的文件
             // 初始化粒子效果
             particlesJS('particles-js', {
                 "particles": {
@@ -561,7 +665,6 @@
                 },
                 "retina_detect": true
             });
-            
             // 语言和登录按钮功能
             const langBtn = document.getElementById('langBtn');
             const loginBtn = document.getElementById('loginBtn');
@@ -572,7 +675,6 @@
             const footerTagline = document.querySelector('.footer-tagline');
             const footerLinksText = document.querySelectorAll('.link-text');
             const copyrightText = document.querySelector('.copyright');
-            
             loginBtn.addEventListener('click', function() {
                 const originalHTML = loginBtn.innerHTML;
                 loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span class="btn-text">正在登录...</span>';
@@ -583,10 +685,11 @@
                     }, 1500);
                 }, 2000);
             });
-            
             langBtn.addEventListener('click', function() {
                 isEnglish = !isEnglish;
                 const btnTextElements = document.querySelectorAll('.btn-text');
+                const fileInputLabel = document.querySelector('.file-input-label');
+                const filePreviewContainer = document.getElementById('filePreviewContainer');
                 if (isEnglish) {
                     btnTextElements[0].textContent = 'Log in';
                     btnTextElements[1].textContent = '中文';
@@ -600,6 +703,12 @@
                         el.textContent = footerLinks[index];
                     });
                     copyrightText.textContent = "© 2025 AliceSkyGarden Technology. All rights reserved";
+                    fileInputLabel.title = "Upload image or file";
+                    // 更新文件预览中的删除按钮提示
+                    const removeButtons = filePreviewContainer.querySelectorAll('.file-preview-remove');
+                    removeButtons.forEach(btn => {
+                        btn.title = "Remove file";
+                    });
                 } else {
                     btnTextElements[0].textContent = 'Log in';
                     btnTextElements[1].textContent = 'English';
@@ -613,40 +722,103 @@
                         el.textContent = footerLinks[index];
                     });
                     copyrightText.textContent = "© 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved";
+                    fileInputLabel.title = "上传图片或文件";
+                    // 更新文件预览中的删除按钮提示
+                    const removeButtons = filePreviewContainer.querySelectorAll('.file-preview-remove');
+                    removeButtons.forEach(btn => {
+                        btn.title = "移除文件";
+                    });
                 }
                 langBtn.classList.add('pulse');
                 setTimeout(() => {
                     langBtn.classList.remove('pulse');
                 }, 500);
             });
-            
             // 聊天功能
             const chatMessages = document.getElementById('chatMessages');
             const userInput = document.getElementById('userInput');
             const sendButton = document.getElementById('sendButton');
-            const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run';
-            
+            const fileInput = document.getElementById('fileInput');
+            const filePreviewContainer = document.getElementById('filePreviewContainer');
+            const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run'; // 请确保这是您的后端地址
+
+            // --- 文件选择和预览 ---
+            fileInput.addEventListener('change', function() {
+                const newFiles = Array.from(fileInput.files);
+                if (newFiles.length > 0) {
+                    // 简单去重：检查文件名和大小
+                    newFiles.forEach(newFile => {
+                        const isDuplicate = selectedFiles.some(existingFile =>
+                            existingFile.name === newFile.name && existingFile.size === newFile.size
+                        );
+                        if (!isDuplicate) {
+                            selectedFiles.push(newFile);
+                        }
+                    });
+                    updateFilePreview();
+                    fileInput.value = ''; // 清空input，允许重复选择相同文件
+                }
+            });
+
+            function updateFilePreview() {
+                filePreviewContainer.innerHTML = '';
+                if (selectedFiles.length > 0) {
+                    filePreviewContainer.style.display = 'flex';
+                    selectedFiles.forEach((file, index) => {
+                        const previewItem = document.createElement('div');
+                        previewItem.className = 'file-preview-item';
+                        previewItem.dataset.index = index; // 用于标识索引
+
+                        const fileNameSpan = document.createElement('span');
+                        fileNameSpan.className = 'file-preview-name';
+                        fileNameSpan.textContent = file.name.length > 20 ? file.name.substring(0, 17) + '...' : file.name;
+                        fileNameSpan.title = file.name; // 鼠标悬停显示完整名称
+
+                        const removeIcon = document.createElement('i');
+                        removeIcon.className = 'fas fa-times file-preview-remove';
+                        removeIcon.title = isEnglish ? "Remove file" : "移除文件";
+                        removeIcon.addEventListener('click', function(e) {
+                            e.stopPropagation(); // 防止事件冒泡
+                            selectedFiles.splice(index, 1); // 从数组中移除
+                            updateFilePreview(); // 更新预览
+                        });
+
+                        previewItem.appendChild(fileNameSpan);
+                        previewItem.appendChild(removeIcon);
+                        filePreviewContainer.appendChild(previewItem);
+                    });
+                } else {
+                    filePreviewContainer.style.display = 'none';
+                }
+            }
+            // --- 文件选择和预览结束 ---
+
             function smartScroll() {
                 if (!scrollLock && !isTyping) {
                     chatMessages.scrollTop = chatMessages.scrollHeight;
                 }
             }
-            
             chatMessages.addEventListener('scroll', function() {
                 const isAtBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight <= 50;
                 scrollLock = !isAtBottom;
             });
-            
-            function addMessage(message, isUser = false) {
+            function addMessage(message, isUser = false, files = []) {
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message');
                 messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+
+                // 如果是用户消息且包含文件，添加文件信息
+                if (isUser && files.length > 0) {
+                    let fileText = isEnglish ? " [Sent files] " : " [已发送文件] ";
+                    fileText += `(${files.length})`;
+                    message += fileText;
+                }
+
                 messageDiv.textContent = message;
                 chatMessages.appendChild(messageDiv);
                 smartScroll();
                 return messageDiv;
             }
-            
             function showTyping() {
                 isTyping = true;
                 const typingDiv = document.createElement('div');
@@ -656,7 +828,6 @@
                 chatMessages.appendChild(typingDiv);
                 smartScroll();
             }
-            
             function hideTyping() {
                 isTyping = false;
                 const typingIndicator = document.getElementById('typingIndicator');
@@ -664,16 +835,14 @@
                     typingIndicator.remove();
                 }
             }
-            
-            function typeWriter(messageDiv, fullText, speed = 15) {
+            // --- 修改打字机速度 ---
+            function typeWriter(messageDiv, fullText, speed = 1) { // 从 15 改为 1
                 let i = 0;
                 const typingCursor = document.createElement('span');
                 typingCursor.classList.add('typing-cursor');
                 messageDiv.appendChild(typingCursor);
-                
                 const textContainer = document.createElement('div');
                 messageDiv.appendChild(textContainer);
-                
                 function type() {
                     if (i < fullText.length) {
                         textContainer.innerHTML = fullText.substring(0, i + 1);
@@ -687,7 +856,6 @@
                     } else {
                         typingCursor.remove();
                         messageDiv.innerHTML = fullText;
-                        
                         // 检查是否需要扩展聊天框高度
                         if (chatMessages.scrollHeight > chatMessages.clientHeight + 50) {
                             chatMessages.classList.add('expanded');
@@ -696,31 +864,53 @@
                 }
                 type();
             }
-            
+            // --- 修改发送消息函数以支持文件 ---
             async function sendMessage() {
                 const message = userInput.value.trim();
-                if (!message) return;
-                
-                // 添加用户消息
-                addMessage(message, true);
+                const filesToSend = [...selectedFiles]; // 创建副本
+
+                if (!message && filesToSend.length === 0) return;
+
+                // 添加用户消息 (包含文件信息)
+                addMessage(message, true, filesToSend);
+
                 userInput.value = '';
+                selectedFiles = []; // 清空选中文件数组
+                updateFilePreview(); // 清空预览
                 showTyping();
                 sendButton.disabled = true;
-                
+
                 try {
-                    const response = await fetch(API_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: message })
-                    });
-                    
+                    let response;
+                    if (filesToSend.length > 0) {
+                        // 如果有文件，使用 FormData
+                        const formData = new FormData();
+                        if(message) {
+                            formData.append('message', message);
+                        }
+                        filesToSend.forEach(file => {
+                            formData.append('file', file);
+                        });
+
+                        response = await fetch(API_URL, {
+                            method: 'POST',
+                            // 不设置 Content-Type，让浏览器自动设置 multipart/form-data
+                            body: formData
+                        });
+                    } else {
+                        // 如果没有文件，保持原来的 JSON 方式
+                         response = await fetch(API_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ message: message })
+                        });
+                    }
+
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
-                    
                     const data = await response.json();
                     hideTyping();
-                    
                     let botReply = "";
                     if (data.reply) {
                         botReply = data.reply;
@@ -729,7 +919,6 @@
                     } else {
                         botReply = isEnglish ? "Sorry, I didn't receive a valid reply." : "抱歉，我没有收到有效的回复。";
                     }
-                    
                     let htmlReply = "";
                     try {
                         htmlReply = marked.parse(botReply, { breaks: true });
@@ -737,14 +926,11 @@
                         console.error("Markdown parsing error:", e);
                         htmlReply = botReply;
                     }
-                    
                     const botMessageDiv = document.createElement('div');
                     botMessageDiv.classList.add('message', 'bot-message');
                     chatMessages.appendChild(botMessageDiv);
-                    
                     // 启动打字机效果
                     typeWriter(botMessageDiv, htmlReply);
-                    
                 } catch (error) {
                     console.error('Error sending message:', error);
                     hideTyping();
@@ -758,14 +944,12 @@
                     if (isNearBottom) {
                         chatMessages.scrollTop = chatMessages.scrollHeight;
                     }
-                    
                     // 检查是否需要扩展聊天框高度
                     if (chatMessages.scrollHeight > chatMessages.clientHeight + 50) {
                         chatMessages.classList.add('expanded');
                     }
                 }
             }
-            
             sendButton.addEventListener('click', sendMessage);
             userInput.addEventListener('keydown', function(event) {
                 if (event.key === 'Enter' && !event.shiftKey) {
@@ -773,7 +957,6 @@
                     sendMessage();
                 }
             });
-            
             smartScroll();
         });
     </script>
