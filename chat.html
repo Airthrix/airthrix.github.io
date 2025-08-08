@@ -302,7 +302,6 @@
             flex-direction: column;
             gap: 1rem;
             transition: max-height 0.3s ease;
-            /* Custom Scrollbar Styling */
             scrollbar-width: thin;
             scrollbar-color: var(--neon-blue) rgba(255, 255, 255, 0.1);
         }
@@ -402,6 +401,7 @@
         .chat-input {
             flex-grow: 1;
             padding: 1rem;
+            padding-right: 60px; /* Add padding to the right to make space for buttons */
             border-radius: 30px;
             border: 1px solid rgba(0, 243, 255, 0.3);
             background: rgba(10, 10, 25, 0.5);
@@ -418,11 +418,14 @@
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
         .right-buttons {
-             /* Removed absolute positioning */
+            position: absolute;
+            right: 5px; /* Position buttons to the right inside the input wrapper */
+            top: 50%;
+            transform: translateY(-50%); /* Vertically center the buttons */
             display: flex;
             gap: 0.25rem; /* Small gap between buttons */
             align-items: center;
-            height: 50px; /* Match input height */
+            height: calc(100% - 10px); /* Adjust height to fit inside the input with some margin */
         }
         .chat-send-btn {
             padding: 0.8rem 1.5rem; /* Increased padding for larger button */
@@ -528,6 +531,9 @@
             .chat-messages.expanded {
                 max-height: 700px;
             }
+            .chat-input {
+                padding-right: 55px; /* Adjust padding for smaller screens */
+            }
             .right-buttons {
                 gap: 0.15rem; /* Smaller gap on mobile */
             }
@@ -539,33 +545,17 @@
             .chat-send-btn {
                 min-width: 80px; /* Smaller minimum width for send button */
             }
-            /* 移动端特殊布局 */
-            .chat-input-area {
-                flex-wrap: wrap; /* 允许换行 */
+            /* 恢复动态省略号动画 */
+            .typing-indicator::after {
+                content: "";
+                animation: blinkDots 1.5s infinite steps(4, end);
             }
-            .chat-input-wrapper {
-                order: 2; /* 输入框在第二行 */
-                width: 100%;
-                margin-top: 0.5rem;
-            }
-            .right-buttons {
-                order: 1; /* 按钮组在第一行 */
-                width: 100%;
-                justify-content: flex-start; /* 按钮靠左对齐 */
-                margin-top: 0; /* 移除顶部间距 */
-            }
-            /* 调整按钮顺序：上传按钮在发送按钮左边 */
-            .upload-btn:first-of-type {
-                 order: 1;
-            }
-            .upload-btn:last-of-type {
-                 order: 2;
-            }
-            .chat-send-btn {
-                order: 3;
-            }
-            .chat-input {
-                padding-right: 1rem; /* 移除内边距 */
+            @keyframes blinkDots {
+                0% { content: "."; }
+                25% { content: ".."; }
+                50% { content: "..."; }
+                75% { content: "...."; }
+                100% { content: "."; }
             }
         }
         @media (max-width: 480px) {
@@ -576,9 +566,14 @@
             .chat-input-wrapper {
                 width: 100%;
             }
+            .chat-input {
+                padding-right: 1rem; /* Remove right padding as buttons will be below */
+            }
             .right-buttons {
+                position: static;
+                transform: none;
                 width: 100%;
-                justify-content: flex-start; /* Align buttons to the left */
+                justify-content: flex-end; /* Align buttons to the right */
                 margin-top: 0.5rem; /* Add some space above */
                 height: auto;
             }
@@ -602,20 +597,19 @@
             .chat-messages.expanded {
                 max-height: 600px;
             }
-        }
-        /* Animation for "正在连接服务器" */
-        .typing-indicator::after {
-             content: "......";
-             animation: blinkDots 1.5s infinite steps(6, end);
-        }
-        @keyframes blinkDots {
-             0% { content: "."; }
-             16.6% { content: ".."; }
-             33.3% { content: "..."; }
-             50% { content: "...."; }
-             66.6% { content: "....."; }
-             83.3% { content: "......"; }
-             100% { content: "."; }
+            /* 调整移动端按钮宽度 */
+            .upload-btn {
+                flex: 1; /* 平均分配宽度 */
+                min-width: auto; /* 移除最小宽度限制 */
+                margin-right: 0.25rem; /* 按钮间更小的间距 */
+                margin-left: 0.25rem;
+            }
+            .chat-send-btn {
+                flex: 2; /* 发送按钮稍微宽一点 */
+                min-width: auto;
+                margin-right: 0.25rem;
+                margin-left: 0.25rem;
+            }
         }
     </style>
 </head>
@@ -656,11 +650,11 @@
                 <!-- Text input and send button -->
                 <div class="chat-input-wrapper">
                     <textarea id="userInput" class="chat-input" placeholder="(因安全原因暂不支持图片PDF等文件)  输入你的消息......"></textarea>
-                </div>
-                <div class="right-buttons">
-                    <button id="sendButton" class="chat-send-btn">
-                        <i class="fas fa-paper-plane"></i> <span class="btn-text">发送</span>
-                    </button>
+                    <div class="right-buttons">
+                        <button id="sendButton" class="chat-send-btn">
+                            <i class="fas fa-paper-plane"></i> <span class="btn-text">发送</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -904,9 +898,10 @@
                 const typingDiv = document.createElement('div');
                 typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
                 typingDiv.id = 'typingIndicator';
+                // 添加文本节点和动态省略号
                 const textNode = document.createTextNode(isEnglish ? 'Connecting to the server' : '正在连接服务器');
                 typingDiv.appendChild(textNode);
-                // 动态 ... 将通过 CSS ::after 实现
+                // 省略号由CSS ::after 伪元素处理
                 chatMessages.appendChild(typingDiv);
                 smartScroll();
             }
