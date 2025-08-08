@@ -899,6 +899,12 @@
 
             function hideTyping() {
                 isTyping = false;
+                // 清除动画循环
+                if (typingInterval) {
+                    clearInterval(typingInterval);
+                    typingInterval = null; // 清除引用
+                }
+                // 移除指示器元素
                 const typingIndicator = document.getElementById('typingIndicator');
                 if (typingIndicator) {
                     typingIndicator.remove();
