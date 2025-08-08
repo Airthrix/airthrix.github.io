@@ -30,7 +30,6 @@
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* 更加动态和科幻的背景 */
             background: linear-gradient(270deg, #0a0a2e, #1a0a2e, #2d0b45, #4a0f6b, #1a0a2e);
             background-size: 600% 600%;
             animation: gradientBG 30s ease infinite;
@@ -44,7 +43,6 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-        /* --- 新增：整体粒子容器 --- */
         #particles-js {
             position: fixed;
             width: 100%;
@@ -53,7 +51,6 @@
             left: 0;
             z-index: 0;
         }
-        /* --- 新增：光晕效果 --- */
         .glow {
             position: absolute;
             border-radius: 50%;
@@ -81,7 +78,6 @@
             0%, 100% { transform: translate(0, 0); }
             50% { transform: translate(20px, 20px); }
         }
-        /* --- 新增：网格背景 --- */
         .grid-overlay {
             position: fixed;
             top: 0;
@@ -170,7 +166,7 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
-            padding-top: 100px; /* 为固定导航栏留出空间 */
+            padding-top: 100px;
         }
         .footer {
             text-align: center;
@@ -270,7 +266,6 @@
             transform: translateY(-5px);
             box-shadow: 0 0 15px var(--neon-blue), 0 0 25px var(--neon-blue);
         }
-        /* --- 修改：扩大聊天容器宽度并居中 --- */
         .chat-container {
             background: rgba(15, 15, 40, 0.5);
             border-radius: 15px;
@@ -281,10 +276,10 @@
             border-top: 3px solid var(--neon-blue);
             position: relative;
             z-index: 10;
-            width: 80%; /* 扩大宽度 */
-            max-width: 1200px; /* 最大宽度限制 */
-            margin-left: auto; /* 居中 */
-            margin-right: auto; /* 居中 */
+            width: 80%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
         }
         .chat-title {
             font-size: 2rem;
@@ -293,10 +288,11 @@
             color: var(--neon-blue);
             text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
-        /* --- 修改：增加聊天消息区域高度并确保滚动 --- */
+        /* 修改1：聊天消息区域高度自适应 */
         .chat-messages {
-            height: 400px; /* 初始高度为全高的一半 */
-            overflow-y: auto; /* 确保有滚动条 */
+            min-height: 400px; /* 最小高度 */
+            max-height: 600px; /* 最大高度 */
+            overflow-y: auto;
             padding: 1rem;
             background: rgba(10, 10, 25, 0.3);
             border-radius: 10px;
@@ -304,32 +300,30 @@
             display: flex;
             flex-direction: column;
             gap: 1rem;
+            transition: max-height 0.3s ease; /* 平滑过渡效果 */
             
-            /* --- 修改：优化滚动条样式，使其更明显 --- */
-            scrollbar-width: thin; /* Firefox */
-            scrollbar-color: var(--neon-blue) rgba(255, 255, 255, 0.1); /* Firefox */
-            position: relative;
-            z-index: 10;
+            /* 滚动条样式 */
+            scrollbar-width: thin;
+            scrollbar-color: var(--neon-blue) rgba(255, 255, 255, 0.1);
+        }
+        /* 内容增多时自动扩展高度 */
+        .chat-messages.expanded {
+            max-height: 800px; /* 更大的最大高度 */
         }
         
-        /* 添加全高样式 */
-        .chat-messages.full-height {
-            height: 600px; /* 全高 */
-        }
-        
-        /* --- 关键修改：为 Webkit 浏览器 (Chrome, Safari, Edge) 设置更明显的滚动条样式 --- */
+        /* Webkit 滚动条样式 */
         .chat-messages::-webkit-scrollbar {
-            width: 12px; /* 增加滚动条宽度 */
-            background-color: rgba(255, 255, 255, 0.05); /* 滚动条轨道背景 */
+            width: 12px;
+            background-color: rgba(255, 255, 255, 0.05);
             border-radius: 6px;
         }
         .chat-messages::-webkit-scrollbar-thumb {
-            background-color: var(--neon-blue); /* 滚动条滑块颜色 */
-            border-radius: 6px; /* 滚动条滑块圆角 */
-            border: 2px solid rgba(10, 10, 25, 0.5); /* 滑块边框 */
+            background-color: var(--neon-blue);
+            border-radius: 6px;
+            border: 2px solid rgba(10, 10, 25, 0.5);
         }
         .chat-messages::-webkit-scrollbar-track {
-            background-color: rgba(255, 255, 255, 0.05); /* 滚动条轨道颜色 */
+            background-color: rgba(255, 255, 255, 0.05);
             border-radius: 6px;
         }
         .message {
@@ -340,7 +334,7 @@
             animation: fadeIn 0.3s ease-in-out;
             position: relative;
             overflow: hidden;
-            font-size: 1rem; /* 确保字体大小不变 */
+            font-size: 1rem;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -357,10 +351,8 @@
             color: #c0c0ff;
             align-self: flex-start;
             border-bottom-left-radius: 5px;
-            /* --- 新增：为机器人消息添加内发光效果 --- */
             box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.2);
         }
-         /* --- 新增：打字机光标样式 --- */
         .typing-cursor::after {
             content: '|';
             animation: blink 1s infinite;
@@ -437,25 +429,25 @@
             .nav-btn {
                 padding: 0.7rem 1.2rem;
                 font-size: 0.9rem;
-                min-width: 100px; /* 缩小按钮宽度 */
+                min-width: 100px;
             }
             .main-content {
                 padding: 1rem;
-                padding-top: 80px; /* 调整移动端间距 */
+                padding-top: 80px;
             }
-            /* --- 修改：移动端也调整聊天容器和消息区域 --- */
             .chat-container {
                 padding: 1rem;
-                width: 95%; /* 移动端适应 */
+                width: 95%;
             }
             .chat-title {
                 font-size: 1.5rem;
             }
             .chat-messages {
-                height: 300px; /* 移动端初始高度为一半 */
+                min-height: 300px; /* 移动端最小高度 */
+                max-height: 500px; /* 移动端最大高度 */
             }
-            .chat-messages.full-height {
-                height: 500px; /* 移动端全高 */
+            .chat-messages.expanded {
+                max-height: 700px; /* 移动端更大的最大高度 */
             }
         }
         @media (max-width: 480px) {
@@ -470,23 +462,20 @@
                 min-width: 90px;
             }
             .chat-messages {
-                height: 250px; /* 更小屏幕初始高度为一半 */
+                min-height: 250px; /* 更小屏幕最小高度 */
+                max-height: 400px; /* 更小屏幕最大高度 */
             }
-            .chat-messages.full-height {
-                height: 400px; /* 更小屏幕全高 */
+            .chat-messages.expanded {
+                max-height: 600px; /* 更小屏幕更大的最大高度 */
             }
         }
     </style>
 </head>
 <body>
-    <!-- --- 新增：粒子容器 --- -->
     <div id="particles-js"></div>
-    <!-- --- 新增：动态光晕 --- -->
     <div class="glow glow-blue"></div>
     <div class="glow glow-purple"></div>
-    <!-- --- 新增：网格叠加层 --- -->
     <div class="grid-overlay"></div>
-    <!-- 顶部导航栏 -->
     <div class="top-nav">
         <button class="nav-btn" id="loginBtn">
             <i class="fas fa-sign-in-alt"></i>
@@ -498,11 +487,9 @@
         </button>
     </div>
     <div class="main-content">
-        <!-- 聊天功能区域 -->
         <div class="chat-container">
             <h2 class="chat-title">与 AliceSkyGarden 对话</h2>
             <div class="chat-messages" id="chatMessages">
-                <!-- 初始欢迎消息 -->
                 <div class="message bot-message" id="initialMessage">你好！我是 AliceSkyGarden，有什么我可以帮助你的吗？😊</div>
             </div>
             <div class="chat-input-area">
@@ -513,7 +500,6 @@
             </div>
         </div>
     </div>
-    <!-- 底部区域 -->
     <div class="footer">
         <div class="footer-logo">AliceSkyGarden</div>
         <p class="footer-tagline">开启智能新纪元 · 探索无限可能</p>
@@ -535,105 +521,40 @@
         <p>Contact: airthrix@163.com | +1 (800) AIRTHRIX-AI</p>
         <p class="copyright">&copy; 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved</p>
     </div>
-    <!-- 粒子效果库 -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 初始状态标记
-            let isFirstMessage = true;
-            let scrollLock = false; // 用户是否手动滚动
-            let isTyping = false;   // 机器人是否正在输入
+            let scrollLock = false;
+            let isTyping = false;
+            let isEnglish = false;
             
-            // --- 初始化 Particles.js ---
+            // 初始化粒子效果
             particlesJS('particles-js', {
                 "particles": {
-                    "number": {
-                        "value": 100, // 增加粒子数量
-                        "density": {
-                            "enable": true,
-                            "value_area": 800
-                        }
-                    },
-                    "color": {
-                        "value": "#00f3ff"
-                    },
-                    "shape": {
-                        "type": "circle",
-                        "stroke": {
-                            "width": 0,
-                            "color": "#000000"
-                        }
-                    },
-                    "opacity": {
-                        "value": 0.5,
-                        "random": true,
-                        "anim": {
-                            "enable": true,
-                            "speed": 1,
-                            "opacity_min": 0.1,
-                            "sync": false
-                        }
-                    },
-                    "size": {
-                        "value": 3,
-                        "random": true,
-                        "anim": {
-                            "enable": true,
-                            "speed": 2,
-                            "size_min": 0.3,
-                            "sync": false
-                        }
-                    },
-                    "line_linked": {
-                        "enable": true,
-                        "distance": 150,
-                        "color": "#00f3ff",
-                        "opacity": 0.4,
-                        "width": 1
-                    },
-                    "move": {
-                        "enable": true,
-                        "speed": 2, // 稍微加快速度
-                        "direction": "none",
-                        "random": true,
-                        "straight": false,
-                        "out_mode": "out",
-                        "bounce": false,
-                        "attract": {
-                            "enable": true,
-                            "rotateX": 600,
-                            "rotateY": 1200
-                        }
-                    }
+                    "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
+                    "color": { "value": "#00f3ff" },
+                    "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" } },
+                    "opacity": { "value": 0.5, "random": true, "anim": { "enable": true, "speed": 1, "opacity_min": 0.1, "sync": false } },
+                    "size": { "value": 3, "random": true, "anim": { "enable": true, "speed": 2, "size_min": 0.3, "sync": false } },
+                    "line_linked": { "enable": true, "distance": 150, "color": "#00f3ff", "opacity": 0.4, "width": 1 },
+                    "move": { "enable": true, "speed": 2, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": true, "rotateX": 600, "rotateY": 1200 } }
                 },
                 "interactivity": {
                     "detect_on": "canvas",
                     "events": {
-                        "onhover": {
-                            "enable": true,
-                            "mode": "grab"
-                        },
-                        "onclick": {
-                            "enable": true,
-                            "mode": "push"
-                        },
+                        "onhover": { "enable": true, "mode": "grab" },
+                        "onclick": { "enable": true, "mode": "push" },
                         "resize": true
                     },
                     "modes": {
-                        "grab": {
-                            "distance": 140,
-                            "line_linked": {
-                                "opacity": 1
-                            }
-                        },
-                        "push": {
-                            "particles_nb": 4
-                        }
+                        "grab": { "distance": 140, "line_linked": { "opacity": 1 } },
+                        "push": { "particles_nb": 4 }
                     }
                 },
                 "retina_detect": true
             });
-            // --- Language and Login Button Functionality (保持不变) ---
+            
+            // 语言和登录按钮功能
             const langBtn = document.getElementById('langBtn');
             const loginBtn = document.getElementById('loginBtn');
             const chatTitle = document.querySelector('.chat-title');
@@ -643,7 +564,7 @@
             const footerTagline = document.querySelector('.footer-tagline');
             const footerLinksText = document.querySelectorAll('.link-text');
             const copyrightText = document.querySelector('.copyright');
-            let isEnglish = false;
+            
             loginBtn.addEventListener('click', function() {
                 const originalHTML = loginBtn.innerHTML;
                 loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span class="btn-text">正在登录...</span>';
@@ -654,17 +575,16 @@
                     }, 1500);
                 }, 2000);
             });
+            
             langBtn.addEventListener('click', function() {
                 isEnglish = !isEnglish;
-                const btnTextElements = document.querySelectorAll('.btn-text'); // 动态选择，确保新文本也被找到
+                const btnTextElements = document.querySelectorAll('.btn-text');
                 if (isEnglish) {
-                    // 切换为英文
-                    btnTextElements[0].textContent = 'Log in'; // 登录按钮
-                    btnTextElements[1].textContent = '中文';   // 语言按钮
+                    btnTextElements[0].textContent = 'Log in';
+                    btnTextElements[1].textContent = '中文';
                     chatTitle.textContent = "Talk with AliceSkyGarden";
                     chatInput.placeholder = "Enter your message...";
-                    btnTextElements[2].textContent = 'Send'; // 发送按钮
-                    // 更新初始欢迎消息
+                    btnTextElements[2].textContent = 'Send';
                     initialMessage.textContent = "Hello! I'm AliceSkyGarden. How can I assist you? 😊";
                     footerTagline.textContent = "Unlocking a New Era of Intelligence · Exploring Infinite Possibilities";
                     const footerLinks = ["Home", "Developers", "Documentation", "Community", "Blog", "Contact Us"];
@@ -673,13 +593,11 @@
                     });
                     copyrightText.textContent = "© 2025 AliceSkyGarden Technology. All rights reserved";
                 } else {
-                    // 切换为中文
                     btnTextElements[0].textContent = 'Log in';
                     btnTextElements[1].textContent = 'English';
                     chatTitle.textContent = "与 AliceSkyGarden 对话";
                     chatInput.placeholder = "输入你的消息...";
                     btnTextElements[2].textContent = '发送';
-                    // 更新初始欢迎消息
                     initialMessage.textContent = "你好！我是 AliceSkyGarden，有什么我可以帮助你的吗？😊";
                     footerTagline.textContent = "开启智能新纪元 · 探索无限可能";
                     const footerLinks = ["首页", "开发者", "文档", "社区", "博客", "联系我们"];
@@ -693,35 +611,22 @@
                     langBtn.classList.remove('pulse');
                 }, 500);
             });
-            // --- 修改后的 Chat Functionality (使用 fetch 和一次性响应) ---
+            
+            // 聊天功能
             const chatMessages = document.getElementById('chatMessages');
             const userInput = document.getElementById('userInput');
             const sendButton = document.getElementById('sendButton');
-            // *** 请确保这个 URL 指向您的后端 API 端点 ***
-            // *** 如果您的后端部署在根路径 '/'，请使用 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run' ***
-            // *** 如果您的后端部署在 '/invoke' 路径，请使用 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run/invoke' ***
-            const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run'; // 根据您的实际部署情况修改
+            const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run';
             
-            // 确保滚动到底部的函数（带智能判断）
             function smartScroll() {
-                // 如果用户没有手动滚动过，自动滚动到底部
                 if (!scrollLock && !isTyping) {
                     chatMessages.scrollTop = chatMessages.scrollHeight;
                 }
             }
             
-            // 监听用户滚动事件
             chatMessages.addEventListener('scroll', function() {
-                // 计算用户是否滚动到底部附近（50px内）
                 const isAtBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight <= 50;
-                
-                // 如果用户滚动到底部，解除滚动锁定
-                if (isAtBottom) {
-                    scrollLock = false;
-                } else {
-                    // 如果用户手动向上滚动，则设置滚动锁定
-                    scrollLock = true;
-                }
+                scrollLock = !isAtBottom;
             });
             
             function addMessage(message, isUser = false) {
@@ -731,7 +636,7 @@
                 messageDiv.textContent = message;
                 chatMessages.appendChild(messageDiv);
                 smartScroll();
-                return messageDiv; // 返回元素以便后续更新
+                return messageDiv;
             }
             
             function showTyping() {
@@ -752,34 +657,33 @@
                 }
             }
             
-            // --- 新增：逐字显示函数 (打字机效果) - 修复字体缩小问题 ---
             function typeWriter(messageDiv, fullText, speed = 15) {
                 let i = 0;
                 const typingCursor = document.createElement('span');
                 typingCursor.classList.add('typing-cursor');
                 messageDiv.appendChild(typingCursor);
                 
-                // 创建一个临时容器来逐步添加文本
                 const textContainer = document.createElement('div');
                 messageDiv.appendChild(textContainer);
                 
                 function type() {
                     if (i < fullText.length) {
-                        // 逐步添加文本到临时容器
                         textContainer.innerHTML = fullText.substring(0, i + 1);
-                        messageDiv.appendChild(typingCursor); // 保持光标在末尾
+                        messageDiv.appendChild(typingCursor);
                         i++;
-                        // 只有在接近底部时才滚动
                         const isNearBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight <= 100;
                         if (isNearBottom) {
                             chatMessages.scrollTop = chatMessages.scrollHeight;
                         }
                         setTimeout(type, speed);
                     } else {
-                        // 移除光标
                         typingCursor.remove();
-                        // 将完整内容放入消息div
                         messageDiv.innerHTML = fullText;
+                        
+                        // 检查是否需要扩展聊天框高度
+                        if (chatMessages.scrollHeight > chatMessages.clientHeight + 50) {
+                            chatMessages.classList.add('expanded');
+                        }
                     }
                 }
                 type();
@@ -789,34 +693,26 @@
                 const message = userInput.value.trim();
                 if (!message) return;
                 
-                // 如果是第一次发送消息，扩展聊天区域高度
-                if (isFirstMessage) {
-                    chatMessages.classList.add('full-height');
-                    isFirstMessage = false;
-                }
-                
                 // 添加用户消息
                 addMessage(message, true);
                 userInput.value = '';
-                // 显示思考提示
                 showTyping();
-                // 禁用发送按钮
                 sendButton.disabled = true;
+                
                 try {
-                    // 使用 fetch 发送 POST 请求
                     const response = await fetch(API_URL, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                            // 如果需要认证，可以在这里添加 'Authorization': 'Bearer YOUR_TOKEN'
-                        },
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ message: message })
                     });
+                    
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
+                    
                     const data = await response.json();
-                    hideTyping(); // 隐藏思考提示
+                    hideTyping();
+                    
                     let botReply = "";
                     if (data.reply) {
                         botReply = data.reply;
@@ -825,20 +721,22 @@
                     } else {
                         botReply = isEnglish ? "Sorry, I didn't receive a valid reply." : "抱歉，我没有收到有效的回复。";
                     }
-                    // 使用 marked 解析 Markdown
+                    
                     let htmlReply = "";
                     try {
                         htmlReply = marked.parse(botReply, { breaks: true });
                     } catch (e) {
                         console.error("Markdown parsing error:", e);
-                        htmlReply = botReply; // Fallback to plain text
+                        htmlReply = botReply;
                     }
-                    // 添加机器人消息容器
+                    
                     const botMessageDiv = document.createElement('div');
                     botMessageDiv.classList.add('message', 'bot-message');
                     chatMessages.appendChild(botMessageDiv);
+                    
                     // 启动打字机效果
                     typeWriter(botMessageDiv, htmlReply);
+                    
                 } catch (error) {
                     console.error('Error sending message:', error);
                     hideTyping();
@@ -847,12 +745,15 @@
                     errorDiv.textContent = isEnglish ? `Error: ${error.message}` : `错误: ${error.message}`;
                     chatMessages.appendChild(errorDiv);
                 } finally {
-                    // 启用发送按钮
                     sendButton.disabled = false;
-                    // 只有在底部附近时才滚动
                     const isNearBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight <= 100;
                     if (isNearBottom) {
                         chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }
+                    
+                    // 检查是否需要扩展聊天框高度
+                    if (chatMessages.scrollHeight > chatMessages.clientHeight + 50) {
+                        chatMessages.classList.add('expanded');
                     }
                 }
             }
@@ -865,7 +766,6 @@
                 }
             });
             
-            // 初始化时滚动到底部
             smartScroll();
         });
     </script>
