@@ -291,7 +291,7 @@
             text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
         .chat-messages {
-            min-height: 600px; /* Increased minimum height for larger chat box */
+            min-height: 600px;
             max-height: 99999999999999999999999999999px;
             overflow-y: auto;
             padding: 1rem;
@@ -361,13 +361,13 @@
         }
         .chat-input-area {
             display: flex;
-            align-items: center; /* Align items vertically in the center */
+            align-items: center;
             gap: 0.5rem;
             z-index: 10;
             position: relative;
         }
         .upload-btn {
-            padding: 0.8rem 1rem; /* Adjusted padding */
+            padding: 0.8rem 1rem;
             border-radius: 30px;
             border: 1px solid rgba(0, 243, 255, 0.3);
             background: rgba(15, 15, 40, 0.4);
@@ -376,12 +376,12 @@
             cursor: pointer;
             display: flex;
             align-items: center;
-            justify-content: center; /* Center content */
+            justify-content: center;
             gap: 0.5rem;
             transition: all 0.3s ease;
             backdrop-filter: blur(5px);
-            height: 50px; /* Match input height */
-            min-width: 50px; /* Ensure minimum width for icon */
+            height: 50px;
+            min-width: 50px;
         }
         .upload-btn:hover {
             background: rgba(0, 243, 255, 0.2);
@@ -396,7 +396,7 @@
         .chat-input-wrapper {
             flex-grow: 1;
             display: flex;
-            min-width: 200px; /* Minimum width for input area */
+            min-width: 200px;
             position: relative;
         }
         .chat-input {
@@ -417,15 +417,14 @@
             border-color: var(--neon-blue);
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
-        /* Removed .right-buttons from inside .chat-input-wrapper */
         .right-buttons {
             display: flex;
-            gap: 0.25rem; /* Small gap between buttons */
+            gap: 0.25rem;
             align-items: center;
-            height: 50px; /* Match input height */
+            height: 50px;
         }
         .chat-send-btn {
-            padding: 0.8rem 1.5rem; /* Increased padding for larger button */
+            padding: 0.8rem 1.5rem;
             border-radius: 30px;
             border: 1px solid rgba(0, 243, 255, 0.3);
             background: rgba(15, 15, 40, 0.4);
@@ -437,8 +436,8 @@
             gap: 0.5rem;
             transition: all 0.3s ease;
             backdrop-filter: blur(5px);
-            height: 100%; /* Full height of the container */
-            min-width: 100px; /* Ensure minimum width */
+            height: 100%;
+            min-width: 100px;
         }
         .chat-send-btn:hover {
             background: rgba(0, 243, 255, 0.2);
@@ -522,72 +521,64 @@
                 font-size: 1.5rem;
             }
             .chat-messages {
-                min-height: 400px; /* Adjusted for smaller screens */
+                min-height: 400px;
                 max-height: 500px;
             }
             .chat-messages.expanded {
                 max-height: 700px;
             }
             .right-buttons {
-                gap: 0.15rem; /* Smaller gap on mobile */
+                gap: 0.15rem;
             }
             .upload-btn, .chat-send-btn {
-                padding: 0.6rem 0.8rem; /* Smaller padding on mobile */
-                min-width: 40px; /* Smaller minimum width */
+                padding: 0.6rem 0.8rem;
+                min-width: 40px;
                 font-size: 0.9rem;
             }
             .chat-send-btn {
-                min-width: 80px; /* Smaller minimum width for send button */
+                min-width: 80px;
             }
         }
-        @media (max-width: 480px) {
+        @media (max-width: 768px) { /* 移动端特殊布局 */
             .chat-input-area {
-                flex-direction: column; /* Stack elements vertically on very small screens */
-                align-items: stretch; /* Stretch to full width */
+                flex-wrap: wrap; /* 允许换行 */
             }
             .chat-input-wrapper {
+                order: 1; /* 输入框在第一行 */
                 width: 100%;
+                margin-bottom: 0.5rem;
             }
             .right-buttons {
+                order: 2; /* 按钮组在第二行 */
                 width: 100%;
-                justify-content: flex-end; /* Align buttons to the right */
-                margin-top: 0.5rem; /* Add some space above */
-                height: auto;
+                justify-content: flex-end; /* 按钮靠右对齐 */
+                margin-top: 0; /* 移除顶部间距 */
             }
-            .upload-btn, .chat-send-btn {
-                height: 45px; /* Adjust height for mobile */
+            /* 调整按钮顺序：上传按钮在发送按钮左边 */
+            .upload-btn:first-of-type {
+                 order: 1;
             }
-            .top-nav {
-                width: 100%;
-                justify-content: center;
-                padding: 0.8rem;
+            .upload-btn:last-of-type {
+                 order: 2;
             }
-            .nav-btn {
-                padding: 0.6rem 1rem;
-                font-size: 0.8rem;
-                min-width: 90px;
+            .chat-send-btn {
+                order: 3;
             }
-            .chat-messages {
-                min-height: 300px;
-                max-height: 400px;
-            }
-            .chat-messages.expanded {
-                max-height: 600px;
+            .chat-input {
+                padding-right: 1rem; /* 移除内边距 */
             }
         }
         /* Animation for "正在连接服务器" */
-        .typing-indicator span {
-            animation: blinkDots 1.5s infinite;
+        .typing-indicator span.dots::after {
+            content: ".";
+            animation: blinkDots 1.5s infinite steps(4, end);
         }
         @keyframes blinkDots {
             0% { content: "."; }
-            33% { content: ".."; }
-            66% { content: "..."; }
+            25% { content: ".."; }
+            50% { content: "..."; }
+            75% { content: "...."; }
             100% { content: "."; }
-        }
-        .typing-indicator::after {
-            content: ".";
-            animation: blinkDots 1.5s infinite;
         }
     </style>
 </head>
@@ -615,7 +606,7 @@
             <!-- File preview area -->
             <div class="file-preview-container" id="filePreviewContainer" style="display: none;"></div>
             <div class="chat-input-area">
-                 <!-- Image upload button -->
+                <!-- Image upload button -->
                 <label for="imageInput" class="upload-btn" title="上传图片">
                     <i class="fas fa-image"></i>
                 </label>
@@ -625,11 +616,11 @@
                     <i class="fas fa-file"></i>
                 </label>
                 <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt">
-                <!-- Text input and send button -->
+                <!-- Text input -->
                 <div class="chat-input-wrapper">
                     <textarea id="userInput" class="chat-input" placeholder="(因安全原因暂不支持图片PDF等文件)  输入你的消息......"></textarea>
                 </div>
-                <!-- Move send button outside the input wrapper -->
+                <!-- Send button -->
                 <div class="right-buttons">
                     <button id="sendButton" class="chat-send-btn">
                         <i class="fas fa-paper-plane"></i> <span class="btn-text">发送</span>
@@ -665,9 +656,8 @@
             let scrollLock = false;
             let isTyping = false;
             let isEnglish = false;
-            let selectedImages = []; // Store selected images
-            let selectedFiles = [];  // Store selected files
-            // Initialize particle effect
+            let selectedImages = [];
+            let selectedFiles = [];
             particlesJS('particles-js', {
                 "particles": {
                     "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
@@ -692,7 +682,6 @@
                 },
                 "retina_detect": true
             });
-            // Language and login button functionality
             const langBtn = document.getElementById('langBtn');
             const loginBtn = document.getElementById('loginBtn');
             const chatTitle = document.querySelector('.chat-title');
@@ -755,16 +744,13 @@
                     langBtn.classList.remove('pulse');
                 }, 500);
             });
-            // Chat functionality
             const chatMessages = document.getElementById('chatMessages');
             const userInput = document.getElementById('userInput');
             const sendButton = document.getElementById('sendButton');
             const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run';
-            // Handle image selection
             imageInput.addEventListener('change', function() {
                 const files = Array.from(imageInput.files);
                 if (files.length > 0) {
-                    // Simple deduplication: check filename and size
                     files.forEach(file => {
                         const isDuplicate = selectedImages.some(existingFile =>
                             existingFile.name === file.name && existingFile.size === file.size
@@ -774,14 +760,12 @@
                         }
                     });
                     updateFilePreview();
-                    imageInput.value = ''; // Clear input to allow re-selecting same file
+                    imageInput.value = '';
                 }
             });
-            // Handle file selection
             fileInput.addEventListener('change', function() {
                 const files = Array.from(fileInput.files);
                 if (files.length > 0) {
-                    // Simple deduplication: check filename and size
                     files.forEach(file => {
                         const isDuplicate = selectedFiles.some(existingFile =>
                             existingFile.name === file.name && existingFile.size === file.size
@@ -791,10 +775,9 @@
                         }
                     });
                     updateFilePreview();
-                    fileInput.value = ''; // Clear input to allow re-selecting same file
+                    fileInput.value = '';
                 }
             });
-            // Update file preview area
             function updateFilePreview() {
                 filePreviewContainer.innerHTML = '';
                 const allFiles = [...selectedImages, ...selectedFiles];
@@ -803,23 +786,21 @@
                     allFiles.forEach((file, index) => {
                         const previewItem = document.createElement('div');
                         previewItem.className = 'file-preview-item';
-                        // Store index and type for removal
                         previewItem.dataset.index = index;
                         previewItem.dataset.type = selectedImages.includes(file) ? 'image' : 'file';
                         const fileNameSpan = document.createElement('span');
                         fileNameSpan.className = 'file-preview-name';
                         fileNameSpan.textContent = file.name.length > 20 ? file.name.substring(0, 17) + '...' : file.name;
-                        fileNameSpan.title = file.name; // Show full name on hover
+                        fileNameSpan.title = file.name;
                         const removeIcon = document.createElement('i');
                         removeIcon.className = 'fas fa-times file-preview-remove';
                         removeIcon.title = isEnglish ? "Remove file" : "移除文件";
                         removeIcon.addEventListener('click', function(e) {
-                            e.stopPropagation(); // Prevent event bubbling
+                            e.stopPropagation();
                             const type = previewItem.dataset.type;
                             const idx = parseInt(previewItem.dataset.index);
                             if (type === 'image') {
                                 selectedImages.splice(idx, 1);
-                                // Adjust indices of remaining items of the same type
                                 const remainingItems = filePreviewContainer.querySelectorAll(`.file-preview-item[data-type='image']`);
                                 remainingItems.forEach((item, i) => {
                                     if (i >= idx) {
@@ -829,7 +810,6 @@
                                 });
                             } else {
                                 selectedFiles.splice(idx, 1);
-                                // Adjust indices of remaining items of the same type
                                 const remainingItems = filePreviewContainer.querySelectorAll(`.file-preview-item[data-type='file']`);
                                 remainingItems.forEach((item, i) => {
                                     if (i >= idx) {
@@ -838,7 +818,7 @@
                                     }
                                 });
                             }
-                            updateFilePreview(); // Update preview
+                            updateFilePreview();
                         });
                         previewItem.appendChild(fileNameSpan);
                         previewItem.appendChild(removeIcon);
@@ -861,7 +841,6 @@
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message');
                 messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
-                // If it's a user message and contains files, add file info
                 if (isUser && files.length > 0) {
                     let fileText = isEnglish ? " [Sent files] " : " [已发送文件] ";
                     fileText += `(${files.length})`;
@@ -877,7 +856,11 @@
                 const typingDiv = document.createElement('div');
                 typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
                 typingDiv.id = 'typingIndicator';
-                typingDiv.textContent = isEnglish ? 'Connecting to the server' : '正在连接服务器';
+                const textNode = document.createTextNode(isEnglish ? 'Connecting to the server' : '正在连接服务器');
+                typingDiv.appendChild(textNode);
+                const dotsSpan = document.createElement('span');
+                dotsSpan.classList.add('dots');
+                typingDiv.appendChild(dotsSpan);
                 chatMessages.appendChild(typingDiv);
                 smartScroll();
             }
@@ -888,8 +871,7 @@
                     typingIndicator.remove();
                 }
             }
-            // --- Modify typewriter speed ---
-            function typeWriter(messageDiv, fullText, speed = 5) { // Changed from 15 to 5
+            function typeWriter(messageDiv, fullText, speed = 5) {
                 let i = 0;
                 const typingCursor = document.createElement('span');
                 typingCursor.classList.add('typing-cursor');
@@ -909,7 +891,6 @@
                     } else {
                         typingCursor.remove();
                         messageDiv.innerHTML = fullText;
-                        // Check if chat box height needs to be expanded
                         if (chatMessages.scrollHeight > chatMessages.clientHeight + 50) {
                             chatMessages.classList.add('expanded');
                         }
@@ -917,43 +898,36 @@
                 }
                 type();
             }
-            // --- Modify send message function to support files and images ---
             async function sendMessage() {
                 const message = userInput.value.trim();
-                const imagesToSend = [...selectedImages]; // Create copies
-                const filesToSend = [...selectedFiles];  // Create copies
+                const imagesToSend = [...selectedImages];
+                const filesToSend = [...selectedFiles];
                 if (!message && imagesToSend.length === 0 && filesToSend.length === 0) return;
-                // Add user message (including file info)
                 addMessage(message, true, [...imagesToSend, ...filesToSend]);
                 userInput.value = '';
-                selectedImages = []; // Clear selected image array
-                selectedFiles = [];  // Clear selected file array
-                updateFilePreview(); // Clear preview
+                selectedImages = [];
+                selectedFiles = [];
+                updateFilePreview();
                 showTyping();
                 sendButton.disabled = true;
                 try {
                     let response;
                     if (imagesToSend.length > 0 || filesToSend.length > 0) {
-                        // If there are files or images, use FormData
                         const formData = new FormData();
                         if(message) {
                             formData.append('message', message);
                         }
                         imagesToSend.forEach((file, index) => {
-                            // Use 'image' as the field name for images
                             formData.append('image', file, file.name);
                         });
                         filesToSend.forEach((file, index) => {
-                            // Use 'file' as the field name for files
                             formData.append('file', file, file.name);
                         });
                         response = await fetch(API_URL, {
                             method: 'POST',
-                            // Do not set Content-Type, let the browser set multipart/form-data automatically
                             body: formData
                         });
                     } else {
-                        // If no files, keep the original JSON method
                          response = await fetch(API_URL, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -983,7 +957,6 @@
                     const botMessageDiv = document.createElement('div');
                     botMessageDiv.classList.add('message', 'bot-message');
                     chatMessages.appendChild(botMessageDiv);
-                    // Start typewriter effect
                     typeWriter(botMessageDiv, htmlReply);
                 } catch (error) {
                     console.error('Error sending message:', error);
@@ -998,7 +971,6 @@
                     if (isNearBottom) {
                         chatMessages.scrollTop = chatMessages.scrollHeight;
                     }
-                    // Check if chat box height needs to be expanded
                     if (chatMessages.scrollHeight > chatMessages.clientHeight + 50) {
                         chatMessages.classList.add('expanded');
                     }
