@@ -874,11 +874,10 @@
                 const typingDiv = document.createElement('div');
                 typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
                 typingDiv.id = 'typingIndicator';
-                const textNode = document.createTextNode(isEnglish ? 'Connecting to the server' : '正在连接服务器');
-                typingDiv.appendChild(textNode);
-                const dotsSpan = document.createElement('span');
-                dotsSpan.classList.add('dots');
-                typingDiv.appendChild(dotsSpan);
+                // 不再单独创建 textNode，而是直接设置初始文本
+                const baseText = isEnglish ? 'Connecting to the server' : '正在连接服务器';
+                typingDiv.textContent = baseText; // 设置初始文本内容
+                // 不再需要 dotsSpan
                 chatMessages.appendChild(typingDiv);
                 smartScroll();
 
