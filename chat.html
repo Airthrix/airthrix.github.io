@@ -878,7 +878,23 @@
                 typingDiv.appendChild(dotsSpan);
                 chatMessages.appendChild(typingDiv);
                 smartScroll();
+
+                // 启动动画：每500毫秒添加一个点
+                let dotCount = 0;
+                typingInterval = setInterval(() => {
+                    dotCount = (dotCount + 1) % 4; // 循环在 0, 1, 2, 3 之间
+                    const dots = '.'.repeat(dotCount); // 创建相应数量的点
+                    typingDiv.textContent = baseText + dots; // 更新文本内容
+
+                    // 如果接近底部，则滚动到底部
+                    const isNearBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight <= 100;
+                    if (isNearBottom) {
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }
+                }, 500); // 动画速度（毫秒）
             }
+
+
             function hideTyping() {
                 isTyping = false;
                 const typingIndicator = document.getElementById('typingIndicator');
@@ -886,7 +902,7 @@
                     typingIndicator.remove();
                 }
             }
-            function typeWriter(messageDiv, fullText, speed = 5) {
+            function typeWriter(messageDiv, fullText, speed = 1) {
                 let i = 0;
                 const typingCursor = document.createElement('span');
                 typingCursor.classList.add('typing-cursor');
