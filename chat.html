@@ -414,7 +414,7 @@
             font-size: 1rem;
             resize: none;
             min-height: 50px;
-            max-height: 99999999999999999999999999999px;
+            max-height: 150px;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
         .chat-input:focus {
@@ -523,12 +523,11 @@
                 font-size: 1.5rem;
             }
             .chat-messages {
-                min-height: 600px; /* 调整为适合移动端屏幕的比例 */
-                max-height: 99999999999999999999999999999px;
+                max-height: 60vh; /* 调整为适合移动端屏幕的比例 */
                 flex-grow: 1; /* 确保它可以增长 */
             }
             .chat-messages.expanded {
-                max-height: 99999999999999999999999999999px;
+                max-height: 75vh; /* 调整展开时的最大高度 */
             }
             .chat-input-area {
                 flex-direction: column; /* 垂直排列 */
@@ -588,12 +587,11 @@
                 /* min-height: 75vh; */
             }
             .chat-messages {
-                min-height: 600px; /* 调整为适合移动端屏幕的比例 */
-                max-height: 99999999999999999999999999999px;
+                max-height: 55vh; /* 进一步调整以适应小屏幕 */
                 flex-grow: 1; /* 确保它可以增长 */
             }
             .chat-messages.expanded {
-                max-height: 99999999999999999999999999999px;
+                max-height: 70vh; /* 调整展开时的最大高度 */
             }
         }
     </style>
@@ -868,51 +866,27 @@
                 smartScroll();
                 return messageDiv;
             }
-
-            let typingInterval; // 用于存储 setInterval 的 ID，以便可以清除它
-
             function showTyping() {
                 isTyping = true;
                 const typingDiv = document.createElement('div');
                 typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
                 typingDiv.id = 'typingIndicator';
-                // 不再单独创建 textNode，而是直接设置初始文本
-                const baseText = isEnglish ? 'Connecting to the server' : '正在连接服务器';
-                typingDiv.textContent = baseText; // 设置初始文本内容
-                // 不再需要 dotsSpan
+                const textNode = document.createTextNode(isEnglish ? 'Connecting to the server' : '正在连接服务器');
+                typingDiv.appendChild(textNode);
+                const dotsSpan = document.createElement('span');
+                dotsSpan.classList.add('dots');
+                typingDiv.appendChild(dotsSpan);
                 chatMessages.appendChild(typingDiv);
                 smartScroll();
-
-                // 启动动画：每500毫秒添加一个点
-                let dotCount = 0;
-                typingInterval = setInterval(() => {
-                    dotCount = (dotCount + 1) % 7; // 循环在 0, 1, 2, 3 之间
-                    const dots = '.'.repeat(dotCount); // 创建相应数量的点
-                    typingDiv.textContent = baseText + dots; // 更新文本内容
-
-                    // 如果接近底部，则滚动到底部
-                    const isNearBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight <= 100;
-                    if (isNearBottom) {
-                        chatMessages.scrollTop = chatMessages.scrollHeight;
-                    }
-                }, 500); // 动画速度（毫秒）
             }
-
-
             function hideTyping() {
                 isTyping = false;
-                // 清除动画循环
-                if (typingInterval) {
-                    clearInterval(typingInterval);
-                    typingInterval = null; // 清除引用
-                }
-                // 移除指示器元素
                 const typingIndicator = document.getElementById('typingIndicator');
                 if (typingIndicator) {
                     typingIndicator.remove();
                 }
             }
-            function typeWriter(messageDiv, fullText, speed = 1) {
+            function typeWriter(messageDiv, fullText, speed = 5) {
                 let i = 0;
                 const typingCursor = document.createElement('span');
                 typingCursor.classList.add('typing-cursor');
