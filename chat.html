@@ -360,11 +360,10 @@
         }
         .chat-input-area {
             display: flex;
-            flex-wrap: wrap; /* Allow wrapping on small screens */
+            align-items: center; /* Align items vertically in the center */
             gap: 0.5rem;
             z-index: 10;
             position: relative;
-            align-items: flex-end; /* Align items to the bottom */
         }
         .upload-btn {
             padding: 0.8rem 1rem; /* Adjusted padding */
@@ -396,17 +395,13 @@
         .chat-input-wrapper {
             flex-grow: 1;
             display: flex;
-            flex-direction: column;
             min-width: 200px; /* Minimum width for input area */
-        }
-        .chat-input-row {
-            display: flex;
-            gap: 0.5rem;
-            width: 100%;
+            position: relative;
         }
         .chat-input {
             flex-grow: 1;
             padding: 1rem;
+            padding-right: 60px; /* Add padding to the right to make space for buttons */
             border-radius: 30px;
             border: 1px solid rgba(0, 243, 255, 0.3);
             background: rgba(10, 10, 25, 0.5);
@@ -422,8 +417,18 @@
             border-color: var(--neon-blue);
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
+        .right-buttons {
+            position: absolute;
+            right: 5px; /* Position buttons to the right inside the input wrapper */
+            top: 50%;
+            transform: translateY(-50%); /* Vertically center the buttons */
+            display: flex;
+            gap: 0.25rem; /* Small gap between buttons */
+            align-items: center;
+            height: calc(100% - 10px); /* Adjust height to fit inside the input with some margin */
+        }
         .chat-send-btn {
-            padding: 0.8rem 1.5rem;
+            padding: 0.8rem 1.5rem; /* Increased padding for larger button */
             border-radius: 30px;
             border: 1px solid rgba(0, 243, 255, 0.3);
             background: rgba(15, 15, 40, 0.4);
@@ -435,7 +440,8 @@
             gap: 0.5rem;
             transition: all 0.3s ease;
             backdrop-filter: blur(5px);
-            height: 50px; /* Match input height */
+            height: 100%; /* Full height of the container */
+            min-width: 100px; /* Ensure minimum width */
         }
         .chat-send-btn:hover {
             background: rgba(0, 243, 255, 0.2);
@@ -525,24 +531,42 @@
             .chat-messages.expanded {
                 max-height: 700px;
             }
-             .chat-input-row {
-                flex-direction: column; /* Stack input and send button vertically on small screens if needed */
+            .chat-input {
+                padding-right: 55px; /* Adjust padding for smaller screens */
+            }
+            .right-buttons {
+                gap: 0.15rem; /* Smaller gap on mobile */
+            }
+            .upload-btn, .chat-send-btn {
+                padding: 0.6rem 0.8rem; /* Smaller padding on mobile */
+                min-width: 40px; /* Smaller minimum width */
+                font-size: 0.9rem;
+            }
+            .chat-send-btn {
+                min-width: 80px; /* Smaller minimum width for send button */
             }
         }
         @media (max-width: 480px) {
-             .chat-input-area {
-                flex-direction: column; /* Stack all elements vertically on very small screens */
+            .chat-input-area {
+                flex-direction: column; /* Stack elements vertically on very small screens */
+                align-items: stretch; /* Stretch to full width */
             }
-             .upload-btn, .chat-input-wrapper {
-                width: 100%; /* Full width on small screens */
+            .chat-input-wrapper {
+                width: 100%;
             }
-            .chat-input-row {
-                 flex-direction: row; /* Keep input and send button horizontal */
-                 align-items: stretch; /* Stretch to match height */
+            .chat-input {
+                padding-right: 1rem; /* Remove right padding as buttons will be below */
             }
-            .chat-send-btn {
-                 flex-shrink: 0; /* Prevent button from shrinking */
-                 width: auto; /* Auto width */
+            .right-buttons {
+                position: static;
+                transform: none;
+                width: 100%;
+                justify-content: flex-end; /* Align buttons to the right */
+                margin-top: 0.5rem; /* Add some space above */
+                height: auto;
+            }
+            .upload-btn, .chat-send-btn {
+                height: 45px; /* Adjust height for mobile */
             }
             .top-nav {
                 width: 100%;
@@ -602,8 +626,8 @@
 
                 <!-- Text input and send button -->
                 <div class="chat-input-wrapper">
-                    <div class="chat-input-row">
-                         <textarea id="userInput" class="chat-input" placeholder="输入你的消息..."></textarea>
+                    <textarea id="userInput" class="chat-input" placeholder="输入你的消息..."></textarea>
+                    <div class="right-buttons">
                         <button id="sendButton" class="chat-send-btn">
                             <i class="fas fa-paper-plane"></i> <span class="btn-text">发送</span>
                         </button>
