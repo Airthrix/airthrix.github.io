@@ -291,7 +291,7 @@
             text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
         .chat-messages {
-            min-height: 600px;
+            min-height: 600px; /* Increased minimum height for larger chat box */
             max-height: 99999999999999999999999999999px;
             overflow-y: auto;
             padding: 1rem;
@@ -302,6 +302,7 @@
             flex-direction: column;
             gap: 1rem;
             transition: max-height 0.3s ease;
+            /* Custom Scrollbar Styling */
             scrollbar-width: thin;
             scrollbar-color: var(--neon-blue) rgba(255, 255, 255, 0.1);
         }
@@ -365,11 +366,6 @@
             z-index: 10;
             position: relative;
         }
-        .upload-buttons {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
         .upload-btn {
             padding: 0.8rem 1rem; /* Adjusted padding */
             border-radius: 30px;
@@ -406,7 +402,6 @@
         .chat-input {
             flex-grow: 1;
             padding: 1rem;
-            padding-right: 60px; /* Add padding to the right to make space for buttons */
             border-radius: 30px;
             border: 1px solid rgba(0, 243, 255, 0.3);
             background: rgba(10, 10, 25, 0.5);
@@ -423,7 +418,11 @@
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
         .right-buttons {
-            display: none; /* 隐藏桌面端的右浮动按钮 */
+             /* Removed absolute positioning */
+            display: flex;
+            gap: 0.25rem; /* Small gap between buttons */
+            align-items: center;
+            height: 50px; /* Match input height */
         }
         .chat-send-btn {
             padding: 0.8rem 1.5rem; /* Increased padding for larger button */
@@ -529,29 +528,44 @@
             .chat-messages.expanded {
                 max-height: 700px;
             }
-            .chat-input-area {
-                flex-direction: column; /* 垂直排列 */
-            }
-            .upload-buttons {
-                display: flex;
-                justify-content: space-between; /* 水平分布按钮 */
-                margin-bottom: 1rem; /* 添加间距 */
-            }
-            .upload-btn {
-                flex-grow: 1; /* 让按钮占据剩余空间 */
-                margin: 0 0.5rem; /* 按钮之间的间距 */
-                min-width: 150px; /* 增加按钮宽度 */
-            }
-            .chat-input {
-                padding-right: 1rem; /* 移除右侧内边距 */
-            }
             .right-buttons {
-                display: flex;
-                justify-content: flex-end; /* 右对齐 */
-                gap: 0.5rem; /* 按钮间距 */
+                gap: 0.15rem; /* Smaller gap on mobile */
+            }
+            .upload-btn, .chat-send-btn {
+                padding: 0.6rem 0.8rem; /* Smaller padding on mobile */
+                min-width: 40px; /* Smaller minimum width */
+                font-size: 0.9rem;
             }
             .chat-send-btn {
-                flex-grow: 1; /* 占据剩余空间 */
+                min-width: 80px; /* Smaller minimum width for send button */
+            }
+            /* 移动端特殊布局 */
+            .chat-input-area {
+                flex-wrap: wrap; /* 允许换行 */
+            }
+            .chat-input-wrapper {
+                order: 2; /* 输入框在第二行 */
+                width: 100%;
+                margin-top: 0.5rem;
+            }
+            .right-buttons {
+                order: 1; /* 按钮组在第一行 */
+                width: 100%;
+                justify-content: flex-start; /* 按钮靠左对齐 */
+                margin-top: 0; /* 移除顶部间距 */
+            }
+            /* 调整按钮顺序：上传按钮在发送按钮左边 */
+            .upload-btn:first-of-type {
+                 order: 1;
+            }
+            .upload-btn:last-of-type {
+                 order: 2;
+            }
+            .chat-send-btn {
+                order: 3;
+            }
+            .chat-input {
+                padding-right: 1rem; /* 移除内边距 */
             }
         }
         @media (max-width: 480px) {
@@ -562,14 +576,9 @@
             .chat-input-wrapper {
                 width: 100%;
             }
-            .chat-input {
-                padding-right: 1rem; /* Remove right padding as buttons will be below */
-            }
             .right-buttons {
-                position: static;
-                transform: none;
                 width: 100%;
-                justify-content: flex-end; /* Align buttons to the right */
+                justify-content: flex-start; /* Align buttons to the left */
                 margin-top: 0.5rem; /* Add some space above */
                 height: auto;
             }
@@ -595,16 +604,18 @@
             }
         }
         /* Animation for "正在连接服务器" */
-        .typing-indicator span.dots::after {
-            content: ".";
-            animation: blinkDots 1.5s infinite steps(4, end);
+        .typing-indicator::after {
+             content: "......";
+             animation: blinkDots 1.5s infinite steps(6, end);
         }
         @keyframes blinkDots {
-            0% { content: "."; }
-            25% { content: ".."; }
-            50% { content: "..."; }
-            75% { content: "...."; }
-            100% { content: "."; }
+             0% { content: "."; }
+             16.6% { content: ".."; }
+             33.3% { content: "..."; }
+             50% { content: "...."; }
+             66.6% { content: "....."; }
+             83.3% { content: "......"; }
+             100% { content: "."; }
         }
     </style>
 </head>
@@ -632,26 +643,24 @@
             <!-- File preview area -->
             <div class="file-preview-container" id="filePreviewContainer" style="display: none;"></div>
             <div class="chat-input-area">
-                <!-- 上传按钮容器 -->
-                <div class="upload-buttons">
-                    <!-- Image upload button -->
-                    <label for="imageInput" class="upload-btn" title="上传图片">
-                        <i class="fas fa-image"></i>
-                    </label>
-                    <input type="file" id="imageInput" class="file-input" accept="image/*">
-                    <!-- File upload button -->
-                    <label for="fileInput" class="upload-btn" title="上传文件">
-                        <i class="fas fa-file"></i>
-                    </label>
-                    <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt">
-                    <!-- Send button -->
+                 <!-- Image upload button -->
+                <label for="imageInput" class="upload-btn" title="上传图片">
+                    <i class="fas fa-image"></i>
+                </label>
+                <input type="file" id="imageInput" class="file-input" accept="image/*">
+                <!-- File upload button -->
+                <label for="fileInput" class="upload-btn" title="上传文件">
+                    <i class="fas fa-file"></i>
+                </label>
+                <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt">
+                <!-- Text input and send button -->
+                <div class="chat-input-wrapper">
+                    <textarea id="userInput" class="chat-input" placeholder="(因安全原因暂不支持图片PDF等文件)  输入你的消息......"></textarea>
+                </div>
+                <div class="right-buttons">
                     <button id="sendButton" class="chat-send-btn">
                         <i class="fas fa-paper-plane"></i> <span class="btn-text">发送</span>
                     </button>
-                </div>
-                <!-- Text input -->
-                <div class="chat-input-wrapper">
-                    <textarea id="userInput" class="chat-input" placeholder="(因安全原因暂不支持图片PDF等文件)  输入你的消息......"></textarea>
                 </div>
             </div>
         </div>
@@ -683,8 +692,9 @@
             let scrollLock = false;
             let isTyping = false;
             let isEnglish = false;
-            let selectedImages = [];
-            let selectedFiles = [];
+            let selectedImages = []; // Store selected images
+            let selectedFiles = [];  // Store selected files
+            // Initialize particle effect
             particlesJS('particles-js', {
                 "particles": {
                     "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
@@ -709,6 +719,7 @@
                 },
                 "retina_detect": true
             });
+            // Language and login button functionality
             const langBtn = document.getElementById('langBtn');
             const loginBtn = document.getElementById('loginBtn');
             const chatTitle = document.querySelector('.chat-title');
@@ -771,13 +782,16 @@
                     langBtn.classList.remove('pulse');
                 }, 500);
             });
+            // Chat functionality
             const chatMessages = document.getElementById('chatMessages');
             const userInput = document.getElementById('userInput');
             const sendButton = document.getElementById('sendButton');
             const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run';
+            // Handle image selection
             imageInput.addEventListener('change', function() {
                 const files = Array.from(imageInput.files);
                 if (files.length > 0) {
+                    // Simple deduplication: check filename and size
                     files.forEach(file => {
                         const isDuplicate = selectedImages.some(existingFile =>
                             existingFile.name === file.name && existingFile.size === file.size
@@ -787,12 +801,14 @@
                         }
                     });
                     updateFilePreview();
-                    imageInput.value = '';
+                    imageInput.value = ''; // Clear input to allow re-selecting same file
                 }
             });
+            // Handle file selection
             fileInput.addEventListener('change', function() {
                 const files = Array.from(fileInput.files);
                 if (files.length > 0) {
+                    // Simple deduplication: check filename and size
                     files.forEach(file => {
                         const isDuplicate = selectedFiles.some(existingFile =>
                             existingFile.name === file.name && existingFile.size === file.size
@@ -802,10 +818,10 @@
                         }
                     });
                     updateFilePreview();
-                    fileInput.value = '';
+                    fileInput.value = ''; // Clear input to allow re-selecting same file
                 }
             });
-            });
+            // Update file preview area
             function updateFilePreview() {
                 filePreviewContainer.innerHTML = '';
                 const allFiles = [...selectedImages, ...selectedFiles];
@@ -814,21 +830,23 @@
                     allFiles.forEach((file, index) => {
                         const previewItem = document.createElement('div');
                         previewItem.className = 'file-preview-item';
+                        // Store index and type for removal
                         previewItem.dataset.index = index;
                         previewItem.dataset.type = selectedImages.includes(file) ? 'image' : 'file';
                         const fileNameSpan = document.createElement('span');
                         fileNameSpan.className = 'file-preview-name';
                         fileNameSpan.textContent = file.name.length > 20 ? file.name.substring(0, 17) + '...' : file.name;
-                        fileNameSpan.title = file.name;
+                        fileNameSpan.title = file.name; // Show full name on hover
                         const removeIcon = document.createElement('i');
                         removeIcon.className = 'fas fa-times file-preview-remove';
                         removeIcon.title = isEnglish ? "Remove file" : "移除文件";
                         removeIcon.addEventListener('click', function(e) {
-                            e.stopPropagation();
+                            e.stopPropagation(); // Prevent event bubbling
                             const type = previewItem.dataset.type;
                             const idx = parseInt(previewItem.dataset.index);
                             if (type === 'image') {
                                 selectedImages.splice(idx, 1);
+                                // Adjust indices of remaining items of the same type
                                 const remainingItems = filePreviewContainer.querySelectorAll(`.file-preview-item[data-type='image']`);
                                 remainingItems.forEach((item, i) => {
                                     if (i >= idx) {
@@ -838,6 +856,7 @@
                                 });
                             } else {
                                 selectedFiles.splice(idx, 1);
+                                // Adjust indices of remaining items of the same type
                                 const remainingItems = filePreviewContainer.querySelectorAll(`.file-preview-item[data-type='file']`);
                                 remainingItems.forEach((item, i) => {
                                     if (i >= idx) {
@@ -846,7 +865,7 @@
                                     }
                                 });
                             }
-                            updateFilePreview();
+                            updateFilePreview(); // Update preview
                         });
                         previewItem.appendChild(fileNameSpan);
                         previewItem.appendChild(removeIcon);
@@ -869,6 +888,7 @@
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message');
                 messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+                // If it's a user message and contains files, add file info
                 if (isUser && files.length > 0) {
                     let fileText = isEnglish ? " [Sent files] " : " [已发送文件] ";
                     fileText += `(${files.length})`;
@@ -886,9 +906,7 @@
                 typingDiv.id = 'typingIndicator';
                 const textNode = document.createTextNode(isEnglish ? 'Connecting to the server' : '正在连接服务器');
                 typingDiv.appendChild(textNode);
-                const dotsSpan = document.createElement('span');
-                dotsSpan.classList.add('dots');
-                typingDiv.appendChild(dotsSpan);
+                // 动态 ... 将通过 CSS ::after 实现
                 chatMessages.appendChild(typingDiv);
                 smartScroll();
             }
@@ -899,7 +917,8 @@
                     typingIndicator.remove();
                 }
             }
-            function typeWriter(messageDiv, fullText, speed = 5) {
+            // --- Modify typewriter speed ---
+            function typeWriter(messageDiv, fullText, speed = 5) { // Changed from 15 to 5
                 let i = 0;
                 const typingCursor = document.createElement('span');
                 typingCursor.classList.add('typing-cursor');
@@ -919,6 +938,7 @@
                     } else {
                         typingCursor.remove();
                         messageDiv.innerHTML = fullText;
+                        // Check if chat box height needs to be expanded
                         if (chatMessages.scrollHeight > chatMessages.clientHeight + 50) {
                             chatMessages.classList.add('expanded');
                         }
@@ -926,36 +946,43 @@
                 }
                 type();
             }
+            // --- Modify send message function to support files and images ---
             async function sendMessage() {
                 const message = userInput.value.trim();
-                const imagesToSend = [...selectedImages];
-                const filesToSend = [...selectedFiles];
+                const imagesToSend = [...selectedImages]; // Create copies
+                const filesToSend = [...selectedFiles];  // Create copies
                 if (!message && imagesToSend.length === 0 && filesToSend.length === 0) return;
+                // Add user message (including file info)
                 addMessage(message, true, [...imagesToSend, ...filesToSend]);
                 userInput.value = '';
-                selectedImages = [];
-                selectedFiles = [];
-                updateFilePreview();
+                selectedImages = []; // Clear selected image array
+                selectedFiles = [];  // Clear selected file array
+                updateFilePreview(); // Clear preview
                 showTyping();
                 sendButton.disabled = true;
                 try {
                     let response;
                     if (imagesToSend.length > 0 || filesToSend.length > 0) {
+                        // If there are files or images, use FormData
                         const formData = new FormData();
                         if(message) {
                             formData.append('message', message);
                         }
                         imagesToSend.forEach((file, index) => {
+                            // Use 'image' as the field name for images
                             formData.append('image', file, file.name);
                         });
                         filesToSend.forEach((file, index) => {
+                            // Use 'file' as the field name for files
                             formData.append('file', file, file.name);
                         });
                         response = await fetch(API_URL, {
                             method: 'POST',
+                            // Do not set Content-Type, let the browser set multipart/form-data automatically
                             body: formData
                         });
                     } else {
+                        // If no files, keep the original JSON method
                          response = await fetch(API_URL, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -985,6 +1012,7 @@
                     const botMessageDiv = document.createElement('div');
                     botMessageDiv.classList.add('message', 'bot-message');
                     chatMessages.appendChild(botMessageDiv);
+                    // Start typewriter effect
                     typeWriter(botMessageDiv, htmlReply);
                 } catch (error) {
                     console.error('Error sending message:', error);
@@ -999,6 +1027,7 @@
                     if (isNearBottom) {
                         chatMessages.scrollTop = chatMessages.scrollHeight;
                     }
+                    // Check if chat box height needs to be expanded
                     if (chatMessages.scrollHeight > chatMessages.clientHeight + 50) {
                         chatMessages.classList.add('expanded');
                     }
