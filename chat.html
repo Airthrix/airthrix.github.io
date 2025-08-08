@@ -302,6 +302,7 @@
             flex-direction: column;
             gap: 1rem;
             transition: max-height 0.3s ease;
+            /* Custom Scrollbar Styling */
             scrollbar-width: thin;
             scrollbar-color: var(--neon-blue) rgba(255, 255, 255, 0.1);
         }
@@ -401,7 +402,6 @@
         .chat-input {
             flex-grow: 1;
             padding: 1rem;
-            padding-right: 60px; /* Add padding to the right to make space for buttons */
             border-radius: 30px;
             border: 1px solid rgba(0, 243, 255, 0.3);
             background: rgba(10, 10, 25, 0.5);
@@ -417,15 +417,12 @@
             border-color: var(--neon-blue);
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
+        /* Removed .right-buttons from inside .chat-input-wrapper */
         .right-buttons {
-            position: absolute;
-            right: 5px; /* Position buttons to the right inside the input wrapper */
-            top: 50%;
-            transform: translateY(-50%); /* Vertically center the buttons */
             display: flex;
             gap: 0.25rem; /* Small gap between buttons */
             align-items: center;
-            height: calc(100% - 10px); /* Adjust height to fit inside the input with some margin */
+            height: 50px;
         }
         .chat-send-btn {
             padding: 0.8rem 1.5rem; /* Increased padding for larger button */
@@ -531,9 +528,6 @@
             .chat-messages.expanded {
                 max-height: 700px;
             }
-            .chat-input {
-                padding-right: 55px; /* Adjust padding for smaller screens */
-            }
             .right-buttons {
                 gap: 0.15rem; /* Smaller gap on mobile */
             }
@@ -545,71 +539,53 @@
             .chat-send-btn {
                 min-width: 80px; /* Smaller minimum width for send button */
             }
-            /* 恢复动态省略号动画 */
-            .typing-indicator::after {
-                content: "";
-                animation: blinkDots 1.5s infinite steps(4, end);
-            }
-            @keyframes blinkDots {
-                0% { content: "."; }
-                25% { content: ".."; }
-                50% { content: "..."; }
-                75% { content: "...."; }
-                100% { content: "."; }
-            }
         }
-        @media (max-width: 480px) {
+        /* --- 关键修改：移动端布局 --- */
+        @media (max-width: 768px) {
             .chat-input-area {
-                flex-direction: column; /* Stack elements vertically on very small screens */
-                align-items: stretch; /* Stretch to full width */
+                flex-direction: column; /* 垂直堆叠 */
+            }
+            /* 在移动端，将上传按钮和发送按钮放在输入框上方 */
+            .mobile-top-buttons {
+                display: flex;
+                width: 100%;
+                justify-content: space-between; /* 或 space-around */
+                gap: 0.5rem; /* 按钮间距 */
+                margin-bottom: 0.5rem;
+            }
+             .mobile-top-buttons .upload-btn {
+                 flex: 1; /* 平均分配空间 */
+                 min-width: 0; /* 允许按钮收缩 */
+                 padding: 0.6rem 0.5rem; /* 减小内边距 */
+                 font-size: 0.85rem; /* 减小字体 */
+            }
+            .mobile-top-buttons .chat-send-btn {
+                 flex: 1; /* 平均分配空间 */
+                 min-width: 0; /* 允许按钮收缩 */
+                 padding: 0.6rem 0.5rem; /* 减小内边距 */
+                 font-size: 0.85rem; /* 减小字体 */
+                 min-width: 80px; /* 保持最小宽度 */
             }
             .chat-input-wrapper {
                 width: 100%;
             }
             .chat-input {
-                padding-right: 1rem; /* Remove right padding as buttons will be below */
+                padding-right: 1rem; /* 移除右侧内边距 */
             }
+            /* 隐藏桌面端的按钮容器 */
             .right-buttons {
-                position: static;
-                transform: none;
-                width: 100%;
-                justify-content: flex-end; /* Align buttons to the right */
-                margin-top: 0.5rem; /* Add some space above */
-                height: auto;
+                display: none !important;
             }
-            .upload-btn, .chat-send-btn {
-                height: 45px; /* Adjust height for mobile */
-            }
-            .top-nav {
-                width: 100%;
-                justify-content: center;
-                padding: 0.8rem;
-            }
-            .nav-btn {
-                padding: 0.6rem 1rem;
-                font-size: 0.8rem;
-                min-width: 90px;
-            }
-            .chat-messages {
-                min-height: 300px;
-                max-height: 400px;
-            }
-            .chat-messages.expanded {
-                max-height: 600px;
-            }
-            /* 调整移动端按钮宽度 */
-            .upload-btn {
-                flex: 1; /* 平均分配宽度 */
-                min-width: auto; /* 移除最小宽度限制 */
-                margin-right: 0.25rem; /* 按钮间更小的间距 */
-                margin-left: 0.25rem;
-            }
-            .chat-send-btn {
-                flex: 2; /* 发送按钮稍微宽一点 */
-                min-width: auto;
-                margin-right: 0.25rem;
-                margin-left: 0.25rem;
-            }
+        }
+        /* --- 恢复动态省略号 --- */
+        .typing-indicator::after {
+             content: "";
+             animation: dots 1.5s steps(5, end) infinite;
+        }
+        @keyframes dots {
+            0%, 20% { content: "."; }
+            40% { content: ".."; }
+            60%, 100% { content: "..."; }
         }
     </style>
 </head>
@@ -650,11 +626,12 @@
                 <!-- Text input and send button -->
                 <div class="chat-input-wrapper">
                     <textarea id="userInput" class="chat-input" placeholder="(因安全原因暂不支持图片PDF等文件)  输入你的消息......"></textarea>
-                    <div class="right-buttons">
-                        <button id="sendButton" class="chat-send-btn">
-                            <i class="fas fa-paper-plane"></i> <span class="btn-text">发送</span>
-                        </button>
-                    </div>
+                </div>
+                 <!-- Send button (desktop/tablet) -->
+                <div class="right-buttons">
+                    <button id="sendButton" class="chat-send-btn">
+                        <i class="fas fa-paper-plane"></i> <span class="btn-text">发送</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -898,10 +875,9 @@
                 const typingDiv = document.createElement('div');
                 typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
                 typingDiv.id = 'typingIndicator';
-                // 添加文本节点和动态省略号
+                // --- 修改：动态省略号文本 ---
                 const textNode = document.createTextNode(isEnglish ? 'Connecting to the server' : '正在连接服务器');
                 typingDiv.appendChild(textNode);
-                // 省略号由CSS ::after 伪元素处理
                 chatMessages.appendChild(typingDiv);
                 smartScroll();
             }
@@ -1036,6 +1012,49 @@
                 }
             });
             smartScroll();
+
+            // --- 关键修改：克隆按钮到移动端容器 ---
+            const imageUploadBtn = document.querySelector('label[for="imageInput"]');
+            const fileUploadBtn = document.querySelector('label[for="fileInput"]');
+            const sendBtn = document.getElementById('sendButton');
+
+            // 创建移动端按钮容器
+            const mobileTopButtons = document.createElement('div');
+            mobileTopButtons.className = 'mobile-top-buttons';
+
+            // 克隆按钮
+            const clonedImageBtn = imageUploadBtn.cloneNode(true);
+            const clonedFileBtn = fileUploadBtn.cloneNode(true);
+            const clonedSendBtn = sendBtn.cloneNode(true);
+
+            // 更新克隆按钮的ID和事件监听器（如果需要）
+            // 注意：克隆的<label>会自动关联到同一个<input>，这通常是可以的。
+            // 但克隆的发送按钮需要重新绑定事件。
+            clonedSendBtn.id = 'sendButtonMobile'; // 给克隆的按钮一个新ID
+
+            // 将克隆的按钮添加到移动端容器
+            mobileTopButtons.appendChild(clonedImageBtn);
+            mobileTopButtons.appendChild(clonedFileBtn);
+            mobileTopButtons.appendChild(clonedSendBtn);
+
+            // 将移动端容器插入到 chat-input-area 的开头
+            const chatInputArea = document.querySelector('.chat-input-area');
+            chatInputArea.insertBefore(mobileTopButtons, chatInputArea.firstChild);
+
+            // 为克隆的发送按钮添加事件监听器
+            clonedSendBtn.addEventListener('click', sendMessage);
+
+            // 可选：隐藏原始的发送按钮（如果在移动端）
+            function updateButtonVisibility() {
+                if (window.innerWidth <= 768) {
+                    sendBtn.style.display = 'none';
+                } else {
+                    sendBtn.style.display = 'flex'; // 或其他原始display值
+                }
+            }
+            // 页面加载时和窗口大小改变时调用
+            updateButtonVisibility();
+            window.addEventListener('resize', updateButtonVisibility);
         });
     </script>
 </body>
