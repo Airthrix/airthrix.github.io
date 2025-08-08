@@ -626,7 +626,7 @@
 
                 <!-- Text input and send button -->
                 <div class="chat-input-wrapper">
-                    <textarea id="userInput" class="chat-input" placeholder="输入你的消息......  (目前因安全原因暂不支持图片PDF等文件)"></textarea>
+                    <textarea id="userInput" class="chat-input" placeholder="(因安全原因暂不支持图片PDF等文件)  输入你的消息......"></textarea>
                     <div class="right-buttons">
                         <button id="sendButton" class="chat-send-btn">
                             <i class="fas fa-paper-plane"></i> <span class="btn-text">发送</span>
@@ -721,7 +721,7 @@
                     btnTextElements[0].textContent = 'Log in';
                     btnTextElements[1].textContent = '中文';
                     chatTitle.textContent = "Talk with AliceSkyGarden";
-                    chatInput.placeholder = "Enter your message...... (Currently, due to security reasons, images PDFS and other files are not supported)";
+                    chatInput.placeholder = "(Due to security, image PDF files are not supported)  Enter your message......";
                     btnTextElements[2].textContent = 'Send';
                     initialMessage.textContent = "Hello! I'm AliceSkyGarden. How can I assist you? 😊";
                     footerTagline.textContent = "Unlocking a New Era of Intelligence · Exploring Infinite Possibilities";
@@ -736,7 +736,7 @@
                     btnTextElements[0].textContent = 'Log in';
                     btnTextElements[1].textContent = 'English';
                     chatTitle.textContent = "与 AliceSkyGarden 对话";
-                    chatInput.placeholder = "输入你的消息...";
+                    chatInput.placeholder = "(因安全原因暂不支持图片PDF等文件)  输入你的消息......";
                     btnTextElements[2].textContent = '发送';
                     initialMessage.textContent = "你好！我是 AliceSkyGarden，有什么我可以帮助你的吗？😊";
                     footerTagline.textContent = "开启智能新纪元 · 探索无限可能";
@@ -884,7 +884,7 @@
                 const typingDiv = document.createElement('div');
                 typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
                 typingDiv.id = 'typingIndicator';
-                typingDiv.textContent = isEnglish ? 'Connecting to the server...' : '正在连接服务器...';
+                typingDiv.textContent = isEnglish ? 'Connecting to the server......' : '正在连接服务器......';
                 chatMessages.appendChild(typingDiv);
                 smartScroll();
             }
