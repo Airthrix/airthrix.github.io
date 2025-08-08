@@ -37,8 +37,6 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
-            display: flex;
-            flex-direction: column;
         }
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
@@ -169,20 +167,18 @@
             margin: 0 auto;
             padding: 2rem;
             padding-top: 70px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            width: 100%;
         }
         .footer {
             text-align: center;
             padding: 4rem 0 3rem;
+            margin-top: 4rem;
             border-top: 1px solid rgba(100, 100, 255, 0.2);
             color: #a0a0ff;
             position: relative;
             z-index: 10;
             background: rgba(10, 10, 25, 0.6);
             backdrop-filter: blur(5px);
+            margin-top: 2rem;
         }
         .footer-logo {
             font-size: 2.5rem;
@@ -277,16 +273,15 @@
             padding: 2rem;
             backdrop-filter: blur(1px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-top: 3rem;
             border-top: 3px solid var(--neon-blue);
             position: relative;
             z-index: 10;
-            width: 100%;
+            width: 80%;
             max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            height: calc(100vh - 180px);
-            min-height: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 1rem;
         }
         .chat-title {
             font-size: 2rem;
@@ -296,7 +291,8 @@
             text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
         .chat-messages {
-            flex: 1;
+            min-height: 600px;
+            max-height: 99999999999999999999999999999px;
             overflow-y: auto;
             padding: 1rem;
             background: rgba(10, 10, 25, 0.3);
@@ -305,9 +301,12 @@
             display: flex;
             flex-direction: column;
             gap: 1rem;
+            transition: max-height 0.3s ease;
             scrollbar-width: thin;
             scrollbar-color: var(--neon-blue) rgba(255, 255, 255, 0.1);
-            min-height: 300px;
+        }
+        .chat-messages.expanded {
+            max-height: 800px;
         }
         .chat-messages::-webkit-scrollbar {
             width: 12px;
@@ -361,7 +360,7 @@
         }
         .chat-input-area {
             display: flex;
-            align-items: center;
+            align-items: center; /* Align items vertically in the center */
             gap: 0.5rem;
             z-index: 10;
             position: relative;
@@ -372,7 +371,7 @@
             align-items: center;
         }
         .upload-btn {
-            padding: 0.8rem 1rem;
+            padding: 0.8rem 1rem; /* Adjusted padding */
             border-radius: 30px;
             border: 1px solid rgba(0, 243, 255, 0.3);
             background: rgba(15, 15, 40, 0.4);
@@ -381,12 +380,12 @@
             cursor: pointer;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: center; /* Center content */
             gap: 0.5rem;
             transition: all 0.3s ease;
             backdrop-filter: blur(5px);
-            height: 50px;
-            min-width: 50px;
+            height: 50px; /* Match input height */
+            min-width: 50px; /* Ensure minimum width for icon */
         }
         .upload-btn:hover {
             background: rgba(0, 243, 255, 0.2);
@@ -401,13 +400,13 @@
         .chat-input-wrapper {
             flex-grow: 1;
             display: flex;
-            min-width: 200px;
+            min-width: 200px; /* Minimum width for input area */
             position: relative;
         }
         .chat-input {
             flex-grow: 1;
             padding: 1rem;
-            padding-right: 60px;
+            padding-right: 60px; /* Add padding to the right to make space for buttons */
             border-radius: 30px;
             border: 1px solid rgba(0, 243, 255, 0.3);
             background: rgba(10, 10, 25, 0.5);
@@ -424,10 +423,10 @@
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
         .right-buttons {
-            display: none;
+            display: none; /* 隐藏桌面端的右浮动按钮 */
         }
         .chat-send-btn {
-            padding: 0.8rem 1.5rem;
+            padding: 0.8rem 1.5rem; /* Increased padding for larger button */
             border-radius: 30px;
             border: 1px solid rgba(0, 243, 255, 0.3);
             background: rgba(15, 15, 40, 0.4);
@@ -439,8 +438,8 @@
             gap: 0.5rem;
             transition: all 0.3s ease;
             backdrop-filter: blur(5px);
-            height: 100%;
-            min-width: 100px;
+            height: 100%; /* Full height of the container */
+            min-width: 100px; /* Ensure minimum width */
         }
         .chat-send-btn:hover {
             background: rgba(0, 243, 255, 0.2);
@@ -462,6 +461,7 @@
             align-self: flex-start;
             padding: 0.5rem 1rem;
         }
+        /* File preview area */
         .file-preview-container {
             display: flex;
             flex-wrap: wrap;
@@ -513,64 +513,60 @@
             .main-content {
                 padding: 1rem;
                 padding-top: 60px;
-                height: calc(100vh - 60px);
             }
             .chat-container {
                 padding: 1rem;
-                height: auto;
-                min-height: calc(100vh - 140px);
+                width: 95%;
+                margin-top: 0.5rem;
             }
             .chat-title {
                 font-size: 1.5rem;
             }
             .chat-messages {
-                min-height: 300px;
-                max-height: none;
-                flex: 1;
+                min-height: 400px; /* Adjusted for smaller screens */
+                max-height: 500px;
+            }
+            .chat-messages.expanded {
+                max-height: 700px;
             }
             .chat-input-area {
-                flex-direction: column;
+                flex-direction: column; /* 垂直排列 */
             }
             .upload-buttons {
                 display: flex;
-                justify-content: space-between;
-                margin-bottom: 1rem;
-                width: 100%;
+                justify-content: space-between; /* 水平分布按钮 */
+                margin-bottom: 1rem; /* 添加间距 */
             }
             .upload-btn {
-                flex-grow: 1;
-                margin: 0 0.3rem;
-                min-width: 30px;
+                flex-grow: 1; /* 让按钮占据剩余空间 */
+                margin: 0 0.3rem; /* 按钮之间的间距 */
+                min-width: 30px; /* 减小按钮宽度 */
             }
             .chat-input {
-                padding-right: 1rem;
+                padding-right: 1rem; /* 移除右侧内边距 */
             }
         }
         @media (max-width: 480px) {
-            .chat-container {
-                padding: 0.5rem;
-                min-height: calc(100vh - 120px);
-            }
             .chat-input-area {
-                flex-direction: column;
-                align-items: stretch;
+                flex-direction: column; /* Stack elements vertically on very small screens */
+                align-items: stretch; /* Stretch to full width */
             }
             .chat-input-wrapper {
                 width: 100%;
             }
             .chat-input {
-                padding-right: 1rem;
+                padding-right: 1rem; /* Remove right padding as buttons will be below */
             }
             .right-buttons {
                 position: static;
                 transform: none;
                 width: 100%;
-                justify-content: flex-end;
-                margin-top: 0.5rem;
+                justify-content: flex-end; /* Align buttons to the right */
+                margin-top: 0.5rem; /* Add some space above */
                 height: auto;
             }
             .upload-btn, .chat-send-btn {
-                height: 45px;
+                height: 45px; /* Adjust height for mobile */
             }
             .top-nav {
                 width: 100%;
@@ -583,8 +579,11 @@
                 min-width: 90px;
             }
             .chat-messages {
-                min-height: 250px;
-                max-height: none;
+                min-height: 300px;
+                max-height: 400px;
+            }
+            .chat-messages.expanded {
+                max-height: 600px;
             }
         }
     </style>
@@ -610,21 +609,27 @@
             <div class="chat-messages" id="chatMessages">
                 <div class="message bot-message" id="initialMessage">你好！我是 AliceSkyGarden，有什么我可以帮助你的吗？😊</div>
             </div>
+            <!-- File preview area -->
             <div class="file-preview-container" id="filePreviewContainer" style="display: none;"></div>
             <div class="chat-input-area">
+                <!-- 上传按钮容器 -->
                 <div class="upload-buttons">
+                    <!-- Image upload button -->
                     <label for="imageInput" class="upload-btn" title="上传图片">
                         <i class="fas fa-image"></i>
                     </label>
                     <input type="file" id="imageInput" class="file-input" accept="image/*">
+                    <!-- File upload button -->
                     <label for="fileInput" class="upload-btn" title="上传文件">
                         <i class="fas fa-file"></i>
                     </label>
                     <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt">
+                    <!-- Send button -->
                     <button id="sendButton" class="chat-send-btn">
                         <i class="fas fa-paper-plane"></i> <span class="btn-text">发送</span>
                     </button>
                 </div>
+                <!-- Text input -->
                 <div class="chat-input-wrapper">
                     <textarea id="userInput" class="chat-input" placeholder="(因安全原因暂不支持图片PDF等文件)  输入你的消息......"></textarea>
                 </div>
@@ -660,8 +665,6 @@
             let isEnglish = false;
             let selectedImages = [];
             let selectedFiles = [];
-            
-            // 初始化粒子背景
             particlesJS('particles-js', {
                 "particles": {
                     "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
@@ -686,8 +689,6 @@
                 },
                 "retina_detect": true
             });
-            
-            // DOM元素
             const langBtn = document.getElementById('langBtn');
             const loginBtn = document.getElementById('loginBtn');
             const chatTitle = document.querySelector('.chat-title');
@@ -700,11 +701,6 @@
             const imageInput = document.getElementById('imageInput');
             const fileInput = document.getElementById('fileInput');
             const filePreviewContainer = document.getElementById('filePreviewContainer');
-            const chatMessages = document.getElementById('chatMessages');
-            const userInput = document.getElementById('userInput');
-            const sendButton = document.getElementById('sendButton');
-            
-            // 登录按钮事件
             loginBtn.addEventListener('click', function() {
                 const originalHTML = loginBtn.innerHTML;
                 loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span class="btn-text">正在登录...</span>';
@@ -715,8 +711,6 @@
                     }, 1500);
                 }, 2000);
             });
-            
-            // 语言切换按钮事件
             langBtn.addEventListener('click', function() {
                 isEnglish = !isEnglish;
                 const btnTextElements = document.querySelectorAll('.btn-text');
@@ -749,7 +743,7 @@
                         el.textContent = footerLinks[index];
                     });
                     copyrightText.textContent = "© 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved";
-                    uploadBtns[0].title = "上传图片";
+                     uploadBtns[0].title = "上传图片";
                     uploadBtns[1].title = "上传文件";
                 }
                 langBtn.classList.add('pulse');
@@ -757,8 +751,10 @@
                     langBtn.classList.remove('pulse');
                 }, 500);
             });
-            
-            // 文件上传处理
+            const chatMessages = document.getElementById('chatMessages');
+            const userInput = document.getElementById('userInput');
+            const sendButton = document.getElementById('sendButton');
+            const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run';
             imageInput.addEventListener('change', function() {
                 const files = Array.from(imageInput.files);
                 if (files.length > 0) {
@@ -774,7 +770,6 @@
                     imageInput.value = '';
                 }
             });
-            
             fileInput.addEventListener('change', function() {
                 const files = Array.from(fileInput.files);
                 if (files.length > 0) {
@@ -790,8 +785,6 @@
                     fileInput.value = '';
                 }
             });
-            
-            // 更新文件预览
             function updateFilePreview() {
                 filePreviewContainer.innerHTML = '';
                 const allFiles = [...selectedImages, ...selectedFiles];
@@ -842,21 +835,15 @@
                     filePreviewContainer.style.display = 'none';
                 }
             }
-            
-            // 智能滚动
-            function smartScroll(force = false) {
-                if (force || (!scrollLock && !isTyping)) {
+            function smartScroll() {
+                if (!scrollLock && !isTyping) {
                     chatMessages.scrollTop = chatMessages.scrollHeight;
                 }
             }
-            
-            // 滚动事件监听
             chatMessages.addEventListener('scroll', function() {
                 const isAtBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight <= 50;
                 scrollLock = !isAtBottom;
             });
-            
-            // 添加消息
             function addMessage(message, isUser = false, files = []) {
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message');
@@ -868,11 +855,9 @@
                 }
                 messageDiv.textContent = message;
                 chatMessages.appendChild(messageDiv);
-                smartScroll(true); // 强制滚动到底部
+                smartScroll();
                 return messageDiv;
             }
-            
-            // 显示"正在输入"状态
             function showTyping() {
                 isTyping = true;
                 const typingDiv = document.createElement('div');
@@ -884,10 +869,8 @@
                 dotsSpan.classList.add('dots');
                 typingDiv.appendChild(dotsSpan);
                 chatMessages.appendChild(typingDiv);
-                smartScroll(true); // 强制滚动到底部
+                smartScroll();
             }
-            
-            // 隐藏"正在输入"状态
             function hideTyping() {
                 isTyping = false;
                 const typingIndicator = document.getElementById('typingIndicator');
@@ -895,8 +878,6 @@
                     typingIndicator.remove();
                 }
             }
-            
-            // 打字机效果
             function typeWriter(messageDiv, fullText, speed = 5) {
                 let i = 0;
                 const typingCursor = document.createElement('span');
@@ -904,58 +885,86 @@
                 messageDiv.appendChild(typingCursor);
                 const textContainer = document.createElement('div');
                 messageDiv.appendChild(textContainer);
-                
                 function type() {
                     if (i < fullText.length) {
                         textContainer.innerHTML = fullText.substring(0, i + 1);
                         messageDiv.appendChild(typingCursor);
                         i++;
-                        
-                        // 如果用户没有锁定滚动，则自动滚动
-                        if (!scrollLock) {
+                        const isNearBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight <= 100;
+                        if (isNearBottom) {
                             chatMessages.scrollTop = chatMessages.scrollHeight;
                         }
-                        
                         setTimeout(type, speed);
                     } else {
                         typingCursor.remove();
                         messageDiv.innerHTML = fullText;
+                        if (chatMessages.scrollHeight > chatMessages.clientHeight + 50) {
+                            chatMessages.classList.add('expanded');
+                        }
                     }
                 }
                 type();
             }
-            
-            // 发送消息
             async function sendMessage() {
                 const message = userInput.value.trim();
                 const imagesToSend = [...selectedImages];
                 const filesToSend = [...selectedFiles];
-                
                 if (!message && imagesToSend.length === 0 && filesToSend.length === 0) return;
-                
                 addMessage(message, true, [...imagesToSend, ...filesToSend]);
                 userInput.value = '';
                 selectedImages = [];
                 selectedFiles = [];
                 updateFilePreview();
-                
                 showTyping();
                 sendButton.disabled = true;
-                
                 try {
-                    // 模拟API请求
-                    await new Promise(resolve => setTimeout(resolve, 1500));
-                    
+                    let response;
+                    if (imagesToSend.length > 0 || filesToSend.length > 0) {
+                        const formData = new FormData();
+                        if(message) {
+                            formData.append('message', message);
+                        }
+                        imagesToSend.forEach((file, index) => {
+                            formData.append('image', file, file.name);
+                        });
+                        filesToSend.forEach((file, index) => {
+                            formData.append('file', file, file.name);
+                        });
+                        response = await fetch(API_URL, {
+                            method: 'POST',
+                            body: formData
+                        });
+                    } else {
+                         response = await fetch(API_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ message: message })
+                        });
+                    }
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
                     hideTyping();
-                    
-                    // 模拟响应
-                    const botReply = "这是一个模拟回复。在实际应用中，这将来自AliceSkyGarden AI模型。AliceSkyGarden是一个开源的绿色节能AI模型，采用三元稀疏激活架构，为多模态超级模型。它专注于提供低功耗、高性能的下一代人工智能技术。";
-                    
+                    let botReply = "";
+                    if (data.reply) {
+                        botReply = data.reply;
+                    } else if (data.error) {
+                        botReply = isEnglish ? `Error: ${data.error}` : `错误: ${data.error}`;
+                    } else {
+                        botReply = isEnglish ? "Sorry, I didn't receive a valid reply." : "抱歉，我没有收到有效的回复。";
+                    }
+                    let htmlReply = "";
+                    try {
+                        htmlReply = marked.parse(botReply, { breaks: true });
+                    } catch (e) {
+                        console.error("Markdown parsing error:", e);
+                        htmlReply = botReply;
+                    }
                     const botMessageDiv = document.createElement('div');
                     botMessageDiv.classList.add('message', 'bot-message');
                     chatMessages.appendChild(botMessageDiv);
-                    typeWriter(botMessageDiv, botReply);
-                    smartScroll(true); // 强制滚动到底部
+                    typeWriter(botMessageDiv, htmlReply);
                 } catch (error) {
                     console.error('Error sending message:', error);
                     hideTyping();
@@ -963,13 +972,17 @@
                     errorDiv.classList.add('message', 'bot-message');
                     errorDiv.textContent = isEnglish ? `Error: ${error.message}` : `错误: ${error.message}`;
                     chatMessages.appendChild(errorDiv);
-                    smartScroll(true); // 强制滚动到底部
                 } finally {
                     sendButton.disabled = false;
+                    const isNearBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight <= 100;
+                    if (isNearBottom) {
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }
+                    if (chatMessages.scrollHeight > chatMessages.clientHeight + 50) {
+                        chatMessages.classList.add('expanded');
+                    }
                 }
             }
-            
-            // 事件监听
             sendButton.addEventListener('click', sendMessage);
             userInput.addEventListener('keydown', function(event) {
                 if (event.key === 'Enter' && !event.shiftKey) {
@@ -977,9 +990,7 @@
                     sendMessage();
                 }
             });
-            
-            // 初始滚动
-            smartScroll(true);
+            smartScroll();
         });
     </script>
 </body>
