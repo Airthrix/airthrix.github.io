@@ -884,7 +884,7 @@
                 // 启动动画：每500毫秒添加一个点
                 let dotCount = 0;
                 typingInterval = setInterval(() => {
-                    dotCount = (dotCount + 1) % 4; // 循环在 0, 1, 2, 3 之间
+                    dotCount = (dotCount + 1) % 7; // 循环在 0, 1, 2, 3 之间
                     const dots = '.'.repeat(dotCount); // 创建相应数量的点
                     typingDiv.textContent = baseText + dots; // 更新文本内容
 
