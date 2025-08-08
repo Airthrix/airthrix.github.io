@@ -534,7 +534,7 @@
                 font-size: 1.5rem;
             }
             .chat-messages {
-                min-height: 400px;
+                min-height: 300px;
                 max-height: none;
                 flex: 1;
             }
@@ -882,7 +882,7 @@
                 const typingDiv = document.createElement('div');
                 typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
                 typingDiv.id = 'typingIndicator';
-                const textNode = document.createTextNode(isEnglish ? 'Connecting to the server' : '正在连接服务器');
+                const textNode = document.createTextNode(isEnglish ? 'Connecting server' : '正在连接服务器');
                 typingDiv.appendChild(textNode);
                 const dotsSpan = document.createElement('span');
                 dotsSpan.classList.add('dots');
