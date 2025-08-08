@@ -1,6 +1,3 @@
-
-
-HTML聊天框高度自适应修改
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -294,7 +291,7 @@ HTML聊天框高度自适应修改
         /* 修改1：聊天消息区域高度自适应 */
         .chat-messages {
             min-height: 400px; /* 最小高度 */
-            max-height: 9999999999999999999999999px; /* 最大高度 */
+            max-height: 99999999999999999999999999999px; /* 最大高度 */
             overflow-y: auto;
             padding: 1rem;
             background: rgba(10, 10, 25, 0.3);
@@ -622,14 +619,15 @@ HTML聊天框高度自适应修改
             const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run';
             
             function smartScroll() {
-                if (!scrollLock && !isTyping) {
+                const isNearBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight <= 100;
+                if (isNearBottom || !scrollLock) {
                     chatMessages.scrollTop = chatMessages.scrollHeight;
                 }
             }
             
             chatMessages.addEventListener('scroll', function() {
-                const isAtBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight <= 50;
-                scrollLock = !isAtBottom;
+                const isFarFromBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight > 100;
+                scrollLock = isFarFromBottom;
             });
             
             function addMessage(message, isUser = false) {
@@ -674,14 +672,17 @@ HTML聊天框高度自适应修改
                         textContainer.innerHTML = fullText.substring(0, i + 1);
                         messageDiv.appendChild(typingCursor);
                         i++;
-                        const isNearBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight <= 100;
-                        if (isNearBottom) {
-                            chatMessages.scrollTop = chatMessages.scrollHeight;
-                        }
+                        
+                        // 打字过程中保持滚动
+                        smartScroll();
+                        
                         setTimeout(type, speed);
                     } else {
                         typingCursor.remove();
                         messageDiv.innerHTML = fullText;
+                        
+                        // 确保最终滚动到底部
+                        smartScroll();
                         
                         // 检查是否需要扩展聊天框高度
                         if (chatMessages.scrollHeight > chatMessages.clientHeight + 50) {
@@ -749,10 +750,7 @@ HTML聊天框高度自适应修改
                     chatMessages.appendChild(errorDiv);
                 } finally {
                     sendButton.disabled = false;
-                    const isNearBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight <= 100;
-                    if (isNearBottom) {
-                        chatMessages.scrollTop = chatMessages.scrollHeight;
-                    }
+                    smartScroll();
                     
                     // 检查是否需要扩展聊天框高度
                     if (chatMessages.scrollHeight > chatMessages.clientHeight + 50) {
