@@ -280,8 +280,6 @@
             margin-top: 3rem;
             border-top: 3px solid var(--neon-blue);
             position: relative;
-            /* --- 关键修改：移除 overflow: hidden --- */
-            /* overflow: hidden; */
             z-index: 10;
             width: 80%; /* 扩大宽度 */
             max-width: 1200px; /* 最大宽度限制 */
@@ -297,10 +295,8 @@
         }
         /* --- 修改：增加聊天消息区域高度并确保滚动 --- */
         .chat-messages {
-            /* --- 关键修改：增加高度到 800px --- */
-            height: 800px;
-            /* --- 关键修改：强制显示滚动条 --- */
-            overflow-y: scroll;
+            height: 400px; /* 初始高度为全高的一半 */
+            overflow-y: auto; /* 确保有滚动条 */
             padding: 1rem;
             background: rgba(10, 10, 25, 0.3);
             border-radius: 10px;
@@ -308,13 +304,20 @@
             display: flex;
             flex-direction: column;
             gap: 1rem;
+            transition: height 0.5s ease; /* 添加高度变化过渡效果 */
+            
             /* --- 修改：优化滚动条样式，使其更明显 --- */
             scrollbar-width: thin; /* Firefox */
             scrollbar-color: var(--neon-blue) rgba(255, 255, 255, 0.1); /* Firefox */
-
             position: relative;
             z-index: 10;
         }
+        
+        /* 添加全高样式 */
+        .chat-messages.full-height {
+            height: 800px; /* 全高 */
+        }
+        
         /* --- 关键修改：为 Webkit 浏览器 (Chrome, Safari, Edge) 设置更明显的滚动条样式 --- */
         .chat-messages::-webkit-scrollbar {
             width: 12px; /* 增加滚动条宽度 */
@@ -449,8 +452,10 @@
                 font-size: 1.5rem;
             }
             .chat-messages {
-                /* --- 关键修改：移动端高度调整为 600px --- */
-                height: 600px;
+                height: 300px; /* 移动端初始高度为一半 */
+            }
+            .chat-messages.full-height {
+                height: 600px; /* 移动端全高 */
             }
         }
         @media (max-width: 480px) {
@@ -465,8 +470,10 @@
                 min-width: 90px;
             }
             .chat-messages {
-                /* --- 关键修改：移动端更小屏幕高度调整为 500px --- */
-                height: 500px;
+                height: 250px; /* 更小屏幕初始高度为一半 */
+            }
+            .chat-messages.full-height {
+                height: 500px; /* 更小屏幕全高 */
             }
         }
     </style>
@@ -532,6 +539,9 @@
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // 初始状态标记
+            let isFirstMessage = true;
+            
             // --- 初始化 Particles.js ---
             particlesJS('particles-js', {
                 "particles": {
@@ -689,29 +699,40 @@
             // *** 如果您的后端部署在根路径 '/'，请使用 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run' ***
             // *** 如果您的后端部署在 '/invoke' 路径，请使用 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run/invoke' ***
             const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run'; // 根据您的实际部署情况修改
+            
+            // 确保滚动到底部的函数
+            function scrollToBottom() {
+                setTimeout(() => {
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 10);
+            }
+            
             function addMessage(message, isUser = false) {
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message');
                 messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
                 messageDiv.textContent = message;
                 chatMessages.appendChild(messageDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+                scrollToBottom();
                 return messageDiv; // 返回元素以便后续更新
             }
+            
             function showTyping() {
                 const typingDiv = document.createElement('div');
                 typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
                 typingDiv.id = 'typingIndicator';
                 typingDiv.textContent = isEnglish ? 'Thinking...' : '正在思考...';
                 chatMessages.appendChild(typingDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+                scrollToBottom();
             }
+            
             function hideTyping() {
                 const typingIndicator = document.getElementById('typingIndicator');
                 if (typingIndicator) {
                     typingIndicator.remove();
                 }
             }
+            
             // --- 新增：逐字显示函数 (打字机效果) ---
             // --- 修改：加快打字速度 ---
             function typeWriter(messageDiv, fullText, speed = 15) { // 将 speed 默认值改为 15 毫秒
@@ -724,7 +745,7 @@
                          messageDiv.innerHTML = fullText.substring(0, i + 1);
                          messageDiv.appendChild(typingCursor); // 保持光标在末尾
                          i++;
-                         chatMessages.scrollTop = chatMessages.scrollHeight;
+                         scrollToBottom();
                          setTimeout(type, speed);
                      } else {
                          // 移除光标
@@ -733,9 +754,17 @@
                  }
                  type();
             }
+            
             async function sendMessage() {
                 const message = userInput.value.trim();
                 if (!message) return;
+                
+                // 如果是第一次发送消息，扩展聊天区域高度
+                if (isFirstMessage) {
+                    chatMessages.classList.add('full-height');
+                    isFirstMessage = false;
+                }
+                
                 // 添加用户消息
                 addMessage(message, true);
                 userInput.value = '';
@@ -779,7 +808,7 @@
                     botMessageDiv.classList.add('message', 'bot-message');
                     botMessageDiv.innerHTML = ""; // 初始为空
                     chatMessages.appendChild(botMessageDiv);
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    scrollToBottom();
                     // 启动打字机效果
                     typeWriter(botMessageDiv, htmlReply);
                 } catch (error) {
@@ -789,12 +818,14 @@
                     errorDiv.classList.add('message', 'bot-message');
                     errorDiv.textContent = isEnglish ? `Error: ${error.message}` : `错误: ${error.message}`;
                     chatMessages.appendChild(errorDiv);
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    scrollToBottom();
                 } finally {
                     // 启用发送按钮
                     sendButton.disabled = false;
+                    scrollToBottom();
                 }
             }
+            
             sendButton.addEventListener('click', sendMessage);
             userInput.addEventListener('keydown', function(event) {
                 if (event.key === 'Enter' && !event.shiftKey) {
@@ -802,6 +833,9 @@
                     sendMessage();
                 }
             });
+            
+            // 初始化时滚动到底部
+            scrollToBottom();
         });
     </script>
 </body>
