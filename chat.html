@@ -515,19 +515,19 @@
                 padding-top: 60px;
             }
             .chat-container {
-                padding: 1rem;
-                width: 95%;
-                margin-top: 0.5rem;
+                display: flex;
+                flex-direction: column;
+                height: calc(100vh - /* 顶部导航高度估算 */ 60px - /* 顶部 padding */ 1rem - /* 底部 margin + footer 高度估算 */ 120px); /* 大概计算可用高度 */
             }
             .chat-title {
                 font-size: 1.5rem;
             }
             .chat-messages {
-                min-height: 400px; /* Adjusted for smaller screens */
-                max-height: 99999999999999999999999999999px;
+                max-height: 60vh; /* 调整为适合移动端屏幕的比例 */
+                flex-grow: 1; /* 确保它可以增长 */
             }
             .chat-messages.expanded {
-                max-height: 99999999999999999999999999999px;
+                max-height: 75vh; /* 调整展开时的最大高度 */
             }
             .chat-input-area {
                 flex-direction: column; /* 垂直排列 */
@@ -578,12 +578,20 @@
                 font-size: 0.8rem;
                 min-width: 90px;
             }
+            .chat-container {
+                /* ... 其他样式 ... */
+                /* 确保在更小屏幕上也应用 flex */
+                /* display: flex; flex-direction: column; 已在 768px 媒体查询中设置 */
+                height: calc(100vh - /* 顶部导航高度估算 */ 50px - /* 顶部 padding */ 1rem - /* 底部 margin + footer 高度估算 */ 120px); /* 调整计算 */
+                /* 或者简化 */
+                /* min-height: 75vh; */
+            }
             .chat-messages {
-                min-height: 300px;
-                max-height: 99999999999999999999999999999px;
+                max-height: 55vh; /* 进一步调整以适应小屏幕 */
+                flex-grow: 1; /* 确保它可以增长 */
             }
             .chat-messages.expanded {
-                max-height: 99999999999999999999999999999px;
+                max-height: 70vh; /* 调整展开时的最大高度 */
             }
         }
     </style>
