@@ -302,7 +302,6 @@
             flex-direction: column;
             gap: 1rem;
             transition: max-height 0.3s ease;
-            /* Custom Scrollbar Styling */
             scrollbar-width: thin;
             scrollbar-color: var(--neon-blue) rgba(255, 255, 255, 0.1);
         }
@@ -361,13 +360,18 @@
         }
         .chat-input-area {
             display: flex;
-            align-items: center;
+            align-items: center; /* Align items vertically in the center */
             gap: 0.5rem;
             z-index: 10;
             position: relative;
         }
+        .upload-buttons {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
         .upload-btn {
-            padding: 0.8rem 1rem;
+            padding: 0.8rem 1rem; /* Adjusted padding */
             border-radius: 30px;
             border: 1px solid rgba(0, 243, 255, 0.3);
             background: rgba(15, 15, 40, 0.4);
@@ -376,12 +380,12 @@
             cursor: pointer;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: center; /* Center content */
             gap: 0.5rem;
             transition: all 0.3s ease;
             backdrop-filter: blur(5px);
-            height: 50px;
-            min-width: 50px;
+            height: 50px; /* Match input height */
+            min-width: 50px; /* Ensure minimum width for icon */
         }
         .upload-btn:hover {
             background: rgba(0, 243, 255, 0.2);
@@ -396,12 +400,13 @@
         .chat-input-wrapper {
             flex-grow: 1;
             display: flex;
-            min-width: 200px;
+            min-width: 200px; /* Minimum width for input area */
             position: relative;
         }
         .chat-input {
             flex-grow: 1;
             padding: 1rem;
+            padding-right: 60px; /* Add padding to the right to make space for buttons */
             border-radius: 30px;
             border: 1px solid rgba(0, 243, 255, 0.3);
             background: rgba(10, 10, 25, 0.5);
@@ -418,13 +423,10 @@
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
         .right-buttons {
-            display: flex;
-            gap: 0.25rem;
-            align-items: center;
-            height: 50px;
+            display: none; /* 隐藏桌面端的右浮动按钮 */
         }
         .chat-send-btn {
-            padding: 0.8rem 1.5rem;
+            padding: 0.8rem 1.5rem; /* Increased padding for larger button */
             border-radius: 30px;
             border: 1px solid rgba(0, 243, 255, 0.3);
             background: rgba(15, 15, 40, 0.4);
@@ -436,8 +438,8 @@
             gap: 0.5rem;
             transition: all 0.3s ease;
             backdrop-filter: blur(5px);
-            height: 100%;
-            min-width: 100px;
+            height: 100%; /* Full height of the container */
+            min-width: 100px; /* Ensure minimum width */
         }
         .chat-send-btn:hover {
             background: rgba(0, 243, 255, 0.2);
@@ -521,64 +523,68 @@
                 font-size: 1.5rem;
             }
             .chat-messages {
-                min-height: 400px;
+                min-height: 400px; /* Adjusted for smaller screens */
                 max-height: 500px;
             }
             .chat-messages.expanded {
                 max-height: 700px;
             }
-            .right-buttons {
-                gap: 0.15rem;
-            }
-            .upload-btn, .chat-send-btn {
-                padding: 0.6rem 0.8rem;
-                min-width: 40px;
-                font-size: 0.9rem;
-            }
-            .chat-send-btn {
-                min-width: 80px;
-            }
-        }
-        @media (max-width: 768px) { /* 移动端特殊布局 */
             .chat-input-area {
-                flex-wrap: wrap; /* 允许换行 */
+                flex-direction: column; /* 垂直排列 */
             }
-            .chat-input-wrapper {
-                order: 1; /* 输入框在第一行 */
-                width: 100%;
-                margin-bottom: 0.5rem;
+            .upload-buttons {
+                display: flex;
+                justify-content: space-between; /* 水平分布按钮 */
+                margin-bottom: 1rem; /* 添加间距 */
             }
-            .right-buttons {
-                order: 2; /* 按钮组在第二行 */
-                width: 100%;
-                justify-content: flex-end; /* 按钮靠右对齐 */
-                margin-top: 0; /* 移除顶部间距 */
-            }
-            /* 调整按钮顺序：上传按钮在发送按钮左边 */
-            .upload-btn:first-of-type {
-                 order: 1;
-            }
-            .upload-btn:last-of-type {
-                 order: 2;
-            }
-            .chat-send-btn {
-                order: 3;
+            .upload-btn {
+                flex-grow: 1; /* 让按钮占据剩余空间 */
+                margin: 0 0.5rem; /* 按钮之间的间距 */
+                min-width: 150px; /* 增加按钮宽度 */
             }
             .chat-input {
-                padding-right: 1rem; /* 移除内边距 */
+                padding-right: 1rem; /* 移除右侧内边距 */
             }
         }
-        /* Animation for "正在连接服务器" */
-        .typing-indicator span.dots::after {
-            content: ".";
-            animation: blinkDots 1.5s infinite steps(4, end);
-        }
-        @keyframes blinkDots {
-            0% { content: "."; }
-            25% { content: ".."; }
-            50% { content: "..."; }
-            75% { content: "...."; }
-            100% { content: "."; }
+        @media (max-width: 480px) {
+            .chat-input-area {
+                flex-direction: column; /* Stack elements vertically on very small screens */
+                align-items: stretch; /* Stretch to full width */
+            }
+            .chat-input-wrapper {
+                width: 100%;
+            }
+            .chat-input {
+                padding-right: 1rem; /* Remove right padding as buttons will be below */
+            }
+            .right-buttons {
+                position: static;
+                transform: none;
+                width: 100%;
+                justify-content: flex-end; /* Align buttons to the right */
+                margin-top: 0.5rem; /* Add some space above */
+                height: auto;
+            }
+            .upload-btn, .chat-send-btn {
+                height: 45px; /* Adjust height for mobile */
+            }
+            .top-nav {
+                width: 100%;
+                justify-content: center;
+                padding: 0.8rem;
+            }
+            .nav-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.8rem;
+                min-width: 90px;
+            }
+            .chat-messages {
+                min-height: 300px;
+                max-height: 400px;
+            }
+            .chat-messages.expanded {
+                max-height: 600px;
+            }
         }
     </style>
 </head>
@@ -606,25 +612,26 @@
             <!-- File preview area -->
             <div class="file-preview-container" id="filePreviewContainer" style="display: none;"></div>
             <div class="chat-input-area">
-                <!-- Image upload button -->
-                <label for="imageInput" class="upload-btn" title="上传图片">
-                    <i class="fas fa-image"></i>
-                </label>
-                <input type="file" id="imageInput" class="file-input" accept="image/*">
-                <!-- File upload button -->
-                <label for="fileInput" class="upload-btn" title="上传文件">
-                    <i class="fas fa-file"></i>
-                </label>
-                <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt">
-                <!-- Text input -->
-                <div class="chat-input-wrapper">
-                    <textarea id="userInput" class="chat-input" placeholder="(因安全原因暂不支持图片PDF等文件)  输入你的消息......"></textarea>
-                </div>
-                <!-- Send button -->
-                <div class="right-buttons">
+                <!-- 上传按钮容器 -->
+                <div class="upload-buttons">
+                    <!-- Image upload button -->
+                    <label for="imageInput" class="upload-btn" title="上传图片">
+                        <i class="fas fa-image"></i>
+                    </label>
+                    <input type="file" id="imageInput" class="file-input" accept="image/*">
+                    <!-- File upload button -->
+                    <label for="fileInput" class="upload-btn" title="上传文件">
+                        <i class="fas fa-file"></i>
+                    </label>
+                    <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt">
+                    <!-- Send button -->
                     <button id="sendButton" class="chat-send-btn">
                         <i class="fas fa-paper-plane"></i> <span class="btn-text">发送</span>
                     </button>
+                </div>
+                <!-- Text input -->
+                <div class="chat-input-wrapper">
+                    <textarea id="userInput" class="chat-input" placeholder="(因安全原因暂不支持图片PDF等文件)  输入你的消息......"></textarea>
                 </div>
             </div>
         </div>
