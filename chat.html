@@ -291,7 +291,7 @@
             text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
         .chat-messages {
-            min-height: 600px; /* Increased minimum height for larger chat box */
+            min-height: 600px;
             max-height: 99999999999999999999999999999px;
             overflow-y: auto;
             padding: 1rem;
@@ -302,7 +302,6 @@
             flex-direction: column;
             gap: 1rem;
             transition: max-height 0.3s ease;
-            /* Custom Scrollbar Styling */
             scrollbar-width: thin;
             scrollbar-color: var(--neon-blue) rgba(255, 255, 255, 0.1);
         }
@@ -366,6 +365,11 @@
             z-index: 10;
             position: relative;
         }
+        .upload-buttons {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
         .upload-btn {
             padding: 0.8rem 1rem; /* Adjusted padding */
             border-radius: 30px;
@@ -402,6 +406,7 @@
         .chat-input {
             flex-grow: 1;
             padding: 1rem;
+            padding-right: 60px; /* Add padding to the right to make space for buttons */
             border-radius: 30px;
             border: 1px solid rgba(0, 243, 255, 0.3);
             background: rgba(10, 10, 25, 0.5);
@@ -417,12 +422,8 @@
             border-color: var(--neon-blue);
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
-        /* Removed .right-buttons from inside .chat-input-wrapper */
         .right-buttons {
-            display: flex;
-            gap: 0.25rem; /* Small gap between buttons */
-            align-items: center;
-            height: 50px;
+            display: none; /* 隐藏桌面端的右浮动按钮 */
         }
         .chat-send-btn {
             padding: 0.8rem 1.5rem; /* Increased padding for larger button */
@@ -528,64 +529,62 @@
             .chat-messages.expanded {
                 max-height: 700px;
             }
-            .right-buttons {
-                gap: 0.15rem; /* Smaller gap on mobile */
+            .chat-input-area {
+                flex-direction: column; /* 垂直排列 */
             }
-            .upload-btn, .chat-send-btn {
-                padding: 0.6rem 0.8rem; /* Smaller padding on mobile */
-                min-width: 40px; /* Smaller minimum width */
-                font-size: 0.9rem;
+            .upload-buttons {
+                display: flex;
+                justify-content: space-between; /* 水平分布按钮 */
+                margin-bottom: 1rem; /* 添加间距 */
             }
-            .chat-send-btn {
-                min-width: 80px; /* Smaller minimum width for send button */
+            .upload-btn {
+                flex-grow: 1; /* 让按钮占据剩余空间 */
+                margin: 0 0.5rem; /* 按钮之间的间距 */
+                min-width: 50px; /* 减小按钮宽度 */
+            }
+            .chat-input {
+                padding-right: 1rem; /* 移除右侧内边距 */
             }
         }
-        /* --- 关键修改：移动端布局 --- */
-        @media (max-width: 768px) {
+        @media (max-width: 480px) {
             .chat-input-area {
-                flex-direction: column; /* 垂直堆叠 */
-            }
-            /* 在移动端，将上传按钮和发送按钮放在输入框上方 */
-            .mobile-top-buttons {
-                display: flex;
-                width: 100%;
-                justify-content: space-between; /* 或 space-around */
-                gap: 0.5rem; /* 按钮间距 */
-                margin-bottom: 0.5rem;
-            }
-             .mobile-top-buttons .upload-btn {
-                 flex: 1; /* 平均分配空间 */
-                 min-width: 0; /* 允许按钮收缩 */
-                 padding: 0.6rem 0.5rem; /* 减小内边距 */
-                 font-size: 0.85rem; /* 减小字体 */
-            }
-            .mobile-top-buttons .chat-send-btn {
-                 flex: 1; /* 平均分配空间 */
-                 min-width: 0; /* 允许按钮收缩 */
-                 padding: 0.6rem 0.5rem; /* 减小内边距 */
-                 font-size: 0.85rem; /* 减小字体 */
-                 min-width: 80px; /* 保持最小宽度 */
+                flex-direction: column; /* Stack elements vertically on very small screens */
+                align-items: stretch; /* Stretch to full width */
             }
             .chat-input-wrapper {
                 width: 100%;
             }
             .chat-input {
-                padding-right: 1rem; /* 移除右侧内边距 */
+                padding-right: 1rem; /* Remove right padding as buttons will be below */
             }
-            /* 隐藏桌面端的按钮容器 */
             .right-buttons {
-                display: none !important;
+                position: static;
+                transform: none;
+                width: 100%;
+                justify-content: flex-end; /* Align buttons to the right */
+                margin-top: 0.5rem; /* Add some space above */
+                height: auto;
             }
-        }
-        /* --- 恢复动态省略号 --- */
-        .typing-indicator::after {
-             content: "";
-             animation: dots 1.5s steps(5, end) infinite;
-        }
-        @keyframes dots {
-            0%, 20% { content: "."; }
-            40% { content: ".."; }
-            60%, 100% { content: "..."; }
+            .upload-btn, .chat-send-btn {
+                height: 45px; /* Adjust height for mobile */
+            }
+            .top-nav {
+                width: 100%;
+                justify-content: center;
+                padding: 0.8rem;
+            }
+            .nav-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.8rem;
+                min-width: 90px;
+            }
+            .chat-messages {
+                min-height: 300px;
+                max-height: 400px;
+            }
+            .chat-messages.expanded {
+                max-height: 600px;
+            }
         }
     </style>
 </head>
@@ -613,25 +612,26 @@
             <!-- File preview area -->
             <div class="file-preview-container" id="filePreviewContainer" style="display: none;"></div>
             <div class="chat-input-area">
-                 <!-- Image upload button -->
-                <label for="imageInput" class="upload-btn" title="上传图片">
-                    <i class="fas fa-image"></i>
-                </label>
-                <input type="file" id="imageInput" class="file-input" accept="image/*">
-                <!-- File upload button -->
-                <label for="fileInput" class="upload-btn" title="上传文件">
-                    <i class="fas fa-file"></i>
-                </label>
-                <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt">
-                <!-- Text input and send button -->
-                <div class="chat-input-wrapper">
-                    <textarea id="userInput" class="chat-input" placeholder="(因安全原因暂不支持图片PDF等文件)  输入你的消息......"></textarea>
-                </div>
-                 <!-- Send button (desktop/tablet) -->
-                <div class="right-buttons">
+                <!-- 上传按钮容器 -->
+                <div class="upload-buttons">
+                    <!-- Image upload button -->
+                    <label for="imageInput" class="upload-btn" title="上传图片">
+                        <i class="fas fa-image"></i>
+                    </label>
+                    <input type="file" id="imageInput" class="file-input" accept="image/*">
+                    <!-- File upload button -->
+                    <label for="fileInput" class="upload-btn" title="上传文件">
+                        <i class="fas fa-file"></i>
+                    </label>
+                    <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt">
+                    <!-- Send button -->
                     <button id="sendButton" class="chat-send-btn">
                         <i class="fas fa-paper-plane"></i> <span class="btn-text">发送</span>
                     </button>
+                </div>
+                <!-- Text input -->
+                <div class="chat-input-wrapper">
+                    <textarea id="userInput" class="chat-input" placeholder="(因安全原因暂不支持图片PDF等文件)  输入你的消息......"></textarea>
                 </div>
             </div>
         </div>
@@ -663,9 +663,8 @@
             let scrollLock = false;
             let isTyping = false;
             let isEnglish = false;
-            let selectedImages = []; // Store selected images
-            let selectedFiles = [];  // Store selected files
-            // Initialize particle effect
+            let selectedImages = [];
+            let selectedFiles = [];
             particlesJS('particles-js', {
                 "particles": {
                     "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
@@ -690,7 +689,6 @@
                 },
                 "retina_detect": true
             });
-            // Language and login button functionality
             const langBtn = document.getElementById('langBtn');
             const loginBtn = document.getElementById('loginBtn');
             const chatTitle = document.querySelector('.chat-title');
@@ -753,16 +751,13 @@
                     langBtn.classList.remove('pulse');
                 }, 500);
             });
-            // Chat functionality
             const chatMessages = document.getElementById('chatMessages');
             const userInput = document.getElementById('userInput');
             const sendButton = document.getElementById('sendButton');
             const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run';
-            // Handle image selection
             imageInput.addEventListener('change', function() {
                 const files = Array.from(imageInput.files);
                 if (files.length > 0) {
-                    // Simple deduplication: check filename and size
                     files.forEach(file => {
                         const isDuplicate = selectedImages.some(existingFile =>
                             existingFile.name === file.name && existingFile.size === file.size
@@ -772,14 +767,12 @@
                         }
                     });
                     updateFilePreview();
-                    imageInput.value = ''; // Clear input to allow re-selecting same file
+                    imageInput.value = '';
                 }
             });
-            // Handle file selection
             fileInput.addEventListener('change', function() {
                 const files = Array.from(fileInput.files);
                 if (files.length > 0) {
-                    // Simple deduplication: check filename and size
                     files.forEach(file => {
                         const isDuplicate = selectedFiles.some(existingFile =>
                             existingFile.name === file.name && existingFile.size === file.size
@@ -789,10 +782,9 @@
                         }
                     });
                     updateFilePreview();
-                    fileInput.value = ''; // Clear input to allow re-selecting same file
+                    fileInput.value = '';
                 }
             });
-            // Update file preview area
             function updateFilePreview() {
                 filePreviewContainer.innerHTML = '';
                 const allFiles = [...selectedImages, ...selectedFiles];
@@ -801,23 +793,21 @@
                     allFiles.forEach((file, index) => {
                         const previewItem = document.createElement('div');
                         previewItem.className = 'file-preview-item';
-                        // Store index and type for removal
                         previewItem.dataset.index = index;
                         previewItem.dataset.type = selectedImages.includes(file) ? 'image' : 'file';
                         const fileNameSpan = document.createElement('span');
                         fileNameSpan.className = 'file-preview-name';
                         fileNameSpan.textContent = file.name.length > 20 ? file.name.substring(0, 17) + '...' : file.name;
-                        fileNameSpan.title = file.name; // Show full name on hover
+                        fileNameSpan.title = file.name;
                         const removeIcon = document.createElement('i');
                         removeIcon.className = 'fas fa-times file-preview-remove';
                         removeIcon.title = isEnglish ? "Remove file" : "移除文件";
                         removeIcon.addEventListener('click', function(e) {
-                            e.stopPropagation(); // Prevent event bubbling
+                            e.stopPropagation();
                             const type = previewItem.dataset.type;
                             const idx = parseInt(previewItem.dataset.index);
                             if (type === 'image') {
                                 selectedImages.splice(idx, 1);
-                                // Adjust indices of remaining items of the same type
                                 const remainingItems = filePreviewContainer.querySelectorAll(`.file-preview-item[data-type='image']`);
                                 remainingItems.forEach((item, i) => {
                                     if (i >= idx) {
@@ -827,7 +817,6 @@
                                 });
                             } else {
                                 selectedFiles.splice(idx, 1);
-                                // Adjust indices of remaining items of the same type
                                 const remainingItems = filePreviewContainer.querySelectorAll(`.file-preview-item[data-type='file']`);
                                 remainingItems.forEach((item, i) => {
                                     if (i >= idx) {
@@ -836,7 +825,7 @@
                                     }
                                 });
                             }
-                            updateFilePreview(); // Update preview
+                            updateFilePreview();
                         });
                         previewItem.appendChild(fileNameSpan);
                         previewItem.appendChild(removeIcon);
@@ -859,7 +848,6 @@
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message');
                 messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
-                // If it's a user message and contains files, add file info
                 if (isUser && files.length > 0) {
                     let fileText = isEnglish ? " [Sent files] " : " [已发送文件] ";
                     fileText += `(${files.length})`;
@@ -875,9 +863,11 @@
                 const typingDiv = document.createElement('div');
                 typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
                 typingDiv.id = 'typingIndicator';
-                // --- 修改：动态省略号文本 ---
                 const textNode = document.createTextNode(isEnglish ? 'Connecting to the server' : '正在连接服务器');
                 typingDiv.appendChild(textNode);
+                const dotsSpan = document.createElement('span');
+                dotsSpan.classList.add('dots');
+                typingDiv.appendChild(dotsSpan);
                 chatMessages.appendChild(typingDiv);
                 smartScroll();
             }
@@ -888,8 +878,7 @@
                     typingIndicator.remove();
                 }
             }
-            // --- Modify typewriter speed ---
-            function typeWriter(messageDiv, fullText, speed = 5) { // Changed from 15 to 5
+            function typeWriter(messageDiv, fullText, speed = 5) {
                 let i = 0;
                 const typingCursor = document.createElement('span');
                 typingCursor.classList.add('typing-cursor');
@@ -909,7 +898,6 @@
                     } else {
                         typingCursor.remove();
                         messageDiv.innerHTML = fullText;
-                        // Check if chat box height needs to be expanded
                         if (chatMessages.scrollHeight > chatMessages.clientHeight + 50) {
                             chatMessages.classList.add('expanded');
                         }
@@ -917,43 +905,36 @@
                 }
                 type();
             }
-            // --- Modify send message function to support files and images ---
             async function sendMessage() {
                 const message = userInput.value.trim();
-                const imagesToSend = [...selectedImages]; // Create copies
-                const filesToSend = [...selectedFiles];  // Create copies
+                const imagesToSend = [...selectedImages];
+                const filesToSend = [...selectedFiles];
                 if (!message && imagesToSend.length === 0 && filesToSend.length === 0) return;
-                // Add user message (including file info)
                 addMessage(message, true, [...imagesToSend, ...filesToSend]);
                 userInput.value = '';
-                selectedImages = []; // Clear selected image array
-                selectedFiles = [];  // Clear selected file array
-                updateFilePreview(); // Clear preview
+                selectedImages = [];
+                selectedFiles = [];
+                updateFilePreview();
                 showTyping();
                 sendButton.disabled = true;
                 try {
                     let response;
                     if (imagesToSend.length > 0 || filesToSend.length > 0) {
-                        // If there are files or images, use FormData
                         const formData = new FormData();
                         if(message) {
                             formData.append('message', message);
                         }
                         imagesToSend.forEach((file, index) => {
-                            // Use 'image' as the field name for images
                             formData.append('image', file, file.name);
                         });
                         filesToSend.forEach((file, index) => {
-                            // Use 'file' as the field name for files
                             formData.append('file', file, file.name);
                         });
                         response = await fetch(API_URL, {
                             method: 'POST',
-                            // Do not set Content-Type, let the browser set multipart/form-data automatically
                             body: formData
                         });
                     } else {
-                        // If no files, keep the original JSON method
                          response = await fetch(API_URL, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -983,7 +964,6 @@
                     const botMessageDiv = document.createElement('div');
                     botMessageDiv.classList.add('message', 'bot-message');
                     chatMessages.appendChild(botMessageDiv);
-                    // Start typewriter effect
                     typeWriter(botMessageDiv, htmlReply);
                 } catch (error) {
                     console.error('Error sending message:', error);
@@ -998,7 +978,6 @@
                     if (isNearBottom) {
                         chatMessages.scrollTop = chatMessages.scrollHeight;
                     }
-                    // Check if chat box height needs to be expanded
                     if (chatMessages.scrollHeight > chatMessages.clientHeight + 50) {
                         chatMessages.classList.add('expanded');
                     }
@@ -1012,49 +991,6 @@
                 }
             });
             smartScroll();
-
-            // --- 关键修改：克隆按钮到移动端容器 ---
-            const imageUploadBtn = document.querySelector('label[for="imageInput"]');
-            const fileUploadBtn = document.querySelector('label[for="fileInput"]');
-            const sendBtn = document.getElementById('sendButton');
-
-            // 创建移动端按钮容器
-            const mobileTopButtons = document.createElement('div');
-            mobileTopButtons.className = 'mobile-top-buttons';
-
-            // 克隆按钮
-            const clonedImageBtn = imageUploadBtn.cloneNode(true);
-            const clonedFileBtn = fileUploadBtn.cloneNode(true);
-            const clonedSendBtn = sendBtn.cloneNode(true);
-
-            // 更新克隆按钮的ID和事件监听器（如果需要）
-            // 注意：克隆的<label>会自动关联到同一个<input>，这通常是可以的。
-            // 但克隆的发送按钮需要重新绑定事件。
-            clonedSendBtn.id = 'sendButtonMobile'; // 给克隆的按钮一个新ID
-
-            // 将克隆的按钮添加到移动端容器
-            mobileTopButtons.appendChild(clonedImageBtn);
-            mobileTopButtons.appendChild(clonedFileBtn);
-            mobileTopButtons.appendChild(clonedSendBtn);
-
-            // 将移动端容器插入到 chat-input-area 的开头
-            const chatInputArea = document.querySelector('.chat-input-area');
-            chatInputArea.insertBefore(mobileTopButtons, chatInputArea.firstChild);
-
-            // 为克隆的发送按钮添加事件监听器
-            clonedSendBtn.addEventListener('click', sendMessage);
-
-            // 可选：隐藏原始的发送按钮（如果在移动端）
-            function updateButtonVisibility() {
-                if (window.innerWidth <= 768) {
-                    sendBtn.style.display = 'none';
-                } else {
-                    sendBtn.style.display = 'flex'; // 或其他原始display值
-                }
-            }
-            // 页面加载时和窗口大小改变时调用
-            updateButtonVisibility();
-            window.addEventListener('resize', updateButtonVisibility);
         });
     </script>
 </body>
