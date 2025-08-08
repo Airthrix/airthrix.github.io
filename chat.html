@@ -302,6 +302,7 @@
             flex-direction: column;
             gap: 1rem;
             transition: max-height 0.3s ease;
+            /* Custom Scrollbar Styling */
             scrollbar-width: thin;
             scrollbar-color: var(--neon-blue) rgba(255, 255, 255, 0.1);
         }
@@ -401,7 +402,6 @@
         .chat-input {
             flex-grow: 1;
             padding: 1rem;
-            padding-right: 60px; /* Add padding to the right to make space for buttons */
             border-radius: 30px;
             border: 1px solid rgba(0, 243, 255, 0.3);
             background: rgba(10, 10, 25, 0.5);
@@ -417,15 +417,12 @@
             border-color: var(--neon-blue);
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
+        /* Removed .right-buttons from inside .chat-input-wrapper */
         .right-buttons {
-            position: absolute;
-            right: 5px; /* Position buttons to the right inside the input wrapper */
-            top: 50%;
-            transform: translateY(-50%); /* Vertically center the buttons */
             display: flex;
             gap: 0.25rem; /* Small gap between buttons */
             align-items: center;
-            height: calc(100% - 10px); /* Adjust height to fit inside the input with some margin */
+            height: 50px; /* Match input height */
         }
         .chat-send-btn {
             padding: 0.8rem 1.5rem; /* Increased padding for larger button */
@@ -531,9 +528,6 @@
             .chat-messages.expanded {
                 max-height: 700px;
             }
-            .chat-input {
-                padding-right: 55px; /* Adjust padding for smaller screens */
-            }
             .right-buttons {
                 gap: 0.15rem; /* Smaller gap on mobile */
             }
@@ -554,12 +548,7 @@
             .chat-input-wrapper {
                 width: 100%;
             }
-            .chat-input {
-                padding-right: 1rem; /* Remove right padding as buttons will be below */
-            }
             .right-buttons {
-                position: static;
-                transform: none;
                 width: 100%;
                 justify-content: flex-end; /* Align buttons to the right */
                 margin-top: 0.5rem; /* Add some space above */
@@ -585,6 +574,20 @@
             .chat-messages.expanded {
                 max-height: 600px;
             }
+        }
+        /* Animation for "正在连接服务器" */
+        .typing-indicator span {
+            animation: blinkDots 1.5s infinite;
+        }
+        @keyframes blinkDots {
+            0% { content: "."; }
+            33% { content: ".."; }
+            66% { content: "..."; }
+            100% { content: "."; }
+        }
+        .typing-indicator::after {
+            content: ".";
+            animation: blinkDots 1.5s infinite;
         }
     </style>
 </head>
@@ -617,21 +620,20 @@
                     <i class="fas fa-image"></i>
                 </label>
                 <input type="file" id="imageInput" class="file-input" accept="image/*">
-
                 <!-- File upload button -->
                 <label for="fileInput" class="upload-btn" title="上传文件">
                     <i class="fas fa-file"></i>
                 </label>
                 <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt">
-
                 <!-- Text input and send button -->
                 <div class="chat-input-wrapper">
                     <textarea id="userInput" class="chat-input" placeholder="(因安全原因暂不支持图片PDF等文件)  输入你的消息......"></textarea>
-                    <div class="right-buttons">
-                        <button id="sendButton" class="chat-send-btn">
-                            <i class="fas fa-paper-plane"></i> <span class="btn-text">发送</span>
-                        </button>
-                    </div>
+                </div>
+                <!-- Move send button outside the input wrapper -->
+                <div class="right-buttons">
+                    <button id="sendButton" class="chat-send-btn">
+                        <i class="fas fa-paper-plane"></i> <span class="btn-text">发送</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -758,7 +760,6 @@
             const userInput = document.getElementById('userInput');
             const sendButton = document.getElementById('sendButton');
             const API_URL = 'https://alice-proxy-lzdnqpchcx.cn-hangzhou.fcapp.run';
-
             // Handle image selection
             imageInput.addEventListener('change', function() {
                 const files = Array.from(imageInput.files);
@@ -776,7 +777,6 @@
                     imageInput.value = ''; // Clear input to allow re-selecting same file
                 }
             });
-
             // Handle file selection
             fileInput.addEventListener('change', function() {
                 const files = Array.from(fileInput.files);
@@ -794,7 +794,6 @@
                     fileInput.value = ''; // Clear input to allow re-selecting same file
                 }
             });
-
             // Update file preview area
             function updateFilePreview() {
                 filePreviewContainer.innerHTML = '';
@@ -807,12 +806,10 @@
                         // Store index and type for removal
                         previewItem.dataset.index = index;
                         previewItem.dataset.type = selectedImages.includes(file) ? 'image' : 'file';
-
                         const fileNameSpan = document.createElement('span');
                         fileNameSpan.className = 'file-preview-name';
                         fileNameSpan.textContent = file.name.length > 20 ? file.name.substring(0, 17) + '...' : file.name;
                         fileNameSpan.title = file.name; // Show full name on hover
-
                         const removeIcon = document.createElement('i');
                         removeIcon.className = 'fas fa-times file-preview-remove';
                         removeIcon.title = isEnglish ? "Remove file" : "移除文件";
@@ -843,7 +840,6 @@
                             }
                             updateFilePreview(); // Update preview
                         });
-
                         previewItem.appendChild(fileNameSpan);
                         previewItem.appendChild(removeIcon);
                         filePreviewContainer.appendChild(previewItem);
@@ -852,7 +848,6 @@
                     filePreviewContainer.style.display = 'none';
                 }
             }
-
             function smartScroll() {
                 if (!scrollLock && !isTyping) {
                     chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -866,14 +861,12 @@
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message');
                 messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
-
                 // If it's a user message and contains files, add file info
                 if (isUser && files.length > 0) {
                     let fileText = isEnglish ? " [Sent files] " : " [已发送文件] ";
                     fileText += `(${files.length})`;
                     message += fileText;
                 }
-
                 messageDiv.textContent = message;
                 chatMessages.appendChild(messageDiv);
                 smartScroll();
@@ -884,7 +877,7 @@
                 const typingDiv = document.createElement('div');
                 typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
                 typingDiv.id = 'typingIndicator';
-                typingDiv.textContent = isEnglish ? 'Connecting to the server......' : '正在连接服务器......';
+                typingDiv.textContent = isEnglish ? 'Connecting to the server' : '正在连接服务器';
                 chatMessages.appendChild(typingDiv);
                 smartScroll();
             }
@@ -929,19 +922,15 @@
                 const message = userInput.value.trim();
                 const imagesToSend = [...selectedImages]; // Create copies
                 const filesToSend = [...selectedFiles];  // Create copies
-
                 if (!message && imagesToSend.length === 0 && filesToSend.length === 0) return;
-
                 // Add user message (including file info)
                 addMessage(message, true, [...imagesToSend, ...filesToSend]);
-
                 userInput.value = '';
                 selectedImages = []; // Clear selected image array
                 selectedFiles = [];  // Clear selected file array
                 updateFilePreview(); // Clear preview
                 showTyping();
                 sendButton.disabled = true;
-
                 try {
                     let response;
                     if (imagesToSend.length > 0 || filesToSend.length > 0) {
@@ -958,7 +947,6 @@
                             // Use 'file' as the field name for files
                             formData.append('file', file, file.name);
                         });
-
                         response = await fetch(API_URL, {
                             method: 'POST',
                             // Do not set Content-Type, let the browser set multipart/form-data automatically
@@ -972,7 +960,6 @@
                             body: JSON.stringify({ message: message })
                         });
                     }
-
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
