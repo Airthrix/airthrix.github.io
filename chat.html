@@ -866,6 +866,9 @@
                 smartScroll();
                 return messageDiv;
             }
+
+            let typingInterval; // 用于存储 setInterval 的 ID，以便可以清除它
+
             function showTyping() {
                 isTyping = true;
                 const typingDiv = document.createElement('div');
