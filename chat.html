@@ -183,7 +183,7 @@
             z-index: 10;
             background: rgba(10, 10, 25, 0.6);
             backdrop-filter: blur(5px);
-            width: 100%; /* 确保页脚宽度为100% */
+            width: 100%; 
         }
         .footer-logo {
             font-size: 2.5rem;
@@ -367,7 +367,7 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
-        /* === 添加在这里 === */
+
         @keyframes dotPulse {
             0%, 100% { opacity: 0.3; }
             50% { opacity: 1; }
@@ -469,7 +469,7 @@
             box-shadow: none;
             transform: none;
         }
-        /* === 替换为 === */
+
         .typing-indicator {
             color: var(--neon-blue);
             font-style: italic;
@@ -479,7 +479,7 @@
             align-items: center;
             gap: 5px;
         }
-        /* === 添加在这里 === */
+
         .dots {
             display: flex;
             gap: 4px;
@@ -500,7 +500,7 @@
         .dot:nth-child(3) {
             animation-delay: 0.6s;
         }
-        /* ================= */
+
         .file-preview-container {
             display: flex;
             flex-wrap: wrap;
@@ -538,7 +538,7 @@
         .file-preview-remove:hover {
             color: #ff5555;
         }
-        /* 移动端优化 */
+
         @media (max-width: 768px) {
             .top-nav {
                 padding: 1rem;
@@ -668,7 +668,7 @@
         <div class="chat-container">
             <h2 class="chat-title">与 AliceSkyGarden 对话</h2>
             <div class="chat-messages" id="chatMessages">
-                <div class="message bot-message" id="initialMessage">你好！我是 AliceSkyGarden，有什么我可以帮助你的吗？😊</div>
+                <div class="message bot-message" id="initialMessage">你好！我是 AliceSkyGarden语言模型，有什么可以帮你吗？😊</div>
             </div>
             <div class="file-preview-container" id="filePreviewContainer" style="display: none;"></div>
             <div class="chat-input-area">
@@ -720,7 +720,7 @@
             let isEnglish = false;
             let selectedImages = [];
             let selectedFiles = [];
-            // 添加会话ID
+         
             let sessionId = localStorage.getItem('chat_session_id') || '';
             
             particlesJS('particles-js', {
@@ -781,7 +781,7 @@
                     chatInput.placeholder = "(Due security image PDF files are not supported)  Enter your message......";
                     btnTextElements[2].textContent = 'Send';
                     clearHistoryBtn.querySelector('.btn-text').textContent = 'Clear History';
-                    initialMessage.textContent = "Hello! I'm AliceSkyGarden. How can I assist you? 😊";
+                    initialMessage.textContent = "Hello! I'm AliceSkyGarden LLM. How can I assist you? 😊";
                     footerTagline.textContent = "Unlocking a New Era of Intelligence · Exploring Infinite Possibilities";
                     const footerLinks = ["Home", "Developers", "Documentation", "Community", "Blog", "Contact Us"];
                     footerLinksText.forEach((el, index) => {
@@ -812,11 +812,11 @@
                     langBtn.classList.remove('pulse');
                 }, 500);
             });
-            // 清除历史按钮事件
+        
             clearHistoryBtn.addEventListener('click', function() {
                 sessionId = '';
                 localStorage.removeItem('chat_session_id');
-                // 清除当前聊天显示（只保留初始消息）
+      
                 const chatMessages = document.getElementById('chatMessages');
                 chatMessages.innerHTML = '';
                 const newInitialMessage = document.createElement('div');
@@ -942,11 +942,11 @@
               const textNode = document.createTextNode(isEnglish ? 'Connecting server' : '正在连接服务器');
               typingDiv.appendChild(textNode);
   
-              // 创建点状动画容器
+      
               const dotsSpan = document.createElement('span');
               dotsSpan.classList.add('dots');
   
-              // 创建三个点
+ 
               for(let i = 0; i < 3; i++) {
                 const dot = document.createElement('span');
                 dot.classList.add('dot');
@@ -1004,13 +1004,13 @@
                 showTyping();
                 sendButton.disabled = true;
                 try {
-                    // 构建请求体
+              
                     let requestBody;
                     let headers = {
                         'X-Session-ID': sessionId
                     };
                     
-                    // 如果有文件，则使用FormData
+     
                     if (imagesToSend.length > 0 || filesToSend.length > 0) {
                         const formData = new FormData();
                         if (message) {
@@ -1023,11 +1023,11 @@
                             formData.append('file', file, file.name);
                         });
                         requestBody = formData;
-                        // 注意：当使用FormData时，不要设置Content-Type，浏览器会自动设置
-                        // 删除headers中的Content-Type，让浏览器设置
+                       
+                
                         delete headers['Content-Type'];
                     } else {
-                        // 纯文本
+               
                         requestBody = JSON.stringify({ 
                             message: message 
                         });
@@ -1047,7 +1047,7 @@
                     const data = await response.json();
                     hideTyping();
                     
-                    // 更新会话ID
+        
                     if (data.session_id) {
                         sessionId = data.session_id;
                         localStorage.setItem('chat_session_id', sessionId);
