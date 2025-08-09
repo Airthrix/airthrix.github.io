@@ -658,6 +658,11 @@
             <i class="fas fa-globe"></i>
             <span class="btn-text">English</span>
         </button>
+        <!-- 添加清除历史按钮 -->
+        <button class="nav-btn" id="clearHistoryBtn">
+            <i class="fas fa-trash-alt"></i>
+            <span class="btn-text">清除历史</span>
+        </button>
     </div>
     <div class="main-content">
         <div class="chat-container">
@@ -715,6 +720,9 @@
             let isEnglish = false;
             let selectedImages = [];
             let selectedFiles = [];
+            // 添加会话ID
+            let sessionId = localStorage.getItem('chat_session_id') || '';
+            
             particlesJS('particles-js', {
                 "particles": {
                     "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
@@ -741,6 +749,7 @@
             });
             const langBtn = document.getElementById('langBtn');
             const loginBtn = document.getElementById('loginBtn');
+            const clearHistoryBtn = document.getElementById('clearHistoryBtn');
             const chatTitle = document.querySelector('.chat-title');
             const chatInput = document.getElementById('userInput');
             const chatSendBtn = document.getElementById('sendButton');
@@ -771,6 +780,7 @@
                     chatTitle.textContent = "Talk with AliceSkyGarden";
                     chatInput.placeholder = "(Due security image PDF files are not supported)  Enter your message......";
                     btnTextElements[2].textContent = 'Send';
+                    clearHistoryBtn.querySelector('.btn-text').textContent = 'Clear History';
                     initialMessage.textContent = "Hello! I'm AliceSkyGarden. How can I assist you? 😊";
                     footerTagline.textContent = "Unlocking a New Era of Intelligence · Exploring Infinite Possibilities";
                     const footerLinks = ["Home", "Developers", "Documentation", "Community", "Blog", "Contact Us"];
@@ -786,6 +796,7 @@
                     chatTitle.textContent = "与 AliceSkyGarden 对话";
                     chatInput.placeholder = "(因安全原因暂不支持图片PDF等文件)  输入你的消息......";
                     btnTextElements[2].textContent = '发送';
+                    clearHistoryBtn.querySelector('.btn-text').textContent = '清除历史';
                     initialMessage.textContent = "你好！我是 AliceSkyGarden，有什么我可以帮助你的吗？😊";
                     footerTagline.textContent = "开启智能新纪元 · 探索无限可能";
                     const footerLinks = ["首页", "开发者", "文档", "社区", "博客", "联系我们"];
@@ -793,13 +804,27 @@
                         el.textContent = footerLinks[index];
                     });
                     copyrightText.textContent = "© 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved";
-                     uploadBtns[0].title = "上传图片";
+                    uploadBtns[0].title = "上传图片";
                     uploadBtns[1].title = "上传文件";
                 }
                 langBtn.classList.add('pulse');
                 setTimeout(() => {
                     langBtn.classList.remove('pulse');
                 }, 500);
+            });
+            // 清除历史按钮事件
+            clearHistoryBtn.addEventListener('click', function() {
+                sessionId = '';
+                localStorage.removeItem('chat_session_id');
+                // 清除当前聊天显示（只保留初始消息）
+                const chatMessages = document.getElementById('chatMessages');
+                chatMessages.innerHTML = '';
+                const newInitialMessage = document.createElement('div');
+                newInitialMessage.classList.add('message', 'bot-message');
+                newInitialMessage.textContent = isEnglish ? 
+                    "History cleared. New session started. How can I assist you?" : 
+                    "历史已清除，开始新会话。有什么我可以帮助你的吗？";
+                chatMessages.appendChild(newInitialMessage);
             });
             const chatMessages = document.getElementById('chatMessages');
             const userInput = document.getElementById('userInput');
@@ -979,10 +1004,16 @@
                 showTyping();
                 sendButton.disabled = true;
                 try {
-                    let response;
+                    // 构建请求体
+                    let requestBody;
+                    let headers = {
+                        'X-Session-ID': sessionId
+                    };
+                    
+                    // 如果有文件，则使用FormData
                     if (imagesToSend.length > 0 || filesToSend.length > 0) {
                         const formData = new FormData();
-                        if(message) {
+                        if (message) {
                             formData.append('message', message);
                         }
                         imagesToSend.forEach((file, index) => {
@@ -991,22 +1022,37 @@
                         filesToSend.forEach((file, index) => {
                             formData.append('file', file, file.name);
                         });
-                        response = await fetch(API_URL, {
-                            method: 'POST',
-                            body: formData
-                        });
+                        requestBody = formData;
+                        // 注意：当使用FormData时，不要设置Content-Type，浏览器会自动设置
+                        // 删除headers中的Content-Type，让浏览器设置
+                        delete headers['Content-Type'];
                     } else {
-                         response = await fetch(API_URL, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ message: message })
+                        // 纯文本
+                        requestBody = JSON.stringify({ 
+                            message: message 
                         });
+                        headers['Content-Type'] = 'application/json';
                     }
+                    
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: headers,
+                        body: requestBody
+                    });
+                    
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
+                    
                     const data = await response.json();
                     hideTyping();
+                    
+                    // 更新会话ID
+                    if (data.session_id) {
+                        sessionId = data.session_id;
+                        localStorage.setItem('chat_session_id', sessionId);
+                    }
+                    
                     let botReply = "";
                     if (data.reply) {
                         botReply = data.reply;
