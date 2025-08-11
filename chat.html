@@ -774,12 +774,13 @@
                 isEnglish = !isEnglish;
                 const btnTextElements = document.querySelectorAll('.btn-text');
                 const uploadBtns = document.querySelectorAll('.upload-btn');
+                const sendButtonText = document.getElementById('sendButtonText');
                 if (isEnglish) {
                     btnTextElements[0].textContent = 'Log in';
                     btnTextElements[1].textContent = '中文';
                     chatTitle.textContent = "Talk with AliceSkyGarden";
                     chatInput.placeholder = "(Due security image PDF files are not supported)  Enter your message......";
-                    btnTextElements[2].textContent = 'Send';
+                    sendButtonText.textContent = 'Send';
                     clearHistoryBtn.querySelector('.btn-text').textContent = 'Clear History';
                     initialMessage.textContent = "AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊";
                     footerTagline.textContent = "Unlocking a New Era of Intelligence · Exploring Infinite Possibilities";
@@ -795,7 +796,7 @@
                     btnTextElements[1].textContent = 'English';
                     chatTitle.textContent = "与 AliceSkyGarden 对话";
                     chatInput.placeholder = "(因安全原因暂不支持图片PDF等文件)  输入你的消息......";
-                    btnTextElements[2].textContent = '发送';
+                    sendButtonText.textContent = '发送';
                     clearHistoryBtn.querySelector('.btn-text').textContent = '清除历史';
                     initialMessage.textContent = "AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊";
                     footerTagline.textContent = "开启智能新纪元 · 探索无限可能";
