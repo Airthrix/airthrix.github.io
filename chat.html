@@ -823,8 +823,8 @@
                 const newInitialMessage = document.createElement('div');
                 newInitialMessage.classList.add('message', 'bot-message');
                 newInitialMessage.textContent = isEnglish ? 
-                    "History cleared. New session started. \nAliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊" : 
-                    "历史已清除，开始新会话。\nAliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊";
+                    "History cleared. New session started. <br>AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊" : 
+                    "历史已清除，开始新会话。<br>AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊";
                 chatMessages.appendChild(newInitialMessage);
             });
             const chatMessages = document.getElementById('chatMessages');
