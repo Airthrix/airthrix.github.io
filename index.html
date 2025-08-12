@@ -1267,11 +1267,11 @@
             <h2 class="chat-title">与 AliceSkyGarden 对话</h2>
             <div class="chat-messages" id="chatMessages">
                 <!-- 消息将在这里显示 -->
-                <div class="message bot-message">AliceSkyGarden模型正在休息😊我是Qwen3，有任何问题你都可以问我😊</div>
+                <div class="message bot-message">I'm AliceSkyGarden LLM😊How can I assist you? 😊</div>
             </div>
             <div class="chat-input-area">
-                <textarea id="userInput" class="chat-input" placeholder="输入你的消息..."></textarea>
-                <button id="sendButton" class="chat-send-btn">
+                <textarea id="userInput" class="chat-input" placeholder="输入你的消息..." onclick="window.location.href='https://aliceskygarden.top/chat'"></textarea>
+                <button id="sendButton" class="chat-send-btn" onclick="window.location.href='https://aliceskygarden.top/chat'">
                     <i class="fas fa-paper-plane"></i> 发送
                 </button>
             </div>
@@ -1859,131 +1859,6 @@
                     typingIndicator.remove();
                 }
             }
-
-            async function sendMessage() {
-                const message = userInput.value.trim();
-                if (!message) return;
-
-                addMessage(message, true); 
-                userInput.value = '';
-     
-                showTyping();
-                sendButton.disabled = true; 
-
-                let botMessageDiv = null; 
-                let fullReply = ""; 
-
-                try {
-                   
-                    const response = await fetch(API_URL, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ message: message })
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
-                    const data = await response.json();
-
-                  
-                    hideTyping();
-
-                 
-                    if (data.reply) {
-                        fullReply = data.reply;
-                    } else if (data.error) {
-                        fullReply = `错误: ${data.error}`;
-                    } else {
-                        fullReply = "抱歉，我没有收到回复。";
-                    }
-
-
-                    const markdownToHtml = (markdownText) => {
-          
-                        if (typeof marked === 'undefined') {
-                            console.warn('marked.js 未加载，无法转换 Markdown');
-                            return markdownText; 
-                        }
-                        try {
-
-                            return marked.parse(markdownText, { breaks: true });
-                        } catch (e) {
-                            console.error('Markdown 转换出错:', e);
-                            return markdownText; 
-                        }
-                    };
-
-        
-                    fullReply = markdownToHtml(fullReply);
-
-
-                
-                    botMessageDiv = document.createElement('div');
-                    botMessageDiv.classList.add('message', 'bot-message');
-               
-    
-                    botMessageDiv.innerHTML = ""; 
-
-                    chatMessages.appendChild(botMessageDiv);
-              
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-
-             
-                    let i = 0;
-
-                    const typeWriterHtml = () => {
- 
-                         botMessageDiv.innerHTML = fullReply;
-                         chatMessages.scrollTop = chatMessages.scrollHeight;
-
-                         /*
-                         if (i < fullReply.length) {
-
-                             botMessageDiv.innerHTML = fullReply.substring(0, i+1);
-                             i++;
-                             chatMessages.scrollTop = chatMessages.scrollHeight;
-                             setTimeout(typeWriterHtml, 30);
-                         }
-                         */
-                    };
-                    typeWriterHtml(); 
-
-
-                } catch (error) {
-                    console.error('Error sending message:', error);
-               
-                    hideTyping();
-                
-                    if (!botMessageDiv) {
-                        const errorDiv = document.createElement('div');
-                        errorDiv.classList.add('message', 'bot-message');
-                        errorDiv.textContent = `错误: ${error.message}`;
-                        chatMessages.appendChild(errorDiv);
-                        chatMessages.scrollTop = chatMessages.scrollHeight;
-                    } else {
-                 
-                        botMessageDiv.textContent = `错误: ${error.message}`;
-                    }
-                } finally {
-                
-                    sendButton.disabled = false;
-                }
-
-            }
-
-
-            sendButton.addEventListener('click', sendMessage);
-       
-            userInput.addEventListener('keydown', function(event) {
-                if (event.key === 'Enter' && !event.shiftKey) {
-                    event.preventDefault(); 
-                    sendMessage();
-                }
-            });
            
         });
     </script>
