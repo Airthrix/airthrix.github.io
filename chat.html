@@ -686,7 +686,7 @@
                     </button>
                 </div>
                 <div class="chat-input-wrapper">
-                    <textarea id="userInput" class="chat-input" placeholder="(现已支持 各种格式的图片 pdf docx txt xlsx csv py html等文件输入)  输入你的消息......"></textarea>
+                    <textarea id="userInput" class="chat-input" placeholder="(现已支持 各种格式的图片 pdf docx txt xlsx csv py html等文件)  输入你的消息..."></textarea>
                 </div>
             </div>
         </div>
@@ -779,7 +779,7 @@
                     btnTextElements[0].textContent = 'Log in';
                     btnTextElements[1].textContent = '中文';
                     chatTitle.textContent = "Talk with AliceSkyGarden";
-                    chatInput.placeholder = "(now support images pdf docx txt xlsx csv py html etc files input)  Enter your message......";
+                    chatInput.placeholder = "(Now support images pdf docx txt xlsx csv py html etc files input) Enter your message...";
                     sendButtonText.textContent = 'Send';
                     clearHistoryBtn.querySelector('.btn-text').textContent = 'Clear History';
                     initialMessage.innerHTML = "AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊<br><br>Now evolved into Multimodal Model, Supporting images, PDF, Word, tables, scripts, web pages, etc files input😊";
@@ -795,7 +795,7 @@
                     btnTextElements[0].textContent = 'Log in';
                     btnTextElements[1].textContent = 'English';
                     chatTitle.textContent = "与 AliceSkyGarden 对话";
-                    chatInput.placeholder = "(现已支持 各种格式的图片 pdf docx txt xlsx csv py html等文件输入)  输入你的消息......";
+                    chatInput.placeholder = "(现已支持 各种格式的图片 pdf docx txt xlsx csv py html等文件)  输入你的消息...";
                     sendButtonText.textContent = '发送';
                     clearHistoryBtn.querySelector('.btn-text').textContent = '清除历史';
                     initialMessage.innerHTML = "AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊<br><br>现已进化成多模态模型，支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊";
@@ -823,8 +823,8 @@
                 const newInitialMessage = document.createElement('div');
                 newInitialMessage.classList.add('message', 'bot-message');
                 newInitialMessage.innerHTML = isEnglish ? 
-                    "History cleared. New session started. <br>AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊 <br>Now evolved into Multimodal Model, Supporting images, PDF, Word, tables, scripts, web pages, etc files input😊" : 
-                    "历史已清除，开始新会话。<br>AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊 <br>现已进化成多模态模型，支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊";
+                    "History cleared. New session started. <br>AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊<br><br>Now evolved into Multimodal Model, Supporting images, PDF, Word, tables, scripts, web pages, etc files input😊" : 
+                    "历史已清除，开始新会话。<br>AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊<br><br>现已进化成多模态模型，支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊";
                 chatMessages.appendChild(newInitialMessage);
             });
             const chatMessages = document.getElementById('chatMessages');
@@ -924,11 +924,19 @@
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message');
                 messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+
                 if (isUser && files.length > 0) {
-                    let fileText = isEnglish ? " [Sent files] " : " [已发送文件] ";
-                    fileText += `(${files.length})`;
-                    message += fileText;
+                    if (files.length === 1) {
+                        const fileName = files[0].name; 
+                        let fileText = isEnglish ? ` [Sent ${fileName}]` : ` [已发送 ${fileName}]`;
+                        message += fileText;
+                    } else {
+                        let fileText = isEnglish ? " [Sent files] " : " [已发送文件] ";
+                        fileText += `(${files.length})`;
+                        message += fileText;
+                    }
                 }
+
                 messageDiv.textContent = message;
                 chatMessages.appendChild(messageDiv);
                 smartScroll();
@@ -1103,4 +1111,3 @@
     </script>
 </body>
 </html>
-
