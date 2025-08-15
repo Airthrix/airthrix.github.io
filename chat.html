@@ -820,6 +820,13 @@
                     copyrightText.textContent = "© 2025 AliceSkyGarden Technology. All rights reserved";
                     uploadBtns[0].title = "Upload Image";
                     uploadBtns[1].title = "Upload File";
+
+                    // *** 插入 ***
+                    const cnTextElements = document.querySelectorAll('.cn-text');
+                    const enTextElements = document.querySelectorAll('.en-text');
+                    cnTextElements.forEach(el => el.style.display = 'none');
+                    enTextElements.forEach(el => el.style.display = 'inline');
+
                 } else {
                     btnTextElements[0].textContent = 'Log in';
                     btnTextElements[1].textContent = 'English';
@@ -836,25 +843,17 @@
                     copyrightText.textContent = "© 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved";
                     uploadBtns[0].title = "上传图片";
                     uploadBtns[1].title = "上传文件";
+
+                    // *** 插入 ***
+                    const cnTextElements = document.querySelectorAll('.cn-text');
+                    const enTextElements = document.querySelectorAll('.en-text');
+                    enTextElements.forEach(el => el.style.display = 'none');
+                    cnTextElements.forEach(el => el.style.display = 'inline');
                 }
                 langBtn.classList.add('pulse');
                 setTimeout(() => {
                     langBtn.classList.remove('pulse');
                 }, 500);
-
-                // *** 插入 ***
-                const cnTextElements = document.querySelectorAll('.cn-text');
-                const enTextElements = document.querySelectorAll('.en-text');
-                if (isEnglish) {
-                    // 如果切换到英文，隐藏中文，显示英文
-                    cnTextElements.forEach(el => el.style.display = 'none');
-                    enTextElements.forEach(el => el.style.display = 'inline'); // 或 'inline' 以保持文本流
-                } else {
-                    // 如果切换到中文，隐藏英文，显示中文
-                    enTextElements.forEach(el => el.style.display = 'none');
-                    cnTextElements.forEach(el => el.style.display = 'inline'); // 或 'inline' 以保持文本流
-                }
-                // *** 插入 ***
 
             });
         
