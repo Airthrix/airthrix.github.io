@@ -18,6 +18,7 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         :root {
             --neon-blue: #00f3ff;
             --neon-purple: #b300ff;
@@ -28,215 +29,396 @@
             --panel-bg: rgba(15, 15, 40, 0.85);
             --glow-color: #00f3ff;
         }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(270deg, #0a0a2e, #1a0a2e, #2d0b45, #4a0f6b, #1a0a2e);
-            background-size: 600% 600%;
+            background-size: 400% 400%;
             animation: gradientBG 30s ease infinite;
             color: #e0e0ff;
             min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
         }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-        #particles-js {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 0;
-        }
-        .glow {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.7;
-            z-index: 1;
-        }
-        .glow-blue {
-            width: 300px;
-            height: 300px;
-            background: var(--neon-blue);
-            top: 10%;
-            left: 10%;
-            animation: float 15s ease-in-out infinite;
-        }
-        .glow-purple {
-            width: 400px;
-            height: 400px;
-            background: var(--neon-purple);
-            bottom: 15%;
-            right: 15%;
-            animation: float 20s ease-in-out infinite reverse;
-        }
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(20px, 20px); }
-        }
-        .grid-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background:
-                linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
-            background-size: 30px 30px;
-            pointer-events: none;
-            z-index: 2;
-            opacity: 0.3;
-        }
-        .top-nav {
-            position: fixed;
-            top: 0;
-            right: 0;
-            z-index: 1000;
-            padding: 1.5rem 2rem;
-            display: flex;
-            gap: 1.5rem;
-            transform: translateY(-5px);
-        }
-        .nav-btn {
-            min-width: 120px;
-            height: 44px;
+
+        .header {
             text-align: center;
-            white-space: nowrap;
-            padding: 0 1.5rem;
-            flex-shrink: 0;
-            background: transparent;
+            margin-bottom: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: rgba(30, 30, 60, 0.7);
+            color: var(--neon-blue);
             border: none;
-            color: #c0c0ff;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
             font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3), inset 0 0 5px rgba(0, 243, 255, 0.3);
+            min-width: 120px;
+        }
+
+        .nav-btn:hover {
+            background-color: rgba(0, 243, 255, 0.2);
+            color: var(--neon-blue);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px var(--neon-blue), inset 0 0 7px rgba(0, 243, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .main-content {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chat-container {
+            background: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 900px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .chat-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+
+        .chat-messages {
+            height: 500px;
+            overflow-y: auto;
+            padding: 1rem;
+            background: rgba(10, 10, 30, 0.5);
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            scrollbar-width: thin;
+            scrollbar-color: var(--neon-blue) rgba(10, 10, 30, 0.5);
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(10, 10, 30, 0.5);
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background-color: var(--neon-blue);
+            border-radius: 4px;
+        }
+
+        .message {
+            padding: 12px 18px;
+            margin-bottom: 15px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+            line-height: 1.5;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user-message {
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+            color: #0a0a12;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .bot-message {
+            background: rgba(0, 0, 0, 0.8);
+            color: #c0c0ff;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #c0c0ff;
+            border-radius: 18px;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .dots {
+            display: flex;
+            margin-left: 8px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: #c0c0ff;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: bounce 1.5s infinite;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background-color: #c0c0ff;
+            margin-left: 2px;
+            animation: blink 1s infinite;
+            vertical-align: text-bottom;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .file-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(30, 30, 60, 0.5);
+            border-radius: 8px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .file-preview-item {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid var(--neon-blue);
+        }
+
+        .file-preview-item.image-preview {
+            background-size: cover;
+            background-position: center;
+        }
+
+        .file-preview-item.file-preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(20, 20, 50, 0.8);
+            font-size: 10px;
+            text-align: center;
+        }
+
+        .file-preview-item .remove-file {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.7rem 1.5rem;
-            border-radius: 30px;
-            transition: all 0.3s ease;
-            position: relative;
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            backdrop-filter: blur(5px);
-            background: rgba(15, 15, 40, 0.4);
-            overflow: hidden;
-            z-index: 10;
+            justify-content: center;
         }
-        .nav-btn::after {
-            content: none;
+
+        .file-preview-item .remove-file:hover {
+            background: var(--neon-red);
         }
-        .nav-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, rgba(0, 243, 255, 0.2) 0%, transparent 70%);
-            transform: scale(0);
-            transition: transform 0.3s ease;
-            border-radius: 30px;
-            z-index: -1;
-        }
-        .nav-btn:hover::before {
-            transform: scale(1.5);
-        }
-        .nav-btn:hover {
-            color: var(--neon-blue);
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.8);
-            box-shadow: 0 0 20px var(--neon-blue);
-            transform: translateY(-5px);
-            background: rgba(0, 243, 255, 0.2);
-        }
-        .nav-btn i {
-            font-size: 1.1rem;
-            transition: transform 0.3s ease;
-        }
-        .nav-btn:hover i {
-            transform: scale(1.2);
-        }
-        .main-content {
-            position: relative;
-            z-index: 10;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-            padding-top: 70px;
-            flex: 1;
+
+        .chat-input-area {
             display: flex;
             flex-direction: column;
-            width: 100%;
+            gap: 10px;
         }
+
+        .chat-input-wrapper {
+            display: flex;
+            align-items: center;
+            background: rgba(30, 30, 60, 0.7);
+            border-radius: 25px;
+            padding: 5px 15px;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+        }
+
+        .chat-input {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            color: #e0e0ff;
+            padding: 12px 0;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .chat-input::placeholder {
+            color: #8888aa;
+        }
+
+        .right-buttons {
+            display: flex;
+            gap: 8px;
+            margin-left: 10px;
+        }
+
+        .upload-btn, .chat-send-btn {
+            background: transparent;
+            color: var(--neon-blue);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3), inset 0 0 5px rgba(0, 243, 255, 0.3);
+        }
+
+        .upload-btn:hover, .chat-send-btn:hover {
+            background-color: rgba(0, 243, 255, 0.2);
+            color: var(--neon-blue);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px var(--neon-blue), inset 0 0 7px rgba(0, 243, 255, 0.5);
+        }
+
+        .hidden-input {
+            display: none;
+        }
+
         .footer {
             text-align: center;
-            padding: 4rem 0 3rem;
-            border-top: 1px solid rgba(100, 100, 255, 0.2);
-            color: #a0a0ff;
-            position: relative;
-            z-index: 10;
-            background: rgba(10, 10, 25, 0.6);
-            backdrop-filter: blur(5px);
-            width: 100%; 
+            padding: 2rem 0 1.5rem;
+            width: 100%;
+            max-width: 1200px;
         }
+
         .footer-logo {
             font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
+
         .footer-links {
             display: flex;
             justify-content: center;
             gap: 2rem;
-            margin: 2rem 0;
+            margin-bottom: 1rem;
             flex-wrap: wrap;
         }
+
         .footer-link {
             color: #c0c0ff;
             text-decoration: none;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            position: relative;
+            transition: color 0.3s ease;
+            font-size: 1rem;
         }
-        .footer-link::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--neon-blue);
-            transition: width 0.3s ease;
-        }
-        .footer-link:hover::after {
-            width: 100%;
-        }
+
         .footer-link:hover {
             color: var(--neon-blue);
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.8);
+            text-shadow: 0 0 8px var(--neon-blue);
         }
-        .footer p {
+
+        .copyright {
             margin: 0.5rem 0;
             font-size: 0.9rem;
             opacity: 0.8;
         }
+
         .social-icons {
             display: flex;
             justify-content: center;
             gap: 1.5rem;
             margin: 1.5rem 0;
         }
+
         .social-icon {
             width: 45px;
             height: 45px;
@@ -252,6 +434,7 @@
             position: relative;
             overflow: hidden;
         }
+
         .social-icon::before {
             content: '';
             position: absolute;
@@ -259,648 +442,272 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, rgba(0, 243, 255, 0.2) 0%, transparent 70%);
-            transform: scale(0);
-            transition: transform 0.3s ease;
-            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 243, 255, 0.4) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-        .social-icon:hover::before {
-            transform: scale(1.5);
-        }
+
         .social-icon:hover {
-            background: rgba(0, 243, 255, 0.2);
-            transform: translateY(-5px);
-            box-shadow: 0 0 15px var(--neon-blue), 0 0 25px var(--neon-blue);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 243, 255, 0.4);
+            border-color: var(--neon-blue);
+            color: white;
         }
-        .chat-container {
-            background: rgba(15, 15, 40, 0.5);
-            border-radius: 15px;
-            padding: 2rem;
-            backdrop-filter: blur(1px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            margin-top: 3rem;
-            border-top: 3px solid var(--neon-blue);
-            position: relative;
-            z-index: 10;
-            width: 80%;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 1rem;
-            display: flex;
-            flex-direction: column;
-            flex: 1;
+
+        .social-icon:hover::before {
+            opacity: 1;
         }
-        .chat-title {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            color: var(--neon-blue);
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
-        }
-        .chat-messages {
-            min-height: 600px;
-            max-height: 99999999999999999999999999999px;
-            overflow-y: auto;
-            padding: 1rem;
-            background: rgba(10, 10, 25, 0.3);
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            transition: max-height 0.3s ease;
-            scrollbar-width: thin;
-            scrollbar-color: var(--neon-blue) rgba(255, 255, 255, 0.1);
-            flex: 1;
-        }
-        .chat-messages.expanded {
-            max-height: 800px;
-        }
-        .chat-messages::-webkit-scrollbar {
-            width: 12px;
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 6px;
-        }
-        .chat-messages::-webkit-scrollbar-thumb {
-            background-color: var(--neon-blue);
-            border-radius: 6px;
-            border: 2px solid rgba(10, 10, 25, 0.5);
-        }
-        .chat-messages::-webkit-scrollbar-track {
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 6px;
-        }
-        .message {
-            padding: 0.8rem 1.2rem;
-            border-radius: 18px;
-            max-width: 95%;
-            word-wrap: break-word;
-            animation: fadeIn 0.3s ease-in-out;
-            position: relative;
-            overflow: hidden;
-            font-size: 1rem;
-        }
+
         .agreement-notice {
             text-align: center;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: #888888;
-            margin-top: 0.1rem;
-            margin-bottom: 0.1rem;
+            margin-top: 0.5rem;
         }
+
         .agreement-link {
             font-size: inherit;
             color: #c0c0ff;
             text-decoration: none;
         }
+
         .agreement-link:hover {
             text-decoration: underline;
             color: var(--neon-blue);
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .user-message {
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
-            color: #0a0a12;
-            align-self: flex-end;
-            border-bottom-right-radius: 5px;
-        }
-        .bot-message {
-            background: rgba(30, 30, 60, 0.8);
-            color: #c0c0ff;
-            align-self: flex-start;
-            border-bottom-left-radius: 5px;
-            box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.2);
-        }
-        .typing-cursor::after {
-            content: '|';
-            animation: blink 1s infinite;
-            color: var(--neon-blue);
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-        @keyframes dotPulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
-        .chat-input-area {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            z-index: 10;
-            position: relative;
-        }
-        .upload-buttons {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-        .upload-btn {
-            padding: 0.8rem 1rem;
-            border-radius: 30px;
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            background: rgba(15, 15, 40, 0.4);
-            color: #c0c0ff;
-            font-size: 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-            height: 50px;
-            min-width: 50px;
-        }
-        .upload-btn:hover {
-            background: rgba(0, 243, 255, 0.2);
-            color: var(--neon-blue);
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 15px var(--neon-blue);
-            transform: translateY(-2px);
-        }
-        .file-input {
-            display: none;
-        }
-        .chat-input-wrapper {
-            flex-grow: 1;
-            display: flex;
-            min-width: 200px;
-            position: relative;
-        }
-        .chat-input {
-            flex-grow: 1;
-            padding: 1rem;
-            padding-right: 60px;
-            border-radius: 30px;
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            background: rgba(10, 10, 25, 0.5);
-            color: #e0e0ff;
-            font-size: 1rem;
-            resize: none;
-            min-height: 50px;
-            max-height: 150px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-        .chat-input:focus {
-            outline: none;
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
-        }
-        .right-buttons {
-            display: none;
-        }
-        .chat-send-btn {
-            padding: 0.8rem 1.5rem;
-            border-radius: 30px;
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            background: rgba(15, 15, 40, 0.4);
-            color: #c0c0ff;
-            font-size: 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-            height: 100%;
-            min-width: 100px;
-        }
-        .chat-send-btn:hover {
-            background: rgba(0, 243, 255, 0.2);
-            color: var(--neon-blue);
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 15px var(--neon-blue);
-            transform: translateY(-2px);
-        }
-        .chat-send-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            background: rgba(50, 50, 80, 0.3);
-            box-shadow: none;
-            transform: none;
-        }
-        .typing-indicator {
-            color: var(--neon-blue);
-            font-style: italic;
-            align-self: flex-start;
-            padding: 0.5rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .dots {
-            display: flex;
-            gap: 4px;
-        }
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: var(--neon-blue);
-            animation: dotPulse 1.5s infinite;
-        }
-        .dot:nth-child(2) {
-            animation-delay: 0.3s;
-        }
-        .dot:nth-child(3) {
-            animation-delay: 0.6s;
-        }
-        .file-preview-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-            padding: 0.5rem;
-            background: rgba(20, 20, 50, 0.3);
-            border-radius: 10px;
-            max-width: 100%;
-            width: 100%;
-        }
-        .file-preview-item {
-            position: relative;
-            display: flex;
-            align-items: center;
-            padding: 0.3rem 0.5rem;
-            background: rgba(0, 243, 255, 0.1);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            border-radius: 15px;
-            font-size: 0.8rem;
-            max-width: calc(100% - 20px);
-        }
-        .file-preview-name {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-right: 5px;
-        }
-        .file-preview-remove {
-            cursor: pointer;
-            color: var(--neon-red);
-            font-size: 0.9rem;
-            padding: 0 2px;
-        }
-        .file-preview-remove:hover {
-            color: #ff5555;
-        }
-        /* --- 新增样式：登录/注册模态框 (气泡型) --- */
+
         .bubble-modal {
-            display: none; /* 默认隐藏 */
+            display: none;
             position: fixed;
-            z-index: 1001; /* 高于其他内容 */
+            z-index: 1000;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.5); /* 半透明背景 */
-        }
-        .bubble-modal-content {
-            background-color: #0a0a2e;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid transparent;
-            border-radius: 20px;
-            width: 80%;
-            max-width: 400px;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-            animation: modalopen 0.4s;
+            background-color: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(5px);
-            position: relative;
-            /* 添加发光边框效果 - 渐变绿色 */
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .bubble-modal-content {
+            background: var(--panel-bg);
+            margin: 5% auto;
+            padding: 0;
+            border: 1px solid var(--neon-blue);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
             position: relative;
             overflow: hidden;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .bubble-modal-content::before {
-            content: '';
-            position: absolute;
-            top: -1px;
-            right: -1px;
-            bottom: -1px;
-            left: -1px;
-            border: 1px solid transparent;
-            border-radius: 20px;
-            /* 使用线性渐变作为内发光，创建边缘的绿色渐变效果 */
-            box-shadow: inset 0 0 30px linear-gradient(90deg, #00ff9d, #00f3ff);
-            /* 这个伪元素的尺寸比主体大1px，确保它能完全覆盖边框并产生发光效果 */
-            z-index: -1;
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
-        .bubble-close {
+
+        .bubble-modal-header {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--neon-blue);
+            text-align: center;
+            font-size: 1.5rem;
+            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+        }
+
+        .bubble-modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #c0c0ff;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            background: rgba(20, 20, 50, 0.5);
+            color: #e0e0ff;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 243, 255, 0.6);
+        }
+
+        .bubble-modal-footer {
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.2);
+            text-align: center;
+            border-top: 1px solid rgba(0, 243, 255, 0.2);
+            font-size: 0.9rem;
+        }
+
+        .bubble-modal-footer a {
+            color: var(--neon-blue);
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .bubble-modal-footer a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+
+        .alert-success {
+            background-color: rgba(0, 255, 157, 0.2);
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+        }
+
+        .alert-error {
+            background-color: rgba(255, 0, 85, 0.2);
+            border: 1px solid var(--neon-red);
+            color: var(--neon-red);
+        }
+
+        .close {
             color: #aaa;
             float: right;
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
             position: absolute;
-            top: 10px;
-            right: 15px;
-            z-index: 1;
+            top: 15px;
+            right: 20px;
+            transition: color 0.3s ease;
         }
-        .bubble-close:hover,
-        .bubble-close:focus {
-            color: #ff0055;
-            text-decoration: none;
+
+        .close:hover,
+        .close:focus {
+            color: var(--neon-red);
         }
-        .bubble-modal-header {
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
-            margin-bottom: 15px;
-            text-align: center;
-            color: #00ff9d;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-        .bubble-modal-body {
-            padding: 10px 0;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #c0c0ff;
-            font-size: 1rem;
-        }
-        .form-control {
-            width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #00ff9d;
-            background: rgba(10, 10, 46, 0.5);
-            color: #e0e0ff;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        .form-control:focus {
-            outline: none;
-            border-color: #00ff9d;
-            box-shadow: 0 0 5px rgba(0, 255, 157, 0.5);
-        }
-        .btn-primary {
-            background-image: linear-gradient(90deg, #00ff9d, #00f3ff);
-            color: #0a0a12;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 1rem;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 10px #00ff9d, inset 0 0 5px rgba(0, 255, 157, 0.3);
-        }
-        .btn-primary:hover {
-            background-position: 100% 0;
-            box-shadow: 0 0 15px #00ff9d, inset 0 0 7px rgba(0, 255, 157, 0.5);
-        }
-        .bubble-modal-footer {
-            padding: 10px 0;
-            border-top: 1px solid rgba(100, 100, 255, 0.2);
-            margin-top: 15px;
-            text-align: center;
-            font-size: 0.9rem;
-        }
-        .bubble-modal-footer a {
-            color: #00ff9d;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-        .bubble-modal-footer a:hover {
-            color: #00c4cc;
-        }
-        .error-message {
-            color: #ff0055;
-            font-size: 0.9rem;
-            margin-top: 5px;
-            display: none; /* 默认隐藏 */
-        }
-        .success-message {
-            color: #00ff9d;
-            font-size: 0.9rem;
-            margin-top: 5px;
-            display: none; /* 默认隐藏 */
-        }
-        /* --- 新增样式：个人中心模态框 (气泡型) --- */
-        .profile-modal-content {
-            background-color: #0a0a2e;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid transparent;
-            border-radius: 20px;
-            width: 80%;
-            max-width: 400px;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-            animation: modalopen 0.4s;
-            backdrop-filter: blur(5px);
-            position: relative;
-            /* 添加发光边框效果 - 渐变绿色 */
-            position: relative;
-            overflow: hidden;
-        }
-        .profile-modal-content::before {
-            content: '';
-            position: absolute;
-            top: -1px;
-            right: -1px;
-            bottom: -1px;
-            left: -1px;
-            border: 1px solid transparent;
-            border-radius: 20px;
-            /* 使用线性渐变作为内发光，创建边缘的绿色渐变效果 */
-            box-shadow: inset 0 0 30px linear-gradient(90deg, #00ff9d, #00f3ff);
-            /* 这个伪元素的尺寸比主体大1px，确保它能完全覆盖边框并产生发光效果 */
-            z-index: -1;
-        }
-        .profile-modal-header {
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(0, 255, 157, 0.2);
-            margin-bottom: 15px;
-            text-align: center;
-            color: #00ff9d;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
+
         .profile-info {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #c0c0ff;
-        }
-        .profile-info h3 {
-            margin-bottom: 10px;
-            color: #00f3ff;
-            font-size: 1.2rem;
-        }
-        .profile-info p {
-            margin: 5px 0;
-            font-size: 0.9rem;
-        }
-        .profile-actions {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 15px;
         }
-        .profile-btn {
-            /* 背景设为透明 */
-            background-color: transparent;
-            /* 默认文字颜色改为浅色，与模态框内文字一致 */
+
+        .profile-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-label {
+            font-weight: bold;
             color: #c0c0ff;
-            /* 默认边框颜色改为浅蓝色 */
+        }
+
+        .profile-value {
+            color: var(--neon-blue);
+        }
+
+        .profile-btn {
+            background: transparent;
+            color: var(--neon-blue);
             border: 1px solid rgba(0, 243, 255, 0.3);
             padding: 10px 15px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 1rem;
-            /* 添加过渡动画 */
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            /* 默认状态下的浅蓝色微光 */
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.3), inset 0 0 5px rgba(0, 243, 255, 0.3);
         }
+
         .profile-btn:hover {
-            /* 悬停时背景变为浅蓝色半透明 */
             background-color: rgba(0, 243, 255, 0.2);
-            /* 悬停时文字变为亮蓝色 */
             color: var(--neon-blue);
-            /* 悬停时边框变为亮蓝色 */
             border-color: var(--neon-blue);
-            /* 悬停时增强光晕效果 */
             box-shadow: 0 0 15px var(--neon-blue), inset 0 0 7px rgba(0, 243, 255, 0.5);
         }
-        .profile-btn.vip {
-            /* VIP按钮背景在初始状态就设为深红色半透明 */
-            background-color: rgba(139, 0, 0, 0.2); /* 深红色半透明 */
-            /* VIP按钮文字和边框颜色 */
-            border-color: #8B0000; /* 深红色 */
-            color: #8B0000; /* 深红色 */
-            /* 字体加粗 */
-            font-weight: bold;
-            /* VIP按钮的微光效果 - 使用深红色 */
-            box-shadow: 0 0 10px #8B0000, inset 0 0 5px rgba(139, 0, 0, 0.3);
-        }
-        .profile-btn.vip:hover {
-            /* 悬停时背景变为更亮的红色 */
-            background-color: rgba(255, 0, 0, 0.3); /* 更亮的红色半透明 */
-            /* 悬停时文字和边框也变为更亮的红色 */
-            border-color: #ff0000; /* 亮红色 */
-            color: #ff0000; /* 亮红色 */
-            /* 悬停时增强红色光晕 */
-            box-shadow: 0 0 15px #ff0000, inset 0 0 7px rgba(255, 0, 0, 0.5);
-        }
-        .profile-btn.logout {
-            /* 使用与登录按钮相同的渐变绿色作为背景 */
-            background-image: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
-            /* 文字颜色设为深色，与登录按钮一致 */
-            color: #0a0a12;
-            /* 边框颜色设为亮绿色，与登录按钮一致 */
-            border-color: var(--neon-green);
-            /* 添加与登录按钮类似的微光效果 */
-            box-shadow: 0 0 10px var(--neon-green), inset 0 0 5px rgba(0, 255, 157, 0.3);
-            /* 背景透明度设置为半透明，使其看起来像一个发光的按钮 */
-            background-color: rgba(0, 255, 157, 0.1);
-        }
-        .profile-btn.logout:hover {
-            /* 悬停时背景变为更亮的渐变绿色 */
-            background-image: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
-            /* 悬停时文字颜色不变，保持深色 */
-            color: #0a0a12;
-            /* 悬停时边框和光晕增强 */
-            border-color: var(--neon-green);
-            box-shadow: 0 0 15px var(--neon-green), inset 0 0 7px rgba(0, 255, 157, 0.5);
-            /* 悬停时背景透明度略微增加 */
-            background-color: rgba(0, 255, 157, 0.2);
-        }
-        /* --- 新增样式结束 --- */
-
 
         @media (max-width: 768px) {
-            .top-nav {
+            .chat-container {
                 padding: 1rem;
-                gap: 1rem;
             }
+
+            .chat-messages {
+                height: 400px;
+                padding: 0.8rem;
+            }
+
+            .message {
+                max-width: 90%;
+                padding: 10px 15px;
+            }
+
+            .top-nav {
+                gap: 0.5rem;
+                margin-bottom: 1rem;
+            }
+
             .nav-btn {
-                padding: 0.7rem 1.2rem;
+                padding: 0.6rem 1rem;
                 font-size: 0.9rem;
                 min-width: 100px;
             }
-            .main-content {
-                padding: 1rem;
-                padding-top: 60px;
-                height: auto;
-                min-height: calc(100vh - 60px);
-            }
-            .chat-container {
-                padding: 1rem;
-                width: 100%;
-                margin: 0 auto;
-                flex: 1;
-            }
-            .chat-title {
-                font-size: 1.5rem;
-            }
-            .chat-messages {
-                min-height: 400px;
-                max-height: none;
-                flex: 1;
-            }
-            .chat-input-area {
-                flex-direction: column;
-            }
-            .upload-buttons {
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: 1rem;
-                width: 100%;
-            }
-            .upload-btn {
-                flex-grow: 1;
-                margin: 0 0.3rem;
-                min-width: 30px;
-            }
-            .chat-input {
-                padding-right: 1rem;
-            }
-            .footer {
-                padding: 2rem 0 1.5rem;
-            }
-            .agreement-notice {
-                text-align: center;
-                font-size: 0.7rem;
-                color: #888888;
-                margin-top: 0.1rem;
-                margin-bottom: 0.1rem;
-            }
-            .agreement-link {
-                font-size: inherit;
-                color: #c0c0ff;
-                text-decoration: none;
-            }
-            .agreement-link:hover {
-                text-decoration: underline;
-                color: var(--neon-blue);
-            }
-        }
-        @media (max-width: 480px) {
-            .chat-container {
-                padding: 0.5rem;
-            }
+
             .chat-input-area {
                 flex-direction: column;
                 align-items: stretch;
             }
+
             .chat-input-wrapper {
                 width: 100%;
             }
+
             .chat-input {
                 padding-right: 1rem;
             }
+
             .right-buttons {
                 position: static;
                 transform: none;
@@ -909,35 +716,44 @@
                 margin-top: 0.5rem;
                 height: auto;
             }
+
             .upload-btn, .chat-send-btn {
                 height: 45px;
             }
+
             .top-nav {
                 width: 100%;
                 justify-content: center;
                 padding: 0.8rem;
             }
+
             .nav-btn {
                 padding: 0.6rem 1rem;
                 font-size: 0.8rem;
                 min-width: 90px;
             }
+
             .chat-messages {
                 min-height: 300px;
                 max-height: none;
             }
+
             .footer {
                 padding: 1.5rem 0 1rem;
             }
+
             .footer-logo {
                 font-size: 2rem;
             }
+
             .footer-links {
                 gap: 1rem;
             }
+
             .footer-link {
                 font-size: 0.9rem;
             }
+
             .agreement-notice {
                 text-align: center;
                 font-size: 0.7rem;
@@ -945,32 +761,131 @@
                 margin-top: 0.1rem;
                 margin-bottom: 0.1rem;
             }
+
             .agreement-link {
                 font-size: inherit;
                 color: #c0c0ff;
                 text-decoration: none;
             }
+
             .agreement-link:hover {
                 text-decoration: underline;
                 color: var(--neon-blue);
             }
         }
+
+        @media (max-width: 480px) {
+            .chat-container {
+                padding: 0.5rem;
+            }
+
+            .chat-input-area {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .chat-input-wrapper {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .chat-input {
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+
+            .right-buttons {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .upload-btn, .chat-send-btn {
+                flex: 1;
+                margin: 0 5px;
+            }
+
+            .header {
+                padding: 0 10px;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+
+            .tagline {
+                font-size: 1rem;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .social-icons {
+                gap: 1rem;
+            }
+
+            .social-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .bubble-modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+
+            .bubble-modal-header {
+                font-size: 1.2rem;
+                padding: 15px;
+            }
+
+            .bubble-modal-body {
+                padding: 15px;
+            }
+
+            .form-group input {
+                padding: 10px;
+            }
+
+            .btn-primary {
+                padding: 10px;
+                font-size: 1rem;
+            }
+
+            .profile-item {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+
+        .pulse {
+            animation: pulse-animation 0.5s ease-in-out;
+        }
+
+        @keyframes pulse-animation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
 <body>
     <div id="particles-js"></div>
-    <div class="glow glow-blue"></div>
-    <div class="glow glow-purple"></div>
-    <div class="grid-overlay"></div>
+
+    <div class="header">
+        <h1 class="logo">AliceSkyGarden</h1>
+        <p class="tagline">开源绿色节能AI模型 | Open Source Green AI Model</p>
+    </div>
 
     <div class="top-nav">
-        <!-- 登录/个人按钮 -->
         <button class="nav-btn" id="loginBtnNav">
             <i class="fas fa-user"></i>
             <span class="btn-text">登录</span>
         </button>
         <button class="nav-btn" id="langBtn">
-            <i class="fas fa-globe"></i>
+            <i class="fas fa-language"></i>
             <span class="btn-text">English</span>
         </button>
         <button class="nav-btn" id="clearHistoryBtn">
@@ -978,6 +893,7 @@
             <span class="btn-text">清除历史</span>
         </button>
     </div>
+
     <div class="main-content">
         <div class="chat-container">
             <h2 class="chat-title">与 AliceSkyGarden 对话</h2>
@@ -986,135 +902,136 @@
             </div>
             <div class="file-preview-container" id="filePreviewContainer" style="display: none;"></div>
             <div class="chat-input-area">
-                <div class="upload-buttons">
-                    <label for="imageInput" class="upload-btn" title="上传图片">
-                        <i class="fas fa-image"></i>
-                    </label>
-                    <input type="file" id="imageInput" class="file-input" accept="image/*">
-                    <label for="fileInput" class="upload-btn" title="上传文件">
-                        <i class="fas fa-file"></i>
-                    </label>
-                    <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt">
-                    <button id="sendButton" class="chat-send-btn">
-                        <i class="fas fa-paper-plane"></i> <span id="sendButtonText" class="btn-text">发送</span>
-                    </button>
-                </div>
                 <div class="chat-input-wrapper">
-                    <textarea id="userInput" class="chat-input" placeholder="(现已支持 各种格式的图片 pdf docx txt xlsx csv py html等文件)  输入你的消息..."></textarea>
+                    <input type="text" class="chat-input" id="userInput" placeholder="输入消息..." autocomplete="off">
+                    <div class="right-buttons">
+                        <button class="upload-btn" id="uploadImageBtn">
+                            <i class="fas fa-image"></i>
+                            <span class="btn-text">图片</span>
+                        </button>
+                        <button class="upload-btn" id="uploadFileBtn">
+                            <i class="fas fa-file-alt"></i>
+                            <span class="btn-text">文件</span>
+                        </button>
+                        <button class="chat-send-btn" id="sendButton">
+                            <i class="fas fa-paper-plane"></i>
+                            <span class="btn-text">发送</span>
+                        </button>
+                    </div>
                 </div>
+                <input type="file" id="imageInput" class="hidden-input" accept="image/*" multiple>
+                <input type="file" id="fileInput" class="hidden-input" accept=".pdf,.docx,.xlsx,.csv,.txt,.md,.py,.js,.html,.css,.json,.xml" multiple>
             </div>
         </div>
     </div>
+
     <div class="footer">
         <div class="footer-logo">AliceSkyGarden</div>
-        <p class="footer-tagline">开启智能新纪元 · 探索无限可能</p>
         <div class="footer-links">
-            <a href="http://aliceskygarden.top" class="footer-link"><i class="fas fa-home"></i> <span class="link-text">首页</span></a>
-            <a href="#" class="footer-link"><i class="fas fa-code"></i> <span class="link-text">开发者</span></a>
-            <a href="#" class="footer-link"><i class="fas fa-book"></i> <span class="link-text">文档</span></a>
-            <a href="#" class="footer-link"><i class="fas fa-users"></i> <span class="link-text">社区</span></a>
-            <a href="#" class="footer-link"><i class="fas fa-newspaper"></i> <span class="link-text">博客</span></a>
-            <a href="#" class="footer-link"><i class="fas fa-envelope"></i> <span class="link-text">联系我们</span></a>
+            <a href="#" class="footer-link">技术规格</a>
+            <a href="#" class="footer-link">API文档</a>
+            <a href="#" class="footer-link">社区</a>
+            <a href="#" class="footer-link">GitHub</a>
+            <a href="#" class="footer-link">关于我们</a>
         </div>
         <div class="social-icons">
             <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
-            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
             <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
-            <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
         </div>
-        <p>Contact: airthrix@163.com | +1 (800) AIRTHRIX-AI</p>
-        <p class="copyright">&copy; 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved</p>
-        <br>
-        <div class="agreement-notice">
-            <span class="agreement-text cn-text">
-                向模型发送消息即表示您已同意<a href="https://chat.qwen.ai/legal-agreement/terms-of-service?spm=a2ty_o01.29997169.0.0.3d4d5171PFORcX" target="_blank" class="agreement-link">用户条款</a>并已阅读<a href="https://chat.qwen.ai/legal-agreement/privacy-policy?spm=a2ty_o01.29997169.0.0.3d4d5171PFORcX" target="_blank" class="agreement-link">隐私协议</a>
-            </span>
-            <span class="agreement-text en-text" style="display: none;">
-                By sending message to mode, you have agreed <a href="https://chat.qwen.ai/legal-agreement/terms-of-service?spm=a2ty_o01.29997169.0.0.3d4d5171PFORcX" target="_blank" class="agreement-link">Terms of Service</a> and have read <a href="https://chat.qwen.ai/legal-agreement/privacy-policy?spm=a2ty_o01.29997169.0.0.3d4d5171PFORcX" target="_blank" class="agreement-link">Privacy Policy</a>
-            </span>
-        </div>
+        <p class="copyright">&copy; 2025 AliceSkyGarden. All rights reserved.</p>
+        <p class="agreement-notice">
+            <span class="cn-text">继续使用即表示您同意我们的 <a href="#" class="agreement-link">服务条款</a> 和 <a href="#" class="agreement-link">隐私政策</a>。</span>
+            <span class="en-text" style="display: none;">By continuing to use this service, you agree to our <a href="#" class="agreement-link">Terms of Service</a> and <a href="#" class="agreement-link">Privacy Policy</a>.</span>
+        </p>
     </div>
-    <!-- --- 新增：登录/注册模态框 (气泡型) --- -->
+
+    <!-- 登录模态框 -->
     <div id="loginModal" class="bubble-modal">
         <div class="bubble-modal-content">
-            <span class="bubble-close">&times;</span>
+            <span class="close" onclick="closeModal(loginModal)">&times;</span>
             <div class="bubble-modal-header">
                 <h2 id="loginModalTitle">登录</h2>
             </div>
             <div class="bubble-modal-body">
+                <div id="loginError" class="alert alert-error" style="display:none;"></div>
+                <div id="loginSuccess" class="alert alert-success" style="display:none;"></div>
                 <div class="form-group">
                     <label for="loginUsername">用户名:</label>
-                    <input type="text" id="loginUsername" class="form-control" required>
+                    <input type="text" id="loginUsername" required>
                 </div>
                 <div class="form-group">
                     <label for="loginPassword">密码:</label>
-                    <input type="password" id="loginPassword" class="form-control" required>
+                    <input type="password" id="loginPassword" required>
                 </div>
-                <div id="loginError" class="error-message"></div>
-                <div id="loginSuccess" class="success-message"></div>
-                <button id="loginSubmitBtn" class="btn-primary">登录</button>
+                <button class="btn-primary" id="loginSubmitBtn">登录</button>
             </div>
             <div class="bubble-modal-footer">
-                还没有账户? <a id="showRegisterLink">立即注册</a>
+                还没有账户? <a id="showRegisterLink" onclick="openRegisterModal()">立即注册</a>
             </div>
         </div>
     </div>
-    <!-- --- 新增结束 --- -->
-    <!-- --- 新增：注册模态框 (气泡型) --- -->
+
+    <!-- 注册模态框 -->
     <div id="registerModal" class="bubble-modal">
         <div class="bubble-modal-content">
-            <span class="bubble-close">&times;</span>
+            <span class="close" onclick="closeModal(registerModal)">&times;</span>
             <div class="bubble-modal-header">
                 <h2 id="registerModalTitle">注册</h2>
             </div>
             <div class="bubble-modal-body">
+                <div id="registerError" class="alert alert-error" style="display:none;"></div>
+                <div id="registerSuccess" class="alert alert-success" style="display:none;"></div>
                 <div class="form-group">
                     <label for="registerUsername">用户名:</label>
-                    <input type="text" id="registerUsername" class="form-control" required>
+                    <input type="text" id="registerUsername" required>
                 </div>
                 <div class="form-group">
                     <label for="registerPassword">密码:</label>
-                    <input type="password" id="registerPassword" class="form-control" required>
+                    <input type="password" id="registerPassword" required>
                 </div>
                 <div class="form-group">
                     <label for="registerConfirmPassword">确认密码:</label>
-                    <input type="password" id="registerConfirmPassword" class="form-control" required>
+                    <input type="password" id="registerConfirmPassword" required>
                 </div>
-                <div id="registerError" class="error-message"></div>
-                <div id="registerSuccess" class="success-message"></div>
-                <button id="registerSubmitBtn" class="btn-primary">注册</button>
+                <button class="btn-primary" id="registerSubmitBtn">注册</button>
             </div>
             <div class="bubble-modal-footer">
-                已有账户? <a id="showLoginLink">立即登录</a>
+                已有账户? <a id="showLoginLink" onclick="openLoginModal()">立即登录</a>
             </div>
         </div>
     </div>
-    <!-- --- 新增结束 --- -->
 
-    <!-- --- 新增：个人中心模态框 --- -->
+    <!-- 个人中心模态框 -->
     <div id="profileModal" class="bubble-modal">
-        <div class="profile-modal-content">
-            <span class="bubble-close">&times;</span>
-            <div class="profile-modal-header">
+        <div class="bubble-modal-content">
+            <span class="close" onclick="closeModal(profileModal)">&times;</span>
+            <div class="bubble-modal-header">
                 <h2 id="profileModalTitle">个人中心</h2>
             </div>
-            <div class="profile-info">
-                <h3 id="profileUsername">用户名</h3>
-                <p id="profileVipStatus">VIP 状态: <span id="vipStatusText">否</span></p>
-            </div>
-            <div class="profile-actions">
-                <button id="rechargeBtnProfile" class="profile-btn vip">
-                    <i class="fas fa-coins"></i> <span id="rechargeBtnProfileText">充值/VIP</span>
-                </button>
-                <button id="logoutBtnProfile" class="profile-btn logout">
-                    <i class="fas fa-sign-out-alt"></i> <span id="logoutBtnProfileText">登出</span>
-                </button>
+            <div class="bubble-modal-body">
+                <div class="profile-info">
+                    <div class="profile-item">
+                        <span class="profile-label">用户名:</span>
+                        <span class="profile-value" id="profileUsername"></span>
+                    </div>
+                    <div class="profile-item">
+                        <span class="profile-label" id="profileVipStatusText">VIP状态:</span>
+                        <span class="profile-value" id="vipStatusText" style="color: #c0c0ff;">否</span>
+                    </div>
+                    <!-- <button class="profile-btn" id="rechargeBtnProfile">
+                        <i class="fas fa-donate"></i>
+                        <span id="rechargeBtnProfileText">充值/VIP</span>
+                    </button> -->
+                    <button class="profile-btn" id="logoutBtnProfile">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span id="logoutBtnProfileText">登出</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-    <!-- --- 新增结束 --- -->
-
 
     <script src="https://hk-alice-file.oss-cn-hongkong.aliyuncs.com/particles.min.js"></script>
     <script>
@@ -1126,9 +1043,680 @@
             let selectedFiles = [];
             let sessionId = localStorage.getItem('chat_session_id') || '';
             let currentUser = null; // 用于存储当前登录用户信息
-            // --- 新增：API基础URL (请根据你的后端部署地址修改) ---
+
+            // - 修改：API基础URL (请根据你的后端部署地址修改) -
             const API_BASE_URL = 'https://test-ffdbgoedhy.cn-hongkong.fcapp.run';
-            // --- 新增结束 ---
+            const API_URL = `${API_BASE_URL}/invoke`; // 使用新的API端点
+
+            // - 新增：从 localStorage 获取并设置 token -
+            const storedToken = localStorage.getItem('jwt_token');
+            if (storedToken) {
+                // 如果有 token，尝试获取用户信息以更新 UI
+                fetchUserInfo();
+            }
+
+            // - 修改：登录按钮点击事件 -
+            const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+            loginSubmitBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const username = document.getElementById('loginUsername').value;
+                const password = document.getElementById('loginPassword').value;
+
+                if (!username || !password) {
+                    alert(isEnglish ? "Please enter username and password." : "请输入用户名和密码。");
+                    return;
+                }
+
+                const loginData = { username, password };
+
+                fetch(`${API_BASE_URL}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(loginData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('loginError').style.display = 'block';
+                        document.getElementById('loginSuccess').style.display = 'none';
+                        document.getElementById('loginError').textContent = data.error;
+                    } else {
+                        document.getElementById('loginSuccess').textContent = data.message;
+                        document.getElementById('loginSuccess').style.display = 'block';
+                        document.getElementById('loginError').style.display = 'none';
+
+                        // --- 关键修改开始 ---
+                        // 1. 将服务器返回的 token 存储到 localStorage
+                        const token = data.token;
+                        if (token) {
+                            localStorage.setItem('jwt_token', token);
+                            console.log("JWT Token 已保存到 localStorage");
+                        } else {
+                            console.error("Login success but no token received from server!");
+                        }
+
+                        // 2. 更新本地用户信息
+                        currentUser = { username: data.username, vip_status: data.vip_status };
+                        // 3. 更新UI
+                        fetchUserInfo();
+                        // 4. 1秒后自动关闭模态框
+                        setTimeout(() => {
+                            closeModal(loginModal);
+                        }, 1000);
+                        // --- 关键修改结束 ---
+                    }
+                })
+                .catch(error => {
+                    console.error('登录请求失败:', error);
+                    document.getElementById('loginError').style.display = 'block';
+                    document.getElementById('loginSuccess').style.display = 'none';
+                    document.getElementById('loginError').textContent = isEnglish ? "Login failed, please try again later." : "登录失败，请稍后再试。";
+                });
+            });
+
+            // - 新增：登出按钮点击事件 -
+            const logoutBtnProfile = document.getElementById('logoutBtnProfile');
+            logoutBtnProfile.addEventListener('click', function() {
+                // --- 关键修改开始 ---
+                // 1. 清除 localStorage 中的 token
+                localStorage.removeItem('jwt_token');
+                console.log("JWT Token 已从 localStorage 删除");
+
+                // 2. 重置本地用户信息
+                currentUser = null;
+
+                // 3. 重置顶部按钮为登录按钮
+                document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
+                document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user';
+
+                // 4. 重置个人中心信息
+                document.getElementById('profileUsername').textContent = '';
+                document.getElementById('vipStatusText').textContent = isEnglish ? 'No' : '否';
+                document.getElementById('vipStatusText').style.color = '#c0c0ff';
+
+                // 5. 可选：向后端发送登出请求 (如果后端有注销逻辑)
+                // fetch(`${API_BASE_URL}/logout`, { method: 'POST' })
+                //     .catch(err => console.error('Logout request failed:', err));
+                // --- 关键修改结束 ---
+                
+                closeModal(profileModal);
+            });
+
+            // - 新增：获取用户信息函数 -
+            function fetchUserInfo() {
+                // --- 关键修改开始 ---
+                // 1. 从 localStorage 获取 token
+                const token = localStorage.getItem('jwt_token');
+                if (!token) {
+                    console.warn("No JWT token found. User is not logged in.");
+                    currentUser = null;
+                    // 重置顶部按钮为登录按钮
+                    document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
+                    document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user';
+                    return;
+                }
+
+                // 2. 在请求头中包含 Authorization Bearer token
+                fetch(`${API_BASE_URL}/user_info`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // 手动添加 token
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.username) {
+                        currentUser = data;
+                        document.getElementById('profileUsername').textContent = data.username;
+                        if (data.vip_status) {
+                            document.getElementById('vipStatusText').textContent = isEnglish ? 'Yes' : '是';
+                            document.getElementById('vipStatusText').style.color = 'gold';
+                        } else {
+                            document.getElementById('vipStatusText').textContent = isEnglish ? 'No' : '否';
+                            document.getElementById('vipStatusText').style.color = '#c0c0ff';
+                        }
+                        // 更新顶部按钮为个人按钮
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = data.username;
+                        document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user-circle';
+                    } else {
+                        // 如果获取用户信息失败，可能 token 过期或无效
+                        console.warn("Failed to fetch user info. Token might be invalid or expired.");
+                        // 清除失效的 token
+                        localStorage.removeItem('jwt_token');
+                        currentUser = null;
+                        // 重置 UI
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
+                        document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user';
+                    }
+                })
+                .catch(error => {
+                    console.error('获取用户信息失败:', error);
+                    // 处理错误，例如 token 无效，清除它
+                    localStorage.removeItem('jwt_token');
+                    currentUser = null;
+                    // 重置 UI
+                    document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
+                    document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user';
+                });
+                // --- 关键修改结束 ---
+            }
+
+            // - 新增：发送消息时包含 token -
+            const sendButton = document.getElementById('sendButton');
+            sendButton.addEventListener('click', async function() {
+                const message = document.getElementById('userInput').value.trim();
+                const imagesToSend = [...selectedImages];
+                const filesToSend = [...selectedFiles];
+
+                // - 修改逻辑：移除前端强制登录检查，允许未登录发送消息 -
+                // if (!currentUser) {
+                //     alert(isEnglish ? "请先登录以发送消息。" : "Please log in to send a message.");
+                //     openLoginModal();
+                //     return; // 阻止发送
+                // }
+                // - 修改逻辑结束 -
+
+                if (!message && imagesToSend.length === 0 && filesToSend.length === 0) return;
+
+                addMessage(message, true, [...imagesToSend, ...filesToSend]);
+                document.getElementById('userInput').value = '';
+                selectedImages = [];
+                selectedFiles = [];
+                updateFilePreview();
+                showTyping();
+                sendButton.disabled = true;
+
+                try {
+                    let requestBody;
+                    // --- 关键修改开始 ---
+                    // 1. 从 localStorage 获取 token
+                    const token = localStorage.getItem('jwt_token');
+
+                    // 2. 创建请求头，包含 Session ID 和 Authorization (如果有的话)
+                    let headers = {
+                        'X-Session-ID': sessionId
+                    };
+
+                    // 如果有 token，则添加到 headers
+                    if (token) {
+                        headers['Authorization'] = `Bearer ${token}`;
+                    }
+                    // --- 关键修改结束 ---
+
+                    if (imagesToSend.length > 0 || filesToSend.length > 0) {
+                        const formData = new FormData();
+                        if (message) {
+                            formData.append('message', message);
+                        }
+                        imagesToSend.forEach((file, index) => {
+                            formData.append('image', file, file.name);
+                        });
+                        filesToSend.forEach((file, index) => {
+                            formData.append('file', file, file.name);
+                        });
+                        requestBody = formData;
+                        delete headers['Content-Type']; // 让浏览器设置 multipart/form-data
+                    } else {
+                        requestBody = JSON.stringify({ message: message });
+                        headers['Content-Type'] = 'application/json';
+                    }
+
+                    // --- 关键修改：使用上面定义的 headers，移除 credentials: 'include' ---
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: headers, // 使用包含 token 的 headers
+                        body: requestBody
+                        // credentials: 'include' // 移除，不再需要
+                    });
+                    // --- 关键修改结束 ---
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    hideTyping();
+                    if (data.reply) {
+                        addMessage(data.reply, false);
+                    }
+                    if (data.session_id) {
+                        sessionId = data.session_id;
+                        localStorage.setItem('chat_session_id', sessionId);
+                    }
+                    sendButton.disabled = false;
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                    hideTyping();
+                    addMessage(isEnglish ? "Sorry, I encountered an error. Please try again later." : "抱歉，我遇到了一个错误。请稍后再试。", false);
+                    sendButton.disabled = false;
+                }
+            });
+
+            // - 新增：打开个人中心时获取用户信息 -
+            const openProfileModal = document.getElementById('loginBtnNav'); // 点击顶部按钮
+            openProfileModal.addEventListener('click', function() {
+                // --- 关键修改开始 ---
+                // 在打开个人中心前，先尝试获取用户信息
+                // 如果 currentUser 为空或 token 不存在，则打开登录模态框
+                const token = localStorage.getItem('jwt_token');
+                if (!token || !currentUser) {
+                    openLoginModal();
+                } else {
+                    fetchUserInfo(); // 确保信息是最新的
+                    document.getElementById('profileModal').style.display = 'block';
+                }
+                // --- 关键修改结束 ---
+            });
+
+            // - 新增：注册成功后存储 token (可选，如果注册后自动登录) -
+            const registerSubmitBtn = document.getElementById('registerSubmitBtn');
+            registerSubmitBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const username = document.getElementById('registerUsername').value;
+                const password = document.getElementById('registerPassword').value;
+                const confirmPassword = document.getElementById('registerConfirmPassword').value;
+
+                if (!username || !password || !confirmPassword) {
+                    document.getElementById('registerError').textContent = isEnglish ? "Please fill in all fields." : "请填写所有字段。";
+                    document.getElementById('registerError').style.display = 'block';
+                    document.getElementById('registerSuccess').style.display = 'none';
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    document.getElementById('registerError').textContent = isEnglish ? "Passwords do not match." : "密码不匹配。";
+                    document.getElementById('registerError').style.display = 'block';
+                    document.getElementById('registerSuccess').style.display = 'none';
+                    return;
+                }
+
+                const registerData = { username, password };
+
+                fetch(`${API_BASE_URL}/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(registerData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('registerError').textContent = data.error;
+                        document.getElementById('registerError').style.display = 'block';
+                        document.getElementById('registerSuccess').style.display = 'none';
+                    } else {
+                        document.getElementById('registerSuccess').textContent = data.message;
+                        document.getElementById('registerSuccess').style.display = 'block';
+                        document.getElementById('registerError').style.display = 'none';
+                        
+                        // --- 关键修改开始 ---
+                        // 注册成功后，如果返回了 token，存储 token 并自动登录
+                        if (data.token) {
+                            localStorage.setItem('jwt_token', data.token);
+                            currentUser = { username: data.username, vip_status: data.vip_status };
+                            fetchUserInfo(); // 更新 UI
+                            // 1秒后自动关闭注册模态框
+                            setTimeout(() => {
+                                closeModal(registerModal);
+                            }, 1000);
+                        } else {
+                             // 如果没有返回 token，提示用户去登录
+                             setTimeout(() => {
+                                 closeModal(registerModal);
+                                 openLoginModal(); // 打开登录框
+                             }, 1000);
+                        }
+                        // --- 关键修改结束 ---
+                    }
+                })
+                .catch(error => {
+                    console.error('注册请求失败:', error);
+                    document.getElementById('registerError').textContent = isEnglish ? "Registration failed, please try again later." : "注册失败，请稍后再试。";
+                    document.getElementById('registerError').style.display = 'block';
+                    document.getElementById('registerSuccess').style.display = 'none';
+                });
+            });
+
+            // - 原有的其他事件监听器和函数保持不变 -
+            // (如 fileInput change, imageInput change, addMessage, showTyping, etc.)
+
+            function updateFilePreview() {
+                const container = document.getElementById('filePreviewContainer');
+                container.innerHTML = '';
+                let hasFiles = false;
+
+                [...selectedImages, ...selectedFiles].forEach((file, index) => {
+                    const isImage = selectedImages.includes(file);
+                    const type = isImage ? 'image' : 'file';
+                    const previewItem = document.createElement('div');
+                    previewItem.className = `file-preview-item ${isImage ? 'image-preview' : 'file-preview'}`;
+                    previewItem.dataset.type = type;
+                    previewItem.dataset.index = isImage ? selectedImages.indexOf(file) : selectedFiles.indexOf(file);
+
+                    if (isImage) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            previewItem.style.backgroundImage = `url(${e.target.result})`;
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        const icon = document.createElement('i');
+                        icon.className = 'fas fa-file';
+                        icon.style.fontSize = '24px';
+                        icon.style.marginBottom = '5px';
+                        const nameSpan = document.createElement('span');
+                        nameSpan.textContent = file.name.length > 10 ? file.name.substring(0, 10) + '...' : file.name;
+                        previewItem.appendChild(icon);
+                        previewItem.appendChild(nameSpan);
+                    }
+
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'remove-file';
+                    removeBtn.innerHTML = '&times;';
+                    removeBtn.onclick = function(e) {
+                        e.stopPropagation();
+                        const type = previewItem.dataset.type;
+                        const idx = parseInt(previewItem.dataset.index);
+                        if (type === 'image') {
+                            selectedImages.splice(idx, 1);
+                            const remainingItems = container.querySelectorAll(`.file-preview-item[data-type='image']`);
+                            remainingItems.forEach((item, i) => {
+                                if (i >= idx) {
+                                    const oldIndex = parseInt(item.dataset.index);
+                                    item.dataset.index = oldIndex - 1;
+                                }
+                            });
+                        } else {
+                            selectedFiles.splice(idx, 1);
+                            const remainingItems = container.querySelectorAll(`.file-preview-item[data-type='file']`);
+                            remainingItems.forEach((item, i) => {
+                                if (i >= idx) {
+                                    const oldIndex = parseInt(item.dataset.index);
+                                    item.dataset.index = oldIndex - 1;
+                                }
+                            });
+                        }
+                        updateFilePreview();
+                    };
+                    previewItem.appendChild(removeBtn);
+                    container.appendChild(previewItem);
+                    hasFiles = true;
+                });
+
+                container.style.display = hasFiles ? 'flex' : 'none';
+            }
+
+            function addMessage(content, isUser = false, files = []) {
+                const chatMessages = document.getElementById('chatMessages');
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+
+                let messageContent = '';
+                if (files && files.length > 0) {
+                    files.forEach(file => {
+                        if (file.type && file.type.startsWith('image/')) {
+                            messageContent += `<div><em>${isEnglish ? 'Image' : '图片'}: ${file.name}</em></div>`;
+                        } else {
+                            messageContent += `<div><em>${isEnglish ? 'File' : '文件'}: ${file.name}</em></div>`;
+                        }
+                    });
+                }
+                if (content) {
+                    messageContent += content;
+                }
+                messageDiv.innerHTML = messageContent;
+                chatMessages.appendChild(messageDiv);
+                smartScroll();
+                return messageDiv;
+            }
+
+            function showTyping() {
+                isTyping = true;
+                const typingDiv = document.createElement('div');
+                typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
+                typingDiv.id = 'typingIndicator';
+                const textNode = document.createTextNode(isEnglish ? 'Connecting Hong Kong Server' : '正在连接香港服务器');
+                typingDiv.appendChild(textNode);
+                const dotsSpan = document.createElement('span');
+                dotsSpan.classList.add('dots');
+                for(let i = 0; i < 3; i++) {
+                    const dot = document.createElement('span');
+                    dot.classList.add('dot');
+                    dotsSpan.appendChild(dot);
+                }
+                typingDiv.appendChild(dotsSpan);
+                document.getElementById('chatMessages').appendChild(typingDiv);
+                smartScroll();
+            }
+
+            function hideTyping() {
+                isTyping = false;
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+
+            function typeWriter(messageDiv, fullText, speed = 5) {
+                let i = 0;
+                const typingCursor = document.createElement('span');
+                typingCursor.classList.add('typing-cursor');
+                messageDiv.appendChild(typingCursor);
+                const textContainer = document.createElement('div');
+                messageDiv.appendChild(textContainer);
+                function type() {
+                    if (i < fullText.length) {
+                        textContainer.innerHTML = fullText.substring(0, i + 1);
+                        i++;
+                        setTimeout(type, speed);
+                    } else {
+                        typingCursor.remove();
+                    }
+                }
+                type();
+            }
+
+            function smartScroll() {
+                const chatMessages = document.getElementById('chatMessages');
+                if (!scrollLock) {
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            }
+
+            function openLoginModal() {
+                document.getElementById('registerModal').style.display = 'none';
+                document.getElementById('profileModal').style.display = 'none';
+                document.getElementById('loginModal').style.display = 'block';
+                document.getElementById('loginError').style.display = 'none';
+                document.getElementById('loginSuccess').style.display = 'none';
+                document.getElementById('loginUsername').value = '';
+                document.getElementById('loginPassword').value = '';
+            }
+
+            function openRegisterModal() {
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('profileModal').style.display = 'none';
+                document.getElementById('registerModal').style.display = 'block';
+                document.getElementById('registerError').style.display = 'none';
+                document.getElementById('registerSuccess').style.display = 'none';
+                document.getElementById('registerUsername').value = '';
+                document.getElementById('registerPassword').value = '';
+                document.getElementById('registerConfirmPassword').value = '';
+            }
+
+            function closeModal(modal) {
+                modal.style.display = 'none';
+            }
+
+            document.getElementById('uploadImageBtn').addEventListener('click', () => document.getElementById('imageInput').click());
+            document.getElementById('uploadFileBtn').addEventListener('click', () => document.getElementById('fileInput').click());
+
+            document.getElementById('imageInput').addEventListener('change', function() {
+                const files = Array.from(imageInput.files);
+                if (files.length > 0) {
+                    files.forEach(file => {
+                        const isDuplicate = selectedImages.some(existingFile =>
+                            existingFile.name === file.name && existingFile.size === file.size
+                        );
+                        if (!isDuplicate) {
+                            selectedImages.push(file);
+                        }
+                    });
+                    updateFilePreview();
+                    imageInput.value = '';
+                }
+            });
+
+            document.getElementById('fileInput').addEventListener('change', function() {
+                const files = Array.from(fileInput.files);
+                if (files.length > 0) {
+                    files.forEach(file => {
+                        const isDuplicate = selectedFiles.some(existingFile =>
+                            existingFile.name === file.name && existingFile.size === file.size
+                        );
+                        if (!isDuplicate) {
+                            selectedFiles.push(file);
+                        }
+                    });
+                    updateFilePreview();
+                    fileInput.value = '';
+                }
+            });
+
+            document.getElementById('userInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendButton.click();
+                }
+            });
+
+            const langBtn = document.getElementById('langBtn');
+            const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+            const chatTitle = document.querySelector('.chat-title');
+            const chatInput = document.getElementById('userInput');
+            const chatSendBtn = document.getElementById('sendButton');
+            const initialMessage = document.getElementById('initialMessage');
+            const loginModalTitle = document.getElementById('loginModalTitle');
+            const registerModalTitle = document.getElementById('registerModalTitle');
+            const showRegisterLinkText = document.querySelector('.bubble-modal-footer a#showRegisterLink');
+            const showLoginLinkText = document.querySelector('.bubble-modal-footer a#showLoginLink');
+            const loginSubmitBtnText = document.getElementById('loginSubmitBtn');
+            const registerSubmitBtnText = document.getElementById('registerSubmitBtn');
+            const loginUsernameLabel = document.querySelector('#loginUsername').previousElementSibling;
+            const loginPasswordLabel = document.querySelector('#loginPassword').previousElementSibling;
+            const registerUsernameLabel = document.querySelector('#registerUsername').previousElementSibling;
+            const registerPasswordLabel = document.querySelector('#registerPassword').previousElementSibling;
+            const registerConfirmPasswordLabel = document.querySelector('#registerConfirmPassword').previousElementSibling;
+            const profileModalTitle = document.getElementById('profileModalTitle');
+            const profileVipStatusText = document.getElementById('profileVipStatusText');
+            const rechargeBtnProfileText = document.getElementById('rechargeBtnProfileText');
+            const logoutBtnProfileText = document.getElementById('logoutBtnProfileText');
+
+            langBtn.addEventListener('click', function() {
+                isEnglish = !isEnglish;
+                const btnTextElements = document.querySelectorAll('.btn-text');
+                const uploadBtns = document.querySelectorAll('.upload-btn');
+                const agreementTextElements = document.querySelectorAll('.agreement-text');
+
+                if (isEnglish) {
+                    btnTextElements[0].textContent = currentUser ? currentUser.username : 'Log in'; // 登录按钮 (如果未登录)
+                    btnTextElements[1].textContent = '中文';
+                    clearHistoryBtnText.textContent = 'Clear History';
+                    chatTitle.textContent = 'Chat with AliceSkyGarden';
+                    chatInput.placeholder = 'Type a message...';
+                    uploadBtns[0].querySelector('.btn-text').textContent = 'Image';
+                    uploadBtns[1].querySelector('.btn-text').textContent = 'File';
+                    chatSendBtn.querySelector('.btn-text').textContent = 'Send';
+                    initialMessage.innerHTML = "AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊<br><br>Now evolved into Multimodal Model: Supporting images, PDF, Word, tables, scripts, web pages, etc files input😊";
+                    loginModalTitle.textContent = "Log in";
+                    registerModalTitle.textContent = "Register";
+                    showRegisterLinkText.textContent = "Register now";
+                    showLoginLinkText.textContent = "Log in now";
+                    loginSubmitBtnText.textContent = "Log in";
+                    registerSubmitBtnText.textContent = "Register";
+                    loginUsernameLabel.textContent = "Username:";
+                    loginPasswordLabel.textContent = "Password:";
+                    registerUsernameLabel.textContent = "Username:";
+                    registerPasswordLabel.textContent = "Password:";
+                    registerConfirmPasswordLabel.textContent = "Confirm Password:";
+                    // 更新个人中心模态框文本 (英文)
+                    profileModalTitle.textContent = "Profile";
+                    profileVipStatusText.textContent = "VIP Status: ";
+                    rechargeBtnProfileText.textContent = "Recharge/VIP";
+                    logoutBtnProfileText.textContent = "Logout";
+                    // 更新协议文本
+                    document.querySelector('.cn-text').style.display = 'none';
+                    document.querySelector('.en-text').style.display = 'block';
+                } else {
+                    btnTextElements[0].textContent = currentUser ? currentUser.username : '登录';
+                    btnTextElements[1].textContent = 'English';
+                    clearHistoryBtnText.textContent = '清除历史';
+                    chatTitle.textContent = '与 AliceSkyGarden 对话';
+                    chatInput.placeholder = '输入消息...';
+                    uploadBtns[0].querySelector('.btn-text').textContent = '图片';
+                    uploadBtns[1].querySelector('.btn-text').textContent = '文件';
+                    chatSendBtn.querySelector('.btn-text').textContent = '发送';
+                    initialMessage.innerHTML = "AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊<br><br>现已进化成多模态模型：支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊";
+                    loginModalTitle.textContent = "登录";
+                    registerModalTitle.textContent = "注册";
+                    showRegisterLinkText.textContent = "立即注册";
+                    showLoginLinkText.textContent = "立即登录";
+                    loginSubmitBtnText.textContent = "登录";
+                    registerSubmitBtnText.textContent = "注册";
+                    loginUsernameLabel.textContent = "用户名:";
+                    loginPasswordLabel.textContent = "密码:";
+                    registerUsernameLabel.textContent = "用户名:";
+                    registerPasswordLabel.textContent = "密码:";
+                    registerConfirmPasswordLabel.textContent = "确认密码:";
+                    // 更新个人中心模态框文本 (中文)
+                    profileModalTitle.textContent = "个人中心";
+                    profileVipStatusText.textContent = "VIP状态: ";
+                    rechargeBtnProfileText.textContent = "充值/VIP";
+                    logoutBtnProfileText.textContent = "登出";
+                    // 更新协议文本
+                    document.querySelector('.cn-text').style.display = 'block';
+                    document.querySelector('.en-text').style.display = 'none';
+                }
+                langBtn.classList.add('pulse');
+                setTimeout(() => {
+                    langBtn.classList.remove('pulse');
+                }, 500);
+            });
+
+            clearHistoryBtn.addEventListener('click', function() {
+                sessionId = '';
+                localStorage.removeItem('chat_session_id');
+                const chatMessages = document.getElementById('chatMessages');
+                chatMessages.innerHTML = '';
+                const newInitialMessage = document.createElement('div');
+                newInitialMessage.classList.add('message', 'bot-message');
+                newInitialMessage.innerHTML = isEnglish ?
+                    "History cleared. New session started. <br>AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊<br><br>Now evolved into Multimodal Model: Supporting images, PDF, Word, tables, scripts, web pages, etc files input😊" :
+                    "历史已清除，开始新会话。<br>AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊<br><br>现已进化成多模态模型：支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊";
+                chatMessages.appendChild(newInitialMessage);
+            });
+
+            // 点击模态框外部关闭
+            window.onclick = function(event) {
+                if (event.target == document.getElementById('loginModal')) {
+                    closeModal(document.getElementById('loginModal'));
+                }
+                if (event.target == document.getElementById('registerModal')) {
+                    closeModal(document.getElementById('registerModal'));
+                }
+                if (event.target == document.getElementById('profileModal')) {
+                    closeModal(document.getElementById('profileModal'));
+                }
+            }
+
+            // - 新增结束 -
             particlesJS('particles-js', {
                 "particles": {
                     "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
@@ -1153,680 +1741,8 @@
                 },
                 "retina_detect": true
             });
-            // --- 新增：获取用户信息并更新UI ---
-            function fetchUserInfo() {
-                fetch(`${API_BASE_URL}/user_info`, {
-                    method: 'GET',
-                    credentials: 'include' // 重要：携带 Cookie/Session
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.username) {
-                        currentUser = data;
-                        document.getElementById('profileUsername').textContent = data.username;
-                        if (data.vip_status) {
-                            document.getElementById('vipStatusText').textContent = isEnglish ? 'Yes' : '是';
-                            document.getElementById('vipStatusText').style.color = 'gold';
-                        } else {
-                            document.getElementById('vipStatusText').textContent = isEnglish ? 'No' : '否';
-                            document.getElementById('vipStatusText').style.color = '#c0c0ff';
-                        }
-                        // 更新顶部按钮为个人按钮
-                        document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = data.username;
-                        document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user-circle';
-                    } else {
-                        currentUser = null;
-                        // 重置顶部按钮为登录按钮
-                        document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
-                        document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user';
-                    }
-                })
-                .catch(error => {
-                    console.error('获取用户信息失败:', error);
-                    currentUser = null;
-                    // 重置顶部按钮为登录按钮
-                    document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
-                    document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user';
-                });
-            }
-            // 页面加载时获取用户信息
-            fetchUserInfo();
-            // --- 新增结束 ---
-            // --- 新增：登录/注册模态框逻辑 (气泡型) ---
-            const loginModal = document.getElementById('loginModal');
-            const registerModal = document.getElementById('registerModal');
-            const profileModal = document.getElementById('profileModal'); // 个人中心模态框
-            const loginBtnNav = document.getElementById('loginBtnNav'); // 导航栏登录/个人按钮
-            const showRegisterLink = document.getElementById('showRegisterLink');
-            const showLoginLink = document.getElementById('showLoginLink');
-            const loginSubmitBtn = document.getElementById('loginSubmitBtn');
-            const registerSubmitBtn = document.getElementById('registerSubmitBtn');
-            const loginClose = loginModal.querySelector('.bubble-close');
-            const registerClose = registerModal.querySelector('.bubble-close');
-            const profileClose = profileModal.querySelector('.bubble-close'); // 个人中心关闭按钮
-            // 个人中心按钮和登出按钮
-            const rechargeBtnProfile = document.getElementById('rechargeBtnProfile');
-            const logoutBtnProfile = document.getElementById('logoutBtnProfile');
-            function openLoginModal() {
-                registerModal.style.display = 'none';
-                profileModal.style.display = 'none'; // 确保其他模态框关闭
-                loginModal.style.display = 'block';
-                document.getElementById('loginError').style.display = 'none';
-                document.getElementById('loginSuccess').style.display = 'none';
-                document.getElementById('loginUsername').value = '';
-                document.getElementById('loginPassword').value = '';
-            }
-            function openRegisterModal() {
-                loginModal.style.display = 'none';
-                profileModal.style.display = 'none'; // 确保其他模态框关闭
-                registerModal.style.display = 'block';
-                document.getElementById('registerError').style.display = 'none';
-                document.getElementById('registerSuccess').style.display = 'none';
-                document.getElementById('registerUsername').value = '';
-                document.getElementById('registerPassword').value = '';
-                document.getElementById('registerConfirmPassword').value = '';
-            }
-            function openProfileModal() {
-                loginModal.style.display = 'none';
-                registerModal.style.display = 'none';
-                profileModal.style.display = 'block';
-                // 更新个人中心信息
-                if (currentUser) {
-                    document.getElementById('profileUsername').textContent = currentUser.username;
-                    if (currentUser.vip_status) {
-                        document.getElementById('vipStatusText').textContent = isEnglish ? 'Yes' : '是';
-                        document.getElementById('vipStatusText').style.color = 'gold';
-                    } else {
-                        document.getElementById('vipStatusText').textContent = isEnglish ? 'No' : '否';
-                        document.getElementById('vipStatusText').style.color = '#c0c0ff';
-                    }
-                }
-            }
-            function closeModal(modal) {
-                modal.style.display = 'none';
-            }
-            // 事件监听器
-            loginBtnNav.addEventListener('click', function() {
-                if (currentUser) {
-                   openProfileModal(); // 如果已登录，打开个人中心
-                } else {
-                    openLoginModal(); // 如果未登录，打开登录框
-                }
-            });
-            showRegisterLink.addEventListener('click', openRegisterModal);
-            showLoginLink.addEventListener('click', openLoginModal);
-            loginClose.addEventListener('click', () => closeModal(loginModal));
-            registerClose.addEventListener('click', () => closeModal(registerModal));
-            profileClose.addEventListener('click', () => closeModal(profileModal)); // 个人中心关闭
-            window.addEventListener('click', (event) => {
-                if (event.target == loginModal) closeModal(loginModal);
-                if (event.target == registerModal) closeModal(registerModal);
-                if (event.target == profileModal) closeModal(profileModal); // 点击背景关闭个人中心
-            });
-            // 登录提交
-            loginSubmitBtn.addEventListener('click', function() {
-                const username = document.getElementById('loginUsername').value.trim();
-                const password = document.getElementById('loginPassword').value;
-                if (!username || !password) {
-                    document.getElementById('loginError').textContent = isEnglish ? '用户名和密码不能为空' : 'Username and password cannot be empty';
-                    document.getElementById('loginError').style.display = 'block';
-                    return;
-                }
-                fetch(`${API_BASE_URL}/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ username, password }),
-                    credentials: 'include' // 重要：携带 Cookie/Session
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        document.getElementById('loginError').textContent = data.error;
-                        document.getElementById('loginError').style.display = 'block';
-                        document.getElementById('loginSuccess').style.display = 'none';
-                    } else {
-                        document.getElementById('loginSuccess').textContent = data.message;
-                        document.getElementById('loginSuccess').style.display = 'block';
-                        document.getElementById('loginError').style.display = 'none';
-                        currentUser = { username: data.username, vip_status: data.vip_status }; // 更新本地用户信息
-                        fetchUserInfo(); // 更新UI
-                        setTimeout(() => {
-                            closeModal(loginModal);
-                        }, 1000); // 1秒后自动关闭模态框
-                    }
-                })
-                .catch(error => {
-                    console.error('登录请求失败:', error);
-                    document.getElementById('loginError').textContent = isEnglish ? '登录请求失败，请稍后再试。' : 'Login request failed, please try again later.';
-                    document.getElementById('loginError').style.display = 'block';
-                    document.getElementById('loginSuccess').style.display = 'none';
-                });
-            });
-            // 注册提交
-            registerSubmitBtn.addEventListener('click', function() {
-                const username = document.getElementById('registerUsername').value.trim();
-                const password = document.getElementById('registerPassword').value;
-                const confirmPassword = document.getElementById('registerConfirmPassword').value;
-                if (!username || !password || !confirmPassword) {
-                    document.getElementById('registerError').textContent = isEnglish ? '所有字段都必须填写' : 'All fields are required';
-                    document.getElementById('registerError').style.display = 'block';
-                    return;
-                }
-                if (password !== confirmPassword) {
-                    document.getElementById('registerError').textContent = isEnglish ? '两次输入的密码不一致' : 'Passwords do not match';
-                    document.getElementById('registerError').style.display = 'block';
-                    return;
-                }
-                fetch(`${API_BASE_URL}/register`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ username, password }),
-                    credentials: 'include' // 注册成功后可能自动登录
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        document.getElementById('registerError').textContent = data.error;
-                        document.getElementById('registerError').style.display = 'block';
-                        document.getElementById('registerSuccess').style.display = 'none';
-                    } else {
-                        document.getElementById('registerSuccess').textContent = data.message;
-                        document.getElementById('registerSuccess').style.display = 'block';
-                        document.getElementById('registerError').style.display = 'none';
-                        // 注册成功后可以自动切换到登录框或直接关闭
-                        setTimeout(() => {
-                            // closeModal(registerModal);
-                            // 或者自动登录
-                            document.getElementById('loginUsername').value = username;
-                            document.getElementById('loginPassword').value = password;
-                            openLoginModal(); // 打开登录框并填充用户名密码
-                            // 触发登录按钮点击事件
-                            // loginSubmitBtn.click();
-                        }, 1500);
-                    }
-                })
-                .catch(error => {
-                    console.error('注册请求失败:', error);
-                    document.getElementById('registerError').textContent = isEnglish ? '注册请求失败，请稍后再试。' : 'Registration request failed, please try again later.';
-                    document.getElementById('registerError').style.display = 'block';
-                    document.getElementById('registerSuccess').style.display = 'none';
-                });
-            });
-
-            // --- 新增：个人中心按钮事件 ---
-            // 充值按钮事件
-            rechargeBtnProfile.addEventListener('click', function() {
-                 if (!currentUser) {
-                     alert(isEnglish ? "请先登录以使用充值功能。" : "Please log in to use the recharge function.");
-                     closeModal(profileModal);
-                     openLoginModal();
-                     return;
-                 }
-                 // 调用充值接口
-                 fetch(`${API_BASE_URL}/recharge`, {
-                     method: 'POST',
-                     headers: {
-                         'Content-Type': 'application/json',
-                     },
-                     credentials: 'include' // 携带 Cookie/Session
-                 })
-                 .then(response => response.json())
-                 .then(data => {
-                     if (data.error) {
-                         alert(`${isEnglish ? '充值失败:' : 'Recharge failed:'} ${data.error}`);
-                     } else {
-                         alert(`${isEnglish ? '充值信息:' : 'Recharge info:'} ${data.message}`);
-                         // 刷新用户信息，检查VIP状态是否更新
-                         fetchUserInfo();
-                     }
-                 })
-                 .catch(error => {
-                     console.error('充值请求失败:', error);
-                     alert(isEnglish ? '充值请求失败，请稍后再试。' : 'Recharge request failed, please try again later.');
-                 });
-            });
-
-            // 登出按钮事件
-            logoutBtnProfile.addEventListener('click', function() {
-                fetch(`${API_BASE_URL}/logout`, {
-                    method: 'POST', // 或者 'GET'，取决于后端
-                    credentials: 'include'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data.message);
-                    currentUser = null;
-                    fetchUserInfo(); // 更新UI
-                    closeModal(profileModal); // 关闭个人中心模态框
-                    // 可以添加登出成功的提示
-                    // alert(isEnglish ? "登出成功" : "Logged out successfully");
-                })
-                .catch(error => {
-                    console.error('登出失败:', error);
-                    // alert(isEnglish ? "登出失败，请稍后再试。" : "Logout failed, please try again later.");
-                });
-            });
-            // --- 新增结束 ---
-
-
-            const langBtn = document.getElementById('langBtn');
-            const clearHistoryBtn = document.getElementById('clearHistoryBtn');
-            const chatTitle = document.querySelector('.chat-title');
-            const chatInput = document.getElementById('userInput');
-            const chatSendBtn = document.getElementById('sendButton');
-            const initialMessage = document.getElementById('initialMessage');
-            const footerTagline = document.querySelector('.footer-tagline');
-            const footerLinksText = document.querySelectorAll('.link-text');
-            const copyrightText = document.querySelector('.copyright');
-            const imageInput = document.getElementById('imageInput');
-            const fileInput = document.getElementById('fileInput');
-            const filePreviewContainer = document.getElementById('filePreviewContainer');
-            const sendButtonText = document.getElementById('sendButtonText');
-            const clearHistoryBtnText = document.getElementById('clearHistoryBtn').querySelector('.btn-text');
-            // 登录/注册模态框文本元素
-            const loginModalTitle = document.getElementById('loginModalTitle');
-            const registerModalTitle = document.getElementById('registerModalTitle');
-            const showRegisterLinkText = document.querySelector('.bubble-modal-footer a#showRegisterLink');
-            const showLoginLinkText = document.querySelector('.bubble-modal-footer a#showLoginLink');
-            const loginSubmitBtnText = document.getElementById('loginSubmitBtn');
-            const registerSubmitBtnText = document.getElementById('registerSubmitBtn');
-            const loginUsernameLabel = document.querySelector('#loginUsername').previousElementSibling;
-            const loginPasswordLabel = document.querySelector('#loginPassword').previousElementSibling;
-            const registerUsernameLabel = document.querySelector('#registerUsername').previousElementSibling;
-            const registerPasswordLabel = document.querySelector('#registerPassword').previousElementSibling;
-            const registerConfirmPasswordLabel = document.querySelector('#registerConfirmPassword').previousElementSibling;
-            // 个人中心模态框文本元素
-            const profileModalTitle = document.getElementById('profileModalTitle');
-            const profileVipStatusText = document.getElementById('profileVipStatus').childNodes[0]; // 获取文本节点
-            const rechargeBtnProfileText = document.getElementById('rechargeBtnProfileText');
-            const logoutBtnProfileText = document.getElementById('logoutBtnProfileText');
-
-            langBtn.addEventListener('click', function() {
-                isEnglish = !isEnglish;
-                const btnTextElements = document.querySelectorAll('.btn-text');
-                const uploadBtns = document.querySelectorAll('.upload-btn');
-                const agreementTextElements = document.querySelectorAll('.agreement-text');
-
-                if (isEnglish) {
-                    btnTextElements[0].textContent = 'Log in'; // 登录按钮 (如果未登录)
-                    btnTextElements[1].textContent = '中文';
-                    clearHistoryBtnText.textContent = 'Clear History';
-                    chatTitle.textContent = "Talk with AliceSkyGarden";
-                    chatInput.placeholder = "(Now support image pdf docx txt xlsx csv py html etc files)  Enter your message...";
-                    sendButtonText.textContent = 'Send';
-                    initialMessage.innerHTML = "AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊<br><br>Now evolved into Multimodal Model: Supporting images, PDF, Word, tables, scripts, web pages, etc files input😊";
-                    footerTagline.textContent = "Unlocking a New Era of Intelligence · Exploring Infinite Possibilities";
-                    const footerLinks = ["Home", "Developers", "Documentation", "Community", "Blog", "Contact Us"];
-                    footerLinksText.forEach((el, index) => {
-                        el.textContent = footerLinks[index];
-                    });
-                    copyrightText.textContent = "© 2025 AliceSkyGarden Technology. All rights reserved";
-                    uploadBtns[0].title = "Upload Image";
-                    uploadBtns[1].title = "Upload File";
-
-                    // 更新模态框文本 (英文)
-                    loginModalTitle.textContent = "Login";
-                    registerModalTitle.textContent = "Register";
-                    showRegisterLinkText.textContent = "Register Now";
-                    showLoginLinkText.textContent = "Login Now";
-                    loginSubmitBtnText.textContent = "Login";
-                    registerSubmitBtnText.textContent = "Register";
-                    loginUsernameLabel.textContent = "Username:";
-                    loginPasswordLabel.textContent = "Password:";
-                    registerUsernameLabel.textContent = "Username:";
-                    registerPasswordLabel.textContent = "Password:";
-                    registerConfirmPasswordLabel.textContent = "Confirm Password:";
-
-                    // 更新个人中心模态框文本 (英文)
-                    profileModalTitle.textContent = "Profile";
-                    profileVipStatusText.textContent = "VIP Status: ";
-                    rechargeBtnProfileText.textContent = "Recharge/VIP";
-                    logoutBtnProfileText.textContent = "Logout";
-
-                    // 更新协议文本
-                    document.querySelector('.cn-text').style.display = 'none';
-                    document.querySelector('.en-text').style.display = 'inline';
-
-                } else {
-                    btnTextElements[0].textContent = '登录'; // 登录按钮 (如果未登录)
-                    btnTextElements[1].textContent = 'English';
-                    clearHistoryBtnText.textContent = '清除历史';
-                    chatTitle.textContent = "与 AliceSkyGarden 对话";
-                    chatInput.placeholder = "(现已支持 各种格式的图片 pdf docx txt xlsx csv py html等文件)  输入你的消息...";
-                    sendButtonText.textContent = '发送';
-                    initialMessage.innerHTML = "AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊<br><br>现已进化成多模态模型：支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊";
-                    footerTagline.textContent = "开启智能新纪元 · 探索无限可能";
-                    const footerLinks = ["首页", "开发者", "文档", "社区", "博客", "联系我们"];
-                    footerLinksText.forEach((el, index) => {
-                        el.textContent = footerLinks[index];
-                    });
-                    copyrightText.textContent = "© 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved";
-                    uploadBtns[0].title = "上传图片";
-                    uploadBtns[1].title = "上传文件";
-
-                    // 更新模态框文本 (中文)
-                    loginModalTitle.textContent = "登录";
-                    registerModalTitle.textContent = "注册";
-                    showRegisterLinkText.textContent = "立即注册";
-                    showLoginLinkText.textContent = "立即登录";
-                    loginSubmitBtnText.textContent = "登录";
-                    registerSubmitBtnText.textContent = "注册";
-                    loginUsernameLabel.textContent = "用户名:";
-                    loginPasswordLabel.textContent = "密码:";
-                    registerUsernameLabel.textContent = "用户名:";
-                    registerPasswordLabel.textContent = "密码:";
-                    registerConfirmPasswordLabel.textContent = "确认密码:";
-
-                    // 更新个人中心模态框文本 (中文)
-                    profileModalTitle.textContent = "个人中心";
-                    profileVipStatusText.textContent = "VIP 状态: ";
-                    rechargeBtnProfileText.textContent = "充值/VIP";
-                    logoutBtnProfileText.textContent = "登出";
-
-                    // 更新协议文本
-                    document.querySelector('.en-text').style.display = 'none';
-                    document.querySelector('.cn-text').style.display = 'inline';
-                }
-
-                // 更新用户信息显示区域的按钮文字 (如果已登录)
-                if (currentUser) {
-                    document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = currentUser.username;
-                }
-
-                langBtn.classList.add('pulse');
-                setTimeout(() => {
-                    langBtn.classList.remove('pulse');
-                }, 500);
-            });
-            clearHistoryBtn.addEventListener('click', function() {
-                sessionId = '';
-                localStorage.removeItem('chat_session_id');
-                const chatMessages = document.getElementById('chatMessages');
-                chatMessages.innerHTML = '';
-                const newInitialMessage = document.createElement('div');
-                newInitialMessage.classList.add('message', 'bot-message');
-                newInitialMessage.innerHTML = isEnglish ?
-                    "History cleared. New session started. <br>AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊<br><br>Now evolved into Multimodal Model: Supporting images, PDF, Word, tables, scripts, web pages, etc files input😊" :
-                    "历史已清除，开始新会话。<br>AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊<br><br>现已进化成多模态模型：支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊";
-                chatMessages.appendChild(newInitialMessage);
-            });
-            const chatMessages = document.getElementById('chatMessages');
-            const userInput = document.getElementById('userInput');
-            const sendButton = document.getElementById('sendButton');
-            // const API_URL = 'https://test-ffdbgoedhy.cn-hongkong.fcapp.run'; // 原始API URL
-            const API_URL = `${API_BASE_URL}/invoke`; // 使用新的API端点
-            imageInput.addEventListener('change', function() {
-                const files = Array.from(imageInput.files);
-                if (files.length > 0) {
-                    files.forEach(file => {
-                        const isDuplicate = selectedImages.some(existingFile =>
-                            existingFile.name === file.name && existingFile.size === file.size
-                        );
-                        if (!isDuplicate) {
-                            selectedImages.push(file);
-                        }
-                    });
-                    updateFilePreview();
-                    imageInput.value = '';
-                }
-            });
-            fileInput.addEventListener('change', function() {
-                const files = Array.from(fileInput.files);
-                if (files.length > 0) {
-                    files.forEach(file => {
-                        const isDuplicate = selectedFiles.some(existingFile =>
-                            existingFile.name === file.name && existingFile.size === file.size
-                        );
-                        if (!isDuplicate) {
-                            selectedFiles.push(file);
-                        }
-                    });
-                    updateFilePreview();
-                    fileInput.value = '';
-                }
-            });
-            function updateFilePreview() {
-                filePreviewContainer.innerHTML = '';
-                const allFiles = [...selectedImages, ...selectedFiles];
-                if (allFiles.length > 0) {
-                    filePreviewContainer.style.display = 'flex';
-                    allFiles.forEach((file, index) => {
-                        const previewItem = document.createElement('div');
-                        previewItem.className = 'file-preview-item';
-                        previewItem.dataset.index = index;
-                        previewItem.dataset.type = selectedImages.includes(file) ? 'image' : 'file';
-                        const fileNameSpan = document.createElement('span');
-                        fileNameSpan.className = 'file-preview-name';
-                        fileNameSpan.textContent = file.name.length > 20 ? file.name.substring(0, 17) + '...' : file.name;
-                        fileNameSpan.title = file.name;
-                        const removeIcon = document.createElement('i');
-                        removeIcon.className = 'fas fa-times file-preview-remove';
-                        removeIcon.title = isEnglish ? "Remove file" : "移除文件";
-                        removeIcon.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            const type = previewItem.dataset.type;
-                            const idx = parseInt(previewItem.dataset.index);
-                            if (type === 'image') {
-                                selectedImages.splice(idx, 1);
-                                const remainingItems = filePreviewContainer.querySelectorAll(`.file-preview-item[data-type='image']`);
-                                remainingItems.forEach((item, i) => {
-                                    if (i >= idx) {
-                                        const oldIndex = parseInt(item.dataset.index);
-                                        item.dataset.index = oldIndex - 1;
-                                    }
-                                });
-                            } else {
-                                selectedFiles.splice(idx, 1);
-                                const remainingItems = filePreviewContainer.querySelectorAll(`.file-preview-item[data-type='file']`);
-                                remainingItems.forEach((item, i) => {
-                                    if (i >= idx) {
-                                        const oldIndex = parseInt(item.dataset.index);
-                                        item.dataset.index = oldIndex - 1;
-                                    }
-                                });
-                            }
-                            updateFilePreview();
-                        });
-                        previewItem.appendChild(fileNameSpan);
-                        previewItem.appendChild(removeIcon);
-                        filePreviewContainer.appendChild(previewItem);
-                    });
-                } else {
-                    filePreviewContainer.style.display = 'none';
-                }
-            }
-            function smartScroll() {
-                if (!scrollLock && !isTyping) {
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }
-            }
-            chatMessages.addEventListener('scroll', function() {
-                const isAtBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight <= 50;
-                scrollLock = !isAtBottom;
-            });
-            function addMessage(message, isUser = false, files = []) {
-                const messageDiv = document.createElement('div');
-                messageDiv.classList.add('message');
-                messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
-                if (isUser && files.length > 0) {
-                    if (files.length === 1) {
-                        const fileName = files[0].name;
-                        let fileText = isEnglish ? ` [Sent ${fileName}]` : ` [已发送 ${fileName}]`;
-                        message += fileText;
-                    } else {
-                        let fileText = isEnglish ? " [Sent files] " : " [已发送文件] ";
-                        fileText += `(${files.length})`;
-                        message += fileText;
-                    }
-                }
-                messageDiv.textContent = message;
-                chatMessages.appendChild(messageDiv);
-                smartScroll();
-                return messageDiv;
-            }
-            function showTyping() {
-              isTyping = true;
-              const typingDiv = document.createElement('div');
-              typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
-              typingDiv.id = 'typingIndicator';
-              const textNode = document.createTextNode(isEnglish ? 'Connecting Hong Kong Server' : '正在连接香港服务器');
-              typingDiv.appendChild(textNode);
-              const dotsSpan = document.createElement('span');
-              dotsSpan.classList.add('dots');
-              for(let i = 0; i < 3; i++) {
-                const dot = document.createElement('span');
-                dot.classList.add('dot');
-                dotsSpan.appendChild(dot);
-              }
-              typingDiv.appendChild(dotsSpan);
-              chatMessages.appendChild(typingDiv);
-              smartScroll();
-            }
-            function hideTyping() {
-                isTyping = false;
-                const typingIndicator = document.getElementById('typingIndicator');
-                if (typingIndicator) {
-                    typingIndicator.remove();
-                }
-            }
-            function typeWriter(messageDiv, fullText, speed = 5) {
-                let i = 0;
-                const typingCursor = document.createElement('span');
-                typingCursor.classList.add('typing-cursor');
-                messageDiv.appendChild(typingCursor);
-                const textContainer = document.createElement('div');
-                messageDiv.appendChild(textContainer);
-                function type() {
-                    if (i < fullText.length) {
-                        textContainer.innerHTML = fullText.substring(0, i + 1);
-                        messageDiv.appendChild(typingCursor);
-                        i++;
-                        const isNearBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight <= 100;
-                        if (isNearBottom) {
-                            chatMessages.scrollTop = chatMessages.scrollHeight;
-                        }
-                        setTimeout(type, speed);
-                    } else {
-                        typingCursor.remove();
-                        messageDiv.innerHTML = fullText;
-                        if (chatMessages.scrollHeight > chatMessages.clientHeight + 50) {
-                            chatMessages.classList.add('expanded');
-                        }
-                    }
-                }
-                type();
-            }
-            async function sendMessage() {
-                const message = userInput.value.trim();
-                const imagesToSend = [...selectedImages];
-                const filesToSend = [...selectedFiles];
-                
-                // --- 修改逻辑：移除前端强制登录检查，允许未登录发送消息 ---
-                // if (!currentUser) {
-                //     alert(isEnglish ? "请先登录以发送消息。" : "Please log in to send a message.");
-                //     openLoginModal();
-                //     return; // 阻止发送
-                // }
-                // --- 修改逻辑结束 ---
-                
-                if (!message && imagesToSend.length === 0 && filesToSend.length === 0) return;
-                addMessage(message, true, [...imagesToSend, ...filesToSend]);
-                userInput.value = '';
-                selectedImages = [];
-                selectedFiles = [];
-                updateFilePreview();
-                showTyping();
-                sendButton.disabled = true;
-                try {
-                    let requestBody;
-                    let headers = {
-                        'X-Session-ID': sessionId
-                    };
-                    if (imagesToSend.length > 0 || filesToSend.length > 0) {
-                        const formData = new FormData();
-                        if (message) {
-                            formData.append('message', message);
-                        }
-                        imagesToSend.forEach((file, index) => {
-                            formData.append('image', file, file.name);
-                        });
-                        filesToSend.forEach((file, index) => {
-                            formData.append('file', file, file.name);
-                        });
-                        requestBody = formData;
-                        delete headers['Content-Type']; // 让浏览器设置 multipart/form-data
-                    } else {
-                        requestBody = JSON.stringify({
-                            message: message
-                        });
-                        headers['Content-Type'] = 'application/json';
-                    }
-                    // --- 修改 fetch 调用以包含 Cookie/Session ---
-                    const response = await fetch(API_URL, {
-                        method: 'POST',
-                        headers: headers,
-                        body: requestBody,
-                        credentials: 'include' // 重要：携带 Cookie/Session
-                    });
-                    // --- 修改结束 ---
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    const data = await response.json();
-                    hideTyping();
-                    if (data.session_id) {
-                        sessionId = data.session_id;
-                        localStorage.setItem('chat_session_id', sessionId);
-                    }
-                    let botReply = "";
-                    if (data.reply) {
-                        botReply = data.reply;
-                    } else if (data.error) {
-                        botReply = isEnglish ? `Error: ${data.error}` : `错误: ${data.error}`;
-                    } else {
-                        botReply = isEnglish ? "Sorry, I didn't receive a valid reply." : "抱歉，我没有收到有效的回复。";
-                    }
-                    let htmlReply = "";
-                    try {
-                        htmlReply = marked.parse(botReply, { breaks: true });
-                    } catch (e) {
-                        console.error("Markdown parsing error:", e);
-                        htmlReply = botReply;
-                    }
-                    const botMessageDiv = document.createElement('div');
-                    botMessageDiv.classList.add('message', 'bot-message');
-                    chatMessages.appendChild(botMessageDiv);
-                    typeWriter(botMessageDiv, htmlReply);
-                } catch (error) {
-                    console.error('Error sending message:', error);
-                    hideTyping();
-                    const errorDiv = document.createElement('div');
-                    errorDiv.classList.add('message', 'bot-message');
-                    errorDiv.textContent = isEnglish ? `Error: ${error.message}` : `错误: ${error.message}`;
-                    chatMessages.appendChild(errorDiv);
-                } finally {
-                    sendButton.disabled = false;
-                    const isNearBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight <= 100;
-                    if (isNearBottom) {
-                        chatMessages.scrollTop = chatMessages.scrollHeight;
-                    }
-                    if (chatMessages.scrollHeight > chatMessages.clientHeight + 50) {
-                        chatMessages.classList.add('expanded');
-                    }
-                }
-            }
-            sendButton.addEventListener('click', sendMessage);
-            userInput.addEventListener('keydown', function(event) {
-                if (event.key === 'Enter' && !event.shiftKey) {
-                    event.preventDefault();
-                    sendMessage();
-                }
-            });
-            smartScroll();
+            // - 新增：获取用户信息并更新UI -
+            // fetchUserInfo(); // 已在顶部执行
         });
     </script>
 </body>
