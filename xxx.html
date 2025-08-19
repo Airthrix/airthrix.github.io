@@ -571,8 +571,9 @@
             animation: modalopen 0.4s;
             backdrop-filter: blur(5px);
             position: relative;
-            /* 气泡尖角 */
             clip-path: polygon(0 0, 100% 0, 100% 90%, 55% 90%, 50% 100%, 45% 90%, 0 90%);
+            /* 添加发光效果 */
+            box-shadow: 0 0 20px var(--neon-blue), inset 0 0 30px rgba(0, 243, 255, 0.3);
         }
         .bubble-modal-content::after {
             content: '';
@@ -585,6 +586,8 @@
             border-left: 1px solid var(--neon-blue);
             border-top: 1px solid var(--neon-blue);
             transform: rotate(45deg);
+            /* 为尖角添加发光 */
+            box-shadow: 0 0 15px var(--neon-blue);
         }
         @keyframes modalopen {
             from {opacity: 0; transform: translateY(-60px);}
@@ -649,10 +652,12 @@
             font-size: 1rem;
             font-weight: bold;
             transition: all 0.3s ease;
+            /* 添加按钮发光效果 */
+            box-shadow: 0 0 10px var(--neon-blue), inset 0 0 5px rgba(0, 243, 255, 0.3);
         }
         .btn-primary:hover {
             background-color: #00c4cc;
-            box-shadow: 0 0 10px var(--neon-blue);
+            box-shadow: 0 0 15px var(--neon-blue), inset 0 0 7px rgba(0, 243, 255, 0.5);
         }
         .bubble-modal-footer {
             padding: 10px 0;
@@ -697,6 +702,8 @@
             backdrop-filter: blur(5px);
             position: relative;
             clip-path: polygon(0 0, 100% 0, 100% 90%, 55% 90%, 50% 100%, 45% 90%, 0 90%);
+            /* 添加发光效果 */
+            box-shadow: 0 0 20px var(--neon-green), inset 0 0 30px rgba(0, 255, 157, 0.3);
         }
         .profile-modal-content::after {
             content: '';
@@ -709,6 +716,8 @@
             border-left: 1px solid var(--neon-green); /* 绿色边框 */
             border-top: 1px solid var(--neon-green); /* 绿色边框 */
             transform: rotate(45deg);
+            /* 为尖角添加发光 */
+            box-shadow: 0 0 15px var(--neon-green);
         }
         .profile-modal-header {
             padding: 10px 0;
@@ -747,30 +756,35 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            /* 添加按钮发光效果 */
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3), inset 0 0 5px rgba(0, 243, 255, 0.3);
         }
         .profile-btn:hover {
             background-color: rgba(0, 243, 255, 0.2);
             color: var(--neon-blue);
             border-color: var(--neon-blue);
-            box-shadow: 0 0 10px var(--neon-blue);
+            box-shadow: 0 0 15px var(--neon-blue), inset 0 0 7px rgba(0, 243, 255, 0.5);
         }
         .profile-btn.vip {
             border-color: gold;
             color: gold;
+            box-shadow: 0 0 10px gold, inset 0 0 5px rgba(255, 215, 0, 0.3);
         }
         .profile-btn.vip:hover {
             background-color: rgba(255, 215, 0, 0.2);
-            box-shadow: 0 0 10px gold;
+            box-shadow: 0 0 15px gold, inset 0 0 7px rgba(255, 215, 0, 0.5);
         }
         .profile-btn.logout {
             border-color: var(--neon-red);
             color: var(--neon-red);
+            box-shadow: 0 0 10px var(--neon-red), inset 0 0 5px rgba(255, 0, 85, 0.3);
         }
         .profile-btn.logout:hover {
             background-color: rgba(255, 0, 85, 0.2);
-            box-shadow: 0 0 10px var(--neon-red);
+            box-shadow: 0 0 15px var(--neon-red), inset 0 0 7px rgba(255, 0, 85, 0.5);
         }
         /* --- 新增样式结束 --- */
+
 
         @media (max-width: 768px) {
             .top-nav {
@@ -1039,6 +1053,29 @@
             </div>
             <div class="bubble-modal-footer">
                 已有账户? <a id="showLoginLink">立即登录</a>
+            </div>
+        </div>
+    </div>
+    <!-- --- 新增结束 --- -->
+
+    <!-- --- 新增：个人中心模态框 --- -->
+    <div id="profileModal" class="bubble-modal">
+        <div class="profile-modal-content">
+            <span class="bubble-close">&times;</span>
+            <div class="profile-modal-header">
+                <h2 id="profileModalTitle">个人中心</h2>
+            </div>
+            <div class="profile-info">
+                <h3 id="profileUsername">用户名</h3>
+                <p id="profileVipStatus">VIP 状态: <span id="vipStatusText">否</span></p>
+            </div>
+            <div class="profile-actions">
+                <button id="rechargeBtnProfile" class="profile-btn vip">
+                    <i class="fas fa-coins"></i> <span id="rechargeBtnProfileText">充值/VIP</span>
+                </button>
+                <button id="logoutBtnProfile" class="profile-btn logout">
+                    <i class="fas fa-sign-out-alt"></i> <span id="logoutBtnProfileText">登出</span>
+                </button>
             </div>
         </div>
     </div>
