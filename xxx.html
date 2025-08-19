@@ -777,32 +777,36 @@
         .profile-btn.vip {
             /* VIP按钮文字和边框改为深红色 */
             border-color: #8B0000; /* 深红色 */
-            color: #8B0000; /* 深红色 */
+            color: #8B0000; /* 深红色 - 初始状态就为深红色 */
             /* 字体加粗 */
             font-weight: bold;
             /* VIP按钮的微光效果 - 使用深红色 */
             box-shadow: 0 0 10px #8B0000, inset 0 0 5px rgba(139, 0, 0, 0.3);
+            /* 背景颜色也设置为深红色半透明，使其在初始状态就“发红” */
+            background-color: rgba(139, 0, 0, 0.1);
         }
         .profile-btn.vip:hover {
-            /* VIP按钮悬停时背景变为深红色半透明 */
+            /* 悬停时背景变为更亮的深红色半透明 */
             background-color: rgba(139, 0, 0, 0.2);
             /* 悬停时增强深红色光晕 */
             box-shadow: 0 0 15px #8B0000, inset 0 0 7px rgba(139, 0, 0, 0.5);
         }
         .profile-btn.logout {
-            /* 登出按钮文字和边框改为深灰色/接近黑色 (比之前的#33334d更深) */
-            border-color: #1a1a2e;
-            color: #1a1a2e; /* 深灰色，接近黑色 */
+            /* 登出按钮文字和边框改为深灰色/接近黑色 */
+            border-color: #1a1a1a; /* 深灰色，接近黑色 */
+            color: #1a1a1a; /* 深灰色，接近黑色 - 初始状态就为深色 */
             /* 登出按钮的微光效果 - 使用深灰色 */
-            box-shadow: 0 0 10px #1a1a2e, inset 0 0 5px rgba(26, 26, 46, 0.3);
+            box-shadow: 0 0 10px #1a1a1a, inset 0 0 5px rgba(26, 26, 26, 0.3);
+            /* 背景颜色也设置为深灰色半透明，使其在初始状态就“发暗” */
+            background-color: rgba(26, 26, 26, 0.1);
         }
         .profile-btn.logout:hover {
-            /* 登出按钮悬停时背景变为深灰色半透明 */
-            background-color: rgba(26, 26, 46, 0.2);
+            /* 悬停时背景变为稍亮的深灰色半透明 */
+            background-color: rgba(26, 26, 26, 0.2);
             /* 悬停时文字变为稍亮的灰色 */
-            color: #33334d;
+            color: #333333;
             /* 悬停时增强深灰色光晕 */
-            box-shadow: 0 0 15px #1a1a2e, inset 0 0 7px rgba(26, 26, 46, 0.5);
+            box-shadow: 0 0 15px #1a1a1a, inset 0 0 7px rgba(26, 26, 26, 0.5);
         }
         /* --- 新增样式结束 --- */
 
