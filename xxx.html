@@ -795,21 +795,27 @@
             box-shadow: 0 0 15px #ff0000, inset 0 0 7px rgba(255, 0, 0, 0.5);
         }
         .profile-btn.logout {
-            /* 登出按钮文字和边框颜色与登录按钮字体颜色一致 */
-            border-color: #1a1a1a; /* 深灰色，接近黑色 */
-            color: #1a1a1a; /* 深灰色，接近黑色 - 与登录按钮字体颜色一致 */
-            /* 登出按钮的微光效果 - 使用深灰色 */
-            box-shadow: 0 0 10px #1a1a1a, inset 0 0 5px rgba(26, 26, 26, 0.3);
-            /* 背景颜色也设置为深灰色半透明 */
-            background-color: rgba(26, 26, 26, 0.1);
+            /* 使用与登录按钮相同的渐变绿色作为背景 */
+            background-image: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+            /* 文字颜色设为深色，与登录按钮一致 */
+            color: #0a0a12;
+            /* 边框颜色设为亮绿色，与登录按钮一致 */
+            border-color: var(--neon-green);
+            /* 添加与登录按钮类似的微光效果 */
+            box-shadow: 0 0 10px var(--neon-green), inset 0 0 5px rgba(0, 255, 157, 0.3);
+            /* 背景透明度设置为半透明，使其看起来像一个发光的按钮 */
+            background-color: rgba(0, 255, 157, 0.1);
         }
         .profile-btn.logout:hover {
-            /* 悬停时背景变为稍亮的深灰色半透明 */
-            background-color: rgba(26, 26, 26, 0.2);
-            /* 悬停时文字变为稍亮的灰色 */
-            color: #333333;
-            /* 悬停时增强深灰色光晕 */
-            box-shadow: 0 0 15px #1a1a1a, inset 0 0 7px rgba(26, 26, 26, 0.5);
+            /* 悬停时背景变为更亮的渐变绿色 */
+            background-image: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+            /* 悬停时文字颜色不变，保持深色 */
+            color: #0a0a12;
+            /* 悬停时边框和光晕增强 */
+            border-color: var(--neon-green);
+            box-shadow: 0 0 15px var(--neon-green), inset 0 0 7px rgba(0, 255, 157, 0.5);
+            /* 悬停时背景透明度略微增加 */
+            background-color: rgba(0, 255, 157, 0.2);
         }
         /* --- 新增样式结束 --- */
 
