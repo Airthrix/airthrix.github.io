@@ -560,10 +560,10 @@
             background-color: rgba(0,0,0,0.5); /* 半透明背景 */
         }
         .bubble-modal-content {
-            background-color: var(--panel-bg);
+            background-color: #0a0a2e;
             margin: 15% auto;
             padding: 20px;
-            border: 1px solid var(--neon-blue);
+            border: 1px solid #00f3ff;
             border-radius: 20px;
             width: 80%;
             max-width: 400px;
@@ -571,9 +571,9 @@
             animation: modalopen 0.4s;
             backdrop-filter: blur(5px);
             position: relative;
-            clip-path: polygon(0 0, 100% 0, 100% 90%, 55% 90%, 50% 100%, 45% 90%, 0 90%);
-            /* 添加一个独立的、用于发光的伪元素 */
+            /* 添加发光边框效果 */
             position: relative;
+            overflow: hidden;
         }
         .bubble-modal-content::before {
             content: '';
@@ -584,33 +584,8 @@
             left: -1px;
             border: 1px solid transparent;
             border-radius: 20px;
-            /* 使用 inset box-shadow 创建内发光，颜色与边框一致 */
-            box-shadow: inset 0 0 30px var(--neon-blue);
-            /* 这个伪元素的尺寸比主体大1px，确保它能完全覆盖边框并产生发光效果 */
+            box-shadow: inset 0 0 30px #00f3ff;
             z-index: -1;
-            /* 关键：让这个发光层也应用相同的裁剪路径 */
-            clip-path: polygon(0 0, 100% 0, 100% 90%, 55% 90%, 50% 100%, 45% 90%, 0 90%);
-        }
-        .bubble-modal-content::after {
-            content: '';
-            position: absolute;
-            top: -15px;
-            right: 30px;
-            width: 30px;
-            height: 30px;
-            background-color: var(--panel-bg);
-            border-left: 1px solid var(--neon-blue);
-            border-top: 1px solid var(--neon-blue);
-            transform: rotate(45deg);
-            /* 为尖角添加发光，同样使用内发光 */
-            box-shadow: inset 0 0 15px var(--neon-blue);
-            z-index: -1;
-            /* 关键：让尖角的发光层也应用相同的裁剪路径 */
-            clip-path: polygon(0 0, 100% 0, 100% 90%, 55% 90%, 50% 100%, 45% 90%, 0 90%);
-        }
-        @keyframes modalopen {
-            from {opacity: 0; transform: translateY(-60px);}
-            to {opacity: 1; transform: translateY(0);}
         }
         .bubble-close {
             color: #aaa;
@@ -625,15 +600,17 @@
         }
         .bubble-close:hover,
         .bubble-close:focus {
-            color: var(--neon-red);
+            color: #ff0055;
             text-decoration: none;
         }
         .bubble-modal-header {
             padding: 10px 0;
-            border-bottom: 1px solid rgba(100, 100, 255, 0.2);
+            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
             margin-bottom: 15px;
             text-align: center;
-            color: var(--neon-blue);
+            color: #00f3ff;
+            font-size: 1.5rem;
+            font-weight: bold;
         }
         .bubble-modal-body {
             padding: 10px 0;
@@ -645,23 +622,25 @@
             display: block;
             margin-bottom: 5px;
             color: #c0c0ff;
+            font-size: 1rem;
         }
         .form-control {
             width: 100%;
             padding: 10px;
             border-radius: 5px;
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            background: rgba(10, 10, 25, 0.5);
+            border: 1px solid #00f3ff;
+            background: rgba(10, 10, 46, 0.5);
             color: #e0e0ff;
             font-size: 1rem;
+            transition: all 0.3s ease;
         }
         .form-control:focus {
             outline: none;
-            border-color: var(--neon-blue);
+            border-color: #00f3ff;
             box-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
         }
         .btn-primary {
-            background-color: var(--neon-blue);
+            background-color: #00f3ff;
             color: #0a0a12;
             border: none;
             padding: 10px 15px;
@@ -671,11 +650,11 @@
             font-size: 1rem;
             font-weight: bold;
             transition: all 0.3s ease;
-            box-shadow: 0 0 10px var(--neon-blue), inset 0 0 5px rgba(0, 243, 255, 0.3);
+            box-shadow: 0 0 10px #00f3ff, inset 0 0 5px rgba(0, 243, 255, 0.3);
         }
         .btn-primary:hover {
             background-color: #00c4cc;
-            box-shadow: 0 0 15px var(--neon-blue), inset 0 0 7px rgba(0, 243, 255, 0.5);
+            box-shadow: 0 0 15px #00f3ff, inset 0 0 7px rgba(0, 243, 255, 0.5);
         }
         .bubble-modal-footer {
             padding: 10px 0;
@@ -685,7 +664,7 @@
             font-size: 0.9rem;
         }
         .bubble-modal-footer a {
-            color: var(--neon-blue);
+            color: #00f3ff;
             cursor: pointer;
             text-decoration: underline;
         }
@@ -693,25 +672,24 @@
             color: #00c4cc;
         }
         .error-message {
-            color: var(--neon-red);
+            color: #ff0055;
             font-size: 0.9rem;
             margin-top: 5px;
             display: none; /* 默认隐藏 */
         }
         .success-message {
-            color: var(--neon-green);
+            color: #00ff9d;
             font-size: 0.9rem;
             margin-top: 5px;
             display: none; /* 默认隐藏 */
         }
-        /* --- 新增样式结束 --- */
 
-        /* --- 新增样式：个人中心模态框 --- */
+        /* --- 新增样式：个人中心模态框 (气泡型) --- */
         .profile-modal-content {
-            background-color: var(--panel-bg);
+            background-color: #0a0a2e;
             margin: 15% auto;
             padding: 20px;
-            border: 1px solid var(--neon-green); /* 绿色边框 */
+            border: 1px solid #00ff9d;
             border-radius: 20px;
             width: 80%;
             max-width: 400px;
@@ -719,9 +697,7 @@
             animation: modalopen 0.4s;
             backdrop-filter: blur(5px);
             position: relative;
-            clip-path: polygon(0 0, 100% 0, 100% 90%, 55% 90%, 50% 100%, 45% 90%, 0 90%);
-            /* 添加一个独立的、用于发光的伪元素 */
-            position: relative;
+            overflow: hidden;
         }
         .profile-modal-content::before {
             content: '';
@@ -732,36 +708,17 @@
             left: -1px;
             border: 1px solid transparent;
             border-radius: 20px;
-            /* 使用 inset box-shadow 创建内发光，颜色与边框一致 */
-            box-shadow: inset 0 0 30px var(--neon-green);
-            /* 这个伪元素的尺寸比主体大1px，确保它能完全覆盖边框并产生发光效果 */
+            box-shadow: inset 0 0 30px #00ff9d;
             z-index: -1;
-            /* 关键：让这个发光层也应用相同的裁剪路径 */
-            clip-path: polygon(0 0, 100% 0, 100% 90%, 55% 90%, 50% 100%, 45% 90%, 0 90%);
-        }
-        .profile-modal-content::after {
-            content: '';
-            position: absolute;
-            top: -15px;
-            right: 30px;
-            width: 30px;
-            height: 30px;
-            background-color: var(--panel-bg);
-            border-left: 1px solid var(--neon-green); /* 绿色边框 */
-            border-top: 1px solid var(--neon-green); /* 绿色边框 */
-            transform: rotate(45deg);
-            /* 为尖角添加发光，同样使用内发光 */
-            box-shadow: inset 0 0 15px var(--neon-green);
-            z-index: -1;
-            /* 关键：让尖角的发光层也应用相同的裁剪路径 */
-            clip-path: polygon(0 0, 100% 0, 100% 90%, 55% 90%, 50% 100%, 45% 90%, 0 90%);
         }
         .profile-modal-header {
             padding: 10px 0;
-            border-bottom: 1px solid rgba(0, 255, 157, 0.2); /* 绿色边框 */
+            border-bottom: 1px solid rgba(0, 255, 157, 0.2);
             margin-bottom: 15px;
             text-align: center;
-            color: var(--neon-green); /* 绿色标题 */
+            color: #00ff9d;
+            font-size: 1.5rem;
+            font-weight: bold;
         }
         .profile-info {
             text-align: center;
@@ -770,10 +727,12 @@
         }
         .profile-info h3 {
             margin-bottom: 10px;
-            color: var(--neon-blue); /* 蓝色用户名 */
+            color: #00f3ff;
+            font-size: 1.2rem;
         }
         .profile-info p {
             margin: 5px 0;
+            font-size: 0.9rem;
         }
         .profile-actions {
             display: flex;
@@ -783,7 +742,7 @@
         .profile-btn {
             background-color: transparent;
             color: #c0c0ff;
-            border: 1px solid rgba(0, 243, 255, 0.3);
+            border: 1px solid #00f3ff;
             padding: 10px 15px;
             border-radius: 5px;
             cursor: pointer;
@@ -797,9 +756,9 @@
         }
         .profile-btn:hover {
             background-color: rgba(0, 243, 255, 0.2);
-            color: var(--neon-blue);
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 15px var(--neon-blue), inset 0 0 7px rgba(0, 243, 255, 0.5);
+            color: #00f3ff;
+            border-color: #00f3ff;
+            box-shadow: 0 0 15px #00f3ff, inset 0 0 7px rgba(0, 243, 255, 0.5);
         }
         .profile-btn.vip {
             border-color: gold;
@@ -811,13 +770,13 @@
             box-shadow: 0 0 15px gold, inset 0 0 7px rgba(255, 215, 0, 0.5);
         }
         .profile-btn.logout {
-            border-color: var(--neon-red);
-            color: var(--neon-red);
-            box-shadow: 0 0 10px var(--neon-red), inset 0 0 5px rgba(255, 0, 85, 0.3);
+            border-color: #ff0055;
+            color: #ff0055;
+            box-shadow: 0 0 10px #ff0055, inset 0 0 5px rgba(255, 0, 85, 0.3);
         }
         .profile-btn.logout:hover {
             background-color: rgba(255, 0, 85, 0.2);
-            box-shadow: 0 0 15px var(--neon-red), inset 0 0 7px rgba(255, 0, 85, 0.5);
+            box-shadow: 0 0 15px #ff0055, inset 0 0 7px rgba(255, 0, 85, 0.5);
         }
         /* --- 新增样式结束 --- */
 
