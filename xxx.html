@@ -547,6 +547,144 @@
         .file-preview-remove:hover {
             color: #ff5555;
         }
+        /* --- 新增样式：登录/注册模态框 (气泡型) --- */
+        .bubble-modal {
+            display: none; /* 默认隐藏 */
+            position: fixed;
+            z-index: 1001; /* 高于其他内容 */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5); /* 半透明背景 */
+        }
+        .bubble-modal-content {
+            background-color: #0a0a2e;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid transparent;
+            border-radius: 20px;
+            width: 80%;
+            max-width: 400px;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+            animation: modalopen 0.4s;
+            backdrop-filter: blur(5px);
+            position: relative;
+            /* 添加发光边框效果 - 渐变绿色 */
+            position: relative;
+            overflow: hidden;
+        }
+        .bubble-modal-content::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            bottom: -1px;
+            left: -1px;
+            border: 1px solid transparent;
+            border-radius: 20px;
+            /* 使用线性渐变作为内发光，创建边缘的绿色渐变效果 */
+            box-shadow: inset 0 0 30px linear-gradient(90deg, #00ff9d, #00f3ff);
+            /* 这个伪元素的尺寸比主体大1px，确保它能完全覆盖边框并产生发光效果 */
+            z-index: -1;
+        }
+        .bubble-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            z-index: 1;
+        }
+        .bubble-close:hover,
+        .bubble-close:focus {
+            color: #ff0055;
+            text-decoration: none;
+        }
+        .bubble-modal-header {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+            margin-bottom: 15px;
+            text-align: center;
+            color: #00ff9d;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .bubble-modal-body {
+            padding: 10px 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #c0c0ff;
+            font-size: 1rem;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #00ff9d;
+            background: rgba(10, 10, 46, 0.5);
+            color: #e0e0ff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #00ff9d;
+            box-shadow: 0 0 5px rgba(0, 255, 157, 0.5);
+        }
+        .btn-primary {
+            background-image: linear-gradient(90deg, #00ff9d, #00f3ff);
+            color: #0a0a12;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px #00ff9d, inset 0 0 5px rgba(0, 255, 157, 0.3);
+        }
+        .btn-primary:hover {
+            background-position: 100% 0;
+            box-shadow: 0 0 15px #00ff9d, inset 0 0 7px rgba(0, 255, 157, 0.5);
+        }
+        .bubble-modal-footer {
+            padding: 10px 0;
+            border-top: 1px solid rgba(100, 100, 255, 0.2);
+            margin-top: 15px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        .bubble-modal-footer a {
+            color: #00ff9d;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .bubble-modal-footer a:hover {
+            color: #00c4cc;
+        }
+        .error-message {
+            color: #ff0055;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none; /* 默认隐藏 */
+        }
+        .success-message {
+            color: #00ff9d;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none; /* 默认隐藏 */
+        }
         /* --- 新增样式：个人中心模态框 (时尚版) --- */
         .profile-modal-content {
             background-color: #0a0a2e;
