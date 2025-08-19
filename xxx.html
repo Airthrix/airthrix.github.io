@@ -1330,11 +1330,11 @@
                             document.getElementById('registerError').style.display = 'none';
                             // 注册成功后可以自动切换到登录框或直接关闭
                             setTimeout(() => {
-                                // closeModal(registerModal);
-                                // 或者自动登录 (这里演示填充并触发登录)
-                                document.getElementById('loginUsername').value = username;
-                                document.getElementById('loginPassword').value = password;
-                                // 更稳妥的方式是直接调用登录逻辑或模拟点击
+                                closeModal(registerModal);
+
+                               //document.getElementById('loginUsername').value = username;
+                               //document.getElementById('loginPassword').value = password;
+
                                 openLoginModal(); // 打开登录框并填充用户名密码
                             }, 1500);
                         }
