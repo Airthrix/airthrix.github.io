@@ -547,36 +547,50 @@
         .file-preview-remove:hover {
             color: #ff5555;
         }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
+        /* --- 新增样式：登录/注册模态框 (气泡型) --- */
+        .bubble-modal {
+            display: none; /* 默认隐藏 */
             position: fixed;
-            z-index: 2000;
+            z-index: 1001; /* 高于其他内容 */
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5); /* 半透明背景 */
         }
-        .modal-content {
-            background: rgba(15, 15, 40, 0.95);
-            padding: 2rem;
-            border-radius: 15px;
-            width: 90%;
+        .bubble-modal-content {
+            background-color: var(--panel-bg);
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid var(--neon-blue);
+            border-radius: 20px;
+            width: 80%;
             max-width: 400px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(0, 243, 255, 0.3);
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+            animation: modalopen 0.4s;
+            backdrop-filter: blur(5px);
             position: relative;
-            animation: modalFadeIn 0.3s ease-out;
+            /* 气泡尖角 */
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 55% 90%, 50% 100%, 45% 90%, 0 90%);
         }
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .bubble-modal-content::after {
+            content: '';
+            position: absolute;
+            top: -15px;
+            right: 30px;
+            width: 30px;
+            height: 30px;
+            background-color: var(--panel-bg);
+            border-left: 1px solid var(--neon-blue);
+            border-top: 1px solid var(--neon-blue);
+            transform: rotate(45deg);
         }
-        .close {
+        @keyframes modalopen {
+            from {opacity: 0; transform: translateY(-60px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+        .bubble-close {
             color: #aaa;
             float: right;
             font-size: 28px;
@@ -585,131 +599,111 @@
             position: absolute;
             top: 10px;
             right: 15px;
+            z-index: 1;
         }
-        .close:hover,
-        .close:focus {
+        .bubble-close:hover,
+        .bubble-close:focus {
             color: var(--neon-red);
+            text-decoration: none;
         }
-        .modal h2 {
+        .bubble-modal-header {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(100, 100, 255, 0.2);
+            margin-bottom: 15px;
             text-align: center;
-            margin-bottom: 1.5rem;
             color: var(--neon-blue);
         }
+        .bubble-modal-body {
+            padding: 10px 0;
+        }
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 15px;
         }
         .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 5px;
             color: #c0c0ff;
         }
-        .form-group input {
+        .form-control {
             width: 100%;
-            padding: 0.8rem;
-            border-radius: 8px;
+            padding: 10px;
+            border-radius: 5px;
             border: 1px solid rgba(0, 243, 255, 0.3);
             background: rgba(10, 10, 25, 0.5);
             color: #e0e0ff;
             font-size: 1rem;
         }
-        .form-group input:focus {
+        .form-control:focus {
             outline: none;
             border-color: var(--neon-blue);
             box-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
         }
-        .btn-submit {
-            width: 100%;
-            padding: 0.8rem;
-            border-radius: 8px;
-            border: none;
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+        .btn-primary {
+            background-color: var(--neon-blue);
             color: #0a0a12;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
             font-size: 1rem;
             font-weight: bold;
-            cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 1rem;
         }
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 243, 255, 0.4);
+        .btn-primary:hover {
+            background-color: #00c4cc;
+            box-shadow: 0 0 10px var(--neon-blue);
         }
-        .switch-form {
+        .bubble-modal-footer {
+            padding: 10px 0;
+            border-top: 1px solid rgba(100, 100, 255, 0.2);
+            margin-top: 15px;
             text-align: center;
-            margin-top: 1rem;
-            color: #a0a0ff;
+            font-size: 0.9rem;
         }
-        .switch-form a {
+        .bubble-modal-footer a {
             color: var(--neon-blue);
-            text-decoration: none;
             cursor: pointer;
-        }
-        .switch-form a:hover {
             text-decoration: underline;
+        }
+        .bubble-modal-footer a:hover {
+            color: #00c4cc;
         }
         .error-message {
             color: var(--neon-red);
-            text-align: center;
-            margin-top: 1rem;
             font-size: 0.9rem;
+            margin-top: 5px;
+            display: none; /* 默认隐藏 */
         }
         .success-message {
             color: var(--neon-green);
-            text-align: center;
-            margin-top: 1rem;
             font-size: 0.9rem;
+            margin-top: 5px;
+            display: none; /* 默认隐藏 */
         }
-        .profile-modal-content {
-            max-width: 350px;
-        }
-        .profile-info {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-        .profile-info h3 {
-            color: var(--neon-blue);
-            margin-bottom: 0.5rem;
-        }
-        .profile-info p {
+        .user-info-display {
+            display: none; /* 默认隐藏 */
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(15, 15, 40, 0.85);
             color: #c0c0ff;
-        }
-        .vip-status {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: 1px solid var(--neon-blue);
+            z-index: 1000;
             font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+        }
+        .user-info-display span {
             font-weight: bold;
-            margin-top: 0.5rem;
-        }
-        .vip-true {
-            background-color: rgba(0, 255, 157, 0.2);
             color: var(--neon-green);
-            border: 1px solid var(--neon-green);
         }
-        .vip-false {
-            background-color: rgba(150, 150, 150, 0.2);
-            color: #a0a0ff;
-            border: 1px solid #a0a0ff;
+        .vip-indicator {
+            color: gold;
+            margin-left: 5px;
         }
-        .btn-logout, .btn-recharge {
-            width: 100%;
-            padding: 0.8rem;
-            border-radius: 8px;
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            background: rgba(15, 15, 40, 0.4);
-            color: #c0c0ff;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 0.5rem;
-        }
-        .btn-logout:hover, .btn-recharge:hover {
-            background: rgba(0, 243, 255, 0.2);
-            color: var(--neon-blue);
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 10px var(--neon-blue);
-        }
-
+        /* --- 新增样式结束 --- */
         @media (max-width: 768px) {
             .top-nav {
                 padding: 1rem;
@@ -852,16 +846,22 @@
     <div class="glow glow-blue"></div>
     <div class="glow glow-purple"></div>
     <div class="grid-overlay"></div>
+    <!-- --- 新增：用户信息显示区域 --- -->
+    <div class="user-info-display" id="userInfoDisplay">
+        <span id="displayUsername">用户</span>
+        <span id="vipIndicator" class="vip-indicator" style="display:none;"><i class="fas fa-crown"></i> VIP</span>
+    </div>
+    <!-- --- 新增结束 --- -->
     <div class="top-nav">
-        <button class="nav-btn" id="loginBtn">
-            <i class="fas fa-sign-in-alt"></i>
+        <!-- 登录按钮被用户信息区域替代或隐藏 -->
+        <button class="nav-btn" id="loginBtnNav">
+            <i class="fas fa-user"></i>
             <span class="btn-text">登录</span>
         </button>
         <button class="nav-btn" id="langBtn">
             <i class="fas fa-globe"></i>
             <span class="btn-text">English</span>
         </button>
-        <!-- 添加清除历史按钮 -->
         <button class="nav-btn" id="clearHistoryBtn">
             <i class="fas fa-trash-alt"></i>
             <span class="btn-text">清除历史</span>
@@ -914,55 +914,72 @@
         </div>
         <p>Contact: airthrix@163.com | +1 (800) AIRTHRIX-AI</p>
         <p class="copyright">&copy; 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved</p>
-            <!-- *** 插入 *** -->
-            <br>
-            <div class="agreement-notice">
-                <!-- 中文版本 -->
-                <span class="agreement-text cn-text">
-                    向模型发送消息即表示您已同意<a href="https://chat.qwen.ai/legal-agreement/terms-of-service?spm=a2ty_o01.29997169.0.0.3d4d5171PFORcX" target="_blank" class="agreement-link">用户条款</a>并已阅读<a href="https://chat.qwen.ai/legal-agreement/privacy-policy?spm=a2ty_o01.29997169.0.0.3d4d5171PFORcX" target="_blank" class="agreement-link">隐私协议</a>
-                </span>
-                <!-- 英文版本 -->
-                <span class="agreement-text en-text" style="display: none;">
-                    By sending message to mode, you have agreed <a href="https://chat.qwen.ai/legal-agreement/terms-of-service?spm=a2ty_o01.29997169.0.0.3d4d5171PFORcX" target="_blank" class="agreement-link">Terms of Service</a> and have read <a href="https://chat.qwen.ai/legal-agreement/privacy-policy?spm=a2ty_o01.29997169.0.0.3d4d5171PFORcX" target="_blank" class="agreement-link">Privacy Policy</a>
-                </span>
-            </div>
-            <!-- *** 插入 *** -->
-    </div>
-
-    <!-- Login/Register Modal -->
-    <div id="authModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 id="authModalTitle">登录</h2>
-            <div class="form-group">
-                <label for="authUsername">用户名</label>
-                <input type="text" id="authUsername" required>
-            </div>
-            <div class="form-group">
-                <label for="authPassword">密码</label>
-                <input type="password" id="authPassword" required>
-            </div>
-            <button id="authSubmitBtn" class="btn-submit">登录</button>
-            <div class="switch-form">
-                还没有账户? <a id="switchToRegister">立即注册</a>
-            </div>
-            <div id="authMessage" class="error-message" style="display: none;"></div>
+        <br>
+        <div class="agreement-notice">
+            <span class="agreement-text cn-text">
+                向模型发送消息即表示您已同意<a href="https://chat.qwen.ai/legal-agreement/terms-of-service?spm=a2ty_o01.29997169.0.0.3d4d5171PFORcX" target="_blank" class="agreement-link">用户条款</a>并已阅读<a href="https://chat.qwen.ai/legal-agreement/privacy-policy?spm=a2ty_o01.29997169.0.0.3d4d5171PFORcX" target="_blank" class="agreement-link">隐私协议</a>
+            </span>
+            <span class="agreement-text en-text" style="display: none;">
+                By sending message to mode, you have agreed <a href="https://chat.qwen.ai/legal-agreement/terms-of-service?spm=a2ty_o01.29997169.0.0.3d4d5171PFORcX" target="_blank" class="agreement-link">Terms of Service</a> and have read <a href="https://chat.qwen.ai/legal-agreement/privacy-policy?spm=a2ty_o01.29997169.0.0.3d4d5171PFORcX" target="_blank" class="agreement-link">Privacy Policy</a>
+            </span>
         </div>
     </div>
-
-    <!-- Profile Modal -->
-    <div id="profileModal" class="modal">
-        <div class="modal-content profile-modal-content">
-            <span class="close">&times;</span>
-            <div class="profile-info">
-                <h3 id="profileUsername">用户名</h3>
-                <p>VIP 状态: <span id="profileVipStatus" class="vip-status">未激活</span></p>
+    <!-- --- 新增：登录/注册模态框 (气泡型) --- -->
+    <div id="loginModal" class="bubble-modal">
+        <div class="bubble-modal-content">
+            <span class="bubble-close">&times;</span>
+            <div class="bubble-modal-header">
+                <h2 id="loginModalTitle">登录</h2>
             </div>
-            <button id="rechargeBtn" class="btn-recharge">VIP充值</button>
-            <button id="logoutBtn" class="btn-logout">退出登录</button>
+            <div class="bubble-modal-body">
+                <div class="form-group">
+                    <label for="loginUsername">用户名:</label>
+                    <input type="text" id="loginUsername" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">密码:</label>
+                    <input type="password" id="loginPassword" class="form-control" required>
+                </div>
+                <div id="loginError" class="error-message"></div>
+                <div id="loginSuccess" class="success-message"></div>
+                <button id="loginSubmitBtn" class="btn-primary">登录</button>
+            </div>
+            <div class="bubble-modal-footer">
+                还没有账户? <a id="showRegisterLink">立即注册</a>
+            </div>
         </div>
     </div>
-
+    <!-- --- 新增结束 --- -->
+    <!-- --- 新增：注册模态框 (气泡型) --- -->
+    <div id="registerModal" class="bubble-modal">
+        <div class="bubble-modal-content">
+            <span class="bubble-close">&times;</span>
+            <div class="bubble-modal-header">
+                <h2 id="registerModalTitle">注册</h2>
+            </div>
+            <div class="bubble-modal-body">
+                <div class="form-group">
+                    <label for="registerUsername">用户名:</label>
+                    <input type="text" id="registerUsername" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">密码:</label>
+                    <input type="password" id="registerPassword" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerConfirmPassword">确认密码:</label>
+                    <input type="password" id="registerConfirmPassword" class="form-control" required>
+                </div>
+                <div id="registerError" class="error-message"></div>
+                <div id="registerSuccess" class="success-message"></div>
+                <button id="registerSubmitBtn" class="btn-primary">注册</button>
+            </div>
+            <div class="bubble-modal-footer">
+                已有账户? <a id="showLoginLink">立即登录</a>
+            </div>
+        </div>
+    </div>
+    <!-- --- 新增结束 --- -->
     <script src="https://hk-alice-file.oss-cn-hongkong.aliyuncs.com/particles.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -972,10 +989,10 @@
             let selectedImages = [];
             let selectedFiles = [];
             let sessionId = localStorage.getItem('chat_session_id') || '';
-            
-            // API Base URL
+            let currentUser = null; // 用于存储当前登录用户信息
+            // --- 新增：API基础URL (请根据你的后端部署地址修改) ---
             const API_BASE_URL = 'https://test-ffdbgoedhy.cn-hongkong.fcapp.run';
-
+            // --- 新增结束 ---
             particlesJS('particles-js', {
                 "particles": {
                     "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
@@ -1000,10 +1017,187 @@
                 },
                 "retina_detect": true
             });
-
-            // DOM Elements
+            // --- 新增：获取用户信息并更新UI ---
+            function fetchUserInfo() {
+                fetch(`${API_BASE_URL}/user_info`, {
+                    method: 'GET',
+                    credentials: 'include' // 重要：携带 Cookie/Session
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.username) {
+                        currentUser = data;
+                        document.getElementById('displayUsername').textContent = data.username;
+                        if (data.vip_status) {
+                            document.getElementById('vipIndicator').style.display = 'inline';
+                        } else {
+                            document.getElementById('vipIndicator').style.display = 'none';
+                        }
+                        document.getElementById('userInfoDisplay').style.display = 'block';
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = data.username; // 更新按钮文字
+                        document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user-circle'; // 更新按钮图标
+                    } else {
+                        currentUser = null;
+                        document.getElementById('userInfoDisplay').style.display = 'none';
+                        // 重置登录按钮
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
+                        document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user';
+                    }
+                })
+                .catch(error => {
+                    console.error('获取用户信息失败:', error);
+                    currentUser = null;
+                    document.getElementById('userInfoDisplay').style.display = 'none';
+                    // 重置登录按钮
+                    document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
+                    document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user';
+                });
+            }
+            // 页面加载时获取用户信息
+            fetchUserInfo();
+            // --- 新增结束 ---
+            // --- 新增：登录/注册模态框逻辑 (气泡型) ---
+            const loginModal = document.getElementById('loginModal');
+            const registerModal = document.getElementById('registerModal');
+            const loginBtnNav = document.getElementById('loginBtnNav'); // 导航栏登录按钮
+            const showRegisterLink = document.getElementById('showRegisterLink');
+            const showLoginLink = document.getElementById('showLoginLink');
+            const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+            const registerSubmitBtn = document.getElementById('registerSubmitBtn');
+            const loginClose = loginModal.querySelector('.bubble-close');
+            const registerClose = registerModal.querySelector('.bubble-close');
+            function openLoginModal() {
+                registerModal.style.display = 'none';
+                loginModal.style.display = 'block';
+                document.getElementById('loginError').style.display = 'none';
+                document.getElementById('loginSuccess').style.display = 'none';
+                document.getElementById('loginUsername').value = '';
+                document.getElementById('loginPassword').value = '';
+            }
+            function openRegisterModal() {
+                loginModal.style.display = 'none';
+                registerModal.style.display = 'block';
+                document.getElementById('registerError').style.display = 'none';
+                document.getElementById('registerSuccess').style.display = 'none';
+                document.getElementById('registerUsername').value = '';
+                document.getElementById('registerPassword').value = '';
+                document.getElementById('registerConfirmPassword').value = '';
+            }
+            function closeModal(modal) {
+                modal.style.display = 'none';
+            }
+            // 事件监听器
+            loginBtnNav.addEventListener('click', function() {
+                if (currentUser) {
+                    // 如果已登录，可以添加登出逻辑或其他个人中心逻辑
+                    alert(isEnglish ? `Welcome, ${currentUser.username}!` : `欢迎, ${currentUser.username}!`);
+                } else {
+                    openLoginModal();
+                }
+            });
+            showRegisterLink.addEventListener('click', openRegisterModal);
+            showLoginLink.addEventListener('click', openLoginModal);
+            loginClose.addEventListener('click', () => closeModal(loginModal));
+            registerClose.addEventListener('click', () => closeModal(registerModal));
+            window.addEventListener('click', (event) => {
+                if (event.target == loginModal) closeModal(loginModal);
+                if (event.target == registerModal) closeModal(registerModal);
+            });
+            // 登录提交
+            loginSubmitBtn.addEventListener('click', function() {
+                const username = document.getElementById('loginUsername').value.trim();
+                const password = document.getElementById('loginPassword').value;
+                if (!username || !password) {
+                    document.getElementById('loginError').textContent = isEnglish ? '用户名和密码不能为空' : 'Username and password cannot be empty';
+                    document.getElementById('loginError').style.display = 'block';
+                    return;
+                }
+                fetch(`${API_BASE_URL}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                    credentials: 'include' // 重要：携带 Cookie/Session
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('loginError').textContent = data.error;
+                        document.getElementById('loginError').style.display = 'block';
+                        document.getElementById('loginSuccess').style.display = 'none';
+                    } else {
+                        document.getElementById('loginSuccess').textContent = data.message;
+                        document.getElementById('loginSuccess').style.display = 'block';
+                        document.getElementById('loginError').style.display = 'none';
+                        currentUser = { username: data.username, vip_status: data.vip_status }; // 更新本地用户信息
+                        fetchUserInfo(); // 更新UI
+                        setTimeout(() => {
+                            closeModal(loginModal);
+                        }, 1000); // 1秒后自动关闭模态框
+                    }
+                })
+                .catch(error => {
+                    console.error('登录请求失败:', error);
+                    document.getElementById('loginError').textContent = isEnglish ? '登录请求失败，请稍后再试。' : 'Login request failed, please try again later.';
+                    document.getElementById('loginError').style.display = 'block';
+                    document.getElementById('loginSuccess').style.display = 'none';
+                });
+            });
+            // 注册提交
+            registerSubmitBtn.addEventListener('click', function() {
+                const username = document.getElementById('registerUsername').value.trim();
+                const password = document.getElementById('registerPassword').value;
+                const confirmPassword = document.getElementById('registerConfirmPassword').value;
+                if (!username || !password || !confirmPassword) {
+                    document.getElementById('registerError').textContent = isEnglish ? '所有字段都必须填写' : 'All fields are required';
+                    document.getElementById('registerError').style.display = 'block';
+                    return;
+                }
+                if (password !== confirmPassword) {
+                    document.getElementById('registerError').textContent = isEnglish ? '两次输入的密码不一致' : 'Passwords do not match';
+                    document.getElementById('registerError').style.display = 'block';
+                    return;
+                }
+                fetch(`${API_BASE_URL}/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                    credentials: 'include' // 注册成功后可能自动登录
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('registerError').textContent = data.error;
+                        document.getElementById('registerError').style.display = 'block';
+                        document.getElementById('registerSuccess').style.display = 'none';
+                    } else {
+                        document.getElementById('registerSuccess').textContent = data.message;
+                        document.getElementById('registerSuccess').style.display = 'block';
+                        document.getElementById('registerError').style.display = 'none';
+                        // 注册成功后可以自动切换到登录框或直接关闭
+                        setTimeout(() => {
+                            // closeModal(registerModal);
+                            // 或者自动登录
+                            document.getElementById('loginUsername').value = username;
+                            document.getElementById('loginPassword').value = password;
+                            openLoginModal(); // 打开登录框并填充用户名密码
+                            // 触发登录按钮点击事件
+                            // loginSubmitBtn.click();
+                        }, 1500);
+                    }
+                })
+                .catch(error => {
+                    console.error('注册请求失败:', error);
+                    document.getElementById('registerError').textContent = isEnglish ? '注册请求失败，请稍后再试。' : 'Registration request failed, please try again later.';
+                    document.getElementById('registerError').style.display = 'block';
+                    document.getElementById('registerSuccess').style.display = 'none';
+                });
+            });
+            // --- 新增结束 ---
             const langBtn = document.getElementById('langBtn');
-            const loginBtn = document.getElementById('loginBtn');
             const clearHistoryBtn = document.getElementById('clearHistoryBtn');
             const chatTitle = document.querySelector('.chat-title');
             const chatInput = document.getElementById('userInput');
@@ -1015,37 +1209,29 @@
             const imageInput = document.getElementById('imageInput');
             const fileInput = document.getElementById('fileInput');
             const filePreviewContainer = document.getElementById('filePreviewContainer');
-            
-            // Modals
-            const authModal = document.getElementById('authModal');
-            const profileModal = document.getElementById('profileModal');
-            const authModalTitle = document.getElementById('authModalTitle');
-            const authUsername = document.getElementById('authUsername');
-            const authPassword = document.getElementById('authPassword');
-            const authSubmitBtn = document.getElementById('authSubmitBtn');
-            const switchToRegister = document.getElementById('switchToRegister');
-            const authMessage = document.getElementById('authMessage');
-            const profileUsername = document.getElementById('profileUsername');
-            const profileVipStatus = document.getElementById('profileVipStatus');
-            const rechargeBtn = document.getElementById('rechargeBtn');
-            const logoutBtn = document.getElementById('logoutBtn');
-
-            // Check login status on page load
-            checkLoginStatus();
-
-            // Language Toggle
             langBtn.addEventListener('click', function() {
                 isEnglish = !isEnglish;
                 const btnTextElements = document.querySelectorAll('.btn-text');
                 const uploadBtns = document.querySelectorAll('.upload-btn');
                 const sendButtonText = document.getElementById('sendButtonText');
+                const loginModalTitle = document.getElementById('loginModalTitle');
+                const registerModalTitle = document.getElementById('registerModalTitle');
+                const showRegisterLinkText = document.querySelector('.bubble-modal-footer a#showRegisterLink');
+                const showLoginLinkText = document.querySelector('.bubble-modal-footer a#showLoginLink');
+                const loginSubmitBtnText = document.getElementById('loginSubmitBtn');
+                const registerSubmitBtnText = document.getElementById('registerSubmitBtn');
+                const loginUsernameLabel = document.querySelector('#loginUsername').previousElementSibling;
+                const loginPasswordLabel = document.querySelector('#loginPassword').previousElementSibling;
+                const registerUsernameLabel = document.querySelector('#registerUsername').previousElementSibling;
+                const registerPasswordLabel = document.querySelector('#registerPassword').previousElementSibling;
+                const registerConfirmPasswordLabel = document.querySelector('#registerConfirmPassword').previousElementSibling;
                 if (isEnglish) {
-                    btnTextElements[0].textContent = 'Personal'; // Will be updated by checkLoginStatus
+                    btnTextElements[0].textContent = 'Log in'; // 登录按钮
                     btnTextElements[1].textContent = '中文';
+                    btnTextElements[2].textContent = 'Clear History';
                     chatTitle.textContent = "Talk with AliceSkyGarden";
                     chatInput.placeholder = "(Now support image pdf docx txt xlsx csv py html etc files)  Enter your message...";
                     sendButtonText.textContent = 'Send';
-                    clearHistoryBtn.querySelector('.btn-text').textContent = 'Clear History';
                     initialMessage.innerHTML = "AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊<br><br>Now evolved into Multimodal Model: Supporting images, PDF, Word, tables, scripts, web pages, etc files input😊";
                     footerTagline.textContent = "Unlocking a New Era of Intelligence · Exploring Infinite Possibilities";
                     const footerLinks = ["Home", "Developers", "Documentation", "Community", "Blog", "Contact Us"];
@@ -1055,18 +1241,30 @@
                     copyrightText.textContent = "© 2025 AliceSkyGarden Technology. All rights reserved";
                     uploadBtns[0].title = "Upload Image";
                     uploadBtns[1].title = "Upload File";
-                    // *** 插入 ***
+                    // --- 更新模态框文本 ---
+                    loginModalTitle.textContent = "Login";
+                    registerModalTitle.textContent = "Register";
+                    showRegisterLinkText.textContent = "Register Now";
+                    showLoginLinkText.textContent = "Login Now";
+                    loginSubmitBtnText.textContent = "Login";
+                    registerSubmitBtnText.textContent = "Register";
+                    loginUsernameLabel.textContent = "Username:";
+                    loginPasswordLabel.textContent = "Password:";
+                    registerUsernameLabel.textContent = "Username:";
+                    registerPasswordLabel.textContent = "Password:";
+                    registerConfirmPasswordLabel.textContent = "Confirm Password:";
+                    // --- 更新结束 ---
                     const cnTextElements = document.querySelectorAll('.cn-text');
                     const enTextElements = document.querySelectorAll('.en-text');
                     cnTextElements.forEach(el => el.style.display = 'none');
                     enTextElements.forEach(el => el.style.display = 'inline');
                 } else {
-                    btnTextElements[0].textContent = '登录'; // Will be updated by checkLoginStatus
+                    btnTextElements[0].textContent = '登录'; // 登录按钮
                     btnTextElements[1].textContent = 'English';
+                    btnTextElements[2].textContent = '清除历史';
                     chatTitle.textContent = "与 AliceSkyGarden 对话";
                     chatInput.placeholder = "(现已支持 各种格式的图片 pdf docx txt xlsx csv py html等文件)  输入你的消息...";
                     sendButtonText.textContent = '发送';
-                    clearHistoryBtn.querySelector('.btn-text').textContent = '清除历史';
                     initialMessage.innerHTML = "AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊<br><br>现已进化成多模态模型：支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊";
                     footerTagline.textContent = "开启智能新纪元 · 探索无限可能";
                     const footerLinks = ["首页", "开发者", "文档", "社区", "博客", "联系我们"];
@@ -1076,230 +1274,33 @@
                     copyrightText.textContent = "© 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved";
                     uploadBtns[0].title = "上传图片";
                     uploadBtns[1].title = "上传文件";
-                    // *** 插入 ***
+                    // --- 更新模态框文本 ---
+                    loginModalTitle.textContent = "登录";
+                    registerModalTitle.textContent = "注册";
+                    showRegisterLinkText.textContent = "立即注册";
+                    showLoginLinkText.textContent = "立即登录";
+                    loginSubmitBtnText.textContent = "登录";
+                    registerSubmitBtnText.textContent = "注册";
+                    loginUsernameLabel.textContent = "用户名:";
+                    loginPasswordLabel.textContent = "密码:";
+                    registerUsernameLabel.textContent = "用户名:";
+                    registerPasswordLabel.textContent = "密码:";
+                    registerConfirmPasswordLabel.textContent = "确认密码:";
+                    // --- 更新结束 ---
                     const cnTextElements = document.querySelectorAll('.cn-text');
                     const enTextElements = document.querySelectorAll('.en-text');
                     enTextElements.forEach(el => el.style.display = 'none');
                     cnTextElements.forEach(el => el.style.display = 'inline');
                 }
-                // Update login button text based on login status
-                checkLoginStatus();
+                // 更新用户信息显示区域的按钮文字
+                if (currentUser) {
+                    document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = currentUser.username;
+                }
                 langBtn.classList.add('pulse');
                 setTimeout(() => {
                     langBtn.classList.remove('pulse');
                 }, 500);
             });
-
-            // Login/Register Modal Logic
-            loginBtn.addEventListener('click', function() {
-                const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-                if (isLoggedIn) {
-                    openProfileModal();
-                } else {
-                    openAuthModal();
-                }
-            });
-
-            // Close modals
-            document.querySelectorAll('.close').forEach(closeBtn => {
-                closeBtn.addEventListener('click', function() {
-                    authModal.style.display = 'none';
-                    profileModal.style.display = 'none';
-                });
-            });
-
-            window.addEventListener('click', function(event) {
-                if (event.target === authModal) {
-                    authModal.style.display = 'none';
-                }
-                if (event.target === profileModal) {
-                    profileModal.style.display = 'none';
-                }
-            });
-
-            // Switch between login and register
-            switchToRegister.addEventListener('click', function() {
-                if (authModalTitle.textContent === (isEnglish ? 'Login' : '登录')) {
-                    authModalTitle.textContent = isEnglish ? 'Register' : '注册';
-                    authSubmitBtn.textContent = isEnglish ? 'Register' : '注册';
-                    switchToRegister.innerHTML = isEnglish ? 'Already have an account? <a>Login</a>' : '已有账户? <a>立即登录</a>';
-                    switchToRegister.querySelector('a').addEventListener('click', switchToLogin);
-                } else {
-                    switchToLogin();
-                }
-            });
-
-            function switchToLogin() {
-                authModalTitle.textContent = isEnglish ? 'Login' : '登录';
-                authSubmitBtn.textContent = isEnglish ? 'Login' : '登录';
-                switchToRegister.innerHTML = isEnglish ? 'No account yet? <a>Register now</a>' : '还没有账户? <a>立即注册</a>';
-                switchToRegister.querySelector('a').addEventListener('click', function() {
-                    authModalTitle.textContent = isEnglish ? 'Register' : '注册';
-                    authSubmitBtn.textContent = isEnglish ? 'Register' : '注册';
-                    switchToRegister.innerHTML = isEnglish ? 'Already have an account? <a>Login</a>' : '已有账户? <a>立即登录</a>';
-                    switchToRegister.querySelector('a').addEventListener('click', switchToLogin);
-                });
-            }
-
-            // Submit login/register
-            authSubmitBtn.addEventListener('click', submitAuth);
-            // Also allow Enter key in password field
-            authPassword.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    submitAuth();
-                }
-            });
-
-            function submitAuth() {
-                const username = authUsername.value.trim();
-                const password = authPassword.value;
-                const isRegister = authModalTitle.textContent === (isEnglish ? 'Register' : '注册');
-
-                if (!username || !password) {
-                    showMessage(authMessage, isEnglish ? 'Username and password are required.' : '用户名和密码不能为空。', true);
-                    return;
-                }
-
-                const url = `${API_BASE_URL}/${isRegister ? 'register' : 'login'}`;
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, password }),
-                    credentials: 'include' // Important for cookies/sessions
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        showMessage(authMessage, data.error, true);
-                    } else {
-                        localStorage.setItem('isLoggedIn', 'true');
-                        localStorage.setItem('username', data.username);
-                        localStorage.setItem('vip_status', data.vip_status || false);
-                        showMessage(authMessage, data.message, false);
-                        setTimeout(() => {
-                            authModal.style.display = 'none';
-                            checkLoginStatus(); // Update UI
-                        }, 1000);
-                    }
-                })
-                .catch(error => {
-                    console.error('Auth error:', error);
-                    showMessage(authMessage, isEnglish ? 'Network error. Please try again.' : '网络错误，请重试。', true);
-                });
-            }
-
-            function openAuthModal() {
-                authModalTitle.textContent = isEnglish ? 'Login' : '登录';
-                authSubmitBtn.textContent = isEnglish ? 'Login' : '登录';
-                switchToRegister.innerHTML = isEnglish ? 'No account yet? <a>Register now</a>' : '还没有账户? <a>立即注册</a>';
-                switchToRegister.querySelector('a').addEventListener('click', function() {
-                    authModalTitle.textContent = isEnglish ? 'Register' : '注册';
-                    authSubmitBtn.textContent = isEnglish ? 'Register' : '注册';
-                    switchToRegister.innerHTML = isEnglish ? 'Already have an account? <a>Login</a>' : '已有账户? <a>立即登录</a>';
-                    switchToRegister.querySelector('a').addEventListener('click', switchToLogin);
-                });
-                authUsername.value = '';
-                authPassword.value = '';
-                authMessage.style.display = 'none';
-                authModal.style.display = 'flex';
-            }
-
-            function openProfileModal() {
-                const username = localStorage.getItem('username');
-                const vipStatus = localStorage.getItem('vip_status') === 'true';
-                profileUsername.textContent = username;
-                profileVipStatus.textContent = vipStatus ? (isEnglish ? 'Active' : '已激活') : (isEnglish ? 'Inactive' : '未激活');
-                profileVipStatus.className = 'vip-status ' + (vipStatus ? 'vip-true' : 'vip-false');
-                profileModal.style.display = 'flex';
-            }
-
-            function checkLoginStatus() {
-                const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-                const username = localStorage.getItem('username');
-                const btnText = loginBtn.querySelector('.btn-text');
-                
-                if (isLoggedIn && username) {
-                    // User is logged in
-                    if (isEnglish) {
-                        btnText.textContent = 'Personal';
-                    } else {
-                        btnText.textContent = username; // Or '个人'
-                    }
-                } else {
-                    // User is not logged in
-                    if (isEnglish) {
-                        btnText.textContent = 'Log in';
-                    } else {
-                        btnText.textContent = '登录';
-                    }
-                }
-            }
-
-            function showMessage(element, message, isError) {
-                element.textContent = message;
-                element.className = isError ? 'error-message' : 'success-message';
-                element.style.display = 'block';
-            }
-
-            // Logout
-            logoutBtn.addEventListener('click', function() {
-                fetch(`${API_BASE_URL}/logout`, {
-                    method: 'POST',
-                    credentials: 'include'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    localStorage.removeItem('isLoggedIn');
-                    localStorage.removeItem('username');
-                    localStorage.removeItem('vip_status');
-                    profileModal.style.display = 'none';
-                    checkLoginStatus(); // Update UI
-                })
-                .catch(error => {
-                    console.error('Logout error:', error);
-                    // Even if server logout fails, clear local state
-                    localStorage.removeItem('isLoggedIn');
-                    localStorage.removeItem('username');
-                    localStorage.removeItem('vip_status');
-                    profileModal.style.display = 'none';
-                    checkLoginStatus(); // Update UI
-                });
-            });
-
-            // Recharge (placeholder)
-            rechargeBtn.addEventListener('click', function() {
-                 fetch(`${API_BASE_URL}/recharge`, {
-                    method: 'POST',
-                    credentials: 'include'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        alert(data.error);
-                    } else {
-                        alert(data.message || (isEnglish ? "Recharge request submitted. Please contact admin for VIP activation." : "充值请求已提交，请联系管理员开通VIP。"));
-                        // Optionally, refresh user info
-                        fetch(`${API_BASE_URL}/user_info`, { credentials: 'include' })
-                            .then(res => res.json())
-                            .then(userInfo => {
-                                if (!userInfo.error) {
-                                    localStorage.setItem('vip_status', userInfo.vip_status || false);
-                                    checkLoginStatus();
-                                    openProfileModal(); // Re-open to show updated status
-                                }
-                            })
-                            .catch(err => console.error('Error refreshing user info:', err));
-                    }
-                })
-                .catch(error => {
-                    console.error('Recharge error:', error);
-                    alert(isEnglish ? "Recharge request failed. Please try again later." : "充值请求失败，请稍后再试。");
-                });
-            });
-
-
             clearHistoryBtn.addEventListener('click', function() {
                 sessionId = '';
                 localStorage.removeItem('chat_session_id');
@@ -1307,16 +1308,16 @@
                 chatMessages.innerHTML = '';
                 const newInitialMessage = document.createElement('div');
                 newInitialMessage.classList.add('message', 'bot-message');
-                newInitialMessage.innerHTML = isEnglish ? 
-                    "History cleared. New session started. <br>AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊<br><br>Now evolved into Multimodal Model: Supporting images, PDF, Word, tables, scripts, web pages, etc files input😊" : 
+                newInitialMessage.innerHTML = isEnglish ?
+                    "History cleared. New session started. <br>AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊<br><br>Now evolved into Multimodal Model: Supporting images, PDF, Word, tables, scripts, web pages, etc files input😊" :
                     "历史已清除，开始新会话。<br>AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊<br><br>现已进化成多模态模型：支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊";
                 chatMessages.appendChild(newInitialMessage);
             });
-
             const chatMessages = document.getElementById('chatMessages');
             const userInput = document.getElementById('userInput');
             const sendButton = document.getElementById('sendButton');
-
+            // const API_URL = 'https://test-ffdbgoedhy.cn-hongkong.fcapp.run'; // 原始API URL
+            const API_URL = `${API_BASE_URL}/invoke`; // 使用新的API端点
             imageInput.addEventListener('change', function() {
                 const files = Array.from(imageInput.files);
                 if (files.length > 0) {
@@ -1332,7 +1333,6 @@
                     imageInput.value = '';
                 }
             });
-
             fileInput.addEventListener('change', function() {
                 const files = Array.from(fileInput.files);
                 if (files.length > 0) {
@@ -1348,7 +1348,6 @@
                     fileInput.value = '';
                 }
             });
-
             function updateFilePreview() {
                 filePreviewContainer.innerHTML = '';
                 const allFiles = [...selectedImages, ...selectedFiles];
@@ -1399,25 +1398,22 @@
                     filePreviewContainer.style.display = 'none';
                 }
             }
-
             function smartScroll() {
                 if (!scrollLock && !isTyping) {
                     chatMessages.scrollTop = chatMessages.scrollHeight;
                 }
             }
-
             chatMessages.addEventListener('scroll', function() {
                 const isAtBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight <= 50;
                 scrollLock = !isAtBottom;
             });
-
             function addMessage(message, isUser = false, files = []) {
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message');
                 messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
                 if (isUser && files.length > 0) {
                     if (files.length === 1) {
-                        const fileName = files[0].name; 
+                        const fileName = files[0].name;
                         let fileText = isEnglish ? ` [Sent ${fileName}]` : ` [已发送 ${fileName}]`;
                         message += fileText;
                     } else {
@@ -1431,7 +1427,6 @@
                 smartScroll();
                 return messageDiv;
             }
-
             function showTyping() {
               isTyping = true;
               const typingDiv = document.createElement('div');
@@ -1450,7 +1445,6 @@
               chatMessages.appendChild(typingDiv);
               smartScroll();
             }
-
             function hideTyping() {
                 isTyping = false;
                 const typingIndicator = document.getElementById('typingIndicator');
@@ -1458,7 +1452,6 @@
                     typingIndicator.remove();
                 }
             }
-
             function typeWriter(messageDiv, fullText, speed = 5) {
                 let i = 0;
                 const typingCursor = document.createElement('span');
@@ -1486,13 +1479,18 @@
                 }
                 type();
             }
-
             async function sendMessage() {
                 const message = userInput.value.trim();
                 const imagesToSend = [...selectedImages];
                 const filesToSend = [...selectedFiles];
-                // if (!message && imagesToSend.length === 0 && filesToSend.length === 0) return; // Allow sending files only
-
+                // --- 修改逻辑：不再检查登录状态，允许未登录发送消息 ---
+                // if (!currentUser) {
+                //     alert(isEnglish ? "请先登录以发送消息。" : "Please log in to send a message.");
+                //     openLoginModal();
+                //     return; // 阻止发送
+                // }
+                // --- 修改逻辑结束 ---
+                if (!message && imagesToSend.length === 0 && filesToSend.length === 0) return;
                 addMessage(message, true, [...imagesToSend, ...filesToSend]);
                 userInput.value = '';
                 selectedImages = [];
@@ -1500,17 +1498,11 @@
                 updateFilePreview();
                 showTyping();
                 sendButton.disabled = true;
-
                 try {
                     let requestBody;
                     let headers = {
                         'X-Session-ID': sessionId
                     };
-                    
-                    // Include credentials for session/cookie-based auth if needed by your backend
-                    // For token-based auth, you might add an Authorization header here
-                    // headers['Authorization'] = `Bearer ${localStorage.getItem('authToken')}`;
-
                     if (imagesToSend.length > 0 || filesToSend.length > 0) {
                         const formData = new FormData();
                         if (message) {
@@ -1523,38 +1515,30 @@
                             formData.append('file', file, file.name);
                         });
                         requestBody = formData;
-                        // Do not set Content-Type header when sending FormData
-                        // delete headers['Content-Type']; // This line is not needed as we didn't set it initially for FormData path
-                        // However, we should ensure 'Content-Type' is not manually set for FormData
-                        if (headers['Content-Type']) {
-                            delete headers['Content-Type'];
-                        }
+                        delete headers['Content-Type']; // 让浏览器设置 multipart/form-data
                     } else {
-                        requestBody = JSON.stringify({ 
-                            message: message 
+                        requestBody = JSON.stringify({
+                            message: message
                         });
                         headers['Content-Type'] = 'application/json';
                     }
-
-                    const response = await fetch(API_BASE_URL, {
+                    // --- 修改 fetch 调用以包含 Cookie/Session ---
+                    const response = await fetch(API_URL, {
                         method: 'POST',
                         headers: headers,
                         body: requestBody,
-                        credentials: 'include' // Important if your backend uses cookies/sessions
+                        credentials: 'include' // 重要：携带 Cookie/Session
                     });
-
+                    // --- 修改结束 ---
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
-
                     const data = await response.json();
                     hideTyping();
-
                     if (data.session_id) {
                         sessionId = data.session_id;
                         localStorage.setItem('chat_session_id', sessionId);
                     }
-
                     let botReply = "";
                     if (data.reply) {
                         botReply = data.reply;
@@ -1563,7 +1547,6 @@
                     } else {
                         botReply = isEnglish ? "Sorry, I didn't receive a valid reply." : "抱歉，我没有收到有效的回复。";
                     }
-
                     let htmlReply = "";
                     try {
                         htmlReply = marked.parse(botReply, { breaks: true });
@@ -1571,7 +1554,6 @@
                         console.error("Markdown parsing error:", e);
                         htmlReply = botReply;
                     }
-
                     const botMessageDiv = document.createElement('div');
                     botMessageDiv.classList.add('message', 'bot-message');
                     chatMessages.appendChild(botMessageDiv);
@@ -1594,7 +1576,6 @@
                     }
                 }
             }
-
             sendButton.addEventListener('click', sendMessage);
             userInput.addEventListener('keydown', function(event) {
                 if (event.key === 'Enter' && !event.shiftKey) {
@@ -1602,7 +1583,6 @@
                     sendMessage();
                 }
             });
-
             smartScroll();
         });
     </script>
