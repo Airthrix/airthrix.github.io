@@ -850,13 +850,16 @@
     <div class="user-info-display" id="userInfoDisplay">
         <span id="displayUsername">用户</span>
         <span id="vipIndicator" class="vip-indicator" style="display:none;"><i class="fas fa-crown"></i> VIP</span>
+        <button id="logoutBtnTop" class="nav-btn" style="margin-left: 10px; padding: 5px 10px; font-size: 0.8rem; min-width: auto;">
+            <i class="fas fa-sign-out-alt"></i> <span class="btn-text">登出</span>
+        </button>
     </div>
     <!-- --- 新增结束 --- -->
     <div class="top-nav">
         <!-- 登录按钮被用户信息区域替代或隐藏 -->
-        <button class="nav-btn" id="loginBtnNav">
-            <i class="fas fa-user"></i>
-            <span class="btn-text">登录</span>
+        <button class="nav-btn" id="loginBtnNav" style="display:none;"> <!-- 初始隐藏 -->
+            <i class="fas fa-sign-in-alt"></i>
+            <span class="btn-text">Log in</span>
         </button>
         <button class="nav-btn" id="langBtn">
             <i class="fas fa-globe"></i>
@@ -866,6 +869,12 @@
             <i class="fas fa-trash-alt"></i>
             <span class="btn-text">清除历史</span>
         </button>
+        <!-- --- 新增：充值按钮 --- -->
+        <button class="nav-btn" id="rechargeBtn">
+            <i class="fas fa-coins"></i>
+            <span class="btn-text">充值/VIP</span>
+        </button>
+        <!-- --- 新增结束 --- -->
     </div>
     <div class="main-content">
         <div class="chat-container">
@@ -1034,12 +1043,13 @@
                             document.getElementById('vipIndicator').style.display = 'none';
                         }
                         document.getElementById('userInfoDisplay').style.display = 'block';
+                        document.getElementById('loginBtnNav').style.display = 'none'; // 隐藏登录按钮
                         document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = data.username; // 更新按钮文字
                         document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user-circle'; // 更新按钮图标
                     } else {
                         currentUser = null;
                         document.getElementById('userInfoDisplay').style.display = 'none';
-                        // 重置登录按钮
+                        document.getElementById('loginBtnNav').style.display = 'flex'; // 显示登录按钮
                         document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
                         document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user';
                     }
@@ -1048,7 +1058,7 @@
                     console.error('获取用户信息失败:', error);
                     currentUser = null;
                     document.getElementById('userInfoDisplay').style.display = 'none';
-                    // 重置登录按钮
+                    document.getElementById('loginBtnNav').style.display = 'flex';
                     document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
                     document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user';
                 });
@@ -1056,10 +1066,12 @@
             // 页面加载时获取用户信息
             fetchUserInfo();
             // --- 新增结束 ---
-            // --- 新增：登录/注册模态框逻辑 (气泡型) ---
+            // --- 新增：登录/注册模态框逻辑 ---
             const loginModal = document.getElementById('loginModal');
             const registerModal = document.getElementById('registerModal');
             const loginBtnNav = document.getElementById('loginBtnNav'); // 导航栏登录按钮
+            const logoutBtnTop = document.getElementById('logoutBtnTop'); // 顶部登出按钮
+            const rechargeBtn = document.getElementById('rechargeBtn'); // 充值按钮
             const showRegisterLink = document.getElementById('showRegisterLink');
             const showLoginLink = document.getElementById('showLoginLink');
             const loginSubmitBtn = document.getElementById('loginSubmitBtn');
@@ -1094,6 +1106,50 @@
                 } else {
                     openLoginModal();
                 }
+            });
+            logoutBtnTop.addEventListener('click', function() {
+                 fetch(`${API_BASE_URL}/logout`, {
+                     method: 'POST',
+                     credentials: 'include'
+                 })
+                 .then(response => response.json())
+                 .then(data => {
+                     console.log(data.message);
+                     currentUser = null;
+                     fetchUserInfo(); // 更新UI
+                     // 可以添加登出成功的提示
+                 })
+                 .catch(error => console.error('登出失败:', error));
+            });
+            rechargeBtn.addEventListener('click', function() {
+                 if (!currentUser) {
+                     alert(isEnglish ? "请先登录以使用充值功能。" : "Please log in to use the recharge function.");
+                     openLoginModal();
+                     return;
+                 }
+                 // --- 调用充值接口 ---
+                 fetch(`${API_BASE_URL}/recharge`, {
+                     method: 'POST',
+                     headers: {
+                         'Content-Type': 'application/json',
+                     },
+                     credentials: 'include' // 携带 Cookie/Session
+                 })
+                 .then(response => response.json())
+                 .then(data => {
+                     if (data.error) {
+                         alert(`${isEnglish ? '充值失败:' : 'Recharge failed:'} ${data.error}`);
+                     } else {
+                         alert(`${isEnglish ? '充值信息:' : 'Recharge info:'} ${data.message}`);
+                         // 可以在这里刷新用户信息，检查VIP状态是否更新
+                         fetchUserInfo(); // 刷新用户信息
+                     }
+                 })
+                 .catch(error => {
+                     console.error('充值请求失败:', error);
+                     alert(isEnglish ? '充值请求失败，请稍后再试。' : 'Recharge request failed, please try again later.');
+                 });
+                 // --- 调用结束 ---
             });
             showRegisterLink.addEventListener('click', openRegisterModal);
             showLoginLink.addEventListener('click', openLoginModal);
@@ -1209,6 +1265,10 @@
             const imageInput = document.getElementById('imageInput');
             const fileInput = document.getElementById('fileInput');
             const filePreviewContainer = document.getElementById('filePreviewContainer');
+            // 登录按钮点击事件（已被模态框替代）
+            // loginBtnNav.addEventListener('click', function() {
+            //     // ... (原登录逻辑已移至模态框)
+            // });
             langBtn.addEventListener('click', function() {
                 isEnglish = !isEnglish;
                 const btnTextElements = document.querySelectorAll('.btn-text');
@@ -1216,8 +1276,8 @@
                 const sendButtonText = document.getElementById('sendButtonText');
                 const loginModalTitle = document.getElementById('loginModalTitle');
                 const registerModalTitle = document.getElementById('registerModalTitle');
-                const showRegisterLinkText = document.querySelector('.bubble-modal-footer a#showRegisterLink');
-                const showLoginLinkText = document.querySelector('.bubble-modal-footer a#showLoginLink');
+                const showRegisterLinkText = document.querySelector('.modal-footer a#showRegisterLink');
+                const showLoginLinkText = document.querySelector('.modal-footer a#showLoginLink');
                 const loginSubmitBtnText = document.getElementById('loginSubmitBtn');
                 const registerSubmitBtnText = document.getElementById('registerSubmitBtn');
                 const loginUsernameLabel = document.querySelector('#loginUsername').previousElementSibling;
@@ -1225,13 +1285,15 @@
                 const registerUsernameLabel = document.querySelector('#registerUsername').previousElementSibling;
                 const registerPasswordLabel = document.querySelector('#registerPassword').previousElementSibling;
                 const registerConfirmPasswordLabel = document.querySelector('#registerConfirmPassword').previousElementSibling;
+                const rechargeBtnText = document.getElementById('rechargeBtn').querySelector('.btn-text');
                 if (isEnglish) {
-                    btnTextElements[0].textContent = 'Log in'; // 登录按钮
+                    btnTextElements[0].textContent = 'Log in'; // 保留
                     btnTextElements[1].textContent = '中文';
-                    btnTextElements[2].textContent = 'Clear History';
+                    rechargeBtnText.textContent = 'Recharge/VIP';
                     chatTitle.textContent = "Talk with AliceSkyGarden";
                     chatInput.placeholder = "(Now support image pdf docx txt xlsx csv py html etc files)  Enter your message...";
                     sendButtonText.textContent = 'Send';
+                    clearHistoryBtn.querySelector('.btn-text').textContent = 'Clear History';
                     initialMessage.innerHTML = "AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊<br><br>Now evolved into Multimodal Model: Supporting images, PDF, Word, tables, scripts, web pages, etc files input😊";
                     footerTagline.textContent = "Unlocking a New Era of Intelligence · Exploring Infinite Possibilities";
                     const footerLinks = ["Home", "Developers", "Documentation", "Community", "Blog", "Contact Us"];
@@ -1259,12 +1321,13 @@
                     cnTextElements.forEach(el => el.style.display = 'none');
                     enTextElements.forEach(el => el.style.display = 'inline');
                 } else {
-                    btnTextElements[0].textContent = '登录'; // 登录按钮
+                    btnTextElements[0].textContent = 'Log in'; // 保留
                     btnTextElements[1].textContent = 'English';
-                    btnTextElements[2].textContent = '清除历史';
+                    rechargeBtnText.textContent = '充值/VIP';
                     chatTitle.textContent = "与 AliceSkyGarden 对话";
                     chatInput.placeholder = "(现已支持 各种格式的图片 pdf docx txt xlsx csv py html等文件)  输入你的消息...";
                     sendButtonText.textContent = '发送';
+                    clearHistoryBtn.querySelector('.btn-text').textContent = '清除历史';
                     initialMessage.innerHTML = "AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊<br><br>现已进化成多模态模型：支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊";
                     footerTagline.textContent = "开启智能新纪元 · 探索无限可能";
                     const footerLinks = ["首页", "开发者", "文档", "社区", "博客", "联系我们"];
@@ -1291,10 +1354,6 @@
                     const enTextElements = document.querySelectorAll('.en-text');
                     enTextElements.forEach(el => el.style.display = 'none');
                     cnTextElements.forEach(el => el.style.display = 'inline');
-                }
-                // 更新用户信息显示区域的按钮文字
-                if (currentUser) {
-                    document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = currentUser.username;
                 }
                 langBtn.classList.add('pulse');
                 setTimeout(() => {
@@ -1483,13 +1542,13 @@
                 const message = userInput.value.trim();
                 const imagesToSend = [...selectedImages];
                 const filesToSend = [...selectedFiles];
-                // --- 修改逻辑：不再检查登录状态，允许未登录发送消息 ---
-                // if (!currentUser) {
-                //     alert(isEnglish ? "请先登录以发送消息。" : "Please log in to send a message.");
-                //     openLoginModal();
-                //     return; // 阻止发送
-                // }
-                // --- 修改逻辑结束 ---
+                // --- 添加认证检查 ---
+                if (!currentUser) {
+                    alert(isEnglish ? "请先登录以发送消息。" : "Please log in to send a message.");
+                    openLoginModal();
+                    return; // 阻止发送
+                }
+                // --- 认证检查结束 ---
                 if (!message && imagesToSend.length === 0 && filesToSend.length === 0) return;
                 addMessage(message, true, [...imagesToSend, ...filesToSend]);
                 userInput.value = '';
