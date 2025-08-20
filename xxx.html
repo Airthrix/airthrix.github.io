@@ -857,6 +857,7 @@
             background-color: rgba(0, 255, 157, 0.2);
         }
         /* --- 新增样式结束 --- */
+
         @media (max-width: 768px) {
             .top-nav {
                 padding: 1rem;
@@ -1081,7 +1082,7 @@
             <div class="bubble-modal-body">
                 <div class="form-group">
                     <label for="loginUsername">用户名:</label>
-                    <input type="text" id="loginUsername" class="form-control" required inputmode="text">
+                    <input type="text" id="loginUsername" class="form-control" required inputmode="text" required maxlength="20">
                 </div>
                 <div class="form-group">
                     <label for="loginPassword">密码:</label>
@@ -1107,7 +1108,7 @@
             <div class="bubble-modal-body">
                 <div class="form-group">
                     <label for="registerUsername">用户名:</label>
-                    <input type="text" id="registerUsername" class="form-control" required inputmode="text">
+                    <input type="text" id="registerUsername" class="form-control" required inputmode="text" required maxlength="20">
                 </div>
                 <!-- --- 新增：手机号输入框 --- -->
                 <div class="form-group">
@@ -1293,6 +1294,13 @@
                         // 更新顶部按钮为个人中心按钮
                         document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = data.username; // 显示用户名
                         document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user';
+                        // --- 新增：登录成功后缩小按钮上的用户名字体 ---
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').style.fontSize = '0.8rem'; // 或者您觉得合适的其他大小，例如 '12px'
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').style.whiteSpace = 'nowrap';
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').style.overflow = 'hidden';
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').style.textOverflow = 'ellipsis';
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').style.maxWidth = '100px'; // 限制最大宽度以触发省略号
+                        // --- 新增结束 ---
                     } else {
                         // Token 无效或过期，清除本地存储并更新UI
                         console.warn('User info request failed or invalid token:', data.error);
