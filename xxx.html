@@ -653,18 +653,10 @@
             font-weight: bold;
             transition: all 0.3s ease;
             box-shadow: 0 0 10px #00ff9d, inset 0 0 5px rgba(0, 255, 157, 0.3);
-            position: relative; /* 为加载动画定位 */
-            overflow: hidden; /* 隐藏超出按钮的动画元素 */
         }
         .btn-primary:hover {
             background-position: 100% 0;
             box-shadow: 0 0 15px #00ff9d, inset 0 0 7px rgba(0, 255, 157, 0.5);
-        }
-        .btn-primary:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            background-position: 0 0; /* 停止渐变动画 */
-            box-shadow: 0 0 5px #00ff9d, inset 0 0 3px rgba(0, 255, 157, 0.2);
         }
         .bubble-modal-footer {
             padding: 10px 0;
@@ -692,8 +684,6 @@
             font-size: 0.9rem;
             margin-top: 5px;
             display: none; /* 默认隐藏 */
-            text-align: center;
-            animation: fadeIn 0.5s ease-in-out; /* 成功消息淡入动画 */
         }
         /* --- 新增样式：个人中心模态框 (气泡型) --- */
         .profile-modal-content {
@@ -828,27 +818,6 @@
             background-color: rgba(0, 255, 157, 0.2);
         }
         /* --- 新增样式结束 --- */
-        /* --- 新增：加载动画样式 --- */
-        .spinner {
-            display: none; /* 默认隐藏 */
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #ffffff;
-            animation: spin 1s ease-in-out infinite;
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        @keyframes spin {
-            to { transform: translateY(-50%) rotate(360deg); }
-        }
-        .btn-text-loading {
-            margin-left: 30px; /* 为加载动画留出空间 */
-        }
-        /* --- 新增结束 --- */
         @media (max-width: 768px) {
             .top-nav {
                 padding: 1rem;
@@ -1081,10 +1050,7 @@
                 </div>
                 <div id="loginError" class="error-message"></div>
                 <div id="loginSuccess" class="success-message"></div>
-                <button id="loginSubmitBtn" class="btn-primary">
-                    <div class="spinner" id="loginSpinner"></div>
-                    <span class="btn-text btn-text-loading" id="loginBtnText">登录</span>
-                </button>
+                <button id="loginSubmitBtn" class="btn-primary">登录</button>
             </div>
             <div class="bubble-modal-footer">
                 还没有账户? <a id="showRegisterLink">立即注册</a>
@@ -1114,10 +1080,7 @@
                 </div>
                 <div id="registerError" class="error-message"></div>
                 <div id="registerSuccess" class="success-message"></div>
-                <button id="registerSubmitBtn" class="btn-primary">
-                    <div class="spinner" id="registerSpinner"></div>
-                    <span class="btn-text btn-text-loading" id="registerBtnText">注册</span>
-                </button>
+                <button id="registerSubmitBtn" class="btn-primary">注册</button>
             </div>
             <div class="bubble-modal-footer">
                 已有账户? <a id="showLoginLink">立即登录</a>
@@ -1237,6 +1200,29 @@
             // 页面加载时获取用户信息
             fetchUserInfo();
             // --- 新增结束 ---
+
+            // --- 新增辅助函数：更新认证按钮文字 ---
+            function updateAuthButtonText(buttonElement, status, type, isEnglish) {
+                const buttonTextMap = {
+                    login: {
+                        idle: { cn: '登录', en: 'Login' },
+                        processing: { cn: '正在登录', en: 'Logging in' },
+                        success: { cn: '登录成功', en: 'Login Success' },
+                        error: { cn: '登录失败', en: 'Login Failed' }
+                    },
+                    register: {
+                        idle: { cn: '注册', en: 'Register' },
+                        processing: { cn: '正在注册', en: 'Registering' },
+                        success: { cn: '注册成功', en: 'Register Success' },
+                        error: { cn: '注册失败', en: 'Register Failed' }
+                    }
+                };
+
+                const texts = buttonTextMap[type]?.[status] || buttonTextMap.login.idle; // 默认回退到登录闲置
+                buttonElement.textContent = isEnglish ? texts.en : texts.cn;
+            }
+            // --- 新增结束 ---
+
             // - 修改：登录/注册模态框逻辑 (气泡型) -
             const loginModal = document.getElementById('loginModal');
             const registerModal = document.getElementById('registerModal');
@@ -1245,8 +1231,6 @@
             const showRegisterLink = document.getElementById('showRegisterLink');
             // - 修改：登录按钮事件 -
             const loginSubmitBtn = document.getElementById('loginSubmitBtn');
-            const loginSpinner = document.getElementById('loginSpinner');
-            const loginBtnText = document.getElementById('loginBtnText');
             loginSubmitBtn.addEventListener('click', function() {
                 const username = document.getElementById('loginUsername').value;
                 const password = document.getElementById('loginPassword').value;
@@ -1255,12 +1239,13 @@
                     document.getElementById('loginError').style.display = 'block';
                     return;
                 }
-                // 显示加载动画，禁用按钮
-                loginSpinner.style.display = 'block';
-                loginBtnText.textContent = isEnglish ? 'Logging in...' : '正在登录...';
-                loginSubmitBtn.disabled = true;
-                document.getElementById('loginError').style.display = 'none';
-                document.getElementById('loginSuccess').style.display = 'none';
+
+                // --- 新增：修改按钮状态为正在处理 ---
+                const originalLoginBtnText = loginSubmitBtn.textContent; // 保存原始文字
+                loginSubmitBtn.disabled = true; // 禁用按钮
+                updateAuthButtonText(loginSubmitBtn, 'processing', 'login', isEnglish); // 更新按钮文字
+                // --- 新增结束 ---
+
                 // 使用 fetch 发送登录请求，不再依赖 credentials: 'include'
                 fetch(`${API_BASE_URL}/login`, {
                     method: 'POST',
@@ -1277,15 +1262,28 @@
                         document.getElementById('loginError').textContent = data.error;
                         document.getElementById('loginError').style.display = 'block';
                         document.getElementById('loginSuccess').style.display = 'none';
-                        // 隐藏加载动画，启用按钮
-                        loginSpinner.style.display = 'none';
-                        loginBtnText.textContent = isEnglish ? 'Login' : '登录';
-                        loginSubmitBtn.disabled = false;
+
+                        // --- 新增：修改按钮状态为错误 ---
+                        updateAuthButtonText(loginSubmitBtn, 'error', 'login', isEnglish);
+                        setTimeout(() => {
+                             loginSubmitBtn.disabled = false;
+                             updateAuthButtonText(loginSubmitBtn, 'idle', 'login', isEnglish); // 恢复按钮文字
+                        }, 1500); // 1.5秒后恢复
+                        // --- 新增结束 ---
+
                     } else {
-                        // 显示成功消息动画
-                        document.getElementById('loginSuccess').textContent = isEnglish ? 'Login successful!' : '登录成功！';
+                        document.getElementById('loginSuccess').textContent = data.message;
                         document.getElementById('loginSuccess').style.display = 'block';
                         document.getElementById('loginError').style.display = 'none';
+
+                        // --- 新增：修改按钮状态为成功 ---
+                        updateAuthButtonText(loginSubmitBtn, 'success', 'login', isEnglish);
+                        setTimeout(() => {
+                             loginSubmitBtn.disabled = false;
+                             updateAuthButtonText(loginSubmitBtn, 'idle', 'login', isEnglish); // 恢复按钮文字
+                        }, 1000); // 1秒后恢复并关闭
+                        // --- 新增结束 ---
+
                         // 关键修改：登录成功后，保存 JWT Token 和用户信息
                         userToken = data.token; // 从后端响应中获取 token
                         currentUser = { username: data.username, vip_status: data.vip_status }; // 保存用户信息
@@ -1306,10 +1304,6 @@
                         // 1秒后自动关闭模态框
                         setTimeout(() => {
                             closeModal(loginModal);
-                            // 重置按钮状态
-                            loginSpinner.style.display = 'none';
-                            loginBtnText.textContent = isEnglish ? 'Login' : '登录';
-                            loginSubmitBtn.disabled = false;
                         }, 1000);
                     }
                 })
@@ -1319,16 +1313,19 @@
                     document.getElementById('loginError').textContent = isEnglish ? '登录请求失败，请稍后再试。' : 'Login request failed, please try again later.';
                     document.getElementById('loginError').style.display = 'block';
                     document.getElementById('loginSuccess').style.display = 'none';
-                    // 隐藏加载动画，启用按钮
-                    loginSpinner.style.display = 'none';
-                    loginBtnText.textContent = isEnglish ? 'Login' : '登录';
-                    loginSubmitBtn.disabled = false;
+
+                    // --- 新增：修改按钮状态为错误 (网络错误) ---
+                    updateAuthButtonText(loginSubmitBtn, 'error', 'login', isEnglish);
+                    setTimeout(() => {
+                         loginSubmitBtn.disabled = false;
+                         updateAuthButtonText(loginSubmitBtn, 'idle', 'login', isEnglish); // 恢复按钮文字
+                    }, 1500); // 1.5秒后恢复
+                    // --- 新增结束 ---
+
                 });
             });
             // - 修改：注册按钮事件 -
             const registerSubmitBtn = document.getElementById('registerSubmitBtn');
-            const registerSpinner = document.getElementById('registerSpinner');
-            const registerBtnText = document.getElementById('registerBtnText');
             if (registerSubmitBtn) { // 确保元素存在再添加监听器
                 registerSubmitBtn.addEventListener('click', function() {
                     console.log("Register Submit button clicked"); // 调试日志
@@ -1345,12 +1342,13 @@
                         document.getElementById('registerError').style.display = 'block';
                         return;
                     }
-                    // 显示加载动画，禁用按钮
-                    registerSpinner.style.display = 'block';
-                    registerBtnText.textContent = isEnglish ? 'Registering...' : '正在注册...';
-                    registerSubmitBtn.disabled = true;
-                    document.getElementById('registerError').style.display = 'none';
-                    document.getElementById('registerSuccess').style.display = 'none';
+
+                    // --- 新增：修改按钮状态为正在处理 ---
+                    const originalRegisterBtnText = registerSubmitBtn.textContent; // 保存原始文字
+                    registerSubmitBtn.disabled = true; // 禁用按钮
+                    updateAuthButtonText(registerSubmitBtn, 'processing', 'register', isEnglish); // 更新按钮文字
+                    // --- 新增结束 ---
+
                     // 使用 fetch 发送注册请求，不再依赖 credentials: 'include'
                     fetch(`${API_BASE_URL}/register`, {
                         method: 'POST',
@@ -1371,26 +1369,33 @@
                             document.getElementById('registerError').textContent = data.error;
                             document.getElementById('registerError').style.display = 'block';
                             document.getElementById('registerSuccess').style.display = 'none';
-                            // 隐藏加载动画，启用按钮
-                            registerSpinner.style.display = 'none';
-                            registerBtnText.textContent = isEnglish ? 'Register' : '注册';
-                            registerSubmitBtn.disabled = false;
+
+                            // --- 新增：修改按钮状态为错误 ---
+                            updateAuthButtonText(registerSubmitBtn, 'error', 'register', isEnglish);
+                            setTimeout(() => {
+                                 registerSubmitBtn.disabled = false;
+                                 updateAuthButtonText(registerSubmitBtn, 'idle', 'register', isEnglish); // 恢复按钮文字
+                            }, 1500); // 1.5秒后恢复
+                            // --- 新增结束 ---
+
                         } else {
-                            // 显示成功消息动画
-                            document.getElementById('registerSuccess').textContent = isEnglish ? 'Registration successful!' : '注册成功！';
+                            document.getElementById('registerSuccess').textContent = data.message;
                             document.getElementById('registerSuccess').style.display = 'block';
                             document.getElementById('registerError').style.display = 'none';
-                            // 注册成功后可以自动切换到登录框或直接关闭
+
+                            // --- 新增：修改按钮状态为成功 ---
+                            updateAuthButtonText(registerSubmitBtn, 'success', 'register', isEnglish);
                             setTimeout(() => {
-                                closeModal(registerModal);
-                               //document.getElementById('loginUsername').value = username;
-                               //document.getElementById('loginPassword').value = password;
-                                openLoginModal(); // 打开登录框并填充用户名密码
-                                // 重置注册按钮状态
-                                registerSpinner.style.display = 'none';
-                                registerBtnText.textContent = isEnglish ? 'Register' : '注册';
-                                registerSubmitBtn.disabled = false;
-                            }, 1500);
+                                 registerSubmitBtn.disabled = false;
+                                 updateAuthButtonText(registerSubmitBtn, 'idle', 'register', isEnglish); // 恢复按钮文字
+                                 // 注册成功后可以自动切换到登录框或直接关闭
+                                 closeModal(registerModal);
+                                //document.getElementById('loginUsername').value = username;
+                                //document.getElementById('loginPassword').value = password;
+                                 openLoginModal(); // 打开登录框并填充用户名密码
+                            }, 1500); // 1.5秒后恢复并执行后续操作
+                            // --- 新增结束 ---
+
                         }
                     })
                     .catch(error => {
@@ -1399,10 +1404,15 @@
                         document.getElementById('registerError').textContent = isEnglish ? '注册请求失败，请稍后再试。' : 'Registration request failed, please try again later.';
                         document.getElementById('registerError').style.display = 'block';
                         document.getElementById('registerSuccess').style.display = 'none';
-                        // 隐藏加载动画，启用按钮
-                        registerSpinner.style.display = 'none';
-                        registerBtnText.textContent = isEnglish ? 'Register' : '注册';
-                        registerSubmitBtn.disabled = false;
+
+                        // --- 新增：修改按钮状态为错误 (网络错误) ---
+                        updateAuthButtonText(registerSubmitBtn, 'error', 'register', isEnglish);
+                        setTimeout(() => {
+                             registerSubmitBtn.disabled = false;
+                             updateAuthButtonText(registerSubmitBtn, 'idle', 'register', isEnglish); // 恢复按钮文字
+                        }, 1500); // 1.5秒后恢复
+                        // --- 新增结束 ---
+
                     });
                 });
             } else {
@@ -1618,8 +1628,8 @@
             const registerModalTitle = document.getElementById('registerModalTitle');
             const showRegisterLinkText = document.querySelector('.bubble-modal-footer a#showRegisterLink');
             const showLoginLinkText = document.querySelector('.bubble-modal-footer a#showLoginLink');
-            const loginSubmitBtnText = document.getElementById('loginBtnText'); // 注意这里修改了ID
-            const registerSubmitBtnText = document.getElementById('registerBtnText'); // 注意这里修改了ID
+            const loginSubmitBtnText = document.getElementById('loginSubmitBtn');
+            const registerSubmitBtnText = document.getElementById('registerSubmitBtn');
             const loginUsernameLabel = document.querySelector('#loginUsername').previousElementSibling;
             const loginPasswordLabel = document.querySelector('#loginPassword').previousElementSibling;
             const registerUsernameLabel = document.querySelector('#registerUsername').previousElementSibling;
@@ -1656,7 +1666,6 @@
                     registerModalTitle.textContent = "Register";
                     showRegisterLinkText.textContent = "Register Now";
                     showLoginLinkText.textContent = "Login Now";
-                    // 注意：按钮文本现在由内部的 span 控制
                     loginSubmitBtnText.textContent = "Login";
                     registerSubmitBtnText.textContent = "Register";
                     loginUsernameLabel.textContent = "Username:";
@@ -1693,7 +1702,6 @@
                     registerModalTitle.textContent = "注册";
                     showRegisterLinkText.textContent = "立即注册";
                     showLoginLinkText.textContent = "立即登录";
-                    // 注意：按钮文本现在由内部的 span 控制
                     loginSubmitBtnText.textContent = "登录";
                     registerSubmitBtnText.textContent = "注册";
                     loginUsernameLabel.textContent = "用户名:";
