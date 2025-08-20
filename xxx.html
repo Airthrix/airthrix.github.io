@@ -880,6 +880,27 @@
         /* --- 新增结束 --- */
 
 
+        /* --- 新增：图片生成模式激活状态按钮样式 --- */
+        .active-image-mode {
+            background-image: linear-gradient(90deg, var(--neon-green), var(--neon-blue)) !important;
+            color: #0a0a12 !important;
+            border-color: var(--neon-green) !important;
+            box-shadow: 0 0 10px var(--neon-green), inset 0 0 5px rgba(0, 255, 157, 0.3) !important;
+            opacity: 1 !important;
+            cursor: pointer !important;
+        }
+        .active-image-mode:hover {
+            background-image: linear-gradient(90deg, var(--neon-green), var(--neon-blue)) !important;
+            color: #0a0a12 !important;
+            border-color: var(--neon-green) !important;
+            box-shadow: 0 0 15px var(--neon-green), inset 0 0 7px rgba(0, 255, 157, 0.5) !important;
+            transform: translateY(-2px) !important;
+            opacity: 1 !important;
+        }
+        /* --- 新增结束 --- */
+
+
+
         @media (max-width: 768px) {
             .top-nav {
                 padding: 1rem;
@@ -1057,7 +1078,7 @@
                     <!-- --- 新增：生成图片按钮 --- -->
                     <button id="generateImageBtn" class="upload-btn disabled-btn" title="生成图片 (VIP)">
                         <span><i class="fas fa-crown"></i> <i class="fas fa-image"></i></span>
-                        <span style="font-size: 0.6rem; color: #888888; margin-left: 5px;">生图模式</span>
+                        <span style="font-size: 0.9rem; color: #888888; margin-left: 5px;">生图模式</span>
                     </button>
                     <!-- --- 新增结束 --- -->
                     <button id="sendButton" class="chat-send-btn">
@@ -1291,6 +1312,9 @@
                     if (isImageGenMode) {
                         // 进入图片生成模式
                         generateImageBtn.classList.remove('disabled-btn');
+                        // --- 修改：添加激活状态类 ---
+                        generateImageBtn.classList.add('active-image-mode');
+                        // --- 修改结束 ---
                         generateImageBtn.title = isEnglish ? "Exit Image Generation Mode" : "退出图片生成模式";
                         // 可选：改变发送按钮文字以提示用户
                         sendButtonText.textContent = isEnglish ? "Generate Image" : "生成图片";
@@ -1298,6 +1322,9 @@
                     } else {
                         // 退出图片生成模式
                         generateImageBtn.classList.add('disabled-btn');
+                        // --- 修改：移除激活状态类 ---
+                        generateImageBtn.classList.remove('active-image-mode');
+                        // --- 修改结束 ---
                         generateImageBtn.title = isEnglish ? "Generate Image (VIP)" : "生成图片 (VIP)";
                         // 恢复发送按钮文字
                         sendButtonText.textContent = isEnglish ? 'Send' : '发送';
@@ -1459,7 +1486,6 @@
                         document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = data.username; // 显示用户名
                         document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user';
                         // --- 新增：登录成功后缩小按钮上的用户名字体 ---
-                        document.getElementById('loginBtnNav').querySelector('.btn-text').style.fontSize = '0.8rem'; // 或者您觉得合适的其他大小，例如 '12px'
                         document.getElementById('loginBtnNav').querySelector('.btn-text').style.whiteSpace = 'nowrap';
                         document.getElementById('loginBtnNav').querySelector('.btn-text').style.overflow = 'hidden';
                         document.getElementById('loginBtnNav').querySelector('.btn-text').style.textOverflow = 'ellipsis';
