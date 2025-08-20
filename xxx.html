@@ -979,7 +979,7 @@
             }
             .nav-btn {
                 padding: 0.6rem 1rem;
-                font-size: 0.8rem;
+                font-size: 1rem;
                 min-width: 90px;
             }
             .chat-messages {
@@ -1056,8 +1056,8 @@
                     <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt">
                     <!-- --- 新增：生成图片按钮 --- -->
                     <button id="generateImageBtn" class="upload-btn disabled-btn" title="生成图片 (VIP)">
-                        <i class="fas fa-crown"></i> <!-- VIP 图标 -->
-                        <i class="fas fa-image"></i> <!-- 图片生成图标 -->
+                        <span><i class="fas fa-crown"></i> <i class="fas fa-image"></i></span>
+                        <span style="font-size: 0.6rem; color: #888888; margin-left: 5px;">生图模式</span>
                     </button>
                     <!-- --- 新增结束 --- -->
                     <button id="sendButton" class="chat-send-btn">
@@ -1274,11 +1274,14 @@
             if (generateImageBtn) {
                 generateImageBtn.addEventListener('click', function() {
                     // 1. 检查用户是否登录且为 VIP
-                    if (!currentUser || !currentUser.vip_status) {
-                        alert(isEnglish ? "此功能为VIP专享，请先登录并开通VIP。" : "This feature is for VIP only. Please log in and activate VIP.");
-                        if (!currentUser) {
-                            openLoginModal();
-                        }
+                    if (!currentUser) {
+                        // 用户未登录，直接打开登录窗口
+                        openLoginModal();
+                        return;
+                    }
+                    // 如果用户已登录但不是VIP，弹出中文报警
+                    if (!currentUser.vip_status) {
+                        alert(isEnglish ? "此功能为VIP专享，请先开通VIP。" : "此功能为VIP专享，请先开通VIP。");
                         return;
                     }
 
@@ -1288,14 +1291,14 @@
                     if (isImageGenMode) {
                         // 进入图片生成模式
                         generateImageBtn.classList.remove('disabled-btn');
-                        generateImageBtn.title = isEnglish ? "退出图片生成模式" : "退出图片生成模式";
+                        generateImageBtn.title = isEnglish ? "Exit Image Generation Mode" : "退出图片生成模式";
                         // 可选：改变发送按钮文字以提示用户
-                        sendButtonText.textContent = isEnglish ? "生成图片" : "生成图片";
+                        sendButtonText.textContent = isEnglish ? "Generate Image" : "生成图片";
                         console.log("Image generation mode activated.");
                     } else {
                         // 退出图片生成模式
                         generateImageBtn.classList.add('disabled-btn');
-                        generateImageBtn.title = isEnglish ? "生成图片 (VIP)" : "生成图片 (VIP)";
+                        generateImageBtn.title = isEnglish ? "Generate Image (VIP)" : "生成图片 (VIP)";
                         // 恢复发送按钮文字
                         sendButtonText.textContent = isEnglish ? 'Send' : '发送';
                         // 停止任何正在进行的轮询
