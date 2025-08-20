@@ -858,6 +858,28 @@
         }
         /* --- 新增样式结束 --- */
 
+
+        /* --- 新增：生成图片按钮样式 --- */
+        .disabled-btn {
+            opacity: 0.5; /* 降低不透明度表示禁用 */
+            cursor: not-allowed; /* 鼠标指针变为禁止符号 */
+            background: rgba(50, 50, 80, 0.3) !important; /* 更暗的背景 */
+            color: #888888 !important; /* 更暗的文字/图标颜色 */
+            border-color: rgba(100, 100, 150, 0.3) !important; /* 更暗的边框 */
+            box-shadow: none !important; /* 移除光晕效果 */
+        }
+        .disabled-btn:hover {
+            /* 确保悬停时也不改变禁用状态的外观 */
+            opacity: 0.5;
+            background: rgba(50, 50, 80, 0.3) !important;
+            color: #888888 !important;
+            border-color: rgba(100, 100, 150, 0.3) !important;
+            box-shadow: none !important;
+            transform: none !important; /* 移除悬停时的上移效果 */
+        }
+        /* --- 新增结束 --- */
+
+
         @media (max-width: 768px) {
             .top-nav {
                 padding: 1rem;
@@ -1032,6 +1054,12 @@
                         <i class="fas fa-file"></i>
                     </label>
                     <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt">
+                    <!-- --- 新增：生成图片按钮 --- -->
+                    <button id="generateImageBtn" class="upload-btn disabled-btn" title="生成图片 (VIP)">
+                        <i class="fas fa-crown"></i> <!-- VIP 图标 -->
+                        <i class="fas fa-image"></i> <!-- 图片生成图标 -->
+                    </button>
+                    <!-- --- 新增结束 --- -->
                     <button id="sendButton" class="chat-send-btn">
                         <i class="fas fa-paper-plane"></i> <span id="sendButtonText" class="btn-text">发送</span>
                     </button>
@@ -1235,6 +1263,139 @@
                 "retina_detect": true
             });
 
+
+
+            // --- 新增：生成图片按钮逻辑 ---
+            const generateImageBtn = document.getElementById('generateImageBtn');
+            let isImageGenMode = false; // 全局变量跟踪图片生成模式
+            let currentTaskId = null; // 存储当前任务ID用于轮询
+            let pollIntervalId = null; // 存储轮询定时器ID
+
+            if (generateImageBtn) {
+                generateImageBtn.addEventListener('click', function() {
+                    // 1. 检查用户是否登录且为 VIP
+                    if (!currentUser || !currentUser.vip_status) {
+                        alert(isEnglish ? "此功能为VIP专享，请先登录并开通VIP。" : "This feature is for VIP only. Please log in and activate VIP.");
+                        if (!currentUser) {
+                            openLoginModal();
+                        }
+                        return;
+                    }
+
+                    // 2. 切换状态
+                    isImageGenMode = !isImageGenMode;
+
+                    if (isImageGenMode) {
+                        // 进入图片生成模式
+                        generateImageBtn.classList.remove('disabled-btn');
+                        generateImageBtn.title = isEnglish ? "退出图片生成模式" : "退出图片生成模式";
+                        // 可选：改变发送按钮文字以提示用户
+                        sendButtonText.textContent = isEnglish ? "生成图片" : "生成图片";
+                        console.log("Image generation mode activated.");
+                    } else {
+                        // 退出图片生成模式
+                        generateImageBtn.classList.add('disabled-btn');
+                        generateImageBtn.title = isEnglish ? "生成图片 (VIP)" : "生成图片 (VIP)";
+                        // 恢复发送按钮文字
+                        sendButtonText.textContent = isEnglish ? 'Send' : '发送';
+                        // 停止任何正在进行的轮询
+                        stopPolling();
+                        console.log("Image generation mode deactivated.");
+                    }
+                });
+            } else {
+                console.error("Generate Image Button (id='generateImageBtn') not found in the DOM!");
+            }
+
+            // 辅助函数：停止轮询
+            function stopPolling() {
+                 if (pollIntervalId) {
+                     clearInterval(pollIntervalId);
+                     pollIntervalId = null;
+                     console.log("Stopped polling for image task.");
+                 }
+                 currentTaskId = null;
+            }
+
+            // 辅助函数：轮询获取图片
+            async function pollForImage(taskId, promptMessageDiv) {
+                const maxAttempts = 30; // 最大尝试次数
+                const pollInterval = 3000; // 轮询间隔 (毫秒)
+                let attempts = 0;
+
+                const poll = async () => {
+                    attempts++;
+                    if (attempts > maxAttempts) {
+                        clearInterval(pollIntervalId);
+                        pollIntervalId = null;
+                        hideTyping();
+                        promptMessageDiv.innerHTML += `<br><span style="color: red;">${isEnglish ? 'Image generation timed out.' : '图片生成超时。'}</span>`;
+                        sendButton.disabled = false;
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch(`${API_BASE_URL}/check_image_task/${taskId}`, {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': `Bearer ${userToken}`
+                            }
+                        });
+
+                        if (!response.ok) {
+                            const errorData = await response.json().catch(() => ({}));
+                            throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                        }
+
+                        const data = await response.json();
+
+                        if (data.status === 'SUCCEEDED' && data.image_url) {
+                            clearInterval(pollIntervalId);
+                            pollIntervalId = null;
+                            hideTyping();
+                            promptMessageDiv.innerHTML = `<p>${isEnglish ? 'Generated Image for:' : '生成的图片：'}</p><p><em>${userInput.value}</em></p><img src="${data.image_url}" alt="Generated Image" style="max-width: 100%; border-radius: 10px; margin-top: 10px;">`;
+                            sendButton.disabled = false;
+                            userInput.value = ''; // 清空输入框
+                            // 可选：生成后自动退出图片模式
+                            // isImageGenMode = false;
+                            // generateImageBtn.classList.add('disabled-btn');
+                            // generateImageBtn.title = isEnglish ? "生成图片 (VIP)" : "生成图片 (VIP)";
+                            // sendButtonText.textContent = isEnglish ? 'Send' : '发送';
+                        } else if (data.status === 'FAILED') {
+                            clearInterval(pollIntervalId);
+                            pollIntervalId = null;
+                            hideTyping();
+                            promptMessageDiv.innerHTML += `<br><span style="color: red;">${isEnglish ? 'Image generation failed:' : '图片生成失败:'} ${data.message || 'Unknown error'}</span>`;
+                            sendButton.disabled = false;
+                        } else if (data.status === 'RUNNING' || data.status === 'PENDING') {
+                            // 仍在进行中，继续轮询
+                            console.log(`Polling attempt ${attempts}: Task ${taskId} is ${data.status}`);
+                        } else {
+                             clearInterval(pollIntervalId);
+                             pollIntervalId = null;
+                             hideTyping();
+                             promptMessageDiv.innerHTML += `<br><span style="color: red;">${isEnglish ? 'Unexpected task status:' : '意外的任务状态:'} ${data.status}</span>`;
+                             sendButton.disabled = false;
+                        }
+
+                    } catch (error) {
+                        console.error('Error polling for image task:', error);
+                        // 可以选择继续轮询或停止
+                        // clearInterval(pollIntervalId);
+                        // pollIntervalId = null;
+                        // hideTyping();
+                        // promptMessageDiv.innerHTML += `<br><span style="color: red;">${isEnglish ? 'Error checking image status:' : '检查图片状态时出错:'} ${error.message}</span>`;
+                        // sendButton.disabled = false;
+                    }
+                };
+
+                // 立即执行一次，然后开始定时轮询
+                await poll();
+                pollIntervalId = setInterval(poll, pollInterval);
+            }
+            // --- 新增结束 ---
+
+
             // --- 新增辅助函数：更新认证按钮文字 ---
             function updateAuthButtonText(buttonElement, status, type, isEnglish) {
                 const buttonTextMap = {
@@ -1433,9 +1594,19 @@
                         if (data.vip_status) {
                             document.getElementById('vipStatusText').textContent = isEnglish ? 'Yes' : '是';
                             document.getElementById('vipStatusText').style.color = 'gold';
+                            // --- 新增：登录成功且是VIP，启用生成图片按钮 ---
+                            if (generateImageBtn) {
+                                 generateImageBtn.classList.remove('disabled-btn');
+                            }
+                            // --- 新增结束 ---
                         } else {
                             document.getElementById('vipStatusText').textContent = isEnglish ? 'No' : '否';
                             document.getElementById('vipStatusText').style.color = '#c0c0ff';
+                            // --- 新增：登录成功但非VIP，禁用生成图片按钮 ---
+                            if (generateImageBtn) {
+                                 generateImageBtn.classList.add('disabled-btn');
+                            }
+                    // --- 新增结束 ---
                         }
                         // 更新顶部按钮为个人中心按钮
                         document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = data.username;
@@ -1658,6 +1829,15 @@
                         // --- 修改结束 ---
                         document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
                         document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
+                        // --- 新增：登出后禁用生成图片按钮 ---
+                        if (generateImageBtn) {
+                             generateImageBtn.classList.add('disabled-btn');
+                             isImageGenMode = false; // 重置模式
+                             generateImageBtn.title = isEnglish ? "生成图片 (VIP)" : "生成图片 (VIP)";
+                             sendButtonText.textContent = isEnglish ? 'Send' : '发送';
+                             stopPolling(); // 停止轮询
+                        }
+                        // --- 新增结束 ---
                         closeModal(profileModal);
                         // alert(isEnglish ? "Logout communication with server failed, but local state is cleared." : "登出时与服务器通信失败，但本地已登出。");
                     });
@@ -2090,6 +2270,68 @@
                 //     return; // 阻止发送
                 // }
                 // --- 修改逻辑结束 ---
+
+
+                // --- 新增：检查是否处于图片生成模式 ---
+                if (isImageGenMode) {
+                    if (!message) {
+                         alert(isEnglish ? "请输入图片描述。" : "Please enter a description for the image.");
+                         return;
+                    }
+                    if (!currentUser || !currentUser.vip_status) {
+                         alert(isEnglish ? "此功能为VIP专享。" : "This feature is for VIP only.");
+                         return;
+                    }
+
+                    console.log("Sending request to generate image with description:", message);
+                    showTyping(); // 显示“正在连接”指示器
+                    sendButton.disabled = true;
+
+                    // 先在聊天区域显示用户输入的提示词
+                    const promptMessageDiv = document.createElement('div');
+                    promptMessageDiv.classList.add('message', 'user-message');
+                    promptMessageDiv.innerHTML = `<p>${isEnglish ? 'Generating image for:' : '正在为以下内容生成图片：'}</p><p><em>${message}</em></p>`;
+                    chatMessages.appendChild(promptMessageDiv);
+                    smartScroll();
+
+                    try {
+                        // 调用新的后端图片生成端点 (异步)
+                        const response = await fetch(`${API_BASE_URL}/generate_image_async`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${userToken}` // 携带 JWT Token 进行身份和权限验证
+                            },
+                            body: JSON.stringify({ prompt: message }) // 发送图片描述
+                        });
+
+                        if (!response.ok) {
+                            const errorData = await response.json().catch(() => ({}));
+                            throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                        }
+
+                        const data = await response.json();
+                        const taskId = data.task_id;
+
+                        if (taskId) {
+                            console.log("Image generation task started with ID:", taskId);
+                            // 开始轮询获取结果
+                            pollForImage(taskId, promptMessageDiv);
+                        } else {
+                            throw new Error(isEnglish ? "Failed to get task ID from backend." : "无法从后端获取任务ID。");
+                        }
+
+                    } catch (error) {
+                        console.error('Error initiating image generation:', error);
+                        hideTyping();
+                        promptMessageDiv.innerHTML += `<br><span style="color: red;">${isEnglish ? 'Error initiating image generation:' : '启动图片生成时出错:'} ${error.message}</span>`;
+                        sendButton.disabled = false;
+                    }
+                    return; // 处理完图片生成后，不再执行普通消息发送逻辑
+                }
+                // --- 修改结束：图片生成逻辑 ---
+
+
                 if (!message && imagesToSend.length === 0 && filesToSend.length === 0) return;
                 addMessage(message, true, [...imagesToSend, ...filesToSend]);
                 userInput.value = '';
