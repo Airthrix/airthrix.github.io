@@ -645,9 +645,11 @@
         .phone-input-group {
             display: flex;
             gap: 5px;
+            /* 确保整个组的宽度与其它表单控件（如 .form-control）一致 */
+            width: 100%;
         }
         .country-code-select {
-            width: 70px; /* 直接设置固定宽度 */
+            width: 66px; /* 直接设置固定宽度 */
             padding: 4px 8px;
             border-radius: 5px;
             border: 1px solid #00ff9d;
@@ -670,6 +672,7 @@
             color: #e0e0ff;
             font-size: 1rem;
             transition: all 0.3s ease;
+            min-width: 0; /* 允许输入框在 flex 容器中收缩 */
         }
         .phone-number-input:focus {
             outline: none;
