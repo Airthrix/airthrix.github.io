@@ -818,6 +818,8 @@
             background-color: rgba(0, 255, 157, 0.2);
         }
         /* --- 新增样式结束 --- */
+
+
         @media (max-width: 768px) {
             .top-nav {
                 padding: 1rem;
@@ -960,6 +962,7 @@
     <div class="glow glow-blue"></div>
     <div class="glow glow-purple"></div>
     <div class="grid-overlay"></div>
+
     <div class="top-nav">
         <!-- 登录/个人按钮 -->
         <button class="nav-btn" id="loginBtnNav">
@@ -1050,7 +1053,14 @@
                 </div>
                 <div id="loginError" class="error-message"></div>
                 <div id="loginSuccess" class="success-message"></div>
-                <button id="loginSubmitBtn" class="btn-primary">登录</button>
+                <!-- --- 新增：登录加载指示器 --- -->
+                <div id="loginLoadingIndicator" class="loading-indicator" style="display: none; text-align: center; margin-top: 10px; color: var(--neon-blue);">
+                    <i class="fas fa-spinner fa-spin"></i> <span id="loggingInText">正在登录...</span>
+                </div>
+                <!-- --- 新增结束 --- -->
+                <button id="loginSubmitBtn" class="btn-primary">
+                    <span id="loginSubmitBtnText">登录</span>
+                </button>
             </div>
             <div class="bubble-modal-footer">
                 还没有账户? <a id="showRegisterLink">立即注册</a>
@@ -1058,6 +1068,7 @@
         </div>
     </div>
     <!-- --- 新增结束 --- -->
+
     <!-- --- 新增：注册模态框 (气泡型) --- -->
     <div id="registerModal" class="bubble-modal">
         <div class="bubble-modal-content">
@@ -1080,7 +1091,14 @@
                 </div>
                 <div id="registerError" class="error-message"></div>
                 <div id="registerSuccess" class="success-message"></div>
-                <button id="registerSubmitBtn" class="btn-primary">注册</button>
+                <!-- --- 新增：注册加载指示器 --- -->
+                <div id="registerLoadingIndicator" class="loading-indicator" style="display: none; text-align: center; margin-top: 10px; color: var(--neon-blue);">
+                    <i class="fas fa-spinner fa-spin"></i> <span id="registeringText">正在注册...</span>
+                </div>
+                <!-- --- 新增结束 --- -->
+                <button id="registerSubmitBtn" class="btn-primary">
+                    <span id="registerSubmitBtnText">注册</span>
+                </button>
             </div>
             <div class="bubble-modal-footer">
                 已有账户? <a id="showLoginLink">立即登录</a>
@@ -1088,6 +1106,29 @@
         </div>
     </div>
     <!-- --- 新增结束 --- -->
+
+
+        /* --- 新增样式：成功消息美化 --- */
+        .success-message {
+            color: var(--neon-green);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+            text-align: center;
+            padding: 8px;
+            border-radius: 5px;
+            background-color: rgba(0, 255, 157, 0.1);
+            border: 1px solid var(--neon-green);
+            animation: fadeInSuccess 0.5s ease-in-out;
+        }
+
+        @keyframes fadeInSuccess {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* --- 新增样式结束 --- */
+
+
     <!-- --- 新增：个人中心模态框 --- -->
     <div id="profileModal" class="bubble-modal">
         <div class="profile-modal-content">
@@ -1110,6 +1151,8 @@
         </div>
     </div>
     <!-- --- 新增结束 --- -->
+
+
     <script src="https://hk-alice-file.oss-cn-hongkong.aliyuncs.com/particles.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -1149,75 +1192,25 @@
                 "retina_detect": true
             });
 
-            // --- 新增/修改：Token 管理函数 ---
-            function saveToken(token) {
-                if (token) {
-                    localStorage.setItem('aliceskygarden_jwt_token', token);
-                    console.log("Token saved to localStorage.");
-                }
-            }
 
-            function loadToken() {
-                const token = localStorage.getItem('aliceskygarden_jwt_token');
-                if (token) {
-                    console.log("Token loaded from localStorage.");
-                } else {
-                    console.log("No token found in localStorage.");
-                }
-                return token;
-            }
-
-            function clearToken() {
-                localStorage.removeItem('aliceskygarden_jwt_token');
-                console.log("Token cleared from localStorage.");
-            }
-            // --- 新增/修改结束 ---
-
-            // - 修改：获取用户信息并更新UI -
+            // - 新增：获取用户信息并更新UI -
             function fetchUserInfo() {
-                // 尝试从 localStorage 加载 Token
-                const storedToken = loadToken();
-                // 如果没有 Token（无论是来自登录响应还是 localStorage），则认为未登录
-                const tokenToUse = userToken || storedToken; // 优先使用内存中的（刚登录的），否则用存储的
-
-                if (!tokenToUse) {
-                    console.log("No token available, setting UI to logged out state.");
+                // 如果没有 Token，直接将按钮设为登录状态并返回
+                if (!userToken) {
                     document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
                     document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
-                    // 确保 currentUser 也是 null
-                    currentUser = null;
                     return;
                 }
+
                 // 使用 JWT Token 获取用户信息
                 fetch(`${API_BASE_URL}/user_info`, {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Bearer ${tokenToUse}` // 关键：将 Token 放入 Authorization 头
+                        'Authorization': `Bearer ${userToken}` // 关键：将 Token 放入 Authorization 头
                     }
                 })
-                .then(response => {
-                    if (!response.ok) {
-                         if (response.status === 401) {
-                             console.warn('User info request failed with 401 Unauthorized. Token might be invalid or expired.');
-                             // Token 无效或过期，清除本地存储并更新UI
-                             clearToken();
-                             userToken = null; // 清除内存中的 token
-                             currentUser = null;
-                             document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
-                             document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
-                             return { error: 'Token expired or invalid' }; // 返回一个特殊对象
-                         } else {
-                             throw new Error(`HTTP error! status: ${response.status}`);
-                         }
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
-                    if (data.error && data.error === 'Token expired or invalid') {
-                        // 已在上面处理，这里可以不做额外处理或显示提示
-                        console.log("Token was invalid, UI already updated.");
-                        return;
-                    }
                     if (data.username) {
                         // 获取成功，更新用户信息和UI
                         currentUser = data;
@@ -1232,25 +1225,31 @@
                         // 更新顶部按钮为个人中心按钮
                         document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = data.username; // 显示用户名
                         document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user';
-                        console.log("User info fetched and UI updated.");
                     } else {
-                        // 一般不应该走到这里，因为 401 会提前处理
-                        console.warn('Unexpected response structure from /user_info:', data);
+                        // Token 无效或过期，清除本地存储并更新UI
+                        console.warn('User info request failed or invalid token:', data.error);
+                        currentUser = null;
+                        userToken = null; // 清除无效的 token
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
+                        document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
                     }
                 })
                 .catch(error => {
-                    console.error('获取用户信息失败:', error);
-                    // 请求失败也认为未登录或需要重置状态
-                    // currentUser = null; // 不要轻易清除，除非确定 token 无效
-                    // userToken = null;   // 不要轻易清除
-                    // document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
-                    // document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
+                    console.error('获取用户信息失败 (可能未登录或Token无效):', error);
+                    // 请求失败也认为未登录
+                    currentUser = null;
+                    userToken = null; // 清除可能有问题的 token
+                    document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
+                    document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
                 });
             }
 
-            // 页面加载时获取用户信息
-            // fetchUserInfo(); // 移到文件末尾，在所有函数定义之后调用
 
+
+
+
+            // 页面加载时获取用户信息
+            fetchUserInfo();
             // --- 新增结束 ---
             // - 修改：登录/注册模态框逻辑 (气泡型) -
             const loginModal = document.getElementById('loginModal');
@@ -1258,16 +1257,30 @@
             const profileModal = document.getElementById('profileModal'); // 个人中心模态框
             const loginBtnNav = document.getElementById('loginBtnNav'); // 导航栏登录/个人按钮
             const showRegisterLink = document.getElementById('showRegisterLink');
+
             // - 修改：登录按钮事件 -
             const loginSubmitBtn = document.getElementById('loginSubmitBtn');
             loginSubmitBtn.addEventListener('click', function() {
                 const username = document.getElementById('loginUsername').value;
                 const password = document.getElementById('loginPassword').value;
                 if (!username || !password) {
-                    document.getElementById('loginError').textContent = isEnglish ? '用户名和密码不能为空' : 'Username and password cannot be empty';
+                    document.getElementById('loginError').textContent = isEnglish ? 'Username and password cannot be empty' : '用户名和密码不能为空';
                     document.getElementById('loginError').style.display = 'block';
                     return;
                 }
+
+                // --- 新增：显示加载动画，禁用按钮 ---
+                const loginLoadingIndicator = document.getElementById('loginLoadingIndicator');
+                const loginSubmitBtnText = document.getElementById('loginSubmitBtnText');
+                const loggingInText = document.getElementById('loggingInText');
+                loginLoadingIndicator.style.display = 'block';
+                loggingInText.textContent = isEnglish ? 'Logging in...' : '正在登录...';
+                loginSubmitBtn.disabled = true;
+                loginSubmitBtnText.style.display = 'none'; // 隐藏按钮文字
+                document.getElementById('loginError').style.display = 'none';
+                document.getElementById('loginSuccess').style.display = 'none';
+                // --- 新增结束 ---
+
                 // 使用 fetch 发送登录请求，不再依赖 credentials: 'include'
                 fetch(`${API_BASE_URL}/login`, {
                     method: 'POST',
@@ -1285,14 +1298,11 @@
                         document.getElementById('loginError').style.display = 'block';
                         document.getElementById('loginSuccess').style.display = 'none';
                     } else {
-                        document.getElementById('loginSuccess').textContent = data.message;
+                        document.getElementById('loginSuccess').textContent = data.message; // "登录成功" 或 "Login successful"
                         document.getElementById('loginSuccess').style.display = 'block';
                         document.getElementById('loginError').style.display = 'none';
                         // 关键修改：登录成功后，保存 JWT Token 和用户信息
                         userToken = data.token; // 从后端响应中获取 token
-                        // --- 新增：保存 Token 到 localStorage ---
-                        saveToken(userToken);
-                        // --- 新增结束 ---
                         currentUser = { username: data.username, vip_status: data.vip_status }; // 保存用户信息
                         // 可选：将 Token 存入 localStorage 以便页面刷新后仍保持登录状态
                         // localStorage.setItem('jwt_token_aliceskygarden', userToken);
@@ -1317,11 +1327,20 @@
                 .catch(error => {
                     console.error('登录请求失败:', error);
                     // 原始代码中的错误处理保持不变
-                    document.getElementById('loginError').textContent = isEnglish ? '登录请求失败，请稍后再试。' : 'Login request failed, please try again later.';
+                    document.getElementById('loginError').textContent = isEnglish ? 'Login request failed, please try again later.' : '登录请求失败，请稍后再试。';
                     document.getElementById('loginError').style.display = 'block';
                     document.getElementById('loginSuccess').style.display = 'none';
+                })
+                .finally(() => {
+                    // --- 新增：无论成功失败，隐藏加载动画，恢复按钮 ---
+                    loginLoadingIndicator.style.display = 'none';
+                    loginSubmitBtn.disabled = false;
+                    loginSubmitBtnText.style.display = 'inline'; // 恢复显示按钮文字
+                    // --- 新增结束 ---
                 });
             });
+            // - 修改结束：登录按钮事件 -
+
             // - 修改：注册按钮事件 -
             const registerSubmitBtn = document.getElementById('registerSubmitBtn');
             if (registerSubmitBtn) { // 确保元素存在再添加监听器
@@ -1331,15 +1350,28 @@
                     const password = document.getElementById('registerPassword').value;
                     const confirmPassword = document.getElementById('registerConfirmPassword').value;
                     if (!username || !password || !confirmPassword) {
-                        document.getElementById('registerError').textContent = isEnglish ? '所有字段都必须填写' : 'All fields are required';
+                        document.getElementById('registerError').textContent = isEnglish ? 'All fields are required' : '所有字段都必须填写';
                         document.getElementById('registerError').style.display = 'block';
                         return;
                     }
                     if (password !== confirmPassword) {
-                        document.getElementById('registerError').textContent = isEnglish ? '两次输入的密码不一致' : 'Passwords do not match';
+                        document.getElementById('registerError').textContent = isEnglish ? 'Passwords do not match' : '两次输入的密码不一致';
                         document.getElementById('registerError').style.display = 'block';
                         return;
                     }
+
+                    // --- 新增：显示加载动画，禁用按钮 ---
+                    const registerLoadingIndicator = document.getElementById('registerLoadingIndicator');
+                    const registerSubmitBtnText = document.getElementById('registerSubmitBtnText');
+                    const registeringText = document.getElementById('registeringText');
+                    registerLoadingIndicator.style.display = 'block';
+                    registeringText.textContent = isEnglish ? 'Registering...' : '正在注册...';
+                    registerSubmitBtn.disabled = true;
+                    registerSubmitBtnText.style.display = 'none'; // 隐藏按钮文字
+                    document.getElementById('registerError').style.display = 'none';
+                    document.getElementById('registerSuccess').style.display = 'none';
+                    // --- 新增结束 ---
+
                     // 使用 fetch 发送注册请求，不再依赖 credentials: 'include'
                     fetch(`${API_BASE_URL}/register`, {
                         method: 'POST',
@@ -1361,7 +1393,7 @@
                             document.getElementById('registerError').style.display = 'block';
                             document.getElementById('registerSuccess').style.display = 'none';
                         } else {
-                            document.getElementById('registerSuccess').textContent = data.message;
+                            document.getElementById('registerSuccess').textContent = data.message; // "注册成功" 或 "Registration successful"
                             document.getElementById('registerSuccess').style.display = 'block';
                             document.getElementById('registerError').style.display = 'none';
                             // 注册成功后可以自动切换到登录框或直接关闭
@@ -1376,18 +1408,26 @@
                     .catch(error => {
                         console.error('注册请求失败:', error);
                         // 原始代码中的错误处理保持不变
-                        document.getElementById('registerError').textContent = isEnglish ? '注册请求失败，请稍后再试。' : 'Registration request failed, please try again later.';
+                        document.getElementById('registerError').textContent = isEnglish ? 'Registration request failed, please try again later.' : '注册请求失败，请稍后再试。';
                         document.getElementById('registerError').style.display = 'block';
                         document.getElementById('registerSuccess').style.display = 'none';
+                    })
+                    .finally(() => {
+                        // --- 新增：无论成功失败，隐藏加载动画，恢复按钮 ---
+                        registerLoadingIndicator.style.display = 'none';
+                        registerSubmitBtn.disabled = false;
+                        registerSubmitBtnText.style.display = 'inline'; // 恢复显示按钮文字
+                        // --- 新增结束 ---
                     });
                 });
             } else {
                 console.error("Register Submit Button (id='registerSubmitBtn') not found in the DOM!");
             }
             // - 修改结束：注册按钮事件 -
+
+
             // --- 新增：个人中心按钮事件 ---
             // 充值按钮事件
-            const rechargeBtnProfile = document.getElementById('rechargeBtnProfile');
             rechargeBtnProfile.addEventListener('click', function() {
                  if (!currentUser) {
                      alert(isEnglish ? "请先登录以使用充值功能。" : "Please log in to use the recharge function.");
@@ -1395,26 +1435,13 @@
                      openLoginModal();
                      return;
                  }
-                 // --- 新增：获取 Token ---
-                 const tokenToUse = userToken || loadToken();
-                 if (!tokenToUse) {
-                     alert(isEnglish ? "登录状态异常，请重新登录。" : "Login status error, please log in again.");
-                     closeModal(profileModal);
-                     openLoginModal();
-                     return;
-                 }
-                 // --- 新增结束 ---
-
                  // 调用充值接口
                  fetch(`${API_BASE_URL}/recharge`, {
                      method: 'POST',
                      headers: {
                          'Content-Type': 'application/json',
-                         // --- 修改：使用 Authorization 头 ---
-                         'Authorization': `Bearer ${tokenToUse}` // 携带 Token
-                         // credentials: 'include' // 移除，使用 JWT
                      },
-                     // credentials: 'include' // 移除
+                     credentials: 'include' // 携带 Cookie/Session
                  })
                  .then(response => response.json())
                  .then(data => {
@@ -1423,7 +1450,7 @@
                      } else {
                          alert(`${isEnglish ? '充值信息:' : 'Recharge info:'} ${data.message}`);
                          // 刷新用户信息，检查VIP状态是否更新
-                         fetchUserInfo(); // 这个函数内部会处理 Token
+                         fetchUserInfo();
                      }
                  })
                  .catch(error => {
@@ -1431,59 +1458,46 @@
                      alert(isEnglish ? '充值请求失败，请稍后再试。' : 'Recharge request failed, please try again later.');
                  });
             });
+
             // - 修改：登出按钮事件 -
             const logoutBtnProfile = document.getElementById('logoutBtnProfile');
             if (logoutBtnProfile) {
                 logoutBtnProfile.addEventListener('click', function() {
                     console.log("Logout button clicked"); // 调试日志
-                    // if (!currentUser || !userToken) { // 检查是否已登录 - 现在只要 token 存在就可以尝试登出
-                    //      console.warn("Logout requested but user is not logged in.");
-                    //      // 仍然执行清理和UI更新
-                    // }
-                    // 尝试获取当前 token
-                    const tokenToUse = userToken || loadToken();
-                    if (!tokenToUse) {
-                         console.warn("Logout requested but no token found.");
-                         // 清理本地状态
-                         currentUser = null;
-                         userToken = null;
-                         clearToken();
-                         document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
-                         document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
-                         closeModal(profileModal);
-                         return;
+                    if (!currentUser || !userToken) { // 检查是否已登录
+                         console.warn("Logout requested but user is not logged in.");
+                         // 仍然执行清理和UI更新
                     }
-
                     // 向后端发送登出请求 (虽然JWT是无状态的，但后端可能需要记录或清理)
                     // 使用 fetch 发送登出请求，使用 Authorization 头携带 JWT Token
                     fetch(`${API_BASE_URL}/logout`, {
                         method: 'POST',
                         headers: {
-                            'Authorization': `Bearer ${tokenToUse}` // 关键：携带 Token
+                            'Authorization': `Bearer ${userToken}` // 关键：携带 Token
                             // 不再需要 credentials: 'include'
                         },
                         // credentials: 'include' // 移除
                     })
                     .then(response => {
                          console.log("Logout fetch response received:", response.status, response.statusText); // 调试日志
-                         // 无论后端响应如何，前端都应清理本地状态
-                         return response.json(); // 尝试解析，即使可能为空
+                         return response.json();
                     })
                     .then(data => {
+                        // 无论后端响应如何，前端都应清理本地状态
                         // 关键修改：清除本地存储的用户信息和 token
                         console.log("Logout response data:", data); // 调试日志
                         currentUser = null;
                         userToken = null;
-                        // --- 新增：清除 localStorage 中的 Token ---
-                        clearToken();
-                        // --- 新增结束 ---
                         // 可选：从 localStorage 移除 Token
                         // localStorage.removeItem('jwt_token_aliceskygarden');
+
                         // 更新 UI 回到未登录状态
                         document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
                         document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
+                        
                         // 关闭个人中心模态框
                         closeModal(profileModal);
+                        
                         // 可选：给出登出成功的提示
                         // alert(isEnglish ? "登出成功" : "Logged out successfully");
                         console.log("User logged out (frontend state cleared).");
@@ -1493,9 +1507,6 @@
                         // 即使后端请求失败，也应清理前端状态
                         currentUser = null;
                         userToken = null;
-                        // --- 新增：清除 localStorage 中的 Token ---
-                        clearToken();
-                        // --- 新增结束 ---
                         // localStorage.removeItem('jwt_token_aliceskygarden');
                         document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
                         document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
@@ -1507,7 +1518,10 @@
                  console.error("Logout Button (id='logoutBtnProfile') not found in the DOM!");
             }
             // - 修改结束：登出按钮事件 -
+
+
             // --- 确保以下模态框控制和事件绑定代码存在 ---
+
             // - 新增：打开登录模态框 -
             function openLoginModal() {
                 console.log("Attempting to open login modal"); // 调试日志
@@ -1518,6 +1532,7 @@
                     console.error("Login modal element not found!");
                 }
             }
+
             // - 新增：打开注册模态框 -
             function openRegisterModal() {
                 console.log("Attempting to open register modal"); // 调试日志
@@ -1528,6 +1543,7 @@
                     console.error("Register modal element not found!");
                 }
             }
+
             // - 新增：打开个人中心模态框 (如果需要) -
             function openProfileModal() {
                 console.log("Attempting to open profile modal"); // 调试日志
@@ -1540,6 +1556,7 @@
                     console.error("Profile modal element not found!");
                 }
             }
+
             // - 新增：关闭任意模态框 -
             function closeModal(modal) {
                 console.log("Attempting to close modal"); // 调试日志
@@ -1548,6 +1565,7 @@
                     console.log("Modal closed"); // 调试日志
                 }
             }
+
             // - 新增：点击模态框外部区域关闭 -
             window.addEventListener('click', function(event) {
                 if (event.target === loginModal) {
@@ -1560,6 +1578,7 @@
                     closeModal(profileModal);
                 }
             });
+
             // --- 事件监听器：绑定按钮点击事件 ---
             // 当点击顶部的登录/个人按钮时
             loginBtnNav.addEventListener('click', function() {
@@ -1572,19 +1591,21 @@
                     openLoginModal(); // 如果未登录，打开登录框
                 }
             });
+
             // 当在登录框内点击“立即注册”链接时
             showRegisterLink.addEventListener('click', function() {
                 console.log("'Show Register' link clicked"); // 调试日志
                 closeModal(loginModal); // 关闭登录框
                 openRegisterModal();   // 打开注册框
             });
+
             // 当在注册框内点击“立即登录”链接时
-            const showLoginLink = document.getElementById('showLoginLink');
             showLoginLink.addEventListener('click', function() {
                 console.log("'Show Login' link clicked"); // 调试日志
                 closeModal(registerModal); // 关闭注册框
                 openLoginModal();         // 打开登录框
             });
+
             // 点击登录模态框的关闭按钮 (x) 时
             const loginClose = loginModal.querySelector('.bubble-close');
             if (loginClose) {
@@ -1593,6 +1614,7 @@
                     closeModal(loginModal);
                 });
             }
+
             // 点击注册模态框的关闭按钮 (x) 时
             const registerClose = registerModal.querySelector('.bubble-close');
             if (registerClose) {
@@ -1601,6 +1623,7 @@
                     closeModal(registerModal);
                 });
             }
+
             // 点击个人中心模态框的关闭按钮 (x) 时
             const profileClose = profileModal.querySelector('.bubble-close');
             if (profileClose) {
@@ -1609,7 +1632,14 @@
                     closeModal(profileModal);
                 });
             }
+
             // --- 新增结束 ---
+
+
+
+
+
+
             const langBtn = document.getElementById('langBtn');
             const clearHistoryBtn = document.getElementById('clearHistoryBtn');
             const chatTitle = document.querySelector('.chat-title');
@@ -1641,11 +1671,13 @@
             const profileVipStatusText = document.getElementById('profileVipStatus').childNodes[0]; // 获取文本节点
             const rechargeBtnProfileText = document.getElementById('rechargeBtnProfileText');
             const logoutBtnProfileText = document.getElementById('logoutBtnProfileText');
+
             langBtn.addEventListener('click', function() {
                 isEnglish = !isEnglish;
                 const btnTextElements = document.querySelectorAll('.btn-text');
                 const uploadBtns = document.querySelectorAll('.upload-btn');
                 const agreementTextElements = document.querySelectorAll('.agreement-text');
+
                 if (isEnglish) {
                     btnTextElements[0].textContent = 'Log in'; // 登录按钮 (如果未登录)
                     btnTextElements[1].textContent = '中文';
@@ -1662,6 +1694,7 @@
                     copyrightText.textContent = "© 2025 AliceSkyGarden Technology. All rights reserved";
                     uploadBtns[0].title = "Upload Image";
                     uploadBtns[1].title = "Upload File";
+
                     // 更新模态框文本 (英文)
                     loginModalTitle.textContent = "Login";
                     registerModalTitle.textContent = "Register";
@@ -1674,14 +1707,25 @@
                     registerUsernameLabel.textContent = "Username:";
                     registerPasswordLabel.textContent = "Password:";
                     registerConfirmPasswordLabel.textContent = "Confirm Password:";
+
+                    // --- 新增：更新加载指示器文本 (英文) ---
+                    if (document.getElementById('loggingInText')) {
+                        document.getElementById('loggingInText').textContent = "Logging in...";
+                    }
+                    if (document.getElementById('registeringText')) {
+                        document.getElementById('registeringText').textContent = "Registering...";
+                    }
+
                     // 更新个人中心模态框文本 (英文)
                     profileModalTitle.textContent = "Profile";
                     profileVipStatusText.textContent = "VIP Status: ";
                     rechargeBtnProfileText.textContent = "Recharge/VIP";
                     logoutBtnProfileText.textContent = "Logout";
+
                     // 更新协议文本
                     document.querySelector('.cn-text').style.display = 'none';
                     document.querySelector('.en-text').style.display = 'inline';
+
                 } else {
                     btnTextElements[0].textContent = '登录'; // 登录按钮 (如果未登录)
                     btnTextElements[1].textContent = 'English';
@@ -1698,6 +1742,7 @@
                     copyrightText.textContent = "© 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved";
                     uploadBtns[0].title = "上传图片";
                     uploadBtns[1].title = "上传文件";
+
                     // 更新模态框文本 (中文)
                     loginModalTitle.textContent = "登录";
                     registerModalTitle.textContent = "注册";
@@ -1710,19 +1755,32 @@
                     registerUsernameLabel.textContent = "用户名:";
                     registerPasswordLabel.textContent = "密码:";
                     registerConfirmPasswordLabel.textContent = "确认密码:";
+
+                    // --- 新增：更新加载指示器文本 (中文) ---
+                    if (document.getElementById('loggingInText')) {
+                        document.getElementById('loggingInText').textContent = "正在登录...";
+                    }
+                    if (document.getElementById('registeringText')) {
+                        document.getElementById('registeringText').textContent = "正在注册...";
+                    }
+                    // --- 新增结束 --
+
                     // 更新个人中心模态框文本 (中文)
                     profileModalTitle.textContent = "个人中心";
                     profileVipStatusText.textContent = "VIP 状态: ";
                     rechargeBtnProfileText.textContent = "充值/VIP";
                     logoutBtnProfileText.textContent = "登出";
+
                     // 更新协议文本
                     document.querySelector('.en-text').style.display = 'none';
                     document.querySelector('.cn-text').style.display = 'inline';
                 }
+
                 // 更新用户信息显示区域的按钮文字 (如果已登录)
                 if (currentUser) {
                     document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = currentUser.username;
                 }
+
                 langBtn.classList.add('pulse');
                 setTimeout(() => {
                     langBtn.classList.remove('pulse');
@@ -1910,6 +1968,7 @@
                 const message = userInput.value.trim();
                 const imagesToSend = [...selectedImages];
                 const filesToSend = [...selectedFiles];
+                
                 // --- 修改逻辑：移除前端强制登录检查，允许未登录发送消息 ---
                 // if (!currentUser) {
                 //     alert(isEnglish ? "请先登录以发送消息。" : "Please log in to send a message.");
@@ -1917,6 +1976,7 @@
                 //     return; // 阻止发送
                 // }
                 // --- 修改逻辑结束 ---
+                
                 if (!message && imagesToSend.length === 0 && filesToSend.length === 0) return;
                 addMessage(message, true, [...imagesToSend, ...filesToSend]);
                 userInput.value = '';
@@ -1926,26 +1986,10 @@
                 showTyping();
                 sendButton.disabled = true;
                 try {
-                    // --- 新增：准备认证头 ---
-                    const headers = {
+                    let requestBody;
+                    let headers = {
                         'X-Session-ID': sessionId
                     };
-                    // 尝试获取 Token (优先使用内存中的，然后是存储的)
-                    const tokenToUse = userToken || loadToken();
-                    if (tokenToUse) {
-                        headers['Authorization'] = `Bearer ${tokenToUse}`;
-                        console.log("Adding Authorization header to chat request.");
-                    } else {
-                        console.log("No token available for chat request.");
-                    }
-                    // --- 新增结束 ---
-
-                    let requestBody;
-                    // 注意：这里不再直接设置 'Content-Type'，因为 multipart/form-data 需要浏览器自动设置边界
-                    // let headers = {
-                    //     'X-Session-ID': sessionId
-                    // };
-
                     if (imagesToSend.length > 0 || filesToSend.length > 0) {
                         const formData = new FormData();
                         if (message) {
@@ -1958,19 +2002,19 @@
                             formData.append('file', file, file.name);
                         });
                         requestBody = formData;
-                        // delete headers['Content-Type']; // 让浏览器设置 multipart/form-data - 这里 headers 已经在上面定义了
+                        delete headers['Content-Type']; // 让浏览器设置 multipart/form-data
                     } else {
                         requestBody = JSON.stringify({
                             message: message
                         });
-                        headers['Content-Type'] = 'application/json'; // 对于 JSON 请求体，需要设置 Content-Type
+                        headers['Content-Type'] = 'application/json';
                     }
-                    // --- 修改 fetch 调用以包含 Cookie/Session 和 Authorization ---
+                    // --- 修改 fetch 调用以包含 Cookie/Session ---
                     const response = await fetch(API_URL, {
                         method: 'POST',
-                        headers: headers, // 使用我们构建的 headers 对象
+                        headers: headers,
                         body: requestBody,
-                        // credentials: 'include' // JWT 通常不需要 Cookie，可以移除或保留，取决于后端是否也用了 Cookie
+                        credentials: 'include' // 重要：携带 Cookie/Session
                     });
                     // --- 修改结束 ---
                     if (!response.ok) {
@@ -2026,12 +2070,6 @@
                     sendMessage();
                 }
             });
-
-            // --- 新增：页面加载完成后尝试获取用户信息 ---
-            // 页面加载时获取用户信息 (这会检查 localStorage 中的 token)
-            fetchUserInfo();
-            // --- 新增结束 ---
-
             smartScroll();
         });
     </script>
