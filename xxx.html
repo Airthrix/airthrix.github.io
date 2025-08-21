@@ -2158,15 +2158,6 @@
                 chatMessages.appendChild(newInitialMessage);
 
 
-                const chatMessages = document.getElementById('chatMessages');
-                chatMessages.innerHTML = '';
-                const newInitialMessage = document.createElement('div');
-                newInitialMessage.classList.add('message', 'bot-message');
-                newInitialMessage.id = 'initialMessage'; // 确保 ID 一致
-                newInitialMessage.innerHTML = isEnglish ?
-                    "History cleared. New session started. <br>AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊<br><br>Now evolved into Multimodal Model: Supporting images, PDF, Word, tables, scripts, web pages, etc files input😊" :
-                    "历史已清除，开始新会话。<br>AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊<br><br>现已进化成多模态模型：支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊";
-                chatMessages.appendChild(newInitialMessage);
             });
             const chatMessages = document.getElementById('chatMessages');
             const userInput = document.getElementById('userInput');
