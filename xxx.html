@@ -1392,6 +1392,8 @@
                             pollIntervalId = null;
                             hideTyping();
 
+                            const imageMessageHtml = `<p>${isEnglish ? 'Generated Image for:' : '生成的图片：'}</p><p><em>${userInput.value}</em></p><img src="${data.image_url}" alt="Generated Image" style="max-width: 100%; border-radius: 10px; margin-top: 10px;">`;
+                            promptMessageDiv.innerHTML = imageMessageHtml;
                             // --- 新增：图片消息添加后立即保存聊天记录 ---
                             try {
                                 localStorage.setItem('aliceskygarden_chat_history', chatMessages.innerHTML);
