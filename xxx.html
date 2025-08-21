@@ -1459,46 +1459,27 @@
 
             // - 新增：获取用户信息并更新UI -
             function fetchUserInfo() {
-                console.log("--- fetchUserInfo called ---");
                 // --- 修改：首先尝试从 localStorage 恢复 Token ---
-                let storedToken = null;
-                try {
-                    storedToken = localStorage.getItem(JWT_TOKEN_KEY);
-                    console.log("Debug[fetchUserInfo]: Attempted to read token from localStorage. Result type:", typeof storedToken, "Length:", storedToken ? storedToken.length : 'N/A');
-                    // 打印 token 的一部分用于调试（确保不是敏感信息）
-                    console.log("Debug[fetchUserInfo]: Token prefix (if exists):", storedToken ? storedToken.substring(0, Math.min(10, storedToken.length)) + (storedToken.length > 10 ? "..." : "") : "null");
-                } catch (e) {
-                    console.error("Error[fetchUserInfo]: Failed to read token from localStorage:", e);
+                const storedToken = localStorage.getItem(JWT_TOKEN_KEY);
+                if (storedToken) {
+                    userToken = storedToken;
                 }
                 // --- 修改结束 ---
-
-                // 关键修改：明确检查 storedToken 是否为有效字符串
-                if (storedToken && typeof storedToken === 'string' && storedToken.length > 0) {
-                    userToken = storedToken;
-                    console.log("Debug[fetchUserInfo]: Valid token found in localStorage, proceeding to fetch user info from backend.");
-                } else {
-                    console.log("Debug[fetchUserInfo]: No valid token found in localStorage (value is null, undefined, or empty string).");
-                    // 如果没有 Token，直接将按钮设为登录状态并返回
+                // 如果没有 Token，直接将按钮设为登录状态并返回
+                if (!userToken) {
                     document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
                     document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
-                    console.log("--- fetchUserInfo finished (no token) ---");
                     return;
                 }
-
                 // 使用 JWT Token 获取用户信息
-                console.log("Debug[fetchUserInfo]: Sending request to /user_info with token...");
                 fetch(`${API_BASE_URL}/user_info`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${userToken}` // 关键：将 Token 放入 Authorization 头
                     }
                 })
-                .then(response => {
-                    console.log(`Debug[fetchUserInfo]: Received response from /user_info. Status: ${response.status}, StatusText: ${response.statusText}`);
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
-                    console.log("Debug[fetchUserInfo]: Parsed response data:", data);
                     if (data.username) {
                         // 获取成功，更新用户信息和UI
                         currentUser = data;
@@ -1506,75 +1487,37 @@
                         if (data.vip_status) {
                             document.getElementById('vipStatusText').textContent = isEnglish ? 'Yes' : '是';
                             document.getElementById('vipStatusText').style.color = 'gold';
-                            // - 新增：登录成功且是VIP，启用生成图片按钮 -
-                            if (generateImageBtn) {
-                                generateImageBtn.classList.remove('disabled-btn');
-                            }
-                            // - 新增结束 -
                         } else {
                             document.getElementById('vipStatusText').textContent = isEnglish ? 'No' : '否';
                             document.getElementById('vipStatusText').style.color = '#c0c0ff';
-                            // - 新增：登录成功但非VIP，禁用生成图片按钮 -
-                            if (generateImageBtn) {
-                                generateImageBtn.classList.add('disabled-btn');
-                            }
-                            // - 新增结束 -
                         }
                         // 更新顶部按钮为个人中心按钮
-                        // --- 修改：登录成功后缩小按钮上的用户名字体 ---
-                        const btnTextEl = document.getElementById('loginBtnNav').querySelector('.btn-text');
-                        btnTextEl.textContent = data.username;
-                        // 应用文本截断
-                        const truncatedUsername = truncateText(data.username, 3);
-                        btnTextEl.textContent = truncatedUsername;
-                        btnTextEl.style.whiteSpace = 'nowrap';
-                        btnTextEl.style.overflow = 'hidden';
-                        btnTextEl.style.textOverflow = 'ellipsis';
-                        // btnTextEl.style.maxWidth = '100px'; // 限制最大宽度以触发省略号 // 可能不需要，由 .nav-btn 控制
-                        // --- 修改结束 ---
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = data.username; // 显示用户名
                         document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user';
-                        console.log("Debug[fetchUserInfo]: User info fetched and UI updated successfully.");
+                        // --- 新增：登录成功后缩小按钮上的用户名字体 ---
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').style.whiteSpace = 'nowrap';
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').style.overflow = 'hidden';
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').style.textOverflow = 'ellipsis';
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').style.maxWidth = '100px'; // 限制最大宽度以触发省略号
+                        // --- 新增结束 ---
                     } else {
                         // Token 无效或过期，清除本地存储并更新UI
-                        console.warn('Debug[fetchUserInfo]: User info request failed or invalid token received from backend:', data.error);
+                        console.warn('User info request failed or invalid token:', data.error);
                         currentUser = null;
                         userToken = null; // 清除无效的 token
-                        try {
-                            localStorage.removeItem(JWT_TOKEN_KEY); // 清除 localStorage 中的 token
-                            console.log("Debug[fetchUserInfo]: Invalid token, removed from localStorage.");
-                        } catch (e) {
-                            console.error("Error[fetchUserInfo]: Failed to remove invalid token from localStorage:", e);
-                        }
+                        localStorage.removeItem(JWT_TOKEN_KEY); // 清除 localStorage 中的 token
                         document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
                         document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
-                        // - 新增：Token无效，禁用生成图片按钮 -
-                        if (generateImageBtn) {
-                            generateImageBtn.classList.add('disabled-btn');
-                        }
-                        // - 新增结束 -
                     }
                 })
                 .catch(error => {
-                    console.error('Debug[fetchUserInfo]: Error fetching user info (network or parsing issue):', error);
+                    console.error('获取用户信息失败 (可能未登录或Token无效):', error);
                     // 请求失败也认为未登录
                     currentUser = null;
                     userToken = null; // 清除可能有问题的 token
-                    try {
-                        localStorage.removeItem(JWT_TOKEN_KEY); // 清除 localStorage 中的 token
-                        console.log("Debug[fetchUserInfo]: Error occurred, removed token from localStorage.");
-                    } catch (e) {
-                        console.error("Error[fetchUserInfo]: Failed to remove token from localStorage after error:", e);
-                    }
+                    localStorage.removeItem(JWT_TOKEN_KEY); // 清除 localStorage 中的 token
                     document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
                     document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
-                     // - 新增：出错，禁用生成图片按钮 -
-                    if (generateImageBtn) {
-                        generateImageBtn.classList.add('disabled-btn');
-                    }
-                    // - 新增结束 -
-                })
-                .finally(() => {
-                    console.log("--- fetchUserInfo finished ---");
                 });
             }
             // 页面加载时获取用户信息
