@@ -1083,7 +1083,7 @@
                     <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt">
                     <!-- --- 新增：生成图片按钮 --- -->
                     <button id="generateImageBtn" class="upload-btn disabled-btn" title="生成图片 (VIP)">
-                        <span class="btn-content" style="display: flex; align-items: center; gap: 3px;"> <!-- 使用 flex 和 gap 控制间距 -->
+                        <span class="btn-content" style="display: flex; align-items: center; gap: 2px;"> <!-- 使用 flex 和 gap 控制间距 -->
                             <i class="fas fa-crown" style="font-size: 1rem;"></i> <!-- 图标 -->
                             <span id="generateImageBtnText" style="font-size: 1.0rem; color: #888888;">生图模式</span> <!-- 文字，初始为中文 -->
                         </span>
@@ -2135,10 +2135,25 @@
             clearHistoryBtn.addEventListener('click', function() {
                 sessionId = '';
                 localStorage.removeItem('chat_session_id');
+
+
+                // --- 修改：清除聊天记录并从 localStorage 中移除 ---
+                chatMessages.innerHTML = '';
+                try {
+                    localStorage.removeItem('aliceskygarden_chat_history'); // 关键修改
+                    console.log("Debug: Chat history removed from localStorage.");
+                } catch (e) {
+                    console.error("Error removing chat history from localStorage:", e);
+                }
+                // --- 修改结束 ---
+
+
                 const chatMessages = document.getElementById('chatMessages');
+                const newInitialMessage = document.createElement('div');
                 chatMessages.innerHTML = '';
                 const newInitialMessage = document.createElement('div');
                 newInitialMessage.classList.add('message', 'bot-message');
+                newInitialMessage.id = 'initialMessage'; // 确保 ID 一致
                 newInitialMessage.innerHTML = isEnglish ?
                     "History cleared. New session started. <br>AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊<br><br>Now evolved into Multimodal Model: Supporting images, PDF, Word, tables, scripts, web pages, etc files input😊" :
                     "历史已清除，开始新会话。<br>AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊<br><br>现已进化成多模态模型：支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊";
@@ -2256,6 +2271,17 @@
                 messageDiv.textContent = message;
                 chatMessages.appendChild(messageDiv);
                 smartScroll();
+
+                // --- 新增：保存聊天记录到 localStorage ---
+                try {
+                    localStorage.setItem('aliceskygarden_chat_history', chatMessages.innerHTML);
+                    console.log("Debug: Chat history saved to localStorage.");
+                } catch (e) {
+                    console.error("Error saving chat history to localStorage:", e);
+                    // 可选：如果存储失败（如空间不足），可以 alert 用户或采取其他措施
+                }
+                // --- 新增结束 ---
+
                 return messageDiv;
             }
             function showTyping() {
@@ -2283,7 +2309,7 @@
                     typingIndicator.remove();
                 }
             }
-            function typeWriter(messageDiv, fullText, speed = 5) {
+            function typeWriter(messageDiv, fullText, speed = 1) {
                 let i = 0;
                 const typingCursor = document.createElement('span');
                 typingCursor.classList.add('typing-cursor');
@@ -2306,6 +2332,16 @@
                         if (chatMessages.scrollHeight > chatMessages.clientHeight + 50) {
                             chatMessages.classList.add('expanded');
                         }
+
+                        // --- 新增：在打字动画完成后保存聊天记录 ---
+                        try {
+                            localStorage.setItem('aliceskygarden_chat_history', chatMessages.innerHTML);
+                            console.log("Debug: Chat history saved to localStorage after bot reply.");
+                        } catch (e) {
+                            console.error("Error saving chat history to localStorage after bot reply:", e);
+                        }
+                        // --- 新增结束 ---
+
                     }
                 }
                 type();
@@ -2477,6 +2513,36 @@
                 }
             });
             smartScroll();
+
+            // --- 新增：页面加载时恢复聊天记录 ---
+            function restoreChatHistory() {
+                try {
+                    const savedHistory = localStorage.getItem('aliceskygarden_chat_history');
+                    if (savedHistory) {
+                        chatMessages.innerHTML = savedHistory;
+                        console.log("Debug: Chat history restored from localStorage.");
+                        // 恢复后滚动到底部
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    } else {
+                        console.log("Debug: No chat history found in localStorage.");
+                    }
+                } catch (e) {
+                    console.error("Error restoring chat history from localStorage:", e);
+                    // 如果恢复失败，清空聊天区域，确保是干净的初始状态
+                    chatMessages.innerHTML = '';
+                    const newInitialMessage = document.createElement('div');
+                    newInitialMessage.classList.add('message', 'bot-message');
+                    newInitialMessage.id = 'initialMessage';
+                    newInitialMessage.innerHTML = isEnglish ?
+                        "History cleared. New session started. <br>AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊<br><br>Now evolved into Multimodal Model: Supporting images, PDF, Word, tables, scripts, web pages, etc files input😊" :
+                        "历史已清除，开始新会话。<br>AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊<br><br>现已进化成多模态模型：支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊";
+                    chatMessages.appendChild(newInitialMessage);
+                }
+            }
+            // 调用恢复函数
+            restoreChatHistory();
+            // --- 新增结束 ---
+
         });
     </script>
 </body>
