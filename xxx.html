@@ -1326,7 +1326,6 @@
                         generateImageBtn.title = isEnglish ? "Exit Image Generation Mode" : "退出图片生成模式";
                         // 可选：改变发送按钮文字以提示用户
                         sendButtonText.textContent = isEnglish ? "Generate Image" : "生成图片";
-                        console.log("Image generation mode activated.");
                     } else {
                         // 退出图片生成模式
                         generateImageBtn.classList.add('disabled-btn');
@@ -1338,7 +1337,6 @@
                         sendButtonText.textContent = isEnglish ? 'Send' : '发送';
                         // 停止任何正在进行的轮询
                         stopPolling();
-                        console.log("Image generation mode deactivated.");
                     }
                 });
             } else {
@@ -1350,7 +1348,6 @@
                  if (pollIntervalId) {
                      clearInterval(pollIntervalId);
                      pollIntervalId = null;
-                     console.log("Stopped polling for image task.");
                  }
                  currentTaskId = null;
             }
@@ -1397,7 +1394,6 @@
                             // --- 新增：图片消息添加后立即保存聊天记录 ---
                             try {
                                 localStorage.setItem('aliceskygarden_chat_history', chatMessages.innerHTML);
-                                console.log("Debug: Chat history (including new image) saved to localStorage.");
                             } catch (e) {
                                 console.error("Error saving chat history (including new image) to localStorage:", e);
                             }
@@ -1418,7 +1414,6 @@
                             sendButton.disabled = false;
                         } else if (data.status === 'RUNNING' || data.status === 'PENDING') {
                             // 仍在进行中，继续轮询
-                            console.log(`Polling attempt ${attempts}: Task ${taskId} is ${data.status}`);
                         } else {
                              clearInterval(pollIntervalId);
                              pollIntervalId = null;
@@ -1689,7 +1684,6 @@
             const registerSubmitBtn = document.getElementById('registerSubmitBtn');
             if (registerSubmitBtn) { // 确保元素存在再添加监听器
                 registerSubmitBtn.addEventListener('click', function() {
-                    console.log("Register Submit button clicked"); // 调试日志
                     const username = document.getElementById('registerUsername').value.trim(); // 建议加上 .trim()
                     const countryCode = document.getElementById('registerCountryCode').value;
                     const phone = document.getElementById('registerPhone').value.trim();
@@ -1728,11 +1722,9 @@
                         // credentials: 'include' // 移除
                     })
                     .then(response => {
-                        console.log("Register fetch response received:", response.status, response.statusText); // 调试日志
                         return response.json();
                     })
                     .then(data => {
-                        console.log("Register response ", data); // 调试日志
                         if (data.error) {
                             // --- 修改：添加英文翻译 ---
                             let errorMessage = data.error;
@@ -1833,7 +1825,6 @@
             const logoutBtnProfile = document.getElementById('logoutBtnProfile');
             if (logoutBtnProfile) {
                 logoutBtnProfile.addEventListener('click', function() {
-                    console.log("Logout button clicked"); // 调试日志
                     if (!currentUser || !userToken) { // 检查是否已登录
                          console.warn("Logout requested but user is not logged in.");
                          // 仍然执行清理和UI更新
@@ -1849,13 +1840,11 @@
                         // credentials: 'include' // 移除
                     })
                     .then(response => {
-                         console.log("Logout fetch response received:", response.status, response.statusText); // 调试日志
                          return response.json();
                     })
                     .then(data => {
                         // 无论后端响应如何，前端都应清理本地状态
                         // 关键修改：清除本地存储的用户信息和 token
-                        console.log("Logout response ", data); // 调试日志
                         currentUser = null;
                         userToken = null;
                         // --- 修改：从 localStorage 移除 Token ---
@@ -1868,7 +1857,6 @@
                         closeModal(profileModal);
                         // 可选：给出登出成功的提示
                         // alert(isEnglish ? "Logged out successfully" : "登出成功");
-                        console.log("User logged out (frontend state cleared).");
                     })
                     .catch(error => {
                         console.error('登出请求失败 (但前端状态已清理):', error);
@@ -1900,36 +1888,30 @@
             // --- 确保以下模态框控制和事件绑定代码存在 ---
             // - 新增：打开登录模态框 -
             function openLoginModal() {
-                console.log("Attempting to open login modal"); // 调试日志
                 // --- 新增：打开前清空状态 ---
                 clearLoginModalState();
                 // --- 新增结束 ---
                 if (loginModal) {
                     loginModal.style.display = 'block';
-                    console.log("Login modal opened"); // 调试日志
                 } else {
                     console.error("Login modal element not found!");
                 }
             }
             // - 新增：打开注册模态框 -
             function openRegisterModal() {
-                console.log("Attempting to open register modal"); // 调试日志
                 // --- 新增：打开前清空状态 ---
                 clearRegisterModalState();
                 // --- 新增结束 ---
                 if (registerModal) {
                     registerModal.style.display = 'block';
-                    console.log("Register modal opened"); // 调试日志
                 } else {
                     console.error("Register modal element not found!");
                 }
             }
             // - 新增：打开个人中心模态框 (如果需要) -
             function openProfileModal() {
-                console.log("Attempting to open profile modal"); // 调试日志
                 if (profileModal) {
                     profileModal.style.display = 'block';
-                    console.log("Profile modal opened"); // 调试日志
                     // 可以在这里更新个人中心里的信息，如果需要的话
                     // 例如：document.getElementById('profileUsername').textContent = currentUser?.username || 'Guest';
                 } else {
@@ -1938,10 +1920,8 @@
             }
             // - 新增：关闭任意模态框 -
             function closeModal(modal) {
-                console.log("Attempting to close modal"); // 调试日志
                 if (modal) {
                     modal.style.display = 'none';
-                    console.log("Modal closed"); // 调试日志
                 }
             }
             // - 新增：点击模态框外部区域关闭 -
@@ -1959,25 +1939,20 @@
             // --- 事件监听器：绑定按钮点击事件 ---
             // 当点击顶部的登录/个人按钮时
             loginBtnNav.addEventListener('click', function() {
-                console.log("Login/Profile button clicked"); // 调试日志
                 if (currentUser) {
-                    console.log("User is logged in, opening profile modal"); // 调试日志
                     openProfileModal(); // 如果已登录，打开个人中心
                 } else {
-                    console.log("User is NOT logged in, opening login modal"); // 调试日志
                     openLoginModal(); // 如果未登录，打开登录框
                 }
             });
             // 当在登录框内点击“立即注册”链接时
             showRegisterLink.addEventListener('click', function() {
-                console.log("'Show Register' link clicked"); // 调试日志
                 closeModal(loginModal); // 关闭登录框
                 openRegisterModal();   // 打开注册框
             });
             // 当在注册框内点击“立即登录”链接时
             if (showLoginLink) { // 确保元素存在
                 showLoginLink.addEventListener('click', function() {
-                    console.log("'Show Login' link clicked"); // 调试日志
                     closeModal(registerModal); // 关闭注册框
                     openLoginModal();         // 打开登录框
                 });
@@ -1986,7 +1961,6 @@
             const loginClose = loginModal.querySelector('.bubble-close');
             if (loginClose) {
                 loginClose.addEventListener('click', function() {
-                    console.log("Login modal close button clicked"); // 调试日志
                     closeModal(loginModal);
                 });
             }
@@ -1994,7 +1968,6 @@
             const registerClose = registerModal.querySelector('.bubble-close');
             if (registerClose) {
                 registerClose.addEventListener('click', function() {
-                    console.log("Register modal close button clicked"); // 调试日志
                     closeModal(registerModal);
                 });
             }
@@ -2002,7 +1975,6 @@
             const profileClose = profileModal.querySelector('.bubble-close');
             if (profileClose) {
                 profileClose.addEventListener('click', function() {
-                    console.log("Profile modal close button clicked"); // 调试日志
                     closeModal(profileModal);
                 });
             }
@@ -2152,7 +2124,6 @@
                 chatMessages.innerHTML = '';
                 try {
                     localStorage.removeItem('aliceskygarden_chat_history'); // 关键修改
-                    console.log("Debug: Chat history removed from localStorage.");
                 } catch (e) {
                     console.error("Error removing chat history from localStorage:", e);
                 }
@@ -2286,7 +2257,6 @@
                 // --- 新增：保存聊天记录到 localStorage ---
                 try {
                     localStorage.setItem('aliceskygarden_chat_history', chatMessages.innerHTML);
-                    console.log("Debug: Chat history saved to localStorage.");
                 } catch (e) {
                     console.error("Error saving chat history to localStorage:", e);
                     // 可选：如果存储失败（如空间不足），可以 alert 用户或采取其他措施
@@ -2347,7 +2317,6 @@
                         // --- 新增：在打字动画完成后保存聊天记录 ---
                         try {
                             localStorage.setItem('aliceskygarden_chat_history', chatMessages.innerHTML);
-                            console.log("Debug: Chat history saved to localStorage after bot reply.");
                         } catch (e) {
                             console.error("Error saving chat history to localStorage after bot reply:", e);
                         }
@@ -2381,7 +2350,6 @@
                          return;
                     }
 
-                    console.log("Sending request to generate image with description:", message);
                     showTyping(); // 显示“正在连接”指示器
                     sendButton.disabled = true;
 
@@ -2412,7 +2380,6 @@
                         const taskId = data.task_id;
 
                         if (taskId) {
-                            console.log("Image generation task started with ID:", taskId);
                             // 开始轮询获取结果
                             pollForImage(taskId, promptMessageDiv);
                         } else {
@@ -2531,11 +2498,9 @@
                     const savedHistory = localStorage.getItem('aliceskygarden_chat_history');
                     if (savedHistory) {
                         chatMessages.innerHTML = savedHistory;
-                        console.log("Debug: Chat history restored from localStorage.");
                         // 恢复后滚动到底部
                         chatMessages.scrollTop = chatMessages.scrollHeight;
                     } else {
-                        console.log("Debug: No chat history found in localStorage.");
                     }
                 } catch (e) {
                     console.error("Error restoring chat history from localStorage:", e);
