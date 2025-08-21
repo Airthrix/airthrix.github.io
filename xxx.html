@@ -120,6 +120,7 @@
             cursor: pointer;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 0.3rem;
             padding: 0.7rem 1.2rem;
             border-radius: 30px;
@@ -129,7 +130,7 @@
             backdrop-filter: blur(5px);
             background: rgba(15, 15, 40, 0.4);
             overflow: hidden;
-            max-width: 110px; /* 关键：设置最大宽度，确保3个字符能被截断 */
+            max-width: 130px; /* 关键：设置最大宽度，确保3个字符能被截断 */
             z-index: 10;
         }
         .nav-btn::after {
@@ -334,9 +335,6 @@
             border-radius: 6px;
         }
         .message {
-            width: 100%;
-            max-width: 100% !important; 
-            margin: 0;
             padding: 0.8rem 1.2rem;
             border-radius: 18px;
             word-wrap: break-word;
@@ -439,7 +437,7 @@
         .chat-input {
             flex-grow: 1;
             padding: 1rem;
-            padding-right: 60px;
+            padding-right: 1rem;
             border-radius: 30px;
             border: 1px solid rgba(0, 243, 255, 0.3);
             background: rgba(10, 10, 25, 0.5);
