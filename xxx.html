@@ -129,7 +129,8 @@
             backdrop-filter: blur(5px);
             background: rgba(15, 15, 40, 0.4);
             overflow: hidden;
-            max-width: 125px; /* 关键：设置最大宽度，确保3个字符能被截断 */
+            max-width: 110px; /* 关键：设置最大宽度，确保3个字符能被截断 */
+            z-index: 10;
         }
         .nav-btn::after {
             content: none;
@@ -284,7 +285,7 @@
             border-top: 3px solid var(--neon-blue);
             position: relative;
             z-index: 10;
-            width: 80%;
+            width: 100%;
             max-width: 1200px;
             margin-left: auto;
             margin-right: auto;
