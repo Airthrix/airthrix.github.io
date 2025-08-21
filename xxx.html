@@ -890,6 +890,10 @@
             box-shadow: 0 0 10px var(--neon-green), inset 0 0 5px rgba(0, 255, 157, 0.3) !important;
             opacity: 1 !important;
             cursor: pointer !important;
+            /* 确保按钮内容区域也适应 flex 布局 */
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important; /* 如果希望内容居中 */
         }
         .active-image-mode:hover {
             background-image: linear-gradient(90deg, var(--neon-green), var(--neon-blue)) !important;
@@ -1079,8 +1083,10 @@
                     <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt">
                     <!-- --- 新增：生成图片按钮 --- -->
                     <button id="generateImageBtn" class="upload-btn disabled-btn" title="生成图片 (VIP)">
-                        <span><i class="fas fa-crown"></i></span>
-                        <span style="font-size: 1.0rem; color: #888888; margin-left: 5px;">生图模式</span>
+                        <span class="btn-content" style="display: flex; align-items: center; gap: 4px;"> <!-- 使用 flex 和 gap 控制间距 -->
+                            <i class="fas fa-crown" style="font-size: 1rem;"></i> <!-- 图标 -->
+                            <span id="generateImageBtnText" style="font-size: 0.9rem; color: #888888;">生图模式</span> <!-- 文字，初始为中文 -->
+                        </span>
                     </button>
                     <!-- --- 新增结束 --- -->
                     <button id="sendButton" class="chat-send-btn">
@@ -2080,6 +2086,12 @@
                     // 更新协议文本
                     document.querySelector('.cn-text').style.display = 'none';
                     document.querySelector('.en-text').style.display = 'inline';
+                    // - 新增：设置“生图模式”按钮为英文 -
+                    if (document.getElementById('generateImageBtnText')) {
+                        document.getElementById('generateImageBtnText').textContent = 'Img Mode';
+                    }
+                    // - 新增结束 -
+
                 } else {
                     btnTextElements[0].textContent = '登录'; // 登录按钮 (如果未登录)
                     btnTextElements[1].textContent = 'English';
@@ -2099,6 +2111,11 @@
                     // 更新协议文本
                     document.querySelector('.en-text').style.display = 'none';
                     document.querySelector('.cn-text').style.display = 'inline';
+                    // - 新增：设置“生图模式”按钮为中文 -
+                    if (document.getElementById('generateImageBtnText')) {
+                        document.getElementById('generateImageBtnText').textContent = '生图模式';
+                    }
+                    // - 新增结束 -
                 }
                 // --- 新增：语言切换时更新模态框文本 ---
                 updateModalTexts();
