@@ -1391,7 +1391,16 @@
                             clearInterval(pollIntervalId);
                             pollIntervalId = null;
                             hideTyping();
-                            promptMessageDiv.innerHTML = `<p>${isEnglish ? 'Generated Image for:' : '生成的图片：'}</p><p><em>${userInput.value}</em></p><img src="${data.image_url}" alt="Generated Image" style="max-width: 100%; border-radius: 10px; margin-top: 10px;">`;
+
+                            // --- 新增：图片消息添加后立即保存聊天记录 ---
+                            try {
+                                localStorage.setItem('aliceskygarden_chat_history', chatMessages.innerHTML);
+                                console.log("Debug: Chat history (including new image) saved to localStorage.");
+                            } catch (e) {
+                                console.error("Error saving chat history (including new image) to localStorage:", e);
+                            }
+                            // --- 新增结束 ---
+
                             sendButton.disabled = false;
                             userInput.value = ''; // 清空输入框
                             // 可选：生成后自动退出图片模式
