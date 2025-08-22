@@ -1639,6 +1639,11 @@
                              }
                         };
                         // - 修改结束 -
+
+                       // - 新增：更新个人中心显示的次数 -
+                       updateProfileCounts(currentUser.counts);
+                       // - 新增结束 -
+
                         // - 修改：将 Token 存入 localStorage -
                         localStorage.setItem(JWT_TOKEN_KEY, userToken);
                         // - 修改结束 -
