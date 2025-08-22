@@ -1394,6 +1394,10 @@
                             pollIntervalId = null;
                             hideTyping();
 
+                            // --- 新增：图片获取成功后，更新用户信息（次数） ---
+                            fetchUserInfo().catch(e => console.error("Failed to fetch user info after image success:", e));
+                            // --- 新增结束 ---
+
                             const imageMessageHtml = `<p>${isEnglish ? 'Generated Image for:' : '生成的图片：'}</p><p><em>${userInput.value}</em></p><img src="${data.image_url}" alt="Generated Image" style="max-width: 100%; border-radius: 10px; margin-top: 10px;">`;
                             promptMessageDiv.innerHTML = imageMessageHtml;
                             // --- 新增：图片消息添加后立即保存聊天记录 ---
@@ -2528,11 +2532,6 @@
 
                         if (taskId) {
                             console.log("Image generation task started with ID:", taskId);
-
-                            // --- 新增：图片任务已启动，立即获取并更新用户信息（次数） ---
-                            // 因为后端在创建任务时已经扣减了次数，我们前端需要同步更新显示
-                            //fetchUserInfo().catch(e => console.error("Failed to fetch user info after image task start:", e));
-                            // --- 新增结束 ---
 
                             // 开始轮询获取结果
                             pollForImage(taskId, promptMessageDiv);
