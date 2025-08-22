@@ -1517,6 +1517,18 @@
                         console.log('[DEBUG] updateProfileCounts called in fetchUserInfo');
                         // - 新增结束 -
 
+
+                        // --- 新增：刷新页面后，根据最新次数启用/禁用生图按钮 ---
+                        if (generateImageBtn) {
+                            if ((currentUser.counts.image_count || 0) > 0) {
+                                generateImageBtn.classList.remove('disabled-btn');
+                            } else {
+                                generateImageBtn.classList.add('disabled-btn');
+                            }
+                        }
+                        // --- 新增结束 ---
+
+
                         // 获取成功，更新用户信息和UI
                         currentUser = data;
                         document.getElementById('profileUsername').textContent = data.username;
