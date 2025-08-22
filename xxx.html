@@ -1497,7 +1497,6 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('[DEBUG] Fetch user info response data:', data); // <--- 添加这个
                     if (data.username) {
                         // 获取成功，更新用户信息和UI
                         currentUser = data;
@@ -1608,6 +1607,7 @@
                 })
                 .then(response => response.json())
                 .then(data => {
+                    console.log('[DEBUG] Fetch user info response data:', data); // <--- 正确位置
                     if (data.error) {
                         document.getElementById('loginError').textContent = isEnglish ? (data.error.includes('用户名或密码错误') ? 'Incorrect username or password' : data.error) : data.error; // 后端返回的错误信息
                         document.getElementById('loginError').style.display = 'block';
@@ -1639,15 +1639,19 @@
 
 
                         // 直接将 data 中的字段赋值给 currentUser
+                        // 更新全局用户信息
                         currentUser = {
-                            username: data.username || '', // 提供默认值
-                            image_count: (data.image_count !== undefined) ? data.image_count : 0, // 更严格的检查
-                            ppt_count: (data.ppt_count !== undefined) ? data.ppt_count : 0,
-                            word_count: (data.word_count !== undefined) ? data.word_count : 0,
-                            pdf_count: (data.pdf_count !== undefined) ? data.pdf_count : 0
+                            username: data.username,
+                            counts: {
+                                image_count: data.image_count || 0,
+                                ppt_count: data.ppt_count || 0,
+                                word_count: data.word_count || 0,
+                                pdf_count: data.pdf_count || 0
+                            }
                         };
-                        // 传入 currentUser 对象本身
-                        updateProfileCounts(currentUser);
+
+                        // - 新增：更新个人中心显示的次数 -
+                        updateProfileCounts(currentUser.counts);
 
 
                         // - 修改：将 Token 存入 localStorage -
