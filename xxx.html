@@ -2138,10 +2138,7 @@
                     "History cleared. New session started. <br>AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊<br><br>Now evolved into Multimodal Model: Supporting images, PDF, Word, tables, scripts, web pages, etc files input😊" :
                     "历史已清除，开始新会话。<br>AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊<br><br>现已进化成多模态模型：支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊";
                 chatMessages.appendChild(newInitialMessage);
-                // --- 新增开始 ---
-                // 清除历史并添加了新的初始消息后，也确保添加隐藏的欢迎消息
-                ensureHiddenWelcomeMessageAtTop();
-                // --- 新增结束 ---
+
 
             });
             const chatMessages = document.getElementById('chatMessages');
@@ -2496,38 +2493,6 @@
             });
             smartScroll();
 
-
-
-
-            // 辅助函数：确保隐藏的欢迎消息始终是第一条（位于最顶端）
-            function ensureHiddenWelcomeMessageAtTop() {
-                const HIDDEN_WELCOME_ID = 'hiddenWelcomeMessage_AS'; // 使用唯一 ID
-                let hiddenWelcomeMessage = document.getElementById(HIDDEN_WELCOME_ID);
-
-                // 1. 如果消息不存在，则创建它
-                if (!hiddenWelcomeMessage) {
-                    hiddenWelcomeMessage = document.createElement('div');
-                    hiddenWelcomeMessage.id = HIDDEN_WELCOME_ID;
-                    hiddenWelcomeMessage.classList.add('message', 'bot-message');
-                    hiddenWelcomeMessage.style.display = 'none'; // 确保隐藏
-                    hiddenWelcomeMessage.textContent = isEnglish ? "I am AliceSkyGarden green multimodal AI model, a model that adopts an advanced ternary sparse activation architecture. Yicong Qian created me. What can I help you with?" : "我是AliceSkyGarden绿色AI多模态模型，一个采用先进的三元稀疏激活架构的模型，Yicong Qian创造了我。有什么需要帮忙吗😊";
-                }
-
-                // 2. 确保它是 chatMessages 的第一个子元素
-                if (chatMessages.firstChild !== hiddenWelcomeMessage) {
-                    // 先从其当前父节点中移除（如果它已经在 DOM 中）
-                    if (hiddenWelcomeMessage.parentNode) {
-                        hiddenWelcomeMessage.parentNode.removeChild(hiddenWelcomeMessage);
-                    }
-                    // 然后插入到最前面
-                    chatMessages.insertBefore(hiddenWelcomeMessage, chatMessages.firstChild);
-                }
-                // 如果它已经是第一个子元素且存在，则无需操作
-            }
-            // --- 新增结束 ---
-
-
-
             // --- 新增：页面加载时恢复聊天记录 ---
             function restoreChatHistory() {
                 try {
@@ -2550,7 +2515,6 @@
                         "历史已清除，开始新会话。<br>AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊<br><br>现已进化成多模态模型：支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊";
                     chatMessages.appendChild(newInitialMessage);
                 }
-                ensureHiddenWelcomeMessageAtTop();
             }
             // 调用恢复函数
             restoreChatHistory();
