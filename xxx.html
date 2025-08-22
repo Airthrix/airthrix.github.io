@@ -1530,8 +1530,10 @@
                         // --- 新增：刷新页面后，根据最新次数启用/禁用生图按钮 ---
                         if (generateImageBtn) {
                             if ((currentUser.counts.image_count || 0) > 0) {
+                                console.log('[DEBUG] Enabling generateImageBtn based on image_count:', currentUser.counts.image_count);
                                 generateImageBtn.classList.remove('disabled-btn');
                             } else {
+                                console.log('[DEBUG] Enabling generateImageBtn based on image_count:', currentUser.counts.image_count);
                                 generateImageBtn.classList.add('disabled-btn');
 
                                 // --- 新增：如果次数为0，同时退出激活状态 ---
