@@ -1933,8 +1933,10 @@
                 if (wordCountText) wordCountText.textContent = userCounts.word_count || 0;
                 if (pdfCountText) pdfCountText.textContent = userCounts.pdf_count || 0;
 
-                // 更新标签文字（如果需要更动态的翻译，可以在这里处理）
-                if (imageCountLabel) imageCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining HD Image Generations: " : "剩余生成 HD超清图片 次数: ";
+                // 安全地更新标签文字
+                if (imageCountLabel && imageCountLabel.childNodes && imageCountLabel.childNodes.length > 0) {
+                    imageCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining HD Image Generations: " : "剩余生成 HD超清图片 次数: ";
+                }
                 if (pptCountLabel) pptCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining PPT Generations: " : "剩余生成 PPT文件 次数: ";
                 if (wordCountLabel) wordCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining Word Generations: " : "剩余生成 Word文件 次数: ";
                 if (pdfCountLabel) pdfCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining PDF Generations: " : "剩余生成 PDF文件 次数: ";
