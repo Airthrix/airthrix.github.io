@@ -1521,8 +1521,10 @@
                         // --- 新增：刷新页面后，根据最新次数启用/禁用生图按钮 ---
                         if (generateImageBtn) {
                             if ((currentUser.counts.image_count || 0) > 0) {
+                                console.log('[DEBUG] Enabling generateImageBtn based on image_count:', currentUser.counts.image_count);
                                 generateImageBtn.classList.remove('disabled-btn');
                             } else {
+                                console.log('[DEBUG] Disabling generateImageBtn based on image_count:', currentUser.counts.image_count);
                                 generateImageBtn.classList.add('disabled-btn');
                             }
                         }
@@ -1530,7 +1532,6 @@
 
 
                         // 获取成功，更新用户信息和UI
-                        currentUser = data;
                         document.getElementById('profileUsername').textContent = data.username;
                         // 更新顶部按钮为个人中心按钮
                         document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = data.username; // 显示用户名
