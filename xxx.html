@@ -1394,11 +1394,6 @@
                             pollIntervalId = null;
                             hideTyping();
 
-                            // ... (添加图片到聊天记录)
-                            sendButton.disabled = false;
-                            // --- 新增：图片获取成功后，更新用户信息（次数） ---
-                            fetchUserInfo().catch(e => console.error("Failed to fetch user info after image success:", e));
-                            // --- 新增结束 ---
 
                             const imageMessageHtml = `<p>${isEnglish ? 'Generated Image for:' : '生成的图片：'}</p><p><em>${userInput.value}</em></p><img src="${data.image_url}" alt="Generated Image" style="max-width: 100%; border-radius: 10px; margin-top: 10px;">`;
                             promptMessageDiv.innerHTML = imageMessageHtml;
