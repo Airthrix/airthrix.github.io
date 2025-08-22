@@ -1636,21 +1636,19 @@
 
                         // 关键修改：登录成功后，保存 JWT Token 和用户信息
                         userToken = data.token; // 从后端响应中获取 token
-                        // - 修改：保存更多用户信息，包括次数 -
+
+
+                        // 直接将 data 中的字段赋值给 currentUser
                         currentUser = {
                             username: data.username,
-                            counts: {
-                                image_count: data.image_count || 0,
-                                ppt_count: data.ppt_count || 0,
-                                word_count: data.word_count || 0,
-                                pdf_count: data.pdf_count || 0
-                             }
+                            image_count: data.image_count || 0,
+                            ppt_count: data.ppt_count || 0,
+                            word_count: data.word_count || 0,
+                            pdf_count: data.pdf_count || 0
                         };
-                        // - 修改结束 -
+                        // 传入 currentUser 对象本身
+                        updateProfileCounts(currentUser);
 
-                       // - 新增：更新个人中心显示的次数 -
-                       updateProfileCounts(currentUser.counts);
-                       // - 新增结束 -
 
                         // - 修改：将 Token 存入 localStorage -
                         localStorage.setItem(JWT_TOKEN_KEY, userToken);
