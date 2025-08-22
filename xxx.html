@@ -1237,7 +1237,12 @@
             </div>
             <div class="profile-info">
                 <h3 id="profileUsername">用户名</h3>
-                <p id="profileVipStatus">VIP 状态: <span id="vipStatusText">否</span></p>
+                <!-- - 新增：剩余次数显示 - -->
+                <p id="profileImageCount">剩余生成 HD超清图片 次数: <span id="imageCountText">0</span></p>
+                <p id="profilePPTCount">剩余生成 PPT文件 次数: <span id="pptCountText">0</span></p>
+                <p id="profileWordCount">剩余生成 Word文件 次数: <span id="wordCountText">0</span></p>
+                <p id="profilePDFCount">剩余生成 PDF文件 次数: <span id="pdfCountText">0</span></p>
+                <!-- - 新增结束 - -->
             </div>
             <div class="profile-actions">
                 <button id="rechargeBtnProfile" class="profile-btn vip">
@@ -1302,15 +1307,16 @@
 
             if (generateImageBtn) {
                 generateImageBtn.addEventListener('click', function() {
-                    // 1. 检查用户是否登录且为 VIP
+                    // 1. 检查用户是否登录
                     if (!currentUser) {
                         // 用户未登录，直接打开登录窗口
                         openLoginModal();
                         return;
                     }
-                    // 如果用户已登录但不是VIP，弹出中文报警
-                    if (!currentUser.vip_status) {
-                        alert(isEnglish ? "此功能为VIP专享，请先开通VIP。" : "此功能为VIP专享，请先开通VIP。");
+                    // 2. 检查用户是否有剩余图片生成次数
+                    const imageCount = (currentUser.counts && currentUser.counts.image_count) || 0;
+                    if (imageCount <= 0) {
+                        alert(isEnglish ? "The number of Image Generated is insufficient. Please donate to obtain more times" : "图片生成次数不足，请通过捐款获取更多次数");
                         return;
                     }
 
@@ -1332,7 +1338,7 @@
                         // --- 修改：移除激活状态类 ---
                         generateImageBtn.classList.remove('active-image-mode');
                         // --- 修改结束 ---
-                        generateImageBtn.title = isEnglish ? "Generate Image (VIP)" : "生成图片 (VIP)";
+                        generateImageBtn.title = isEnglish ? "Generate Image(Sufficient remaining times are required)" : "生成图片(需要有充足的剩余次数)";
                         // 恢复发送按钮文字
                         sendButtonText.textContent = isEnglish ? 'Send' : '发送';
                         // 停止任何正在进行的轮询
@@ -1631,29 +1637,40 @@
 
                         // 关键修改：登录成功后，保存 JWT Token 和用户信息
                         userToken = data.token; // 从后端响应中获取 token
-                        currentUser = { username: data.username, vip_status: data.vip_status }; // 保存用户信息
-                        // --- 修改：将 Token 存入 localStorage ---
+                        // - 修改：保存更多用户信息，包括次数 -
+                        currentUser = {
+                            username: data.username,
+                            // vip_status: data.vip_status, // 移除 VIP 状态
+                            counts: {
+                                image_count: data.image_count || 0,
+                                ppt_count: data.ppt_count || 0,
+                                word_count: data.word_count || 0,
+                                pdf_count: data.pdf_count || 0
+                             }
+                        };
+                        // - 修改结束 -
+                        // - 修改：将 Token 存入 localStorage -
                         localStorage.setItem(JWT_TOKEN_KEY, userToken);
-                        // --- 修改结束 ---
+                        // - 修改结束 -
+
                         // 更新UI
                         document.getElementById('profileUsername').textContent = data.username;
-                        if (data.vip_status) {
-                            document.getElementById('vipStatusText').textContent = isEnglish ? 'Yes' : '是';
-                            document.getElementById('vipStatusText').style.color = 'gold';
-                            // --- 新增：登录成功且是VIP，启用生成图片按钮 ---
-                            if (generateImageBtn) {
-                                 generateImageBtn.classList.remove('disabled-btn');
+                        // - 修改：更新次数显示 -
+                        updateProfileCounts(currentUser.counts);
+                        // - 修改结束 -
+
+                        // - 修改：根据图片生成次数启用/禁用生图按钮 -
+                        if (generateImageBtn) {
+                            if ((currentUser.counts.image_count || 0) > 0) {
+                                generateImageBtn.classList.remove('disabled-btn');
+                            } else {
+                                generateImageBtn.classList.add('disabled-btn');
                             }
-                            // --- 新增结束 ---
-                        } else {
-                            document.getElementById('vipStatusText').textContent = isEnglish ? 'No' : '否';
-                            document.getElementById('vipStatusText').style.color = '#c0c0ff';
-                            // --- 新增：登录成功但非VIP，禁用生成图片按钮 ---
-                            if (generateImageBtn) {
-                                 generateImageBtn.classList.add('disabled-btn');
-                            }
-                    // --- 新增结束 ---
                         }
+                        // - 修改结束 -
+
+
+
                         // 更新顶部按钮为个人中心按钮
                         document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = data.username;
                         document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user';
@@ -1758,6 +1775,9 @@
                                  closeModal(registerModal);
                                 //document.getElementById('loginUsername').value = username;
                                 //document.getElementById('loginPassword').value = password;
+                                // - 修改：自动登录时填充用户名 -
+                                document.getElementById('loginUsername').value = username;
+                                // - 修改结束 -
                                  openLoginModal(); // 打开登录框并填充用户名密码
                             }, 1500); // 1.5秒后恢复并执行后续操作
                             // --- 新增结束 ---
@@ -1885,6 +1905,52 @@
                  console.error("Logout Button (id='logoutBtnProfile') not found in the DOM!");
             }
             // - 修改结束：登出按钮事件 -
+
+
+
+
+            // - 新增：捐款按钮事件 -
+            const donateBtnProfile = document.getElementById('donateBtnProfile');
+            if (donateBtnProfile) {
+                donateBtnProfile.addEventListener('click', function() {
+                    alert(isEnglish ? "Donation function is under development." : "捐款功能正在开发中。");
+                    // closeModal(profileModal); // 如果点击后需要关闭模态框，取消注释
+                });
+            } else {
+                console.error("Donate Button (id='donateBtnProfile') not found in the DOM!");
+            }
+            // - 新增结束：捐款按钮事件 -
+
+            // - 新增：更新用户次数显示的函数 -
+            function updateProfileCounts(userCounts) {
+                const imageCountText = document.getElementById('imageCountText');
+                const pptCountText = document.getElementById('pptCountText');
+                const wordCountText = document.getElementById('wordCountText');
+                const pdfCountText = document.getElementById('pdfCountText');
+
+                const imageCountLabel = document.getElementById('profileImageCount');
+                const pptCountLabel = document.getElementById('profilePPTCount');
+                const wordCountLabel = document.getElementById('profileWordCount');
+                const pdfCountLabel = document.getElementById('profilePDFCount');
+
+                if (imageCountText) imageCountText.textContent = userCounts.image_count || 0;
+                if (pptCountText) pptCountText.textContent = userCounts.ppt_count || 0;
+                if (wordCountText) wordCountText.textContent = userCounts.word_count || 0;
+                if (pdfCountText) pdfCountText.textContent = userCounts.pdf_count || 0;
+
+                // 更新标签文字（如果需要更动态的翻译，可以在这里处理）
+                if (imageCountLabel) imageCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining HD Image Generations: " : "剩余生成 HD超清图片 次数: ";
+                if (pptCountLabel) pptCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining PPT Generations: " : "剩余生成 PPT文件 次数: ";
+                if (wordCountLabel) wordCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining Word Generations: " : "剩余生成 Word文件 次数: ";
+                if (pdfCountLabel) pdfCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining PDF Generations: " : "剩余生成 PDF文件 次数: ";
+            }
+            // - 新增结束：更新用户次数显示的函数 -
+
+
+
+
+
+
             // --- 确保以下模态框控制和事件绑定代码存在 ---
             // - 新增：打开登录模态框 -
             function openLoginModal() {
@@ -2078,6 +2144,19 @@
                     }
                     // - 新增结束 -
 
+                    // - 新增结束 -
+                    // - 新增：更新个人中心按钮文字为英文 -
+                    if (document.getElementById('profileModalTitle')) document.getElementById('profileModalTitle').textContent = "Profile";
+                    // if (document.getElementById('profileVipStatus')) document.getElementById('profileVipStatus').textContent = "VIP Status: "; // 已移除
+                    if (document.getElementById('donateBtnProfileText')) document.getElementById('donateBtnProfileText').textContent = "Donate";
+                    if (document.getElementById('logoutBtnProfileText')) document.getElementById('logoutBtnProfileText').textContent = "Logout";
+                    // 更新次数标签文字 (调用函数)
+                    if (currentUser && currentUser.counts) {
+                         updateProfileCounts(currentUser.counts);
+                    }
+                    // - 新增结束 -
+
+
                 } else {
                     btnTextElements[0].textContent = '登录'; // 登录按钮 (如果未登录)
                     btnTextElements[1].textContent = 'English';
@@ -2102,6 +2181,18 @@
                         document.getElementById('generateImageBtnText').textContent = '生图模式';
                     }
                     // - 新增结束 -
+
+                    // - 新增：更新个人中心按钮文字为中文 -
+                    if (document.getElementById('profileModalTitle')) document.getElementById('profileModalTitle').textContent = "个人中心";
+                    // if (document.getElementById('profileVipStatus')) document.getElementById('profileVipStatus').textContent = "VIP 状态: "; // 已移除
+                    if (document.getElementById('donateBtnProfileText')) document.getElementById('donateBtnProfileText').textContent = "捐款";
+                    if (document.getElementById('logoutBtnProfileText')) document.getElementById('logoutBtnProfileText').textContent = "登出";
+                    // 更新次数标签文字 (调用函数)
+                    if (currentUser && currentUser.counts) {
+                         updateProfileCounts(currentUser.counts);
+                    }
+                    // - 新增结束 -
+
                 }
                 // --- 新增：语言切换时更新模态框文本 ---
                 updateModalTexts();
