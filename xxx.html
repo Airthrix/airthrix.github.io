@@ -1928,10 +1928,11 @@
                 const wordCountLabel = document.getElementById('profileWordCount');
                 const pdfCountLabel = document.getElementById('profilePDFCount');
 
-                if (imageCountText) imageCountText.textContent = userCounts.image_count || 0;
-                if (pptCountText) pptCountText.textContent = userCounts.ppt_count || 0;
-                if (wordCountText) wordCountText.textContent = userCounts.word_count || 0;
-                if (pdfCountText) pdfCountText.textContent = userCounts.pdf_count || 0;
+                // 安全地设置计数文本
+                if (imageCountText) imageCountText.textContent = (userCounts && userCounts.image_count) || 0;
+                if (pptCountText) pptCountText.textContent = (userCounts && userCounts.ppt_count) || 0;
+                if (wordCountText) wordCountText.textContent = (userCounts && userCounts.word_count) || 0;
+                if (pdfCountText) pdfCountText.textContent = (userCounts && userCounts.pdf_count) || 0;
 
                 // 安全地更新标签文字
                 if (imageCountLabel && imageCountLabel.childNodes && imageCountLabel.childNodes.length > 0) {
