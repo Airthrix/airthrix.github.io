@@ -2505,6 +2505,11 @@
                          alert(isEnglish ? "请输入图片描述。" : "Please enter a description for the image.");
                          return;
                     }
+
+                    // --- 新增：在启动图片生成流程前清空输入框 ---
+                    userInput.value = '';
+                    // --- 新增结束 ---
+
                     showTyping(); // 显示“正在连接”指示器
                     sendButton.disabled = true;
 
