@@ -1497,7 +1497,21 @@
                 })
                 .then(response => response.json())
                 .then(data => {
+                    console.log('[DEBUG] Fetch user info response data (in fetchUserInfo):', data); // <--- 确保这行在这里
                     if (data.username) {
+
+                        // 更新全局用户信息
+                        currentUser = {
+                            username: data.username,
+                            counts: {
+                                image_count: data.image_count || 0,
+                                ppt_count: data.ppt_count || 0,
+                                word_count: data.word_count || 0,
+                                pdf_count: data.pdf_count || 0
+                            }
+                        };
+                        console.log('[DEBUG] currentUser updated in fetchUserInfo:', currentUser);
+
                         // 获取成功，更新用户信息和UI
                         currentUser = data;
                         document.getElementById('profileUsername').textContent = data.username;
