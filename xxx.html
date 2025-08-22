@@ -1383,7 +1383,7 @@
                         });
 
                         if (!response.ok) {
-                            const errorData = await response.json().catch(() => ({ error: 'Response is not valid JSON' }));
+                            const errorData = await response.json().catch(() => ({}));
                             throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
                         }
 
@@ -2531,7 +2531,7 @@
 
                             // --- 新增：图片任务已启动，立即获取并更新用户信息（次数） ---
                             // 因为后端在创建任务时已经扣减了次数，我们前端需要同步更新显示
-                            fetchUserInfo().catch(e => console.error("Failed to fetch user info after image task start:", e));
+                            //fetchUserInfo().catch(e => console.error("Failed to fetch user info after image task start:", e));
                             // --- 新增结束 ---
 
                             // 开始轮询获取结果
