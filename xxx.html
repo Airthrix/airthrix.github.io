@@ -1640,11 +1640,11 @@
 
                         // 直接将 data 中的字段赋值给 currentUser
                         currentUser = {
-                            username: data.username,
-                            image_count: data.image_count || 0,
-                            ppt_count: data.ppt_count || 0,
-                            word_count: data.word_count || 0,
-                            pdf_count: data.pdf_count || 0
+                            username: data.username || '', // 提供默认值
+                            image_count: (data.image_count !== undefined) ? data.image_count : 0, // 更严格的检查
+                            ppt_count: (data.ppt_count !== undefined) ? data.ppt_count : 0,
+                            word_count: (data.word_count !== undefined) ? data.word_count : 0,
+                            pdf_count: (data.pdf_count !== undefined) ? data.pdf_count : 0
                         };
                         // 传入 currentUser 对象本身
                         updateProfileCounts(currentUser);
