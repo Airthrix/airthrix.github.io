@@ -1394,6 +1394,8 @@
                             pollIntervalId = null;
                             hideTyping();
 
+                            // ... (添加图片到聊天记录)
+                            sendButton.disabled = false;
                             // --- 新增：图片获取成功后，更新用户信息（次数） ---
                             fetchUserInfo().catch(e => console.error("Failed to fetch user info after image success:", e));
                             // --- 新增结束 ---
