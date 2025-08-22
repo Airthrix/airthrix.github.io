@@ -1530,11 +1530,24 @@
                         // --- 新增：刷新页面后，根据最新次数启用/禁用生图按钮 ---
                         if (generateImageBtn) {
                             if ((currentUser.counts.image_count || 0) > 0) {
-                                console.log('[DEBUG] Enabling generateImageBtn based on image_count:', currentUser.counts.image_count);
                                 generateImageBtn.classList.remove('disabled-btn');
                             } else {
-                                console.log('[DEBUG] Disabling generateImageBtn based on image_count:', currentUser.counts.image_count);
                                 generateImageBtn.classList.add('disabled-btn');
+
+                                // --- 新增：如果次数为0，同时退出激活状态 ---
+                                if (isImageGenMode) {
+                                     isImageGenMode = false; // 更新全局状态变量
+                                     generateImageBtn.classList.remove('active-image-mode'); // 移除激活样式
+                                     // 可选：恢复发送按钮文字
+                                     const sendButtonText = document.getElementById('sendButtonText');
+                                     if (sendButtonText) {
+                                         sendButtonText.textContent = isEnglish ? 'Send' : '发送';
+                                     }
+                                     // 可选：更新按钮提示
+                                     generateImageBtn.title = isEnglish ? "Generate Image (Sufficient remaining times are required)" : "生成图片(需要有充足的剩余次数)";
+                                }
+                                // --- 新增结束 ---
+
                             }
                         }
                         // --- 新增结束 ---
