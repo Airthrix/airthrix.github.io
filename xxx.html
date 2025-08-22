@@ -1405,6 +1405,13 @@
                             }
                             // --- 新增结束 ---
 
+
+                            // --- 新增：图片获取成功后，更新用户信息（次数） ---
+                            // 因为后端在任务成功时才扣减了次数，现在前端需要同步更新显示
+                            fetchUserInfo().catch(e => console.error("Failed to fetch user info after image success:", e));
+                            // --- 新增结束 ---
+
+
                             sendButton.disabled = false;
                             userInput.value = ''; // 清空输入框
                             // 可选：生成后自动退出图片模式
