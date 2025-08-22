@@ -1498,8 +1498,9 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log('[DEBUG] Fetch user info response data (in fetchUserInfo):', data); // <--- 确保这行在这里
-                    if (data.username) {
+                    if (data && (typeof data.username === 'string' || typeof data.image_count === 'number')) {
 
+                        console.log('[DEBUG] Valid user data received, processing...');
                         // 更新全局用户信息
                         currentUser = {
                             username: data.username,
