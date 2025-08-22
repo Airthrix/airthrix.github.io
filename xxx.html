@@ -1082,7 +1082,7 @@
                     </label>
                     <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt">
                     <!-- --- 新增：生成图片按钮 --- -->
-                    <button id="generateImageBtn" class="upload-btn disabled-btn" title="生成图片 (VIP)">
+                    <button id="generateImageBtn" class="upload-btn disabled-btn" title="生成图片">
                         <span class="btn-content" style="display: flex; align-items: center; gap: 2px;"> <!-- 使用 flex 和 gap 控制间距 -->
                             <i class="fas fa-crown" style="font-size: 1rem;"></i> <!-- 图标 -->
                             <span id="generateImageBtnText" style="font-size: 1.0rem; color: #888888;">生图模式</span> <!-- 文字，初始为中文 -->
@@ -1408,7 +1408,7 @@
                             // 可选：生成后自动退出图片模式
                             // isImageGenMode = false;
                             // generateImageBtn.classList.add('disabled-btn');
-                            // generateImageBtn.title = isEnglish ? "生成图片 (VIP)" : "生成图片 (VIP)";
+                            // generateImageBtn.title = isEnglish ? "Generate Image)" : "生成图片";
                             // sendButtonText.textContent = isEnglish ? 'Send' : '发送';
                         } else if (data.status === 'FAILED') {
                             clearInterval(pollIntervalId);
@@ -1494,13 +1494,6 @@
                         // 获取成功，更新用户信息和UI
                         currentUser = data;
                         document.getElementById('profileUsername').textContent = data.username;
-                        if (data.vip_status) {
-                            document.getElementById('vipStatusText').textContent = isEnglish ? 'Yes' : '是';
-                            document.getElementById('vipStatusText').style.color = 'gold';
-                        } else {
-                            document.getElementById('vipStatusText').textContent = isEnglish ? 'No' : '否';
-                            document.getElementById('vipStatusText').style.color = '#c0c0ff';
-                        }
                         // 更新顶部按钮为个人中心按钮
                         document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = data.username; // 显示用户名
                         document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user';
@@ -1638,7 +1631,6 @@
                         // - 修改：保存更多用户信息，包括次数 -
                         currentUser = {
                             username: data.username,
-                            // vip_status: data.vip_status, // 移除 VIP 状态
                             counts: {
                                 image_count: data.image_count || 0,
                                 ppt_count: data.ppt_count || 0,
@@ -1890,7 +1882,7 @@
                         if (generateImageBtn) {
                              generateImageBtn.classList.add('disabled-btn');
                              isImageGenMode = false; // 重置模式
-                             generateImageBtn.title = isEnglish ? "生成图片 (VIP)" : "生成图片 (VIP)";
+                             generateImageBtn.title = isEnglish ? "Generate Image" : "生成图片";
                              sendButtonText.textContent = isEnglish ? 'Send' : '发送';
                              stopPolling(); // 停止轮询
                         }
@@ -2072,7 +2064,6 @@
             const registerConfirmPasswordLabel = document.querySelector('#registerConfirmPassword').previousElementSibling;
             // 个人中心模态框文本元素
             const profileModalTitle = document.getElementById('profileModalTitle');
-            const profileVipStatusText = document.getElementById('profileVipStatus').childNodes[0]; // 获取文本节点
             const rechargeBtnProfileText = document.getElementById('rechargeBtnProfileText');
             const logoutBtnProfileText = document.getElementById('logoutBtnProfileText');
 
@@ -2090,8 +2081,6 @@
                     registerPasswordLabel.textContent = "Password:";
                     registerConfirmPasswordLabel.textContent = "Confirm Password:";
                     profileModalTitle.textContent = "Profile";
-                    profileVipStatusText.textContent = "VIP Status: ";
-                    rechargeBtnProfileText.textContent = "Recharge/VIP";
                     logoutBtnProfileText.textContent = "Logout";
                 } else {
                     loginModalTitle.textContent = "登录";
@@ -2105,8 +2094,6 @@
                     registerPasswordLabel.textContent = "密码:";
                     registerConfirmPasswordLabel.textContent = "确认密码:";
                     profileModalTitle.textContent = "个人中心";
-                    profileVipStatusText.textContent = "VIP 状态: ";
-                    rechargeBtnProfileText.textContent = "充值/VIP";
                     logoutBtnProfileText.textContent = "登出";
                 }
             }
@@ -2145,7 +2132,6 @@
                     // - 新增结束 -
                     // - 新增：更新个人中心按钮文字为英文 -
                     if (document.getElementById('profileModalTitle')) document.getElementById('profileModalTitle').textContent = "Profile";
-                    // if (document.getElementById('profileVipStatus')) document.getElementById('profileVipStatus').textContent = "VIP Status: "; // 已移除
                     if (document.getElementById('donateBtnProfileText')) document.getElementById('donateBtnProfileText').textContent = "Donate";
                     if (document.getElementById('logoutBtnProfileText')) document.getElementById('logoutBtnProfileText').textContent = "Logout";
                     // 更新次数标签文字 (调用函数)
@@ -2182,7 +2168,6 @@
 
                     // - 新增：更新个人中心按钮文字为中文 -
                     if (document.getElementById('profileModalTitle')) document.getElementById('profileModalTitle').textContent = "个人中心";
-                    // if (document.getElementById('profileVipStatus')) document.getElementById('profileVipStatus').textContent = "VIP 状态: "; // 已移除
                     if (document.getElementById('donateBtnProfileText')) document.getElementById('donateBtnProfileText').textContent = "捐款";
                     if (document.getElementById('logoutBtnProfileText')) document.getElementById('logoutBtnProfileText').textContent = "登出";
                     // 更新次数标签文字 (调用函数)
@@ -2434,11 +2419,6 @@
                          alert(isEnglish ? "请输入图片描述。" : "Please enter a description for the image.");
                          return;
                     }
-                    if (!currentUser || !currentUser.vip_status) {
-                         alert(isEnglish ? "此功能为VIP专享。" : "This feature is for VIP only.");
-                         return;
-                    }
-
                     showTyping(); // 显示“正在连接”指示器
                     sendButton.disabled = true;
 
