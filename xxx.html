@@ -1358,7 +1358,7 @@
             }
 
             // 辅助函数：轮询获取图片
-            async function pollForImage(taskId, promptMessageDiv) {
+            async function pollForImage(taskId, promptMessageDiv, userPrompt) {
                 const maxAttempts = 30; // 最大尝试次数
                 const pollInterval = 3000; // 轮询间隔 (毫秒)
                 let attempts = 0;
@@ -1395,7 +1395,12 @@
                             hideTyping();
 
 
-                            const imageMessageHtml = `<p>${isEnglish ? 'Generated Image for:' : '生成的图片：'}</p><p><em>${userInput.value}</em></p><img src="${data.image_url}" alt="Generated Image" style="max-width: 100%; border-radius: 10px; margin-top: 10px;">`;
+                            const imageMessageHtml = `
+                                <p>${isEnglish ? 'Generated Image for:' : '生成的图片：'}</p>
+                                <p><em>${userPrompt}</em></p> <!-- 使用保存的描述 -->
+                                <img src="${data.image_url}" alt="Generated Image" style="max-width: 100%; border-radius: 10px; margin-top: 10px;">
+                            `;
+
                             promptMessageDiv.innerHTML = imageMessageHtml;
                             // --- 新增：图片消息添加后立即保存聊天记录 ---
                             try {
@@ -2572,8 +2577,12 @@
                         if (taskId) {
                             console.log("Image generation task started with ID:", taskId);
 
+                            // --- 新增：在调用 pollForImage 前保存用户输入 ---
+                            const userPrompt = userInput.value.trim(); // 保存用户输入的描述
+                            // --- 新增结束 ---
+
                             // 开始轮询获取结果
-                            pollForImage(taskId, promptMessageDiv);
+                            pollForImage(taskId, promptMessageDiv, userPrompt); // 将描述传给 pollForImage
                         } else {
                             throw new Error(isEnglish ? "Failed to get task ID from backend." : "无法从后端获取任务ID。");
                         }
