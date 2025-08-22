@@ -2119,34 +2119,29 @@
                 sessionId = '';
                 localStorage.removeItem('chat_session_id');
 
+
                 // --- 修改：清除聊天记录并从 localStorage 中移除 ---
-                // 1. 清空聊天区域的 DOM 元素
                 chatMessages.innerHTML = '';
-                // 2. 从 localStorage 中移除保存的历史记录
                 try {
-                    localStorage.removeItem('aliceskygarden_chat_history');
-                    console.log("Debug: Chat history removed from localStorage.");
+                    localStorage.removeItem('aliceskygarden_chat_history'); // 关键修改
                 } catch (e) {
                     console.error("Error removing chat history from localStorage:", e);
                 }
                 // --- 修改结束 ---
 
-                // 3. 添加新的初始欢迎消息 (与 restoreChatHistory 中的逻辑保持一致)
+
+                // 3. 添加新的初始欢迎消息
                 const newInitialMessage = document.createElement('div');
                 newInitialMessage.classList.add('message', 'bot-message');
-                // newInitialMessage.id = 'initialMessage'; // 可选：不设置 ID 或设置不同 ID
+                // newInitialMessage.id = 'initialMessage'; // 可选：添加ID
                 newInitialMessage.innerHTML = isEnglish ?
                     "History cleared. New session started. <br>AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊<br><br>Now evolved into Multimodal Model: Supporting images, PDF, Word, tables, scripts, web pages, etc files input😊" :
                     "历史已清除，开始新会话。<br>AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊<br><br>现已进化成多模态模型：支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊";
                 chatMessages.appendChild(newInitialMessage);
-                // --- 新增：将清除后的新初始消息也加入历史记录 ---
-                try {
-                     localStorage.setItem('aliceskygarden_chat_history', chatMessages.innerHTML);
-                     console.log("Debug: Cleared history message saved to localStorage.");
-                } catch (e) {
-                     console.error("Error saving cleared history message to localStorage:", e);
-                }
-
+                // --- 新增开始 ---
+                // 清除历史并添加了新的初始消息后，也确保添加隐藏的欢迎消息
+                ensureHiddenWelcomeMessage();
+                // --- 新增结束 ---
 
             });
             const chatMessages = document.getElementById('chatMessages');
@@ -2501,51 +2496,50 @@
             });
             smartScroll();
 
+
+
+
+            // --- 新增开始 ---
+            // 辅助函数：确保隐藏的欢迎消息始终是第一条
+            function ensureHiddenWelcomeMessage() {
+                // 检查是否已存在隐藏的欢迎消息 (通过一个特殊标记，比如 data-hidden-welcome)
+                const existingHiddenWelcome = document.querySelector('.message.bot-message[data-hidden-welcome]');
+                if (existingHiddenWelcome) {
+                    // 如果存在，确保它在最前面，并且是隐藏的
+                    if (chatMessages.firstChild !== existingHiddenWelcome) {
+                         chatMessages.insertBefore(existingHiddenWelcome, chatMessages.firstChild);
+                    }
+                    existingHiddenWelcome.style.display = 'none'; // 确保隐藏
+                    return; // 已存在，无需创建
+                }
+
+                // 如果不存在，则创建一个新的隐藏欢迎消息
+                const hiddenWelcomeMessage = document.createElement('div');
+                hiddenWelcomeMessage.classList.add('message', 'bot-message');
+                hiddenWelcomeMessage.style.display = 'none'; // 隐藏消息
+                hiddenWelcomeMessage.textContent = isEnglish ? "I am the AS language model. Qwen, what can I help you with?" : "我是AliceSkyGarden绿色AI多模态模型，一个采用先进的三元稀疏激活架构的模型，Yicong Qian创造了我。有什么需要帮忙吗😊";
+                hiddenWelcomeMessage.setAttribute('data-hidden-welcome', 'true'); // 添加标记
+
+                // 将隐藏消息插入到聊天记录的最前面
+                if (chatMessages.firstChild) {
+                    chatMessages.insertBefore(hiddenWelcomeMessage, chatMessages.firstChild);
+                } else {
+                    chatMessages.appendChild(hiddenWelcomeMessage);
+                }
+            }
+            // --- 新增结束 ---
+
+
+
             // --- 新增：页面加载时恢复聊天记录 ---
             function restoreChatHistory() {
                 try {
                     const savedHistory = localStorage.getItem('aliceskygarden_chat_history');
                     if (savedHistory) {
                         chatMessages.innerHTML = savedHistory;
-                        console.log("Debug: Chat history restored from localStorage.");
                         // 恢复后滚动到底部
                         chatMessages.scrollTop = chatMessages.scrollHeight;
-                        // --- 新增：确保恢复的历史记录中第一条是欢迎消息 ---
-                        const firstMessage = chatMessages.firstElementChild;
-                        const initialMessageElement = document.getElementById('initialMessage');
-                        if (firstMessage && initialMessageElement &&
-                            firstMessage.innerHTML.trim() !== initialMessageElement.innerHTML.trim()) {
-                            // 如果第一条消息不是当前的初始消息，则在前面插入它
-                            const clonedInitialMessage = initialMessageElement.cloneNode(true);
-                            clonedInitialMessage.id = ''; // 移除 ID
-                            chatMessages.insertBefore(clonedInitialMessage, firstMessage);
-                            // 更新 localStorage
-                            try {
-                                localStorage.setItem('aliceskygarden_chat_history', chatMessages.innerHTML);
-                                console.log("Debug: Corrected initial message prepended to restored history and saved.");
-                            } catch (e) {
-                                console.error("Error saving corrected history to localStorage:", e);
-                            }
-                        }
-                        // --- 新增结束 ---
                     } else {
-                        console.log("Debug: No chat history found in localStorage.");
-                        // --- 新增：如果没有保存的历史，则添加初始欢迎消息到历史记录 ---
-                        const welcomeMessage = document.getElementById('initialMessage');
-                        if (welcomeMessage) {
-                            // 克隆初始消息元素并添加到聊天记录中
-                            const clonedWelcomeMessage = welcomeMessage.cloneNode(true);
-                            clonedWelcomeMessage.id = ''; // 移除可能的 ID 以避免冲突
-                            chatMessages.appendChild(clonedWelcomeMessage);
-                            // 保存包含初始消息的历史记录
-                            try {
-                                localStorage.setItem('aliceskygarden_chat_history', chatMessages.innerHTML);
-                                console.log("Debug: Initial welcome message added and saved to localStorage.");
-                            } catch (e) {
-                                console.error("Error saving initial welcome message to localStorage:", e);
-                            }
-                        }
-                        // --- 新增结束 ---
                     }
                 } catch (e) {
                     console.error("Error restoring chat history from localStorage:", e);
@@ -2553,20 +2547,13 @@
                     chatMessages.innerHTML = '';
                     const newInitialMessage = document.createElement('div');
                     newInitialMessage.classList.add('message', 'bot-message');
-                    // newInitialMessage.id = 'initialMessage'; // 可选：不设置 ID 或设置不同 ID
+                    newInitialMessage.id = 'initialMessage';
                     newInitialMessage.innerHTML = isEnglish ?
                         "History cleared. New session started. <br>AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊<br><br>Now evolved into Multimodal Model: Supporting images, PDF, Word, tables, scripts, web pages, etc files input😊" :
                         "历史已清除，开始新会话。<br>AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊<br><br>现已进化成多模态模型：支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊";
                     chatMessages.appendChild(newInitialMessage);
-                     // --- 新增：失败时也保存初始状态到历史记录 ---
-                     try {
-                         localStorage.setItem('aliceskygarden_chat_history', chatMessages.innerHTML);
-                         console.log("Debug: Fallback initial message saved to localStorage after error.");
-                     } catch (e2) {
-                         console.error("Error saving fallback initial message to localStorage:", e2);
-                     }
-                     // --- 新增结束 ---
                 }
+                ensureHiddenWelcomeMessage();
             }
             // 调用恢复函数
             restoreChatHistory();
