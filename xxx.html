@@ -2528,6 +2528,12 @@
 
                         if (taskId) {
                             console.log("Image generation task started with ID:", taskId);
+
+                            // --- 新增：图片任务已启动，立即获取并更新用户信息（次数） ---
+                            // 因为后端在创建任务时已经扣减了次数，我们前端需要同步更新显示
+                            fetchUserInfo().catch(e => console.error("Failed to fetch user info after image task start:", e));
+                            // --- 新增结束 ---
+
                             // 开始轮询获取结果
                             pollForImage(taskId, promptMessageDiv);
                         } else {
