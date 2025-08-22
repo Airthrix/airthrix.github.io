@@ -1294,8 +1294,6 @@
                 },
                 "retina_detect": true
 
-                fetchUserInfo(); // <--- 确保在这里调用
-
             });
 
 
@@ -1472,18 +1470,24 @@
 
             // - 新增：获取用户信息并更新UI -
             function fetchUserInfo() {
-                // --- 修改：首先尝试从 localStorage 恢复 Token ---
+                console.log("[fetchUserInfo] Function started."); // <-- 添加日志
+                // - 修改：首先尝试从 localStorage 恢复 Token -
                 const storedToken = localStorage.getItem(JWT_TOKEN_KEY);
+                console.log("[fetchUserInfo] Stored token from localStorage:", storedToken); // <-- 添加日志
                 if (storedToken) {
                     userToken = storedToken;
+                    console.log("[fetchUserInfo] userToken set from localStorage:", userToken); // <-- 添加日志
+                } else {
+                    console.log("[fetchUserInfo] No stored token found in localStorage."); // <-- 添加日志
                 }
-                // --- 修改结束 ---
+                // - 修改结束 -
                 // 如果没有 Token，直接将按钮设为登录状态并返回
                 if (!userToken) {
                     document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
                     document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
                     return;
                 }
+                console.log("[fetchUserInfo] Proceeding with fetch request using token."); // <-- 添加日志
                 // 使用 JWT Token 获取用户信息
                 fetch(`${API_BASE_URL}/user_info`, {
                     method: 'GET',
