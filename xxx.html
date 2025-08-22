@@ -1383,7 +1383,7 @@
                         });
 
                         if (!response.ok) {
-                            const errorData = await response.json().catch(() => ({}));
+                            const errorData = await response.json().catch(() => ({ error: 'Response is not valid JSON' }));
                             throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
                         }
 
