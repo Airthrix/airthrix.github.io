@@ -1497,6 +1497,7 @@
                 })
                 .then(response => response.json())
                 .then(data => {
+                    console.log('[DEBUG] Fetch user info response data:', data); // <--- 添加这个
                     if (data.username) {
                         // 获取成功，更新用户信息和UI
                         currentUser = data;
