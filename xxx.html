@@ -1512,6 +1512,11 @@
                         };
                         console.log('[DEBUG] currentUser updated in fetchUserInfo:', currentUser);
 
+                        // - 新增：强制触发 updateProfileCounts 并添加日志 -
+                        updateProfileCounts(currentUser.counts);
+                        console.log('[DEBUG] updateProfileCounts called in fetchUserInfo');
+                        // - 新增结束 -
+
                         // 获取成功，更新用户信息和UI
                         currentUser = data;
                         document.getElementById('profileUsername').textContent = data.username;
@@ -1942,31 +1947,32 @@
 
             // - 新增：更新用户次数显示的函数 -
             function updateProfileCounts(userCounts) {
+                console.log('[DEBUG] updateProfileCounts called with:', userCounts);
+
+                // --- 新增：添加调试日志 ---
+                console.log('[DEBUG] Elements found for text content:');
+                console.log('  imageCountText:', document.getElementById('imageCountText'));
+                console.log('  pptCountText:', document.getElementById('pptCountText'));
+                console.log('  wordCountText:', document.getElementById('wordCountText'));
+                console.log('  pdfCountText:', document.getElementById('pdfCountText'));
+                // --- 新增结束 ---
+
+                // 获取所有文本节点元素，如果不存在则返回 null
                 const imageCountText = document.getElementById('imageCountText');
                 const pptCountText = document.getElementById('pptCountText');
                 const wordCountText = document.getElementById('wordCountText');
                 const pdfCountText = document.getElementById('pdfCountText');
 
-
                 // --- 新增：添加调试日志 ---
-                console.log('[DEBUG] Elements found for text content:', {
-                    imageCountText: !!imageCountText,
-                    pptCountText: !!pptCountText,
-                    wordCountText: !!wordCountText,
-                    pdfCountText: !!pdfCountText
-                });
+                console.log('[DEBUG] Setting text content:');
                 // --- 新增结束 ---
-
-                const imageCountLabel = document.getElementById('profileImageCount');
-                const pptCountLabel = document.getElementById('profilePPTCount');
-                const wordCountLabel = document.getElementById('profileWordCount');
-                const pdfCountLabel = document.getElementById('profilePDFCount');
-
 
                 // 安全地设置计数文本
                 if (imageCountText) {
                     imageCountText.textContent = (userCounts && userCounts.image_count) || 0;
                     console.log('[DEBUG] Set imageCountText.textContent to:', imageCountText.textContent);
+                } else {
+                    console.error('[ERROR] imageCountText element not found!');
                 }
                 if (pptCountText) {
                     pptCountText.textContent = (userCounts && userCounts.ppt_count) || 0;
@@ -1977,6 +1983,12 @@
                 if (pdfCountText) {
                     pdfCountText.textContent = (userCounts && userCounts.pdf_count) || 0;
                 }
+
+                // 获取所有标签元素，如果不存在则返回 null
+                const imageCountLabel = document.getElementById('profileImageCount');
+                const pptCountLabel = document.getElementById('profilePPTCount');
+                const wordCountLabel = document.getElementById('profileWordCount');
+                const pdfCountLabel = document.getElementById('profilePDFCount');
 
                 // 安全地更新标签文字
                 if (imageCountLabel && imageCountLabel.childNodes && imageCountLabel.childNodes.length > 0) {
