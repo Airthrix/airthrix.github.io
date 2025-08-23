@@ -1537,6 +1537,10 @@
                             if ((currentUser.counts.image_count || 0) > 0) {
                                 console.log('[DEBUG] Enabling generateImageBtn based on image_count:', currentUser.counts.image_count);
                                 generateImageBtn.classList.remove('disabled-btn');
+                                // 如果当前处于图片生成模式，保持激活状态样式
+                                if (isImageGenMode) {
+                                    generateImageBtn.classList.add('active-image-mode');
+                                }
                             } else {
                                 console.log('[DEBUG] Enabling generateImageBtn based on image_count:', currentUser.counts.image_count);
                                 generateImageBtn.classList.add('disabled-btn');
