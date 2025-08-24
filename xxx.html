@@ -767,9 +767,20 @@
             font-weight: bold;
         }
         .profile-info {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #c0c0ff;
+            display: flex;
+            flex-direction: column;
+            gap: 8px; /* 设置项目间的间距 */
+            margin-bottom: 20px; /* 增加与下方按钮的距离 */
+        }
+        .profile-info p span {
+            font-weight: bold; /* 加粗数字 */
+            color: var(--neon-green); /* 数字用霓虹绿 */
+            margin-left: 10px; /* 数字和标签间留点距离 */
+        }
+        .profile-info p:hover {
+            background: rgba(0, 243, 255, 0.1); /* 鼠标悬停时背景变浅 */
+            transform: translateY(-2px); /* 微微上移 */
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2); /* 添加发光效果 */
         }
         .profile-info h3 {
             margin-bottom: 10px;
@@ -777,8 +788,14 @@
             font-size: 1.2rem;
         }
         .profile-info p {
-            margin: 5px 0;
-            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between; /* 将文字和数字分开放置 */
+            align-items: center; /* 垂直居中对齐 */
+            padding: 8px 0; /* 添加上下内边距 */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* 添加底部细线分隔 */
+            color: #ffffff; /* 文字颜色 */
+            font-size: 0.9rem; /* 稍微减小字体 */
+            transition: all 0.3s ease; /* 添加过渡效果 */
         }
         .profile-actions {
             display: flex;
