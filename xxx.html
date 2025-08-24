@@ -976,38 +976,40 @@
         }
         /* - 新增结束 - */
 
-        /* - 新增：二维码模态框样式 - */
+        /* - 修改：二维码模态框样式 (放大图片) - */
         .qr-modal-content {
-            max-width: 400px;
+            max-width: 600px; /* 增大最大宽度 */
             width: 90%;
             text-align: center;
         }
 
         .qr-modal-body {
-            padding: 20px;
+            padding: 25px; /* 稍微增加内边距 */
         }
 
         .qr-amount-value {
-            font-size: 1.2rem;
+            font-size: 1.4rem; /* 稍微增大金额字体 */
             font-weight: bold;
             color: var(--neon-green);
-            margin: 10px 0;
+            margin: 15px 0; /* 增加上下边距 */
         }
 
         .qr-image {
-            max-width: 100%;
-            height: auto;
-            border: 2px solid var(--neon-blue);
-            border-radius: 10px;
-            margin: 15px 0;
+            max-width: 90%; /* 减小最大宽度限制，让图片更大 */
+            width: 300px; /* 设置一个固定的宽度 */
+            height: auto; /* 保持高宽比 */
+            border: 3px solid var(--neon-blue); /* 稍微加粗边框 */
+            border-radius: 15px; /* 增大圆角 */
+            margin: 20px auto; /* 增加上下边距，并水平居中 */
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5); /* 添加发光效果 */
         }
 
         .qr-instruction {
-            font-size: 0.9rem;
+            font-size: 1rem; /* 增大说明文字 */
             color: #cccccc;
-            margin-top: 10px;
+            margin-top: 15px; /* 增加上边距 */
         }
-        /* - 新增结束 - */
+        /* - 修改结束 - */
 
 
 
@@ -2454,16 +2456,20 @@
                 }
             }
 
-            // 为“显示二维码”按钮添加事件监听器
+
+            // 为“显示二维码”按钮添加事件监听器 (修改版)
             document.addEventListener('click', function(event) {
-                if (event.target && event.target.matches('.show-qr-btn')) {
-                    const amount = event.target.getAttribute('data-amount');
+                if (event.target && (event.target.matches('.show-qr-btn') || event.target.closest('.show-qr-btn'))) {
+                    // 兼容事件委托，确保点击到按钮内部元素也能触发
+                    const button = event.target.closest('.show-qr-btn');
+                    const amount = button.getAttribute('data-amount');
                     if (amount) {
                         closeDonateModal(); // 关闭捐款选择模态框
                         openQrModal(amount); // 打开二维码模态框
                     }
                 }
             });
+
 
             // 点击捐款模态框的关闭按钮 (x) 时
             if (donateModal) {
