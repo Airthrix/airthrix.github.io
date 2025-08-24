@@ -984,24 +984,29 @@
         }
 
         .qr-modal-body {
-            padding: 15px; /* 减少内边距 */
+            padding: 12px; /* 保持现有内边距 */
+            display: flex; /* 关键：将 body 设为 flex 容器 */
+            flex-direction: column; /* 垂直排列子元素 */
+            align-items: center; /* 水平居中对齐子元素 */
+            justify-content: center; /* 垂直居中对齐子元素 */
+            min-height: 200px; /* 设置最小高度，防止内容过少时模态框太小 */
         }
 
         .qr-amount-value {
-            font-size: 1.2rem; /* 保持原有大小或略小 */
+            font-size: 1.2rem;
             font-weight: bold;
             color: var(--neon-green);
-            margin: 10px 0; /* 减少上下边距 */
+            margin: 8px 0; /* 保持现有边距 */
         }
 
         .qr-image {
-            max-width: none; /* 移除最大宽度限制 */
-            width: 320px; /* 设置一个更大的固定宽度 */
-            height: auto; /* 保持高宽比 */
-            border: 3px solid var(--neon-blue); /* 保持边框 */
-            border-radius: 15px; /* 保持圆角 */
-            margin: 15px auto; /* 减少上下边距 */
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5); /* 保持发光效果 */
+            max-width: none;
+            width: 300px; /* 保持现有宽度 */
+            height: auto;
+            border: 3px solid var(--neon-blue);
+            border-radius: 15px;
+            margin: 12px auto; /* 保持现有边距 */
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
         }
 
         .qr-instruction {
