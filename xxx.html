@@ -907,6 +907,103 @@
 
 
 
+        /* - 新增：捐款模态框样式 - */
+        .donate-modal-content {
+            background: var(--panel-bg);
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+            border-radius: 15px;
+            padding: 25px;
+            width: 90%;
+            max-width: 500px;
+            color: #e0e0ff;
+            position: relative;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .donate-modal-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .donate-modal-header h2 {
+            margin: 0;
+            color: var(--neon-blue);
+            font-size: 1.8rem;
+        }
+
+        .donate-info {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            color: #ccccff;
+        }
+
+        .donate-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .donate-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(20, 20, 50, 0.6);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+        }
+
+        .donate-option span {
+            font-size: 1rem;
+            color: #d0d0ff;
+        }
+
+        .donate-qr-btn {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border-radius: 5px;
+            border: none;
+            background-image: linear-gradient(90deg, #00aaff, #00f3ff);
+            color: #0a0a12;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .donate-qr-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 243, 255, 0.4);
+        }
+
+        .donate-qr-btn i {
+            font-size: 1.2rem;
+        }
+
+        .qr-code-container {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px dashed rgba(0, 243, 255, 0.3);
+        }
+
+        .qr-code-container img {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .qr-code-container p {
+            margin: 5px 0;
+            color: #c0c0ff;
+        }
+
+        /* - 新增结束 - */
+
+
+
         @media (max-width: 768px) {
             .top-nav {
                 padding: 1rem;
@@ -1252,6 +1349,61 @@
             </div>
         </div>
     </div>
+    <!-- - 新增：捐款模态框 - -->
+    <div id="donateModal" class="modal">
+        <div class="modal-content donate-modal-content">
+            <span class="close" onclick="closeModal(document.getElementById('donateModal'))">&times;</span>
+            <div class="donate-modal-header">
+                <h2 id="donateModalTitle">捐款</h2>
+            </div>
+            <div class="donate-info">
+                <p id="donateInfoText">您的捐款将帮助我们维持服务器运行和模型优化。请选择金额，保存二维码并使用支付宝支付。</p>
+                <!-- <p id="donateInfoTextEn" style="display:none;">Your donation helps us maintain servers and optimize models. Please choose an amount, save the QR code, and pay via Alipay.</p> -->
+            </div>
+            <div class="donate-options">
+                <div class="donate-option">
+                    <span id="option1Text">0.08元 -> 1次 HD超清图片</span>
+                    <!-- <span id="option1TextEn" style="display:none;">0.08 RMB -> 1 HD Image</span> -->
+                    <button class="btn-primary donate-qr-btn" onclick="showQRCode('https://hk-alice-file.oss-cn-hongkong.aliyuncs.com/0.08.png')">
+                        <i class="fab fa-alipay"></i> <span id="alipayBtnText">支付宝捐款</span>
+                        <!-- <span id="alipayBtnTextEn" style="display:none;">Alipay</span> -->
+                    </button>
+                </div>
+                <div class="donate-option">
+                    <span id="option2Text">1.0元 -> 15次 HD超清图片</span>
+                    <!-- <span id="option2TextEn" style="display:none;">1.0 RMB -> 15 HD Images</span> -->
+                    <button class="btn-primary donate-qr-btn" onclick="showQRCode('https://hk-alice-file.oss-cn-hongkong.aliyuncs.com/1.0.png')">
+                        <i class="fab fa-alipay"></i> <span id="alipayBtnText2">支付宝捐款</span>
+                        <!-- <span id="alipayBtnText2En" style="display:none;">Alipay</span> -->
+                    </button>
+                </div>
+                <div class="donate-option">
+                    <span id="option3Text">5.0元 -> 88次 HD超清图片</span>
+                    <!-- <span id="option3TextEn" style="display:none;">5.0 RMB -> 88 HD Images</span> -->
+                    <button class="btn-primary donate-qr-btn" onclick="showQRCode('https://hk-alice-file.oss-cn-hongkong.aliyuncs.com/5.0.png')">
+                        <i class="fab fa-alipay"></i> <span id="alipayBtnText3">支付宝捐款</span>
+                        <!-- <span id="alipayBtnText3En" style="display:none;">Alipay</span> -->
+                    </button>
+                </div>
+                <div class="donate-option">
+                    <span id="option4Text">9.9元 -> 188次 HD超清图片</span>
+                    <!-- <span id="option4TextEn" style="display:none;">9.9 RMB -> 188 HD Images</span> -->
+                    <button class="btn-primary donate-qr-btn" onclick="showQRCode('https://hk-alice-file.oss-cn-hongkong.aliyuncs.com/9.9.png')">
+                        <i class="fab fa-alipay"></i> <span id="alipayBtnText4">支付宝捐款</span>
+                        <!-- <span id="alipayBtnText4En" style="display:none;">Alipay</span> -->
+                    </button>
+                </div>
+            </div>
+            <div id="qrCodeContainer" class="qr-code-container" style="display:none;">
+                <p id="scanToPayText">请保存下方二维码并使用支付宝扫描支付：</p>
+                <!-- <p id="scanToPayTextEn" style="display:none;">Please save the QR code below and scan it with Alipay:</p> -->
+                <img id="qrCodeImage" src="" alt="QR Code" style="max-width: 80%; height: auto; border: 2px solid var(--neon-blue); border-radius: 10px;">
+                <p><small id="saveTipText">提示：长按图片可保存。</small></p>
+                <!-- <small id="saveTipTextEn" style="display:none;">Tip: Long press the image to save.</small> -->
+            </div>
+        </div>
+    </div>
+    <!-- - 新增结束 - -->
     <!-- --- 新增结束 --- -->
     <script src="https://hk-alice-file.oss-cn-hongkong.aliyuncs.com/particles.min.js"></script>
     <script>
@@ -1994,17 +2146,129 @@
 
 
 
-            // - 新增：捐款按钮事件 -
+        
+            // - 新增：捐款模态框逻辑 -
+            const donateModal = document.getElementById('donateModal');
+            if (!donateModal) {
+                console.error("Donate modal element (id='donateModal') not found!");
+            }
+
+            // 显示二维码图片的函数
+            function showQRCode(imageUrl) {
+                const container = document.getElementById('qrCodeContainer');
+                const image = document.getElementById('qrCodeImage');
+                if (container && image) {
+                    image.src = imageUrl;
+                    container.style.display = 'block';
+                    // 可选：滚动到二维码区域
+                    container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } else {
+                    console.error("QR Code container or image element not found!");
+                }
+            }
+
+            // 更新捐款模态框内的文本 (支持中英文切换)
+            function updateDonateModalTexts() {
+                if (!donateModal) return;
+                const isEnglish = window.isEnglish || false; // 假设 isEnglish 是全局变量
+
+                const texts = {
+                    donateModalTitle: isEnglish ? "Donate" : "捐款",
+                    donateInfoText: isEnglish ? "Your donation helps us maintain servers and optimize models. Please choose an amount, save the QR code, and pay via Alipay." : "您的捐款将帮助我们维持服务器运行和模型优化。请选择金额，保存二维码并使用支付宝支付。",
+                    option1Text: isEnglish ? "0.08 RMB -> 1 HD Image" : "0.08元 -> 1次 HD超清图片",
+                    option2Text: isEnglish ? "1.0 RMB -> 15 HD Images" : "1.0元 -> 15次 HD超清图片",
+                    option3Text: isEnglish ? "5.0 RMB -> 88 HD Images" : "5.0元 -> 88次 HD超清图片",
+                    option4Text: isEnglish ? "9.9 RMB -> 188 HD Images" : "9.9元 -> 188次 HD超清图片",
+                    alipayBtnText: isEnglish ? "Alipay" : "支付宝捐款", // 为所有按钮使用相同文本
+                    scanToPayText: isEnglish ? "Please save the QR code below and scan it with Alipay:" : "请保存下方二维码并使用支付宝扫描支付：",
+                    saveTipText: isEnglish ? "Tip: Long press the image to save." : "提示：长按图片可保存。"
+                };
+
+                // 更新标题
+                const titleEl = document.getElementById('donateModalTitle');
+                if (titleEl) titleEl.textContent = texts.donateModalTitle;
+
+                // 更新信息文本
+                const infoEl = document.getElementById('donateInfoText');
+                if (infoEl) infoEl.textContent = texts.donateInfoText;
+                // if (infoEl) infoEl.style.display = isEnglish ? 'none' : 'block'; // 如果你用了两个 P 标签
+                // const infoEnEl = document.getElementById('donateInfoTextEn');
+                // if (infoEnEl) infoEnEl.style.display = isEnglish ? 'block' : 'none';
+
+                // 更新选项文本
+                const options = [
+                    { id: 'option1Text', text: texts.option1Text },
+                    { id: 'option2Text', text: texts.option2Text },
+                    { id: 'option3Text', text: texts.option3Text },
+                    { id: 'option4Text', text: texts.option4Text }
+                ];
+                options.forEach(opt => {
+                    const el = document.getElementById(opt.id);
+                    if (el) el.textContent = opt.text;
+                    // const enEl = document.getElementById(opt.id + 'En');
+                    // if (enEl) enEl.style.display = isEnglish ? 'inline' : 'none';
+                });
+
+                // 更新按钮文本 (为简洁，这里所有按钮用同一个文本)
+                const buttons = [
+                    'alipayBtnText', 'alipayBtnText2', 'alipayBtnText3', 'alipayBtnText4'
+                ];
+                buttons.forEach(btnId => {
+                     const el = document.getElementById(btnId);
+                     if (el) el.textContent = texts.alipayBtnText; // 使用统一的 Alipay 文本
+                     // const enEl = document.getElementById(btnId + 'En');
+                     // if (enEl) enEl.style.display = isEnglish ? 'inline' : 'none';
+                });
+
+                // 更新二维码下方提示文本
+                const scanTextEl = document.getElementById('scanToPayText');
+                if (scanTextEl) scanTextEl.textContent = texts.scanToPayText;
+                // if (scanTextEl) scanTextEl.style.display = isEnglish ? 'none' : 'block';
+                // const scanTextEnEl = document.getElementById('scanToPayTextEn');
+                // if (scanTextEnEl) scanTextEnEl.style.display = isEnglish ? 'block' : 'none';
+
+                const saveTipEl = document.getElementById('saveTipText');
+                if (saveTipEl) saveTipEl.textContent = texts.saveTipText;
+                // if (saveTipEl) saveTipEl.style.display = isEnglish ? 'none' : 'block';
+                // const saveTipEnEl = document.getElementById('saveTipTextEn');
+                // if (saveTipEnEl) saveTipEnEl.style.display = isEnglish ? 'block' : 'none';
+            }
+
+            // 修改或替换现有的捐款按钮事件
+            // 查找 `// - 新增：捐款按钮事件 -` 和 `// - 新增结束：捐款按钮事件 -` 之间的代码块
+            // 替换为以下代码：
+            // --- 替换开始 ---
             const donateBtnProfile = document.getElementById('donateBtnProfile');
             if (donateBtnProfile) {
                 donateBtnProfile.addEventListener('click', function() {
-                    alert(isEnglish ? "Donation function is under development." : "捐款功能正在开发中。");
-                    // closeModal(profileModal); // 如果点击后需要关闭模态框，取消注释
+                    // 1. 检查用户是否登录
+                    if (!currentUser) {
+                        // 用户未登录，直接打开登录窗口
+                        openLoginModal();
+                        return;
+                    }
+                    // 2. 打开捐款模态框
+                    if (donateModal) {
+                        donateModal.style.display = 'block';
+                        // 3. 更新模态框内文本 (根据当前语言)
+                        updateDonateModalTexts();
+                        // 4. 确保二维码容器是隐藏的
+                        const container = document.getElementById('qrCodeContainer');
+                        if (container) {
+                            container.style.display = 'none';
+                        }
+                    } else {
+                        console.error("Donate modal element not found when trying to open!");
+                    }
                 });
             } else {
                 console.error("Donate Button (id='donateBtnProfile') not found in the DOM!");
             }
-            // - 新增结束：捐款按钮事件 -
+            // --- 替换结束 ---
+
+
+
+
 
             // - 新增：更新用户次数显示的函数 -
             function updateProfileCounts(userCounts) {
