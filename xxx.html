@@ -976,50 +976,61 @@
         }
         /* - 新增结束 - */
 
-        /* - 修改：二维码模态框样式 (更紧凑，图片更大) - */
+
+        /* - 修改：二维码模态框样式 (更紧凑，图片更大，边距更小，居中) - */
         .qr-modal-content {
-            max-width: 350px; /* 改为更紧凑的宽度 */
-            width: 80%; /* 略微减少宽度占比 */
+            max-width: 350px;
+            width: 80%;
             text-align: center;
+            /* 关键：移除默认的内边距，让内容紧贴边框 */
+            padding: 0;
         }
 
         .qr-modal-body {
-            padding: 12px; /* 保持现有内边距 */
-            display: flex; /* 关键：将 body 设为 flex 容器 */
-            flex-direction: column; /* 垂直排列子元素 */
-            align-items: center; /* 水平居中对齐子元素 */
-            justify-content: center; /* 垂直居中对齐子元素 */
-            min-height: 200px; /* 设置最小高度，防止内容过少时模态框太小 */
-            /* 添加这个属性，确保内容不会被父容器的 padding 挤开 */
+            /* 关键：将内边距设为非常小，实现 0.1rem 左右的边距效果 */
+            padding: 0.1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px; /* 保持最小高度 */
             box-sizing: border-box;
+            /* 可选：如果上面的 padding 还是觉得大，可以尝试 padding: 1px; */
+            /* padding: 1px; */
         }
 
         .qr-amount-value {
             font-size: 1.2rem;
             font-weight: bold;
             color: var(--neon-green);
-            margin: 8px 0; /* 保持现有边距 */
+            /* 减小金额文本的上下边距 */
+            margin: 5px 0;
         }
 
         .qr-image {
             max-width: none;
+            /* 可选：稍微增大图片宽度以填充更多空间 */
+            /* width: 310px; */
             width: 300px; /* 保持现有宽度 */
             height: auto;
-            border: 3px solid var(--neon-blue);
+            /* 关键：减小边框宽度 */
+            border: 2px solid var(--neon-blue);
             border-radius: 15px;
-            margin: 12px auto; /* 保持现有边距 */
+            /* 关键：减小图片的上下边距 */
+            margin: 5px auto;
             box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
-            /* 关键修改：确保图片自身也居中 */
-            display: block; /* 将图片设为块级元素，使其能应用 margin */
-            /* 这个 margin 是关键，它会自动计算左右两边的间距，使图片居中 */
+            display: block;
             margin-left: auto;
             margin-right: auto;
         }
 
         .qr-instruction {
-            font-size: 0.9rem; /* 保持或略小 */
+            font-size: 0.9rem;
             color: #cccccc;
-            margin-top: 10px; /* 减少上边距 */
+            /* 减小说明文字的上边距 */
+            margin-top: 5px;
+            /* 可选：添加一点左右内边距，防止文字贴边 */
+            padding: 0 5px;
         }
         /* - 修改结束 - */
 
