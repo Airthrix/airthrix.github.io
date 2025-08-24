@@ -2144,9 +2144,6 @@
             // - 修改结束：登出按钮事件 -
 
 
-
-
-        
             // - 新增：捐款模态框逻辑 -
             const donateModal = document.getElementById('donateModal');
             if (!donateModal) {
@@ -2193,7 +2190,7 @@
                 if (infoEl) infoEl.textContent = texts.donateInfoText;
                 // if (infoEl) infoEl.style.display = isEnglish ? 'none' : 'block'; // 如果你用了两个 P 标签
                 // const infoEnEl = document.getElementById('donateInfoTextEn');
-                // if (infoEnEl) infoEnEl.style.display = isEnglish ? 'block' : 'none';
+               // if (infoEnEl) infoEnEl.style.display = isEnglish ? 'block' : 'none';
 
                 // 更新选项文本
                 const options = [
@@ -2233,13 +2230,13 @@
                 // const saveTipEnEl = document.getElementById('saveTipTextEn');
                 // if (saveTipEnEl) saveTipEnEl.style.display = isEnglish ? 'block' : 'none';
             }
-
+        
             // 修改或替换现有的捐款按钮事件
             // 查找 `// - 新增：捐款按钮事件 -` 和 `// - 新增结束：捐款按钮事件 -` 之间的代码块
             // 替换为以下代码：
             // --- 替换开始 ---
             const donateBtnProfile = document.getElementById('donateBtnProfile');
-            if (donateBtnProfile) {
+            if (donteBtnProfile) { // 注意：这里原代码可能有拼写错误 'donteBtnProfile'，应为 'donateBtnProfile'
                 donateBtnProfile.addEventListener('click', function() {
                     // 1. 检查用户是否登录
                     if (!currentUser) {
@@ -2265,9 +2262,6 @@
                 console.error("Donate Button (id='donateBtnProfile') not found in the DOM!");
             }
             // --- 替换结束 ---
-
-
-
 
 
             // - 新增：更新用户次数显示的函数 -
