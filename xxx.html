@@ -976,38 +976,38 @@
         }
         /* - 新增结束 - */
 
-        /* - 修改：二维码模态框样式 (放大图片) - */
+        /* - 修改：二维码模态框样式 (更紧凑，图片更大) - */
         .qr-modal-content {
-            max-width: 600px; /* 增大最大宽度 */
-            width: 90%;
+            max-width: 400px; /* 改为更紧凑的宽度 */
+            width: 85%; /* 略微减少宽度占比 */
             text-align: center;
         }
 
         .qr-modal-body {
-            padding: 25px; /* 稍微增加内边距 */
+            padding: 15px; /* 减少内边距 */
         }
 
         .qr-amount-value {
-            font-size: 1.4rem; /* 稍微增大金额字体 */
+            font-size: 1.2rem; /* 保持原有大小或略小 */
             font-weight: bold;
             color: var(--neon-green);
-            margin: 15px 0; /* 增加上下边距 */
+            margin: 10px 0; /* 减少上下边距 */
         }
 
         .qr-image {
-            max-width: 90%; /* 减小最大宽度限制，让图片更大 */
-            width: 300px; /* 设置一个固定的宽度 */
+            max-width: none; /* 移除最大宽度限制 */
+            width: 320px; /* 设置一个更大的固定宽度 */
             height: auto; /* 保持高宽比 */
-            border: 3px solid var(--neon-blue); /* 稍微加粗边框 */
-            border-radius: 15px; /* 增大圆角 */
-            margin: 20px auto; /* 增加上下边距，并水平居中 */
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5); /* 添加发光效果 */
+            border: 3px solid var(--neon-blue); /* 保持边框 */
+            border-radius: 15px; /* 保持圆角 */
+            margin: 15px auto; /* 减少上下边距 */
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5); /* 保持发光效果 */
         }
 
         .qr-instruction {
-            font-size: 1rem; /* 增大说明文字 */
+            font-size: 0.9rem; /* 保持或略小 */
             color: #cccccc;
-            margin-top: 15px; /* 增加上边距 */
+            margin-top: 10px; /* 减少上边距 */
         }
         /* - 修改结束 - */
 
