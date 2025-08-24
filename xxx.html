@@ -1354,7 +1354,7 @@
     </div>
     <!-- --- 新增结束 --- -->
     <!-- - 新增：捐款选项模态框 - -->
-    <div id="donateOptionsModal" class="modal">
+    <div id="donateOptionsModal" class="modal" style="display: none;">
         <div class="modal-content donate-modal-content">
             <span class="close" onclick="closeModal(document.getElementById('donateOptionsModal'))">&times;</span>
             <h2 id="donateOptionsModalTitle">选择捐款金额</h2>
@@ -1388,7 +1388,7 @@
     </div>
     <!-- - 新增结束 - -->
     <!-- - 新增：支付宝付款码显示模态框 - -->
-    <div id="qrCodeModal" class="modal">
+    <div id="qrCodeModal" class="modal" style="display: none;">
         <div class="modal-content qr-modal-content">
             <span class="close" onclick="closeModal(document.getElementById('qrCodeModal'))">&times;</span>
             <h2 id="qrCodeModalTitle">支付宝付款码</h2>
@@ -1756,6 +1756,18 @@
                 }
             }
             // - 新增结束 - //
+
+            // - 新增：捐款按钮事件 - //
+            const donateBtnProfile = document.getElementById('donateBtnProfile');
+            if (donateBtnProfile) {
+                donateBtnProfile.addEventListener('click', function() {
+                    closeModal(profileModal); // 关闭个人中心模态框
+                    openDonateOptionsModal(); // 打开捐款选项模态框
+                });
+            } else {
+                console.error("Donate Button (id='donateBtnProfile') not found in the DOM!");
+            }
+            // - 新增结束：捐款按钮事件 - //
 
             // - 新增：显示支付宝付款码的函数 - //
             function showQRCode(imageUrl) {
