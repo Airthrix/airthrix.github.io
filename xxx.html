@@ -2214,29 +2214,6 @@
 
 
 
-
-            // - 修改：捐款按钮事件 - //
-            const donateBtnProfile = document.getElementById('donateBtnProfile');
-            if (donateBtnProfile) {
-                donateBtnProfile.addEventListener('click', function() {
-                    // 关闭个人中心模态框
-                    closeModal(profileModal);
-                    // 打开捐款选项模态框
-                    const donateOptionsModal = document.getElementById('donateOptionsModal');
-                    if (donateOptionsModal) {
-                        donateOptionsModal.style.display = 'block';
-                        // 更新捐款选项模态框内的文本
-                        updateDonateOptionsText();
-                    } else {
-                        console.error("Donate Options Modal (id='donateOptionsModal') not found in the DOM!");
-                    }
-                });
-            } else {
-                console.error("Donate Button (id='donateBtnProfile') not found in the DOM!");
-            }
-            // - 修改结束 - //
-
-
             // - 新增：更新用户次数显示的函数 -
             function updateProfileCounts(userCounts) {
                 console.log('[DEBUG] updateProfileCounts called with:', userCounts);
