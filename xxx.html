@@ -909,7 +909,6 @@
         /* - 新增：捐款选项模态框样式 - */
         .donate-modal-content {
             background-color: var(--panel-bg);
-            margin: 5% auto;
             padding: 25px;
             border: 1px solid var(--neon-blue);
             border-radius: 10px;
@@ -917,7 +916,12 @@
             max-width: 500px;
             box-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
             color: white;
-            position: relative;
+            /* 使用 fixed 定位实现居中 */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1001; /* 确保在模态框背景之上 */
             animation: fadeIn 0.3s ease-in-out;
         }
 
@@ -971,7 +975,7 @@
         /* - 新增：支付宝付款码模态框样式 - */
         .qr-modal-content {
             background-color: var(--panel-bg);
-            margin: 10% auto;
+            /* margin: 10% auto; */ /* 移除旧的 margin */
             padding: 25px;
             border: 1px solid var(--neon-green);
             border-radius: 10px;
@@ -979,7 +983,12 @@
             max-width: 400px;
             box-shadow: 0 0 20px rgba(0, 255, 157, 0.5);
             color: white;
-            position: relative;
+            /* 使用 fixed 定位实现居中 */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1001; /* 确保在模态框背景之上 */
             animation: fadeIn 0.3s ease-in-out;
             text-align: center;
         }
