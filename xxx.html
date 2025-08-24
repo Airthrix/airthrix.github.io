@@ -935,7 +935,7 @@
         }
 
         .donate-option-text {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             color: #ffffff;
         }
 
@@ -990,6 +990,8 @@
             align-items: center; /* 水平居中对齐子元素 */
             justify-content: center; /* 垂直居中对齐子元素 */
             min-height: 200px; /* 设置最小高度，防止内容过少时模态框太小 */
+            /* 添加这个属性，确保内容不会被父容器的 padding 挤开 */
+            box-sizing: border-box;
         }
 
         .qr-amount-value {
@@ -1007,6 +1009,11 @@
             border-radius: 15px;
             margin: 12px auto; /* 保持现有边距 */
             box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+            /* 关键修改：确保图片自身也居中 */
+            display: block; /* 将图片设为块级元素，使其能应用 margin */
+            /* 这个 margin 是关键，它会自动计算左右两边的间距，使图片居中 */
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .qr-instruction {
