@@ -2322,11 +2322,11 @@
 
                 // 安全地更新标签文字
                 if (imageCountLabel && imageCountLabel.childNodes && imageCountLabel.childNodes.length > 0) {
-                    imageCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining HD-Image Generate: " : "剩余生成 HD超清图片 次数: ";
+                    imageCountLabel.childNodes[0].nodeValue = isEnglish ? "Residual HD-Image Generate: " : "剩余生成 HD超清图片 次数: ";
                 }
-                if (pptCountLabel) pptCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining PPT-File Generate: " : "剩余生成 PPT文件 次数: ";
-                if (wordCountLabel) wordCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining Word-File Generate: " : "剩余生成 Word文件 次数: ";
-                if (pdfCountLabel) pdfCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining PDF-File Generate: " : "剩余生成 PDF文件 次数: ";
+                if (pptCountLabel) pptCountLabel.childNodes[0].nodeValue = isEnglish ? "Residual PPT-File Generate: " : "剩余生成 PPT文件 次数: ";
+                if (wordCountLabel) wordCountLabel.childNodes[0].nodeValue = isEnglish ? "Residual Word-File Generate: " : "剩余生成 Word文件 次数: ";
+                if (pdfCountLabel) pdfCountLabel.childNodes[0].nodeValue = isEnglish ? "Residual PDF-File Generate: " : "剩余生成 PDF文件 次数: ";
             }
             // - 新增结束：更新用户次数显示的函数 -
 
@@ -2553,7 +2553,7 @@
                   modalContent.style.animation = '';
 
                   // 4. 应用 ashDisappear 关闭动画
-                  modalContent.style.animation = 'ashDisappear 0.15s ease-in forwards';
+                  modalContent.style.animation = 'ashDisappear 0.3s ease-in forwards';
 
                   // 5. 监听动画结束事件
                   modalContent.addEventListener('animationend', function handler() {
