@@ -1077,7 +1077,7 @@
           }
           25% {
             clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); /* 保持完整 */
-            transform: scale(1.125); /* 轻微放大 */
+            transform: scale(0.75); /* 轻微放大 */
             opacity: 0.9;
             filter: blur(1px); /* 开始轻微模糊 */
           }
@@ -1089,7 +1089,7 @@
               50% 50%, 50% 50%, 50% 50%, 50% 50%,
               50% 50%, 50% 50%, 
             );
-            transform: scale(1.25);
+            transform: scale(0.5);
             opacity: 0.7;
             filter: blur(2px);
           }
@@ -1101,7 +1101,7 @@
               50% 50%, 50% 50%, 50% 50%, 50% 50%,
               50% 50%, 50% 50%, 
             );
-            transform: scale(1.375);
+            transform: scale(0.25);
             opacity: 0.4;
             filter: blur(4px);
           }
@@ -1113,7 +1113,7 @@
               50% 50%, 50% 50%, 50% 50%, 50% 50%,
               50% 50%, 50% 50%, 
             );
-            transform: scale(1.5);
+            transform: scale(0);
             opacity: 0;
             filter: blur(8px); /* 增加模糊度 */
           }
@@ -2379,7 +2379,7 @@
                   modalContent.style.animation = '';
 
                   // 2. 应用关闭动画
-                  modalContent.style.animation = 'ashDisappear 0.1s ease-in forwards';
+                  modalContent.style.animation = 'ashDisappear 0.2s ease-in forwards';
 
                   // 3. 监听动画结束事件
                   modalContent.addEventListener('animationend', function handler() {
@@ -2498,7 +2498,7 @@
                   modalContent.style.animation = '';
 
                   // 4. 应用 ashDisappear 关闭动画
-                  modalContent.style.animation = 'ashDisappear 0.1s ease-in forwards';
+                  modalContent.style.animation = 'ashDisappear 0.2s ease-in forwards';
 
                   // 5. 监听动画结束事件
                   modalContent.addEventListener('animationend', function handler() {
@@ -2553,7 +2553,7 @@
                   modalContent.style.animation = '';
 
                   // 4. 应用 ashDisappear 关闭动画
-                  modalContent.style.animation = 'ashDisappear 0.00s ease-in forwards';
+                  modalContent.style.animation = 'ashDisappear 0.2s ease-in forwards';
 
                   // 5. 监听动画结束事件
                   modalContent.addEventListener('animationend', function handler() {
