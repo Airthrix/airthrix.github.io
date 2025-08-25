@@ -2342,9 +2342,6 @@
                 clearLoginModalState();
                 // --- 新增结束 ---
                 if (loginModal) {
-                    // 确保背景色是默认的半透明黑色
-                    loginModal.style.backgroundColor = ''; // 清除内联样式，让 CSS 生效
-                    // 或者显式设置
                     loginModal.style.display = 'block';
                 } else {
                     console.error("Login modal element not found!");
