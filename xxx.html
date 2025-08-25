@@ -2578,6 +2578,10 @@
 
             // --- 新增：语言切换时更新模态框内的标签和链接文字 ---
             function updateModalTexts() {
+
+                // 获取国家代码下拉框元素
+                const registerCountryCodeSelect = document.getElementById('registerCountryCode');
+
                 if (isEnglish) {
                     loginModalTitle.textContent = "Login AliceSkyGarden";
                     registerModalTitle.textContent = "Register AliceSkyGarden";
@@ -2592,11 +2596,22 @@
                     profileModalTitle.textContent = "Profile";
                     logoutBtnProfileText.textContent = "Logout";
 
-                    // - 新增：设置英文状态下国家代码下拉框的默认值 -
+                    // --- 新增/修改：确保国家代码下拉框默认选中 +86 ---
+                    // 方法二：使用 querySelector 找到 option 并设置 selected
                     if (registerCountryCodeSelect) {
-                        registerCountryCodeSelect.selectedIndex = 0; // 强制选中第一个选项
+                        // 先移除所有选项的 selected 属性（可选，但更安全）
+                        const allOptions = registerCountryCodeSelect.querySelectorAll('option');
+                        allOptions.forEach(opt => opt.removeAttribute('selected'));
+
+                        // 找到 value 为 "+86" 的 option 并设置为 selected
+                        const targetOption = registerCountryCodeSelect.querySelector('option[value="+86"]');
+                        if (targetOption) {
+                            targetOption.setAttribute('selected', 'selected');
+                            // 为了确保 UI 更新，有时也需要设置 selectedIndex
+                            registerCountryCodeSelect.value = "+86"; // 或者 registerCountryCodeSelect.selectedIndex = targetOption.index;
+                        }
                     }
-                    // - 新增结束 -
+                    // --- 新增/修改结束 ---
 
                 } else {
                     loginModalTitle.textContent = "登录AliceSkyGarden";
@@ -2612,11 +2627,22 @@
                     profileModalTitle.textContent = "个人中心";
                     logoutBtnProfileText.textContent = "登出";
 
-                    // - 新增：设置中文状态下国家代码下拉框的默认值 -
+                    // --- 新增/修改：确保国家代码下拉框默认选中 +86 ---
+                    // 方法二：使用 querySelector 找到 option 并设置 selected
                     if (registerCountryCodeSelect) {
-                        registerCountryCodeSelect.selectedIndex = 0; // 强制选中第一个选项
+                        // 先移除所有选项的 selected 属性（可选，但更安全）
+                        const allOptions = registerCountryCodeSelect.querySelectorAll('option');
+                        allOptions.forEach(opt => opt.removeAttribute('selected'));
+
+                        // 找到 value 为 "+86" 的 option 并设置为 selected
+                        const targetOption = registerCountryCodeSelect.querySelector('option[value="+86"]');
+                        if (targetOption) {
+                            targetOption.setAttribute('selected', 'selected');
+                            // 为了确保 UI 更新，有时也需要设置 selectedIndex
+                            registerCountryCodeSelect.value = "+86"; // 或者 registerCountryCodeSelect.selectedIndex = targetOption.index;
+                        }
                     }
-                    // - 新增结束 -
+                    // --- 新增/修改结束 ---
 
                 }
             }
