@@ -1068,19 +1068,15 @@
 
         /* 新增：模态框关闭动画 - 与打开动画相反 */
         @keyframes scaleOutFade {
-          0% {
-            transform: scale(1);
-            opacity: 1;
-          }
-          30% { /* 在 30% 时间点，轻微放大 */
-            transform: scale(1.05); /* 调整这个值可以控制"跳"的幅度，例如 1.03 或 1.08 */
-            opacity: 1;
-          }
-          100% {
-            transform: scale(0.1); /* 结束时的缩放值与打开动画的起始值一致 */
-            opacity: 0;
-          }
-        }
+         0% {
+           transform: translateY(0) scale(1); /* 从当前位置开始 */
+           opacity: 1;
+         }
+         100% {
+           transform: translateY(-100%) scale(0.8); /* 向上移动自身高度的100%，并略微缩小 */
+           opacity: 0; /* 淡出 */
+         }
+       }
 
 
 
@@ -2343,7 +2339,7 @@
 
                   // 2. 应用关闭动画
                   // 使用与打开动画相同的时长和缓动函数，但使用新的动画名称
-                  modalContent.style.animation = 'scaleOutFade 0.2s cubic-bezier(0.33, 1, 0.68, 1) forwards';
+                  modalContent.style.animation = 'scaleOutFade 0.3s cubic-bezier(0.33, 1, 0.68, 1) forwards';
 
                   // 3. 监听动画结束事件
                   modalContent.addEventListener('animationend', function handler() {
