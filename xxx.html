@@ -2342,6 +2342,9 @@
                 clearLoginModalState();
                 // --- 新增结束 ---
                 if (loginModal) {
+                    // 确保背景色是默认的半透明黑色
+                    loginModal.style.backgroundColor = ''; // 清除内联样式，让 CSS 生效
+                    // 或者显式设置
                     loginModal.style.display = 'block';
                 } else {
                     console.error("Login modal element not found!");
@@ -2372,6 +2375,10 @@
             // --- 修改后的 closeModal 函数 ---
             function closeModal(modalElement) {
               if (modalElement) {
+
+                //    这会让背景在内容动画播放时就变亮
+                modalElement.style.backgroundColor = 'rgba(0, 0, 0, 0)'; 
+
                 const modalContent = modalElement.querySelector('.bubble-modal-content, .profile-modal-content'); // 选择模态框内容
 
                 if (modalContent) {
@@ -2397,6 +2404,9 @@
                   // 如果找不到内容元素，直接隐藏
                   console.warn('Modal content element not found for closing animation.');
                   modalElement.style.display = 'none';
+
+                  // 并恢复背景色（虽然即将被隐藏）
+                  modalElement.style.backgroundColor = '';
                 }
               } else {
                 console.error("closeModal: modalElement is null or undefined.");
@@ -2489,6 +2499,10 @@
             function closeDonateModal() {
               // 检查 donateModal 元素是否存在
               if (donateModal) {
+
+                // 1. 立即修改模态框背景层的透明度
+                donateModal.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+
                 // 1. 找到模态框的内容元素 (donate-modal-content)
                 const modalContent = donateModal.querySelector('.donate-modal-content');
 
@@ -2515,6 +2529,8 @@
                   // 如果找不到内容元素，直接隐藏（回退方案）
                   console.warn('Donate modal content element not found for closing animation.');
                   donateModal.style.display = 'none';
+
+                  donateModal.style.backgroundColor = ''; // 恢复，虽然即将隐藏
                 }
               } else {
                 console.error("closeDonateModal: donateModal element is null or undefined.");
@@ -2544,6 +2560,10 @@
             function closeQrModal() {
               // 检查 qrModal 元素是否存在
               if (qrModal) {
+
+                // 1. 立即修改模态框背景层的透明度
+                qrModal.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+
                 // 1. 找到模态框的内容元素 (qr-modal-content)
                 const modalContent = qrModal.querySelector('.qr-modal-content');
 
@@ -2570,6 +2590,8 @@
                   // 如果找不到内容元素，直接隐藏（回退方案）
                   console.warn('QR modal content element not found for closing animation.');
                   qrModal.style.display = 'none';
+
+                  qrModal.style.backgroundColor = ''; // 恢复，虽然即将隐藏
                 }
               } else {
                 console.error("closeQrModal: qrModal element is null or undefined.");
