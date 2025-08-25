@@ -1264,7 +1264,6 @@
     <div class="glow glow-purple"></div>
     <div class="grid-overlay"></div>
     <div class="top-nav">
-        <!-- 登录/个人按钮 -->
         <button class="nav-btn" id="loginBtnNav">
             <i class="fas fa-user"></i>
             <span class="btn-text">登录</span>
@@ -1295,14 +1294,12 @@
                         <i class="fas fa-file"></i>
                     </label>
                     <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt">
-                    <!-- --- 新增：生成图片按钮 --- -->
                     <button id="generateImageBtn" class="upload-btn disabled-btn" title="生成图片">
-                        <span class="btn-content" style="display: flex; align-items: center; gap: 2px;"> <!-- 使用 flex 和 gap 控制间距 -->
-                            <i class="fas fa-crown" style="font-size: 1rem;"></i> <!-- 图标 -->
-                            <span id="generateImageBtnText" style="font-size: 1.0rem; color: #888888;">生图模式</span> <!-- 文字，初始为中文 -->
+                        <span class="btn-content" style="display: flex; align-items: center; gap: 2px;"> 
+                            <i class="fas fa-crown" style="font-size: 1rem;"></i> 
+                            <span id="generateImageBtnText" style="font-size: 1.0rem; color: #888888;">生图模式</span> 
                         </span>
                     </button>
-                    <!-- --- 新增结束 --- -->
                     <button id="sendButton" class="chat-send-btn">
                         <i class="fas fa-paper-plane"></i> <span id="sendButtonText" class="btn-text">发送</span>
                     </button>
@@ -1343,7 +1340,6 @@
             </span>
         </div>
     </div>
-    <!-- --- 新增：登录/注册模态框 (气泡型) --- -->
     <div id="loginModal" class="bubble-modal">
         <div class="bubble-modal-content">
             <span class="bubble-close">&times;</span>
@@ -1368,8 +1364,6 @@
             </div>
         </div>
     </div>
-    <!-- --- 新增结束 --- -->
-    <!-- --- 新增：注册模态框 (气泡型) --- -->
     <div id="registerModal" class="bubble-modal">
         <div class="bubble-modal-content">
             <span class="bubble-close">&times;</span>
@@ -1381,7 +1375,6 @@
                     <label for="registerUsername">用户名:</label>
                     <input type="text" id="registerUsername" class="form-control" required inputmode="text" required maxlength="20">
                 </div>
-                <!-- --- 新增：手机号输入框 --- -->
                 <div class="form-group">
                     <label for="registerPhone">手机号:</label>
                     <div class="phone-input-group">
@@ -1422,7 +1415,6 @@
                         <input type="tel" id="registerPhone" class="phone-number-input" placeholder="请输入手机号" maxlength="20">
                     </div>
                 </div>
-                <!-- --- 新增结束 --- -->
                 <div class="form-group">
                     <label for="registerPassword">密码:</label>
                     <input type="password" id="registerPassword" class="form-control" required maxlength="20">
@@ -1440,8 +1432,6 @@
             </div>
         </div>
     </div>
-    <!-- --- 新增结束 --- -->
-    <!-- --- 新增：个人中心模态框 --- -->
     <div id="profileModal" class="bubble-modal">
         <div class="profile-modal-content">
             <span class="bubble-close">&times;</span>
@@ -1450,28 +1440,22 @@
             </div>
             <div class="profile-info">
                 <h3 id="profileUsername">用户名</h3>
-                <!-- - 新增：剩余次数显示 - -->
                 <p id="profileImageCount">剩余生成  HD超清图片  次数: <span id="imageCountText">0</span></p>
                 <p id="profilePPTCount">剩余生成  PPT文件  次数: <span id="pptCountText">0</span></p>
                 <p id="profileWordCount">剩余生成  Word文件  次数: <span id="wordCountText">0</span></p>
                 <p id="profilePDFCount">剩余生成  PDF文件  次数: <span id="pdfCountText">0</span></p>
-                <!-- - 新增结束 - -->
             </div>
             <div class="profile-actions">
-                <!-- - 新增：捐款按钮 - -->
                 <button id="donateBtnProfile" class="profile-btn donate"><i class="fas fa-donate"></i> <span id="donateBtnProfileText">捐款</span></button>
-                <!-- - 新增结束 - -->
                 <button id="logoutBtnProfile" class="profile-btn logout"><i class="fas fa-sign-out-alt"></i> <span id="logoutBtnProfileText">登出</span></button>
             </div>
         </div>
     </div>
-    <!-- --- 新增结束 --- -->
-        <!-- - 新增：捐款模态框 - -->
         <div id="donateModal" class="bubble-modal" style="display: none;">
             <div class="bubble-modal-content donate-modal-content">
                 <span class="bubble-close">&times;</span>
                 <div class="bubble-modal-header">
-                    <h2 id="donateModalTitle">Select Amount</h2> <!-- 默认英文 -->
+                    <h2 id="donateModalTitle">Select Amount</h2> 
                 </div>
                 <div class="bubble-modal-body donate-modal-body">
                     <ul class="donate-options-list">
@@ -1505,13 +1489,11 @@
                 </div>
             </div>
         </div>
-        <!-- - 新增结束 - -->
-        <!-- - 新增：二维码展示模态框 - -->
         <div id="qrModal" class="bubble-modal" style="display: none;">
             <div class="bubble-modal-content qr-modal-content">
                 <span class="bubble-close">&times;</span>
                 <div class="bubble-modal-header">
-                    <h2 id="qrModalTitle">Alipay QR Code</h2> <!-- 默认英文 -->
+                    <h2 id="qrModalTitle">Alipay QR Code</h2> 
                 </div>
                 <div class="bubble-modal-body qr-modal-body">
                     <p id="qrAmountLabel">Amount:</p>
@@ -1521,7 +1503,6 @@
                 </div>
             </div>
         </div>
-        <!-- - 新增结束 - -->
     <script src="https://hk-alice-file.oss-cn-hongkong.aliyuncs.com/particles.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -1665,7 +1646,7 @@
 
                             const imageMessageHtml = `
                                 <p>${isEnglish ? 'Generated Image for:' : '生成的图片：'}</p>
-                                <p><em>${userPrompt}</em></p> <!-- 使用保存的描述 -->
+                                <p><em>${userPrompt}</em></p> 
                                 <img src="${data.image_url}" alt="Generated Image" style="max-width: 100%; border-radius: 10px; margin-top: 10px;">
                             `;
 
