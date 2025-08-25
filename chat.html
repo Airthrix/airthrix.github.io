@@ -109,6 +109,8 @@
             height: 44px;
             text-align: center;
             white-space: nowrap;
+            overflow: hidden; 
+            text-overflow: ellipsis; 
             padding: 0 1.5rem;
             flex-shrink: 0;
             background: transparent;
@@ -118,8 +120,9 @@
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.7rem 1.5rem;
+            justify-content: center;
+            gap: 0.3rem;
+            padding: 0.7rem 1.2rem;
             border-radius: 30px;
             transition: all 0.3s ease;
             position: relative;
@@ -127,6 +130,7 @@
             backdrop-filter: blur(5px);
             background: rgba(15, 15, 40, 0.4);
             overflow: hidden;
+            max-width: 130px; 
             z-index: 10;
         }
         .nav-btn::after {
@@ -311,8 +315,7 @@
             gap: 1rem;
             transition: max-height 0.3s ease;
             scrollbar-width: thin;
-            scrollbar-color: var(--neon-blue) rgba(255, 255, 255, 0.1);
-            flex: 1;
+            width: 100%;
         }
         .chat-messages.expanded {
             max-height: 800px;
@@ -334,14 +337,12 @@
         .message {
             padding: 0.8rem 1.2rem;
             border-radius: 18px;
-            max-width: 95%;
             word-wrap: break-word;
             animation: fadeIn 0.3s ease-in-out;
             position: relative;
             overflow: hidden;
             font-size: 1rem;
         }
-
         .agreement-notice {
             text-align: center;
             font-size: 0.7rem;
@@ -358,7 +359,6 @@
             text-decoration: underline;
             color: var(--neon-blue);
         }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -385,7 +385,6 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
-
         @keyframes dotPulse {
             0%, 100% { opacity: 0.3; }
             50% { opacity: 1; }
@@ -438,7 +437,7 @@
         .chat-input {
             flex-grow: 1;
             padding: 1rem;
-            padding-right: 60px;
+            padding-right: 1rem;
             border-radius: 30px;
             border: 1px solid rgba(0, 243, 255, 0.3);
             background: rgba(10, 10, 25, 0.5);
@@ -458,7 +457,7 @@
             display: none;
         }
         .chat-send-btn {
-            padding: 0.8rem 1.5rem;
+            padding: 0.8rem 1.2rem;
             border-radius: 30px;
             border: 1px solid rgba(0, 243, 255, 0.3);
             background: rgba(15, 15, 40, 0.4);
@@ -487,7 +486,6 @@
             box-shadow: none;
             transform: none;
         }
-
         .typing-indicator {
             color: var(--neon-blue);
             font-style: italic;
@@ -497,12 +495,10 @@
             align-items: center;
             gap: 5px;
         }
-
         .dots {
             display: flex;
             gap: 4px;
         }
-
         .dot {
             width: 8px;
             height: 8px;
@@ -510,15 +506,12 @@
             background-color: var(--neon-blue);
             animation: dotPulse 1.5s infinite;
         }
-
         .dot:nth-child(2) {
             animation-delay: 0.3s;
         }
-
         .dot:nth-child(3) {
             animation-delay: 0.6s;
         }
-
         .file-preview-container {
             display: flex;
             flex-wrap: wrap;
@@ -556,6 +549,577 @@
         .file-preview-remove:hover {
             color: #ff5555;
         }
+
+        .bubble-modal {
+            display: none; 
+            position: fixed;
+            z-index: 1001; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5); 
+            transition: background-color 0.3s ease, backdrop-filter 0.3s ease; 
+        }
+        .bubble-modal-content {
+            background-color: #0a0a2e;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid transparent;
+            border-radius: 20px;
+            width: 80%;
+            max-width: 400px;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+            animation: scaleInFade 0.32s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+            backdrop-filter: blur(5px);
+            position: relative;
+    
+            position: relative;
+            overflow: hidden;
+        }
+        .bubble-modal-content::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            bottom: -1px;
+            left: -1px;
+            border: 1px solid transparent;
+            border-radius: 20px;
+        
+            box-shadow: inset 0 0 30px linear-gradient(90deg, #00ff9d, #00f3ff);
+          
+            z-index: -1;
+        }
+        .bubble-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            z-index: 1;
+        }
+        .bubble-close:hover,
+        .bubble-close:focus {
+            color: #ff0055;
+            text-decoration: none;
+        }
+        .bubble-modal-header {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+            margin-bottom: 15px;
+            text-align: center;
+            color: #00ff9d;
+            font-size: 1.0rem;
+            font-weight: bold;
+        }
+        .bubble-modal-body {
+            padding: 10px 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #c0c0ff;
+            font-size: 1rem;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #00ff9d;
+            background: rgba(10, 10, 46, 0.5);
+            color: #e0e0ff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #00ff9d;
+            box-shadow: 0 0 5px rgba(0, 255, 157, 0.5);
+        }
+    
+        .phone-input-group {
+            display: flex;
+            gap: 5px;
+         
+            width: 100%;
+        }
+        .country-code-select {
+            width: 66px; 
+            padding: 4px 8px;
+            border-radius: 5px;
+            border: 1px solid #00ff9d;
+            background: rgba(10, 10, 46, 0.5);
+            color: #e0e0ff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .country-code-select:focus {
+            outline: none;
+            border-color: #00ff9d;
+            box-shadow: 0 0 5px rgba(0, 255, 157, 0.5);
+        }
+        .phone-number-input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #00ff9d;
+            background: rgba(10, 10, 46, 0.5);
+            color: #e0e0ff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            min-width: 0; 
+        }
+        .phone-number-input:focus {
+            outline: none;
+            border-color: #00ff9d;
+            box-shadow: 0 0 5px rgba(0, 255, 157, 0.5);
+        }
+  
+        .btn-primary {
+            background-image: linear-gradient(90deg, #00ff9d, #00f3ff);
+            color: #0a0a12;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px #00ff9d, inset 0 0 5px rgba(0, 255, 157, 0.3);
+        }
+        .btn-primary:hover {
+            background-position: 100% 0;
+            box-shadow: 0 0 15px #00ff9d, inset 0 0 7px rgba(0, 255, 157, 0.5);
+        }
+        .bubble-modal-footer {
+            padding: 10px 0;
+            border-top: 1px solid rgba(100, 100, 255, 0.2);
+            margin-top: 15px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        .bubble-modal-footer a {
+            color: #00ff9d;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .bubble-modal-footer a:hover {
+            color: #00c4cc;
+        }
+        .error-message {
+            color: #ff0055;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none; 
+        }
+        .success-message {
+            color: #00ff9d;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none; 
+        }
+
+        .profile-modal-content {
+            background-color: #0a0a2e;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid transparent;
+            border-radius: 20px;
+            width: 80%;
+            max-width: 400px;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); 
+            animation: scaleInFade 0.32s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+            backdrop-filter: blur(5px);
+            position: relative;
+
+            position: relative;
+            overflow: hidden;
+        }
+        .profile-modal-content::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            bottom: -1px;
+            left: -1px;
+            border: 1px solid transparent;
+            border-radius: 20px;
+         
+            box-shadow: inset 0 0 30px linear-gradient(90deg, #00ff9d, #00f3ff);
+          
+            z-index: -1;
+        }
+        .profile-modal-header {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 255, 157, 0.2);
+            margin-bottom: 15px;
+            text-align: center;
+            color: #00ff9d;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px; 
+            margin-bottom: 20px; 
+        }
+        .profile-info p span {
+            font-weight: bold; 
+            color: var(--neon-green); 
+            margin-left: 10px; 
+        }
+        .profile-info p:hover {
+            background: rgba(0, 243, 255, 0.1); 
+            transform: translateY(-2px); 
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2); 
+        }
+        .profile-info h3 {
+            text-align: center; 
+            margin-bottom: 10px;
+            color: #00f3ff;
+            font-size: 1.2rem;
+        }
+        .profile-info p {
+            display: flex;
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 8px 10px; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+            color: #ffffff; 
+            font-size: 0.9rem; 
+            transition: all 0.3s ease; 
+        }
+        .profile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .profile-btn {
+         
+            background-color: transparent;
+          
+            color: #c0c0ff;
+          
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+       
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+       
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3), inset 0 0 5px rgba(0, 243, 255, 0.3);
+        }
+        .profile-btn:hover {
+      
+            background-color: rgba(0, 243, 255, 0.2);
+      
+            color: var(--neon-blue);
+        
+            border-color: var(--neon-blue);
+           
+            box-shadow: 0 0 15px var(--neon-blue), inset 0 0 7px rgba(0, 243, 255, 0.5);
+        }
+        .profile-btn.vip {
+         
+            background-color: rgba(139, 0, 0, 0.2); 
+  
+            border-color: #8B0000; 
+            color: #8B0000; 
+
+            font-weight: bold;
+      
+            box-shadow: 0 0 10px #8B0000, inset 0 0 5px rgba(139, 0, 0, 0.3);
+        }
+        .profile-btn.vip:hover {
+          
+            background-color: rgba(255, 0, 0, 0.3); 
+      
+            border-color: #ff0000; 
+            color: #ff0000; 
+      
+            box-shadow: 0 0 15px #ff0000, inset 0 0 7px rgba(255, 0, 0, 0.5);
+        }
+        .profile-btn.logout {
+        
+            background-image: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+        
+            color: #0a0a12;
+       
+            border-color: var(--neon-green);
+            
+            box-shadow: 0 0 10px var(--neon-green), inset 0 0 5px rgba(0, 255, 157, 0.3);
+           
+            background-color: rgba(0, 255, 157, 0.1);
+        }
+        .profile-btn.logout:hover {
+        
+            background-image: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+         
+            color: #0a0a12;
+        
+            border-color: var(--neon-green);
+            box-shadow: 0 0 15px var(--neon-green), inset 0 0 7px rgba(0, 255, 157, 0.5);
+         
+            background-color: rgba(0, 255, 157, 0.2);
+        }
+
+
+
+  
+        .disabled-btn {
+            opacity: 0.5; 
+            cursor: not-allowed; 
+            background: rgba(50, 50, 80, 0.3) !important; 
+            color: #888888 !important; 
+            border-color: rgba(100, 100, 150, 0.3) !important; 
+            box-shadow: none !important; 
+        }
+        .disabled-btn:hover {
+     
+            opacity: 0.5;
+            background: rgba(50, 50, 80, 0.3) !important;
+            color: #888888 !important;
+            border-color: rgba(100, 100, 150, 0.3) !important;
+            box-shadow: none !important;
+            transform: none !important; 
+        }
+  
+
+
+
+        .active-image-mode {
+            background-image: linear-gradient(90deg, var(--neon-green), var(--neon-blue)) !important;
+            color: #0a0a12 !important;
+            border-color: var(--neon-green) !important;
+            box-shadow: 0 0 10px var(--neon-green), inset 0 0 5px rgba(0, 255, 157, 0.3) !important;
+            opacity: 1 !important;
+            cursor: pointer !important;
+       
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important; 
+        }
+        .active-image-mode:hover {
+            background-image: linear-gradient(90deg, var(--neon-green), var(--neon-blue)) !important;
+            color: #0a0a12 !important;
+            border-color: var(--neon-green) !important;
+            box-shadow: 0 0 15px var(--neon-green), inset 0 0 7px rgba(0, 255, 157, 0.5) !important;
+            transform: translateY(-2px) !important;
+            opacity: 1 !important;
+        }
+  
+
+
+     
+        .donate-modal-content {
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .donate-modal-body {
+            text-align: left;
+        }
+
+        .donate-options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+        }
+
+        .donate-option-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .donate-option-item:last-child {
+            border-bottom: none;
+        }
+
+        .donate-option-text {
+            font-size: 0.7rem;
+            color: #ffffff;
+        }
+
+        .donate-option-text span {
+             color: var(--neon-green); 
+        }
+
+        .btn-secondary {
+            background: rgba(50, 50, 80, 0.5);
+            color: white;
+            border: 1px solid var(--neon-blue);
+            padding: 8px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px; 
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 243, 255, 0.2);
+            box-shadow: 0 0 10px var(--neon-blue);
+            transform: translateY(-2px);
+        }
+
+        .donate-instruction, .donate-note {
+            font-size: 0.85rem;
+            color: #cccccc;
+            margin: 5px 0;
+            text-align: center;
+        }
+
+        .donate-note {
+            color: #ff9966; 
+            font-style: italic;
+        }
+    
+
+
+       
+        .qr-modal-content {
+            max-width: 350px;
+            width: 80%;
+            text-align: center;
+       
+            padding: 0;
+        }
+
+        .qr-modal-body {
+   
+            padding: 0.1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px; 
+            box-sizing: border-box;
+       
+
+        }
+
+        .qr-amount-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--neon-green);
+       
+            margin: 5px 0;
+        }
+
+        .qr-image {
+            max-width: none;
+         
+     
+            width: 300px; 
+            height: auto;
+    
+            border: 2px solid var(--neon-blue);
+            border-radius: 15px;
+    
+            margin: 5px auto;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .qr-instruction {
+            font-size: 0.9rem;
+            color: #cccccc;
+        
+            margin-top: 5px;
+     
+            padding: 0 5px;
+        }
+ 
+
+
+    
+        @keyframes scaleInFade {
+          0% {
+            transform: scale(0.3);
+            opacity: 0;
+          }
+          100% {
+            transform: scale(1);
+            opacity: 1;
+          }
+        }
+
+
+
+        @keyframes ashDisappear {
+          0% {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); 
+            transform: scale(1);
+            opacity: 1;
+            filter: blur(0px); 
+          }
+          25% {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); 
+            transform: scale(0.75); 
+            opacity: 0.9;
+            filter: blur(1px); 
+          }
+          50% {
+   
+            clip-path: polygon(
+              50% 50%, 50% 50%, 50% 50%, 50% 50%,
+              50% 50%, 50% 50%, 50% 50%, 50% 50%,
+              50% 50%, 50% 50%, 50% 50%, 50% 50%,
+              50% 50%, 50% 50%, 
+            );
+            transform: scale(0.5);
+            opacity: 0.7;
+            filter: blur(2px);
+          }
+          75% {
+  
+            clip-path: polygon(
+              50% 50%, 50% 50%, 50% 50%, 50% 50%,
+              50% 50%, 50% 50%, 50% 50%, 50% 50%,
+              50% 50%, 50% 50%, 50% 50%, 50% 50%,
+              50% 50%, 50% 50%, 
+            );
+            transform: scale(0.25);
+            opacity: 0.4;
+            filter: blur(4px);
+          }
+          100% {
+
+            clip-path: polygon(
+              50% 50%, 50% 50%, 50% 50%, 50% 50%,
+              50% 50%, 50% 50%, 50% 50%, 50% 50%,
+              50% 50%, 50% 50%, 50% 50%, 50% 50%,
+              50% 50%, 50% 50%, 
+            );
+            transform: scale(0.1);
+            opacity: 0;
+            filter: blur(8px); 
+          }
+        } 
+
+
 
         @media (max-width: 768px) {
             .top-nav {
@@ -607,7 +1171,6 @@
             .footer {
                 padding: 2rem 0 1.5rem;
             }
-
             .agreement-notice {
                 text-align: center;
                 font-size: 0.7rem;
@@ -624,7 +1187,6 @@
                 text-decoration: underline;
                 color: var(--neon-blue);
             }
-
         }
         @media (max-width: 480px) {
             .chat-container {
@@ -658,7 +1220,7 @@
             }
             .nav-btn {
                 padding: 0.6rem 1rem;
-                font-size: 0.8rem;
+                font-size: 1rem;
                 min-width: 90px;
             }
             .chat-messages {
@@ -677,7 +1239,6 @@
             .footer-link {
                 font-size: 0.9rem;
             }
-
             .agreement-notice {
                 text-align: center;
                 font-size: 0.7rem;
@@ -694,7 +1255,6 @@
                 text-decoration: underline;
                 color: var(--neon-blue);
             }
-
         }
     </style>
 </head>
@@ -704,15 +1264,14 @@
     <div class="glow glow-purple"></div>
     <div class="grid-overlay"></div>
     <div class="top-nav">
-        <button class="nav-btn" id="loginBtn">
-            <i class="fas fa-sign-in-alt"></i>
-            <span class="btn-text">Log in</span>
+        <button class="nav-btn" id="loginBtnNav">
+            <i class="fas fa-user"></i>
+            <span class="btn-text">登录</span>
         </button>
         <button class="nav-btn" id="langBtn">
             <i class="fas fa-globe"></i>
             <span class="btn-text">English</span>
         </button>
-        <!-- 添加清除历史按钮 -->
         <button class="nav-btn" id="clearHistoryBtn">
             <i class="fas fa-trash-alt"></i>
             <span class="btn-text">清除历史</span>
@@ -722,7 +1281,7 @@
         <div class="chat-container">
             <h2 class="chat-title">与 AliceSkyGarden 对话</h2>
             <div class="chat-messages" id="chatMessages">
-                <div class="message bot-message" id="initialMessage">AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊<br><br>现已进化成多模态模型：支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊</div>
+                <div class="message bot-message" id="initialMessage">我是 AliceSkyGarden 超级模型 😊 与 Qwen3 一起随机上线，有什么可以帮你吗？😊<br><br>新增图片, PDF, Word, 表格, 脚本, 网页等文件输入解析功能 😊 新增用户登录和账号注册功能 😊 新增聊天记录缓存到本地浏览器功能 😊 新增HD超清图片生成功能 😊</div>
             </div>
             <div class="file-preview-container" id="filePreviewContainer" style="display: none;"></div>
             <div class="chat-input-area">
@@ -735,6 +1294,12 @@
                         <i class="fas fa-file"></i>
                     </label>
                     <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt">
+                    <button id="generateImageBtn" class="upload-btn disabled-btn" title="生成图片">
+                        <span class="btn-content" style="display: flex; align-items: center; gap: 2px;"> 
+                            <i class="fas fa-crown" style="font-size: 1rem;"></i> 
+                            <span id="generateImageBtnText" style="font-size: 1.0rem; color: #888888;">生图模式</span> 
+                        </span>
+                    </button>
                     <button id="sendButton" class="chat-send-btn">
                         <i class="fas fa-paper-plane"></i> <span id="sendButtonText" class="btn-text">发送</span>
                     </button>
@@ -765,20 +1330,179 @@
         </div>
         <p>Contact: airthrix@163.com | +1 (800) AIRTHRIX-AI</p>
         <p class="copyright">&copy; 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved</p>
-            <!-- *** 插入 *** -->
-            <br>
-            <div class="agreement-notice">
-                <!-- 中文版本 -->
-                <span class="agreement-text cn-text">
-                    向模型发送消息即表示您已同意<a href="https://chat.qwen.ai/legal-agreement/terms-of-service?spm=a2ty_o01.29997169.0.0.3d4d5171PFORcX" target="_blank" class="agreement-link">用户条款</a>并已阅读<a href="https://chat.qwen.ai/legal-agreement/privacy-policy?spm=a2ty_o01.29997169.0.0.3d4d5171PFORcX" target="_blank" class="agreement-link">隐私协议</a>
-                </span>
-                <!-- 英文版本 -->
-                <span class="agreement-text en-text" style="display: none;">
-                    By sending message to mode, you have agreed <a href="https://chat.qwen.ai/legal-agreement/terms-of-service?spm=a2ty_o01.29997169.0.0.3d4d5171PFORcX" target="_blank" class="agreement-link">Terms of Service</a> and have read <a href="https://chat.qwen.ai/legal-agreement/privacy-policy?spm=a2ty_o01.29997169.0.0.3d4d5171PFORcX" target="_blank" class="agreement-link">Privacy Policy</a>
-                </span>
-            </div>
-            <!-- *** 插入 *** -->
+        <br>
+        <div class="agreement-notice">
+            <span class="agreement-text cn-text">
+                向模型发送消息即表示您已同意<a href="https://chat.qwen.ai/legal-agreement/terms-of-service?spm=a2ty_o01.29997169.0.0.3d4d5171PFORcX" target="_blank" class="agreement-link">用户条款</a>并已阅读<a href="https://chat.qwen.ai/legal-agreement/privacy-policy?spm=a2ty_o01.29997169.0.0.3d4d5171PFORcX" target="_blank" class="agreement-link">隐私协议</a>
+            </span>
+            <span class="agreement-text en-text" style="display: none;">
+                By sending message to mode, you have agreed <a href="https://chat.qwen.ai/legal-agreement/terms-of-service?spm=a2ty_o01.29997169.0.0.3d4d5171PFORcX" target="_blank" class="agreement-link">Terms of Service</a> and have read <a href="https://chat.qwen.ai/legal-agreement/privacy-policy?spm=a2ty_o01.29997169.0.0.3d4d5171PFORcX" target="_blank" class="agreement-link">Privacy Policy</a>
+            </span>
+        </div>
     </div>
+    <div id="loginModal" class="bubble-modal">
+        <div class="bubble-modal-content">
+            <span class="bubble-close">&times;</span>
+            <div class="bubble-modal-header">
+                <h2 id="loginModalTitle">登录AliceSkyGarden</h2>
+            </div>
+            <div class="bubble-modal-body">
+                <div class="form-group">
+                    <label for="loginUsername">用户名:</label>
+                    <input type="text" id="loginUsername" class="form-control" required inputmode="text" required maxlength="20">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">密码:</label>
+                    <input type="password" id="loginPassword" class="form-control" required maxlength="20">
+                </div>
+                <div id="loginError" class="error-message"></div>
+                <div id="loginSuccess" class="success-message"></div>
+                <button id="loginSubmitBtn" class="btn-primary">登录</button>
+            </div>
+            <div class="bubble-modal-footer">
+                还没有账户? <a id="showRegisterLink">立即注册</a>
+            </div>
+        </div>
+    </div>
+    <div id="registerModal" class="bubble-modal">
+        <div class="bubble-modal-content">
+            <span class="bubble-close">&times;</span>
+            <div class="bubble-modal-header">
+                <h2 id="registerModalTitle">注册AliceSkyGarden</h2>
+            </div>
+            <div class="bubble-modal-body">
+                <div class="form-group">
+                    <label for="registerUsername">用户名:</label>
+                    <input type="text" id="registerUsername" class="form-control" required inputmode="text" required maxlength="20">
+                </div>
+                <div class="form-group">
+                    <label for="registerPhone">手机号:</label>
+                    <div class="phone-input-group">
+                        <select id="registerCountryCode" class="country-code-select">
+                            <option value="+86" selected>+86 (中国)</option>
+                            <option value="+1">+1 (美国)</option>
+                            <option value="+44">+44 (英国)</option>
+                            <option value="+82">+82 (韩国)</option>
+                            <option value="+65">+65 (新加坡)</option>
+                            <option value="+61">+61 (澳大利亚)</option>
+                            <option value="+33">+33 (法国)</option>
+                            <option value="+49">+49 (德国)</option>
+                            <option value="+39">+39 (意大利)</option>
+                            <option value="+55">+55 (巴西)</option>
+                            <option value="+34">+34 (西班牙)</option>
+                            <option value="+31">+31 (荷兰)</option>
+                            <option value="+46">+46 (瑞典)</option>
+                            <option value="+47">+47 (挪威)</option>
+                            <option value="+45">+45 (丹麦)</option>
+                            <option value="+358">+358 (芬兰)</option>
+                            <option value="+48">+48 (波兰)</option>
+                            <option value="+64">+64 (新西兰)</option>
+                            <option value="+1">+1 (加拿大)</option>
+                            <option value="+30">+30 (希腊)</option>
+                            <option value="+299">+299 (格陵兰)</option>
+                            <option value="+852">+852 (香港)</option>
+                            <option value="+36">+36 (匈牙利)</option>
+                            <option value="+354">+354 (冰岛)</option>
+                            <option value="+353">+353 (爱尔兰)</option>
+                            <option value="+44">+44 (马恩岛)</option>
+                            <option value="+972">+972 (以色列)</option>
+                            <option value="+853">+853 (澳门)</option>
+                            <option value="+377">+377 (摩纳哥)</option>
+                            <option value="+41">+41 (瑞士)</option>
+                            <option value="+90">+90 (土耳其)</option>
+                            <option value="+379">+379 (梵蒂冈)</option>
+                        </select>
+                        <input type="tel" id="registerPhone" class="phone-number-input" placeholder="请输入手机号" maxlength="20">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">密码:</label>
+                    <input type="password" id="registerPassword" class="form-control" required maxlength="20">
+                </div>
+                <div class="form-group">
+                    <label for="registerConfirmPassword">确认密码:</label>
+                    <input type="password" id="registerConfirmPassword" class="form-control" required maxlength="20">
+                </div>
+                <div id="registerError" class="error-message"></div>
+                <div id="registerSuccess" class="success-message"></div>
+                <button id="registerSubmitBtn" class="btn-primary">注册</button>
+            </div>
+            <div class="bubble-modal-footer">
+                已有账户? <a id="showLoginLink">立即登录</a>
+            </div>
+        </div>
+    </div>
+    <div id="profileModal" class="bubble-modal">
+        <div class="profile-modal-content">
+            <span class="bubble-close">&times;</span>
+            <div class="profile-modal-header">
+                <h2 id="profileModalTitle">个人中心</h2>
+            </div>
+            <div class="profile-info">
+                <h3 id="profileUsername">用户名</h3>
+                <p id="profileImageCount">剩余生成  HD超清图片  次数: <span id="imageCountText">0</span></p>
+                <p id="profilePPTCount">剩余生成  PPT文件  次数: <span id="pptCountText">0</span></p>
+                <p id="profileWordCount">剩余生成  Word文件  次数: <span id="wordCountText">0</span></p>
+                <p id="profilePDFCount">剩余生成  PDF文件  次数: <span id="pdfCountText">0</span></p>
+            </div>
+            <div class="profile-actions">
+                <button id="donateBtnProfile" class="profile-btn donate"><i class="fas fa-donate"></i> <span id="donateBtnProfileText">捐款</span></button>
+                <button id="logoutBtnProfile" class="profile-btn logout"><i class="fas fa-sign-out-alt"></i> <span id="logoutBtnProfileText">登出</span></button>
+            </div>
+        </div>
+    </div>
+        <div id="donateModal" class="bubble-modal" style="display: none;">
+            <div class="bubble-modal-content donate-modal-content">
+                <span class="bubble-close">&times;</span>
+                <div class="bubble-modal-header">
+                    <h2 id="donateModalTitle">Select Amount</h2> 
+                </div>
+                <div class="bubble-modal-body donate-modal-body">
+                    <ul class="donate-options-list">
+                        <li class="donate-option-item">
+                            <span class="donate-option-text"><span id="donateOption1Text">0.08 RMB</span> <span id="donateOption1Desc">--> 1 HD Image</span></span>
+                            <button class="btn-secondary show-qr-btn" data-amount="0.08">
+                                <i class="fab fa-alipay"></i> <span id="alipayBtnText1">Alipay</span>
+                            </button>
+                        </li>
+                        <li class="donate-option-item">
+                            <span class="donate-option-text"><span id="donateOption2Text">1.0 RMB</span> <span id="donateOption2Desc">--> 15 HD Images</span></span>
+                            <button class="btn-secondary show-qr-btn" data-amount="1.0">
+                                <i class="fab fa-alipay"></i> <span id="alipayBtnText2">Alipay</span>
+                            </button>
+                        </li>
+                        <li class="donate-option-item">
+                            <span class="donate-option-text"><span id="donateOption3Text">5.0 RMB</span> <span id="donateOption3Desc">--> 88 HD Images</span></span>
+                            <button class="btn-secondary show-qr-btn" data-amount="5.0">
+                                <i class="fab fa-alipay"></i> <span id="alipayBtnText3">Alipay</span>
+                            </button>
+                        </li>
+                        <li class="donate-option-item">
+                            <span class="donate-option-text"><span id="donateOption4Text">9.9 RMB</span> <span id="donateOption4Desc">--> 188 HD Images</span></span>
+                            <button class="btn-secondary show-qr-btn" data-amount="9.9">
+                                <i class="fab fa-alipay"></i> <span id="alipayBtnText4">Alipay</span>
+                            </button>
+                        </li>
+                    </ul>
+                    <p class="donate-instruction" id="donateInstructionText">Click to view the QR code, save and pay via Alipay app</p>
+                    <p class="donate-note" id="donateNoteText">Note: Please ensure the payment amount is correct</p>
+                </div>
+            </div>
+        </div>
+        <div id="qrModal" class="bubble-modal" style="display: none;">
+            <div class="bubble-modal-content qr-modal-content">
+                <span class="bubble-close">&times;</span>
+                <div class="bubble-modal-header">
+                    <h2 id="qrModalTitle">Alipay QR Code</h2> 
+                </div>
+                <div class="bubble-modal-body qr-modal-body">
+                    <p id="qrAmountLabel">Amount:</p>
+                    <p id="qrAmountValue" class="qr-amount-value">0.00 RMB</p>
+                    <img id="qrImage" src="" alt="Alipay QR Code" class="qr-image">
+                    <p class="qr-instruction" id="qrInstructionText">Save this image and open it in Alipay app to scan and pay</p>
+                </div>
+            </div>
+        </div>
     <script src="https://hk-alice-file.oss-cn-hongkong.aliyuncs.com/particles.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -787,9 +1511,14 @@
             let isEnglish = false;
             let selectedImages = [];
             let selectedFiles = [];
-         
             let sessionId = localStorage.getItem('chat_session_id') || '';
-            
+            let currentUser = null; 
+            let userToken = null; 
+
+            const API_BASE_URL = 'https://aliceskygarden-fxrfxmvaow.cn-hongkong.fcapp.run';
+
+            const JWT_TOKEN_KEY = 'jwt_token_aliceskygarden';
+
             particlesJS('particles-js', {
                 "particles": {
                     "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
@@ -813,9 +1542,1114 @@
                     }
                 },
                 "retina_detect": true
+
             });
+
+
+
+
+            const generateImageBtn = document.getElementById('generateImageBtn');
+            let isImageGenMode = false; 
+            let currentTaskId = null; 
+            let pollIntervalId = null; 
+
+            if (generateImageBtn) {
+                generateImageBtn.addEventListener('click', function() {
+            
+                    if (!currentUser) {
+                      
+                        openLoginModal();
+                        return;
+                    }
+              
+                    const imageCount = (currentUser.counts && currentUser.counts.image_count) || 0;
+                    if (imageCount <= 0) {
+                        alert(isEnglish ? "The number of Image Generated is insufficient. Please donate to obtain more times" : "图片生成次数不足，请通过捐款获取更多次数");
+                        return;
+                    }
+
+          
+                    isImageGenMode = !isImageGenMode;
+
+                    if (isImageGenMode) {
+                 
+                        generateImageBtn.classList.remove('disabled-btn');
+                     
+                        generateImageBtn.classList.add('active-image-mode');
+                     
+                        generateImageBtn.title = isEnglish ? "Exit Image Generation Mode" : "退出图片生成模式";
+                    
+                        sendButtonText.textContent = isEnglish ? "Generate Image" : "生成图片";
+                    } else {
+               
+                        generateImageBtn.classList.add('disabled-btn');
+                    
+                        generateImageBtn.classList.remove('active-image-mode');
+                   
+                        generateImageBtn.title = isEnglish ? "Generate Image(Sufficient remaining times are required)" : "生成图片(需要有充足的剩余次数)";
+                     
+                        sendButtonText.textContent = isEnglish ? 'Send' : '发送';
+            
+                        stopPolling();
+                    }
+                });
+            } else {
+                console.error("Generate Image Button (id='generateImageBtn') not found in the DOM!");
+            }
+
+  
+            function stopPolling() {
+                 if (pollIntervalId) {
+                     clearInterval(pollIntervalId);
+                     pollIntervalId = null;
+                 }
+                 currentTaskId = null;
+            }
+
+    
+            async function pollForImage(taskId, promptMessageDiv, userPrompt) {
+                const maxAttempts = 30; 
+                const pollInterval = 3000; 
+                let attempts = 0;
+
+                const poll = async () => {
+                    attempts++;
+                    if (attempts > maxAttempts) {
+                        clearInterval(pollIntervalId);
+                        pollIntervalId = null;
+                        hideTyping();
+                        promptMessageDiv.innerHTML += `<br><span style="color: red;">${isEnglish ? 'Image generation timed out.' : '图片生成超时。'}</span>`;
+                        sendButton.disabled = false;
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch(`${API_BASE_URL}/check_image_task/${taskId}`, {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': `Bearer ${userToken}`
+                            }
+                        });
+
+                        if (!response.ok) {
+                            const errorData = await response.json().catch(() => ({}));
+                            throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                        }
+
+                        const data = await response.json();
+
+                        if (data.status === 'SUCCEEDED' && data.image_url) {
+                            clearInterval(pollIntervalId);
+                            pollIntervalId = null;
+                            hideTyping();
+
+
+                            const imageMessageHtml = `
+                                <p>${isEnglish ? 'Generated Image for:' : '生成的图片：'}</p>
+                                <p><em>${userPrompt}</em></p> 
+                                <img src="${data.image_url}" alt="Generated Image" style="max-width: 100%; border-radius: 10px; margin-top: 10px;">
+                            `;
+
+                            promptMessageDiv.innerHTML = imageMessageHtml;
+                      
+                            try {
+                                localStorage.setItem('aliceskygarden_chat_history', chatMessages.innerHTML);
+                            } catch (e) {
+                                console.error("Error saving chat history (including new image) to localStorage:", e);
+                            }
+                
+
+                            await fetchUserInfo(); 
+                  
+
+
+                            sendButton.disabled = false;
+                            userInput.value = ''; 
+
+                        } else if (data.status === 'FAILED') {
+                            clearInterval(pollIntervalId);
+                            pollIntervalId = null;
+                            hideTyping();
+                            promptMessageDiv.innerHTML += `<br><span style="color: red;">${isEnglish ? 'Image generation failed:' : '图片生成失败:'} ${data.message || 'Unknown error'}</span>`;
+                            sendButton.disabled = false;
+                        } else if (data.status === 'RUNNING' || data.status === 'PENDING') {
+          
+                        } else {
+                             clearInterval(pollIntervalId);
+                             pollIntervalId = null;
+                             hideTyping();
+                             promptMessageDiv.innerHTML += `<br><span style="color: red;">${isEnglish ? 'Unexpected task status:' : '意外的任务状态:'} ${data.status}</span>`;
+                             sendButton.disabled = false;
+                        }
+
+                    } catch (error) {
+                        console.error('Error polling for image task:', error);
+
+                    }
+                };
+
+
+                await poll();
+                pollIntervalId = setInterval(poll, pollInterval);
+            }
+
+
+
+            function updateAuthButtonText(buttonElement, status, type, isEnglish) {
+                const buttonTextMap = {
+                    login: {
+                        idle: { cn: '登录', en: 'Login' },
+                        processing: { cn: '正在登录', en: 'Logging in' },
+                        success: { cn: '登录成功', en: 'Login Success' },
+                        error: { cn: '登录失败', en: 'Login Failed' }
+                    },
+                    register: {
+                        idle: { cn: '注册', en: 'Register' },
+                        processing: { cn: '正在注册', en: 'Registering' },
+                        success: { cn: '注册成功', en: 'Register Success' },
+                        error: { cn: '注册失败', en: 'Register Failed' }
+                    }
+                };
+
+                const texts = buttonTextMap[type]?.[status] || buttonTextMap.login.idle; 
+                buttonElement.textContent = isEnglish ? texts.en : texts.cn;
+            }
+
+
+
+     
+            function fetchUserInfo() {
+           
+         
+                const storedToken = localStorage.getItem(JWT_TOKEN_KEY);
+             
+                if (storedToken) {
+                    userToken = storedToken;
+          
+                } else {
+  
+                }
+           
+      
+                if (!userToken) {
+                    document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
+                    document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
+                    return;
+                }
+          
+           
+                fetch(`${API_BASE_URL}/user_info`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${userToken}` 
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+              
+                    if (data && (typeof data.username === 'string' || typeof data.image_count === 'number')) {
+
+                     
+          
+                        currentUser = {
+                            username: data.username,
+                            counts: {
+                                image_count: data.image_count || 0,
+                                ppt_count: data.ppt_count || 0,
+                                word_count: data.word_count || 0,
+                                pdf_count: data.pdf_count || 0
+                            }
+                        };
+                   
+
+          
+                        updateProfileCounts(currentUser.counts);
+                
+                    
+         
+                        if (generateImageBtn) {
+                            if ((currentUser.counts.image_count || 0) > 0) {
+                
+                                generateImageBtn.classList.remove('disabled-btn');
+                        
+                                if (isImageGenMode) {
+                                    generateImageBtn.classList.add('active-image-mode');
+                                }
+                            } else {
+             
+                                generateImageBtn.classList.add('disabled-btn');
+
+                       
+                                if (isImageGenMode) {
+                                     isImageGenMode = false; 
+                                     generateImageBtn.classList.remove('active-image-mode'); 
+                          
+                                     const sendButtonText = document.getElementById('sendButtonText');
+                                     if (sendButtonText) {
+                                         sendButtonText.textContent = isEnglish ? 'Send' : '发送';
+                                     }
+                                  
+                                     generateImageBtn.title = isEnglish ? "Generate Image (Sufficient remaining times are required)" : "生成图片(需要有充足的剩余次数)";
+                                }
+                          
+
+                            }
+                        }
+       
+
+
+                  
+                        document.getElementById('profileUsername').textContent = data.username;
+                 
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = data.username; 
+                        document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user';
+                  
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').style.whiteSpace = 'nowrap';
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').style.overflow = 'hidden';
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').style.textOverflow = 'ellipsis';
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').style.maxWidth = '100px'; 
+                  
+                    } else {
+                     
+                        console.warn('User info request failed or invalid token:', data.error);
+                        currentUser = null;
+                        userToken = null; 
+                        localStorage.removeItem(JWT_TOKEN_KEY); 
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
+                        document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
+                    }
+                })
+                .catch(error => {
+                    console.error('获取用户信息失败 (可能未登录或Token无效):', error);
+              
+                    currentUser = null;
+                    userToken = null; 
+                    localStorage.removeItem(JWT_TOKEN_KEY); 
+                    document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
+                    document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
+                });
+            }
+       
+            fetchUserInfo();
+       
+
+
+            const loginModal = document.getElementById('loginModal');
+            const registerModal = document.getElementById('registerModal');
+            const profileModal = document.getElementById('profileModal'); 
+            const loginBtnNav = document.getElementById('loginBtnNav'); 
+            const showRegisterLink = document.getElementById('showRegisterLink');
+            const showLoginLink = document.getElementById('showLoginLink'); 
+
+
+            function clearLoginModalState() {
+                document.getElementById('loginUsername').value = '';
+                document.getElementById('loginPassword').value = '';
+                document.getElementById('loginError').style.display = 'none';
+                document.getElementById('loginSuccess').style.display = 'none';
+                document.getElementById('loginError').textContent = '';
+                document.getElementById('loginSuccess').textContent = '';
+      
+                const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+                if (loginSubmitBtn) {
+                     loginSubmitBtn.disabled = false;
+                     updateAuthButtonText(loginSubmitBtn, 'idle', 'login', isEnglish);
+                }
+            }
+
+            function clearRegisterModalState() {
+                document.getElementById('registerUsername').value = '';
+                document.getElementById('registerCountryCode').value = '+86'; 
+                document.getElementById('registerPhone').value = '';
+                document.getElementById('registerPassword').value = '';
+                document.getElementById('registerConfirmPassword').value = '';
+                document.getElementById('registerError').style.display = 'none';
+                document.getElementById('registerSuccess').style.display = 'none';
+                document.getElementById('registerError').textContent = '';
+                document.getElementById('registerSuccess').textContent = '';
+       
+                const registerSubmitBtn = document.getElementById('registerSubmitBtn');
+                if (registerSubmitBtn) {
+                     registerSubmitBtn.disabled = false;
+                     updateAuthButtonText(registerSubmitBtn, 'idle', 'register', isEnglish);
+                }
+            }
+         
+
+            
+            const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+            loginSubmitBtn.addEventListener('click', function() {
+                const username = document.getElementById('loginUsername').value;
+                const password = document.getElementById('loginPassword').value;
+                if (!username || !password) {
+                    document.getElementById('loginError').textContent = isEnglish ? 'Username and password cannot be empty' : '用户名和密码不能为空';
+                    document.getElementById('loginError').style.display = 'block';
+                    return;
+                }
+
+         
+                loginSubmitBtn.disabled = true; 
+                updateAuthButtonText(loginSubmitBtn, 'processing', 'login', isEnglish); 
+
+
+           
+                fetch(`${API_BASE_URL}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                   
+                    },
+                    body: JSON.stringify({ username, password }),
+                   
+                })
+                .then(response => response.json())
+                .then(data => {
+     
+                    if (data.error) {
+                        document.getElementById('loginError').textContent = isEnglish ? (data.error.includes('用户名或密码错误') ? 'Incorrect username or password' : data.error) : data.error; 
+                        document.getElementById('loginError').style.display = 'block';
+                        document.getElementById('loginSuccess').style.display = 'none';
+
+                    
+                        updateAuthButtonText(loginSubmitBtn, 'error', 'login', isEnglish);
+                        setTimeout(() => {
+                             loginSubmitBtn.disabled = false;
+                             updateAuthButtonText(loginSubmitBtn, 'idle', 'login', isEnglish); 
+                        }, 1500); 
+          
+
+                    } else {
+                        document.getElementById('loginSuccess').textContent = data.message;
+                        document.getElementById('loginSuccess').style.display = 'block';
+                        document.getElementById('loginError').style.display = 'none';
+
+                  
+                        updateAuthButtonText(loginSubmitBtn, 'success', 'login', isEnglish);
+                        setTimeout(() => {
+                             loginSubmitBtn.disabled = false;
+                             updateAuthButtonText(loginSubmitBtn, 'idle', 'login', isEnglish); 
+                        }, 1000); 
+          
+    
+                        userToken = data.token; 
+
+
+                        currentUser = {
+                            username: data.username,
+                            counts: {
+                                image_count: data.image_count || 0,
+                                ppt_count: data.ppt_count || 0,
+                                word_count: data.word_count || 0,
+                                pdf_count: data.pdf_count || 0
+                            }
+                        };
+
+                        updateProfileCounts(currentUser.counts);
+
+
+                        localStorage.setItem(JWT_TOKEN_KEY, userToken);
+
+
+                        document.getElementById('profileUsername').textContent = data.username;
+
+                        updateProfileCounts(currentUser.counts);
+
+
+
+                        if (generateImageBtn) {
+                            if ((currentUser.counts.image_count || 0) > 0) {
+                                generateImageBtn.classList.remove('disabled-btn');
+                            } else {
+                                generateImageBtn.classList.add('disabled-btn');
+
+
+                                if (isImageGenMode) {
+                                     isImageGenMode = false; 
+                                     generateImageBtn.classList.remove('active-image-mode'); 
+                          
+                                     const sendButtonText = document.getElementById('sendButtonText');
+                                     if (sendButtonText) {
+                                         sendButtonText.textContent = isEnglish ? 'Send' : '发送';
+                                     }
+                        
+                                     generateImageBtn.title = isEnglish ? "Generate Image (Sufficient remaining times are required)" : "生成图片(需要有充足的剩余次数)";
+                                }
+                    
+
+                            }
+                        }
+            
+
+
+
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = data.username;
+                        document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user';
+          
+                        setTimeout(() => {
+                            closeModal(loginModal);
+                        }, 1000);
+                    }
+                })
+                .catch(error => {
+                    console.error('登录请求失败:', error);
+           
+                    document.getElementById('loginError').textContent = isEnglish ? 'Login request failed, please try again later.' : '登录请求失败，请稍后再试。';
+                    document.getElementById('loginError').style.display = 'block';
+                    document.getElementById('loginSuccess').style.display = 'none';
+
+          
+                    updateAuthButtonText(loginSubmitBtn, 'error', 'login', isEnglish);
+                    setTimeout(() => {
+                         loginSubmitBtn.disabled = false;
+                         updateAuthButtonText(loginSubmitBtn, 'idle', 'login', isEnglish); 
+                    }, 1500); 
+
+
+                });
+            });
+
+            const registerSubmitBtn = document.getElementById('registerSubmitBtn');
+            if (registerSubmitBtn) { 
+                registerSubmitBtn.addEventListener('click', function() {
+                    const username = document.getElementById('registerUsername').value.trim(); 
+                    const countryCode = document.getElementById('registerCountryCode').value;
+                    const phone = document.getElementById('registerPhone').value.trim();
+                    const password = document.getElementById('registerPassword').value;
+                    const confirmPassword = document.getElementById('registerConfirmPassword').value;
+                    if (!username || !password || !confirmPassword) {
+                        document.getElementById('registerError').textContent = isEnglish ? 'All fields are required' : '所有字段都必须填写';
+                        document.getElementById('registerError').style.display = 'block';
+                        return;
+                    }
+                    if (password !== confirmPassword) {
+                        document.getElementById('registerError').textContent = isEnglish ? 'Passwords do not match' : '两次输入的密码不一致';
+                        document.getElementById('registerError').style.display = 'block';
+                        return;
+                    }
+
+     
+                    registerSubmitBtn.disabled = true; 
+                    updateAuthButtonText(registerSubmitBtn, 'processing', 'register', isEnglish); 
+
+
+
+                    const registerData = { username, password };
+                    if (phone) {
+                        registerData.phone = `${countryCode}${phone}`;
+                    }
+     
+                    fetch(`${API_BASE_URL}/register`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+        
+                        },
+                        body: JSON.stringify(registerData), 
+                 
+                    })
+                    .then(response => {
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.error) {
+               
+                            let errorMessage = data.error;
+                            if (errorMessage.includes('用户名已存在')) {
+                                errorMessage = isEnglish ? 'Username already exists' : '用户名已存在';
+                            }
+                            document.getElementById('registerError').textContent = errorMessage; 
+                   
+                            document.getElementById('registerError').style.display = 'block';
+                            document.getElementById('registerSuccess').style.display = 'none';
+
+                        
+                            updateAuthButtonText(registerSubmitBtn, 'error', 'register', isEnglish);
+                            setTimeout(() => {
+                                 registerSubmitBtn.disabled = false;
+                                 updateAuthButtonText(registerSubmitBtn, 'idle', 'register', isEnglish); 
+                            }, 1500); 
+                  
+
+                        } else {
+                            document.getElementById('registerSuccess').textContent = data.message;
+                            document.getElementById('registerSuccess').style.display = 'block';
+                            document.getElementById('registerError').style.display = 'none';
+
+                   
+                            updateAuthButtonText(registerSubmitBtn, 'success', 'register', isEnglish);
+                            setTimeout(() => {
+                                 registerSubmitBtn.disabled = false;
+                                 updateAuthButtonText(registerSubmitBtn, 'idle', 'register', isEnglish); 
+            
+                                 closeModal(registerModal);
+
+                                document.getElementById('loginUsername').value = username;
+                      
+                                 openLoginModal(); 
+                            }, 1500); 
+              
+
+                        }
+                    })
+                    .catch(error => {
+                        console.error('注册请求失败:', error);
+                 
+                        document.getElementById('registerError').textContent = isEnglish ? 'Registration request failed, please try again later.' : '注册请求失败，请稍后再试。';
+                        document.getElementById('registerError').style.display = 'block';
+                        document.getElementById('registerSuccess').style.display = 'none';
+
+                 
+                        updateAuthButtonText(registerSubmitBtn, 'error', 'register', isEnglish);
+                        setTimeout(() => {
+                             registerSubmitBtn.disabled = false;
+                             updateAuthButtonText(registerSubmitBtn, 'idle', 'register', isEnglish); 
+                        }, 1500); 
+      
+
+                    });
+                });
+            } else {
+                console.error("Register Submit Button (id='registerSubmitBtn') not found in the DOM!");
+            }
+
+            const rechargeBtnProfile = document.getElementById('rechargeBtnProfile');
+            if (rechargeBtnProfile) { 
+                rechargeBtnProfile.addEventListener('click', function() {
+                     if (!currentUser) {
+                         alert(isEnglish ? "Please log in to use the recharge function." : "请先登录以使用充值功能。");
+                         closeModal(profileModal);
+                         openLoginModal();
+                         return;
+                     }
+         
+                     fetch(`${API_BASE_URL}/recharge`, {
+                         method: 'POST',
+                         headers: {
+                             'Content-Type': 'application/json',
+                             'Authorization': `Bearer ${userToken}`
+                         },
+              
+                     })
+                     .then(response => response.json())
+                     .then(data => {
+                         if (data.error) {
+                             alert(`${isEnglish ? 'Recharge failed:' : '充值失败:'} ${data.error}`);
+                         } else {
+                             alert(`${isEnglish ? 'Recharge info:' : '充值信息:'} ${data.message}`);
+                          
+                             fetchUserInfo();
+                         }
+                     })
+                     .catch(error => {
+                         console.error('充值请求失败:', error);
+                         alert(isEnglish ? 'Recharge request failed, please try again later.' : '充值请求失败，请稍后再试。');
+                     });
+                });
+            }
+   
+            const logoutBtnProfile = document.getElementById('logoutBtnProfile');
+            if (logoutBtnProfile) {
+                logoutBtnProfile.addEventListener('click', function() {
+                    if (!currentUser || !userToken) { 
+                         console.warn("Logout requested but user is not logged in.");
+                 
+                    }
+
+                    fetch(`${API_BASE_URL}/logout`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${userToken}` 
+                       
+                        },
+    
+                    })
+                    .then(response => {
+                         return response.json();
+                    })
+                    .then(data => {
+
+                        currentUser = null;
+                        userToken = null;
+         
+                        localStorage.removeItem(JWT_TOKEN_KEY);
+                
+                   
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
+                        document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
+          
+                        closeModal(profileModal);
+
+                    })
+                    .catch(error => {
+                        console.error('登出请求失败 (但前端状态已清理):', error);
+                     
+                        currentUser = null;
+                        userToken = null;
+                     
+                        localStorage.removeItem(JWT_TOKEN_KEY);
+                   
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
+                        document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
+       
+                        if (generateImageBtn) {
+                             generateImageBtn.classList.add('disabled-btn');
+                             isImageGenMode = false; 
+                             generateImageBtn.title = isEnglish ? "Generate Image" : "生成图片";
+                             sendButtonText.textContent = isEnglish ? 'Send' : '发送';
+                             stopPolling(); 
+                        }
+           
+                        closeModal(profileModal);
+                      
+                    });
+                });
+            } else {
+                 console.error("Logout Button (id='logoutBtnProfile') not found in the DOM!");
+            }
+   
+
+
+
+            const donateBtnProfile = document.getElementById('donateBtnProfile');
+            if (donateBtnProfile) {
+                donateBtnProfile.addEventListener('click', function() {
+       
+                    openDonateModal(); 
+                });
+            } else {
+                console.error("Donate Button (id='donateBtnProfile') not found in the DOM!");
+            }
+    
+
+
+            function updateProfileCounts(userCounts) {
+
+
+
+                const imageCountText = document.getElementById('imageCountText');
+                const pptCountText = document.getElementById('pptCountText');
+                const wordCountText = document.getElementById('wordCountText');
+                const pdfCountText = document.getElementById('pdfCountText');
+
+
+                if (imageCountText) {
+                    imageCountText.textContent = (userCounts && userCounts.image_count) || 0;
+              
+                } else {
+                    console.error('[ERROR] imageCountText element not found!');
+                }
+                if (pptCountText) {
+                    pptCountText.textContent = (userCounts && userCounts.ppt_count) || 0;
+                }
+                if (wordCountText) {
+                    wordCountText.textContent = (userCounts && userCounts.word_count) || 0;
+                }
+                if (pdfCountText) {
+                    pdfCountText.textContent = (userCounts && userCounts.pdf_count) || 0;
+                }
+
+ 
+                const imageCountLabel = document.getElementById('profileImageCount');
+                const pptCountLabel = document.getElementById('profilePPTCount');
+                const wordCountLabel = document.getElementById('profileWordCount');
+                const pdfCountLabel = document.getElementById('profilePDFCount');
+
+             
+                if (imageCountLabel && imageCountLabel.childNodes && imageCountLabel.childNodes.length > 0) {
+                    imageCountLabel.childNodes[0].nodeValue = isEnglish ? "Residual HD-Image Generate: " : "剩余生成 HD超清图片 次数: ";
+                }
+                if (pptCountLabel) pptCountLabel.childNodes[0].nodeValue = isEnglish ? "Residual PPT-File Generate: " : "剩余生成 PPT文件 次数: ";
+                if (wordCountLabel) wordCountLabel.childNodes[0].nodeValue = isEnglish ? "Residual Word-File Generate: " : "剩余生成 Word文件 次数: ";
+                if (pdfCountLabel) pdfCountLabel.childNodes[0].nodeValue = isEnglish ? "Residual PDF-File Generate: " : "剩余生成 PDF文件 次数: ";
+            }
+
+
+
+
+
+            function openLoginModal() {
+          
+                clearLoginModalState();
+        
+                if (loginModal) {
+                    loginModal.style.display = 'block';
+                    loginModal.style.backgroundColor = '';
+                } else {
+                    console.error("Login modal element not found!");
+                }
+            }
+
+            function openRegisterModal() {
+     
+                clearRegisterModalState();
+               
+                if (registerModal) {
+                    registerModal.style.display = 'block';
+                    registerModal.style.backgroundColor = '';
+                } else {
+                    console.error("Register modal element not found!");
+                }
+            }
+  
+            function openProfileModal() {
+                if (profileModal) {
+                    profileModal.style.display = 'block';
+                    profileModal.style.backgroundColor = '';
+                } else {
+                    console.error("Profile modal element not found!");
+                }
+            }
+
+            function closeModal(modalElement) {
+              if (modalElement) {
+
+            
+                modalElement.style.backgroundColor = 'rgba(0, 0, 0, 0)'; 
+
+                const modalContent = modalElement.querySelector('.bubble-modal-content, .profile-modal-content'); 
+
+                if (modalContent) {
+
+                  modalContent.style.animation = '';
+
+
+                  modalContent.style.animation = 'ashDisappear 0.2s ease-in forwards';
+
+        
+                  modalContent.addEventListener('animationend', function handler() {
+       
+                    modalContent.removeEventListener('animationend', handler);
+
+                
+                    modalElement.style.display = 'none';
+
+
+                    modalContent.style.animation = '';
+                  }, { once: true }); 
+                } else {
+    
+                  console.warn('Modal content element not found for closing animation.');
+                  modalElement.style.display = 'none';
+
+          
+                  modalElement.style.backgroundColor = '';
+                }
+              } else {
+                console.error("closeModal: modalElement is null or undefined.");
+              }
+            }
+
+            window.addEventListener('click', function(event) {
+                if (event.target === loginModal) {
+                    closeModal(loginModal);
+                }
+                if (event.target === registerModal) {
+                    closeModal(registerModal);
+                }
+                if (event.target === profileModal) {
+                    closeModal(profileModal);
+                }
+            });
+
+            loginBtnNav.addEventListener('click', function() {
+                if (currentUser) {
+                    openProfileModal(); 
+                } else {
+                    openLoginModal(); 
+                }
+            });
+  
+            showRegisterLink.addEventListener('click', function() {
+                closeModal(loginModal); 
+                openRegisterModal();   
+            });
+
+            if (showLoginLink) { 
+                showLoginLink.addEventListener('click', function() {
+                    closeModal(registerModal);
+                    openLoginModal();        
+                });
+            }
+
+            const loginClose = loginModal.querySelector('.bubble-close');
+            if (loginClose) {
+                loginClose.addEventListener('click', function() {
+                    closeModal(loginModal);
+                });
+            }
+        
+            const registerClose = registerModal.querySelector('.bubble-close');
+            if (registerClose) {
+                registerClose.addEventListener('click', function() {
+                    closeModal(registerModal);
+                });
+            }
+ 
+            const profileClose = profileModal.querySelector('.bubble-close');
+            if (profileClose) {
+                profileClose.addEventListener('click', function() {
+                    closeModal(profileModal);
+                });
+            }
+  
+
+
+            const donateModal = document.getElementById('donateModal');
+            const qrModal = document.getElementById('qrModal');
+            const qrImage = document.getElementById('qrImage');
+            const qrAmountValue = document.getElementById('qrAmountValue');
+
+     
+            const qrCodeUrls = {
+                '0.08': 'https://hk-alice-file.oss-cn-hongkong.aliyuncs.com/0.08.jpg',
+                '1.0': 'https://hk-alice-file.oss-cn-hongkong.aliyuncs.com/1.0.jpg',
+                '5.0': 'https://hk-alice-file.oss-cn-hongkong.aliyuncs.com/5.0.jpg',
+                '9.9': 'https://hk-alice-file.oss-cn-hongkong.aliyuncs.com/9.9.jpg'
+            };
+
+       
+            function openDonateModal() {
+                if (donateModal) {
+                    donateModal.style.display = 'block';
+                    updateDonateModalTexts(); 
+                    donateModal.style.backgroundColor = '';
+                } else {
+                    console.error("Donate modal element not found!");
+                }
+            }
+
+     
+            function closeDonateModal() {
+          
+              if (donateModal) {
+
+  
+                donateModal.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+
+    
+                const modalContent = donateModal.querySelector('.donate-modal-content');
+
+           
+                if (modalContent) {
+           
+                  modalContent.style.animation = '';
+
+               
+                  modalContent.style.animation = 'ashDisappear 0.2s ease-in forwards';
+
+             
+                  modalContent.addEventListener('animationend', function handler() {
+              
+                    modalContent.removeEventListener('animationend', handler);
+
+              
+                    donateModal.style.display = 'none';
+
+               
+                    modalContent.style.animation = '';
+                  }, { once: true }); 
+                } else {
+       
+                  console.warn('Donate modal content element not found for closing animation.');
+                  donateModal.style.display = 'none';
+
+                  donateModal.style.backgroundColor = ''; 
+                }
+              } else {
+                console.error("closeDonateModal: donateModal element is null or undefined.");
+              }
+            }
+
+
+
+            function openQrModal(amount) {
+                if (qrModal && qrImage) {
+                    const url = qrCodeUrls[amount];
+                    if (url) {
+                        qrImage.src = url;
+                        qrAmountValue.textContent = isEnglish ? `${amount} RMB` : `${amount} 元人民币`;
+                        qrModal.style.display = 'block';
+                        updateQrModalTexts(amount); 
+                        qrModal.style.backgroundColor = '';
+                    } else {
+                        alert(isEnglish ? "Invalid amount selected." : "选择了无效金额。");
+                    }
+                } else {
+                    console.error("QR modal or image element not found!");
+                }
+            }
+
+
+      
+            function closeQrModal() {
+     
+              if (qrModal) {
+
+            
+                qrModal.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+
+           
+                const modalContent = qrModal.querySelector('.qr-modal-content');
+
+         
+                if (modalContent) {
+             
+                  modalContent.style.animation = '';
+
+           
+                  modalContent.style.animation = 'ashDisappear 0.2s ease-in forwards';
+
+                 
+                  modalContent.addEventListener('animationend', function handler() {
+             
+                    modalContent.removeEventListener('animationend', handler);
+
+                 
+                    qrModal.style.display = 'none';
+
+                  
+                    modalContent.style.animation = '';
+                  }, { once: true }); 
+                } else {
+           
+                  console.warn('QR modal content element not found for closing animation.');
+                  qrModal.style.display = 'none';
+
+                  qrModal.style.backgroundColor = ''; 
+                }
+              } else {
+                console.error("closeQrModal: qrModal element is null or undefined.");
+              }
+            }
+ 
+
+
+
+      
+            function updateDonateModalTexts() {
+                const donateModalTitle = document.getElementById('donateModalTitle');
+                const donateInstructionText = document.getElementById('donateInstructionText');
+                const donateNoteText = document.getElementById('donateNoteText');
+
+          
+                const donateOption1Text = document.getElementById('donateOption1Text');
+                const donateOption1Desc = document.getElementById('donateOption1Desc');
+                const donateOption2Text = document.getElementById('donateOption2Text');
+                const donateOption2Desc = document.getElementById('donateOption2Desc');
+                const donateOption3Text = document.getElementById('donateOption3Text');
+                const donateOption3Desc = document.getElementById('donateOption3Desc');
+                const donateOption4Text = document.getElementById('donateOption4Text');
+                const donateOption4Desc = document.getElementById('donateOption4Desc');
+
+        
+                const alipayBtnText1 = document.getElementById('alipayBtnText1');
+                const alipayBtnText2 = document.getElementById('alipayBtnText2');
+                const alipayBtnText3 = document.getElementById('alipayBtnText3');
+                const alipayBtnText4 = document.getElementById('alipayBtnText4');
+
+                if (isEnglish) {
+                    if (donateModalTitle) donateModalTitle.textContent = "Select Amount";
+                    if (donateOption1Text) donateOption1Text.textContent = "0.08 RMB";
+                    if (donateOption1Desc) donateOption1Desc.textContent = "-> 1 HD Image";
+                    if (donateOption2Text) donateOption2Text.textContent = "1.0 RMB";
+                    if (donateOption2Desc) donateOption2Desc.textContent = "-> 15 HD Images";
+                    if (donateOption3Text) donateOption3Text.textContent = "5.0 RMB";
+                    if (donateOption3Desc) donateOption3Desc.textContent = "-> 88 HD Images";
+                    if (donateOption4Text) donateOption4Text.textContent = "9.9 RMB";
+                    if (donateOption4Desc) donateOption4Desc.textContent = "-> 188 HD Images";
+                    if (alipayBtnText1) alipayBtnText1.textContent = "Alipay";
+                    if (alipayBtnText2) alipayBtnText2.textContent = "Alipay";
+                    if (alipayBtnText3) alipayBtnText3.textContent = "Alipay";
+                    if (alipayBtnText4) alipayBtnText4.textContent = "Alipay";
+                    if (donateInstructionText) donateInstructionText.textContent = "Click \"Alipay\" to view QR code, save and pay via Alipay app";
+                    if (donateNoteText) donateNoteText.textContent = "Attention: when making donation note your username+phone+email";
+                } else {
+                    if (donateModalTitle) donateModalTitle.textContent = "选择金额";
+                    if (donateOption1Text) donateOption1Text.textContent = "0.08 元人民币";
+                    if (donateOption1Desc) donateOption1Desc.textContent = "-> 1 次 HD超清图片";
+                    if (donateOption2Text) donateOption2Text.textContent = "1.0 元人民币";
+                    if (donateOption2Desc) donateOption2Desc.textContent = "-> 15 次 HD超清图片";
+                    if (donateOption3Text) donateOption3Text.textContent = "5.0 元人民币";
+                    if (donateOption3Desc) donateOption3Desc.textContent = "-> 88 次 HD超清图片";
+                    if (donateOption4Text) donateOption4Text.textContent = "9.9 元人民币";
+                    if (donateOption4Desc) donateOption4Desc.textContent = "-> 188 次 HD超清图片";
+                    if (alipayBtnText1) alipayBtnText1.textContent = "支付宝";
+                    if (alipayBtnText2) alipayBtnText2.textContent = "支付宝";
+                    if (alipayBtnText3) alipayBtnText3.textContent = "支付宝";
+                    if (alipayBtnText4) alipayBtnText4.textContent = "支付宝";
+                    if (donateInstructionText) donateInstructionText.textContent = "点击查看二维码，保存图片后在支付宝APP中扫描";
+                    if (donateNoteText) donateNoteText.textContent = "注意：捐款时请备注 用户名+手机号+(可不用)邮箱";
+                }
+            }
+    
+   
+            function updateQrModalTexts(amount) {
+                const qrModalTitle = document.getElementById('qrModalTitle');
+                const qrAmountLabel = document.getElementById('qrAmountLabel');
+                const qrInstructionText = document.getElementById('qrInstructionText');
+
+                if (isEnglish) {
+                    if (qrModalTitle) qrModalTitle.textContent = "Alipay QR Code";
+                    if (qrAmountLabel) qrAmountLabel.textContent = "Amount:";
+          
+                    if (qrInstructionText) qrInstructionText.textContent = "Save this image and open it in Alipay app to scan and pay.";
+                } else {
+                    if (qrModalTitle) qrModalTitle.textContent = "支付宝二维码";
+                    if (qrAmountLabel) qrAmountLabel.textContent = "金额:";
+            
+                    if (qrInstructionText) qrInstructionText.textContent = "保存此图片并在支付宝APP中打开扫描支付";
+                }
+            }
+
+
+
+            document.addEventListener('click', function(event) {
+                if (event.target && (event.target.matches('.show-qr-btn') || event.target.closest('.show-qr-btn'))) {
+              
+                    const button = event.target.closest('.show-qr-btn');
+                    const amount = button.getAttribute('data-amount');
+                    if (amount) {
+                        closeDonateModal(); 
+                        openQrModal(amount); 
+                    }
+                }
+            });
+
+
+     
+            if (donateModal) {
+                const donateClose = donateModal.querySelector('.bubble-close');
+                if (donateClose) {
+                    donateClose.addEventListener('click', function() {
+                        closeDonateModal();
+                    });
+                }
+            }
+
+  
+            if (qrModal) {
+                const qrClose = qrModal.querySelector('.bubble-close');
+                if (qrClose) {
+                    qrClose.addEventListener('click', function() {
+                        closeQrModal();
+                    });
+                }
+            }
+
+
+            window.addEventListener('click', function(event) {
+                if (event.target === donateModal) {
+                    closeDonateModal();
+                }
+                if (event.target === qrModal) {
+                    closeQrModal();
+                }
+            });
+
+
+
+
             const langBtn = document.getElementById('langBtn');
-            const loginBtn = document.getElementById('loginBtn');
             const clearHistoryBtn = document.getElementById('clearHistoryBtn');
             const chatTitle = document.querySelector('.chat-title');
             const chatInput = document.getElementById('userInput');
@@ -827,29 +2661,149 @@
             const imageInput = document.getElementById('imageInput');
             const fileInput = document.getElementById('fileInput');
             const filePreviewContainer = document.getElementById('filePreviewContainer');
-            loginBtn.addEventListener('click', function() {
-                const originalHTML = loginBtn.innerHTML;
-                loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span class="btn-text">正在登录...</span>';
-                setTimeout(() => {
-                    loginBtn.innerHTML = '<i class="fas fa-exclamation-circle"></i> <span class="btn-text">登录失败</span>';
-                    setTimeout(() => {
-                        loginBtn.innerHTML = originalHTML;
-                    }, 1500);
-                }, 2000);
-            });
+            const sendButtonText = document.getElementById('sendButtonText');
+            const clearHistoryBtnText = document.getElementById('clearHistoryBtn').querySelector('.btn-text');
+         
+            const loginModalTitle = document.getElementById('loginModalTitle');
+            const registerModalTitle = document.getElementById('registerModalTitle');
+            const showRegisterLinkText = document.querySelector('.bubble-modal-footer a#showRegisterLink');
+            const showLoginLinkText = document.querySelector('.bubble-modal-footer a#showLoginLink');
+            const loginSubmitBtnText = document.getElementById('loginSubmitBtn');
+            const registerSubmitBtnText = document.getElementById('registerSubmitBtn');
+            const loginUsernameLabel = document.querySelector('#loginUsername').previousElementSibling;
+            const loginPasswordLabel = document.querySelector('#loginPassword').previousElementSibling;
+            const registerUsernameLabel = document.querySelector('#registerUsername').previousElementSibling;
+            const registerPhoneLabel = document.querySelector('#registerPhone').previousElementSibling; 
+            const registerPasswordLabel = document.querySelector('#registerPassword').previousElementSibling;
+            const registerConfirmPasswordLabel = document.querySelector('#registerConfirmPassword').previousElementSibling;
+    
+            const profileModalTitle = document.getElementById('profileModalTitle');
+            const rechargeBtnProfileText = document.getElementById('rechargeBtnProfileText');
+            const logoutBtnProfileText = document.getElementById('logoutBtnProfileText');
+
+      
+            function updateModalTexts() {
+                if (isEnglish) {
+                    loginModalTitle.textContent = "Login AliceSkyGarden";
+                    registerModalTitle.textContent = "Register AliceSkyGarden";
+                    showRegisterLinkText.textContent = "Register Now";
+                    if(showLoginLinkText) showLoginLinkText.textContent = "Login Now";
+                    loginUsernameLabel.textContent = "Username:";
+                    loginPasswordLabel.textContent = "Password:";
+                    registerUsernameLabel.textContent = "Username:";
+                    registerPhoneLabel.textContent = "Phone Number:"; 
+                    registerPasswordLabel.textContent = "Password:";
+                    registerConfirmPasswordLabel.textContent = "Confirm Password:";
+                    profileModalTitle.textContent = "Profile";
+                    logoutBtnProfileText.textContent = "Logout";
+
+                } else {
+                    loginModalTitle.textContent = "登录AliceSkyGarden";
+                    registerModalTitle.textContent = "注册AliceSkyGarden";
+                    showRegisterLinkText.textContent = "立即注册";
+                    if(showLoginLinkText) showLoginLinkText.textContent = "立即登录";
+                    loginUsernameLabel.textContent = "用户名:";
+                    loginPasswordLabel.textContent = "密码:";
+                    registerUsernameLabel.textContent = "用户名:";
+                    registerPhoneLabel.textContent = "手机号:"; 
+                    registerPasswordLabel.textContent = "密码:";
+                    registerConfirmPasswordLabel.textContent = "确认密码:";
+                    profileModalTitle.textContent = "个人中心";
+                    logoutBtnProfileText.textContent = "登出";
+
+                }
+
+
+        
+
+                const registerCountryCodeSelect = document.getElementById('registerCountryCode');
+                if (registerCountryCodeSelect) {
+            
+                    const valueToSelect = "+86";
+
+              
+                    registerCountryCodeSelect.innerHTML = '';
+
+               
+                  
+                    const optionsData = [
+                        { value: "+86", label: "+86 (中国)" },
+                        { value: "+1", label: "+1 (美国)" },
+                        { value: "+44", label: "+44 (英国)" },
+                        { value: "+82", label: "+82 (韩国)" },
+                        { value: "+65", label: "+65 (新加坡)" },
+                        { value: "+61", label: "+61 (澳大利亚)" },
+                        { value: "+33", label: "+33 (法国)" },
+                        { value: "+49", label: "+49 (德国)" },
+                        { value: "+39", label: "+39 (意大利)" },
+                        { value: "+55", label: "+55 (巴西)" },
+                        { value: "+34", label: "+34 (西班牙)" },
+                        { value: "+31", label: "+31 (荷兰)" },
+                        { value: "+46", label: "+46 (瑞典)" },
+                        { value: "+47", label: "+47 (挪威)" },
+                        { value: "+45", label: "+45 (丹麦)" },
+                        { value: "+358", label: "+358 (芬兰)" },
+                        { value: "+48", label: "+48 (波兰)" },
+                        { value: "+64", label: "+64 (新西兰)" },
+                        { value: "+1", label: "+1 (加拿大)" },
+                        { value: "+30", label: "+30 (希腊)" },
+                        { value: "+299", label: "+299 (格陵兰)" },
+                        { value: "+852", label: "+852 (香港)" },
+                        { value: "+36", label: "+36 (匈牙利)" },
+                        { value: "+354", label: "+354 (冰岛)" },
+                        { value: "+353", label: "+353 (爱尔兰)" },
+                        { value: "+44", label: "+44 (马恩岛)" },
+                        { value: "+972", label: "+972 (以色列)" },
+                        { value: "+853", label: "+853 (澳门)" },
+                        { value: "+377", label: "+377 (摩纳哥)" },
+                        { value: "+41", label: "+41 (瑞士)" },
+                        { value: "+90", label: "+90 (土耳其)" },
+                        { value: "+379", label: "+379 (梵蒂冈)" }
+                    ];
+
+                    let selectedIndex = -1; 
+                    optionsData.forEach((optData, index) => {
+                        const optionElement = document.createElement('option');
+                        optionElement.value = optData.value;
+                        optionElement.textContent = optData.label;
+                        if (optData.value === valueToSelect) {
+                            optionElement.selected = true;
+                            selectedIndex = index; 
+                        }
+                        registerCountryCodeSelect.appendChild(optionElement);
+                    });
+
+                 
+                    if (selectedIndex !== -1) {
+                        registerCountryCodeSelect.selectedIndex = selectedIndex;
+                    }
+
+
+            
+                } else {
+                    console.warn("[DEBUG] registerCountryCode element not found during rebuild.");
+                }
+            
+
+
+
+
+            }
+        
+
             langBtn.addEventListener('click', function() {
                 isEnglish = !isEnglish;
                 const btnTextElements = document.querySelectorAll('.btn-text');
                 const uploadBtns = document.querySelectorAll('.upload-btn');
-                const sendButtonText = document.getElementById('sendButtonText');
+                const agreementTextElements = document.querySelectorAll('.agreement-text');
                 if (isEnglish) {
-                    btnTextElements[0].textContent = 'Log in';
+                    btnTextElements[0].textContent = 'Log in'; 
                     btnTextElements[1].textContent = '中文';
+                    clearHistoryBtnText.textContent = 'Clear History';
                     chatTitle.textContent = "Talk with AliceSkyGarden";
                     chatInput.placeholder = "(Now support image pdf docx txt xlsx csv py html etc files)  Enter your message...";
                     sendButtonText.textContent = 'Send';
-                    clearHistoryBtn.querySelector('.btn-text').textContent = 'Clear History';
-                    initialMessage.innerHTML = "AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊<br><br>Now evolved into Multimodal Model: Supporting images, PDF, Word, tables, scripts, web pages, etc files input😊";
+                    initialMessage.innerHTML = "I am AliceSkyGarden Super LLM 😊 Mixed Qwen3 randomly launch, how to assist you? 😊<br><br>Add input and parsing function for images, PDF, Word, tables, scripts, web pages, etc files 😊 Add user login and account registration function 😊 Add chat history cache local browser function 😊 Add HD ultra image generation function 😊";
                     footerTagline.textContent = "Unlocking a New Era of Intelligence · Exploring Infinite Possibilities";
                     const footerLinks = ["Home", "Developers", "Documentation", "Community", "Blog", "Contact Us"];
                     footerLinksText.forEach((el, index) => {
@@ -858,21 +2812,32 @@
                     copyrightText.textContent = "© 2025 AliceSkyGarden Technology. All rights reserved";
                     uploadBtns[0].title = "Upload Image";
                     uploadBtns[1].title = "Upload File";
+                
+                    document.querySelector('.cn-text').style.display = 'none';
+                    document.querySelector('.en-text').style.display = 'inline';
+                  
+                    if (document.getElementById('generateImageBtnText')) {
+                        document.getElementById('generateImageBtnText').textContent = 'Img Mode';
+                    }
 
-                    // *** 插入 ***
-                    const cnTextElements = document.querySelectorAll('.cn-text');
-                    const enTextElements = document.querySelectorAll('.en-text');
-                    cnTextElements.forEach(el => el.style.display = 'none');
-                    enTextElements.forEach(el => el.style.display = 'inline');
+                    if (document.getElementById('profileModalTitle')) document.getElementById('profileModalTitle').textContent = "Profile";
+                    if (document.getElementById('donateBtnProfileText')) document.getElementById('donateBtnProfileText').textContent = "Donate";
+                    if (document.getElementById('logoutBtnProfileText')) document.getElementById('logoutBtnProfileText').textContent = "Logout";
+           
+                    if (currentUser && currentUser.counts) {
+                         updateProfileCounts(currentUser.counts);
+                    }
+          
+
 
                 } else {
-                    btnTextElements[0].textContent = 'Log in';
+                    btnTextElements[0].textContent = '登录'; 
                     btnTextElements[1].textContent = 'English';
+                    clearHistoryBtnText.textContent = '清除历史';
                     chatTitle.textContent = "与 AliceSkyGarden 对话";
                     chatInput.placeholder = "(现已支持 各种格式的图片 pdf docx txt xlsx csv py html等文件)  输入你的消息...";
                     sendButtonText.textContent = '发送';
-                    clearHistoryBtn.querySelector('.btn-text').textContent = '清除历史';
-                    initialMessage.innerHTML = "AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊<br><br>现已进化成多模态模型：支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊";
+                    initialMessage.innerHTML = "我是 AliceSkyGarden 超级模型 😊 与 Qwen3 一起随机上线，有什么可以帮你吗？😊<br><br>新增图片, PDF, Word, 表格, 脚本, 网页等文件输入解析功能 😊 新增用户登录和账号注册功能 😊 新增聊天记录缓存到本地浏览器功能 😊 新增HD超清图片生成功能 😊";
                     footerTagline.textContent = "开启智能新纪元 · 探索无限可能";
                     const footerLinks = ["首页", "开发者", "文档", "社区", "博客", "联系我们"];
                     footerLinksText.forEach((el, index) => {
@@ -881,37 +2846,73 @@
                     copyrightText.textContent = "© 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved";
                     uploadBtns[0].title = "上传图片";
                     uploadBtns[1].title = "上传文件";
+              
+                    document.querySelector('.en-text').style.display = 'none';
+                    document.querySelector('.cn-text').style.display = 'inline';
+                 
+                    if (document.getElementById('generateImageBtnText')) {
+                        document.getElementById('generateImageBtnText').textContent = '生图模式';
+                    }
+                  
 
-                    // *** 插入 ***
-                    const cnTextElements = document.querySelectorAll('.cn-text');
-                    const enTextElements = document.querySelectorAll('.en-text');
-                    enTextElements.forEach(el => el.style.display = 'none');
-                    cnTextElements.forEach(el => el.style.display = 'inline');
+           
+                    if (document.getElementById('profileModalTitle')) document.getElementById('profileModalTitle').textContent = "个人中心";
+                    if (document.getElementById('donateBtnProfileText')) document.getElementById('donateBtnProfileText').textContent = "捐款";
+                    if (document.getElementById('logoutBtnProfileText')) document.getElementById('logoutBtnProfileText').textContent = "登出";
+
+                    if (currentUser && currentUser.counts) {
+                         updateProfileCounts(currentUser.counts);
+                    }
+             
+
+                }
+             
+                updateModalTexts();
+          
+
+                updateDonateModalTexts(); -
+                updateQrModalTexts(document.querySelector('#qrAmountValue')?.textContent?.split(' ')[0] || '0.00'); 
+          
+
+                
+                if (currentUser) {
+                    document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = currentUser.username;
                 }
                 langBtn.classList.add('pulse');
                 setTimeout(() => {
                     langBtn.classList.remove('pulse');
                 }, 500);
-
             });
-        
             clearHistoryBtn.addEventListener('click', function() {
                 sessionId = '';
                 localStorage.removeItem('chat_session_id');
-      
-                const chatMessages = document.getElementById('chatMessages');
+
+
+           
                 chatMessages.innerHTML = '';
+                try {
+                    localStorage.removeItem('aliceskygarden_chat_history'); 
+                } catch (e) {
+                    console.error("Error removing chat history from localStorage:", e);
+                }
+          
+
+
+            
                 const newInitialMessage = document.createElement('div');
                 newInitialMessage.classList.add('message', 'bot-message');
-                newInitialMessage.innerHTML = isEnglish ? 
-                    "History cleared. New session started. <br>AliceSkyGarden LLM is resting😊I am Qwen3, how can I assist you? 😊<br><br>Now evolved into Multimodal Model: Supporting images, PDF, Word, tables, scripts, web pages, etc files input😊" : 
-                    "历史已清除，开始新会话。<br>AliceSkyGarden正在休息😊我是Qwen3，有什么可以帮你吗？😊<br><br>现已进化成多模态模型：支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊";
+            
+                newInitialMessage.innerHTML = isEnglish ?
+                    "History cleared. New session started. <br>I am AliceSkyGarden Super LLM 😊 Mixed Qwen3 randomly launch, how to assist you? 😊<br><br>Add input and parsing function for images, PDF, Word, tables, scripts, web pages, etc files 😊 Add user login and account registration function 😊 Add chat history cache local browser function 😊 Add HD ultra image generation function 😊" :
+                    "历史已清除，开始新会话。<br>我是 AliceSkyGarden 超级模型 😊 与 Qwen3 一起随机上线，有什么可以帮你吗？😊<br><br>新增图片, PDF, Word, 表格, 脚本, 网页等文件输入解析功能 😊 新增用户登录和账号注册功能 😊 新增聊天记录缓存到本地浏览器功能 😊 新增HD超清图片生成功能 😊";
                 chatMessages.appendChild(newInitialMessage);
+
+
             });
             const chatMessages = document.getElementById('chatMessages');
             const userInput = document.getElementById('userInput');
             const sendButton = document.getElementById('sendButton');
-            const API_URL = 'https://hk-alice-azqlklqpcg.cn-hongkong.fcapp.run';
+            const API_URL = `${API_BASE_URL}/invoke`; 
             imageInput.addEventListener('change', function() {
                 const files = Array.from(imageInput.files);
                 if (files.length > 0) {
@@ -1005,10 +3006,9 @@
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message');
                 messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
-
                 if (isUser && files.length > 0) {
                     if (files.length === 1) {
-                        const fileName = files[0].name; 
+                        const fileName = files[0].name;
                         let fileText = isEnglish ? ` [Sent ${fileName}]` : ` [已发送 ${fileName}]`;
                         message += fileText;
                     } else {
@@ -1017,10 +3017,19 @@
                         message += fileText;
                     }
                 }
-
                 messageDiv.textContent = message;
                 chatMessages.appendChild(messageDiv);
                 smartScroll();
+
+          
+                try {
+                    localStorage.setItem('aliceskygarden_chat_history', chatMessages.innerHTML);
+                } catch (e) {
+                    console.error("Error saving chat history to localStorage:", e);
+                    
+                }
+              
+
                 return messageDiv;
             }
             function showTyping() {
@@ -1028,21 +3037,15 @@
               const typingDiv = document.createElement('div');
               typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
               typingDiv.id = 'typingIndicator';
-  
               const textNode = document.createTextNode(isEnglish ? 'Connecting Hong Kong Server' : '正在连接香港服务器');
               typingDiv.appendChild(textNode);
-  
-      
               const dotsSpan = document.createElement('span');
               dotsSpan.classList.add('dots');
-  
- 
               for(let i = 0; i < 3; i++) {
                 const dot = document.createElement('span');
                 dot.classList.add('dot');
                 dotsSpan.appendChild(dot);
               }
-  
               typingDiv.appendChild(dotsSpan);
               chatMessages.appendChild(typingDiv);
               smartScroll();
@@ -1054,7 +3057,7 @@
                     typingIndicator.remove();
                 }
             }
-            function typeWriter(messageDiv, fullText, speed = 5) {
+            function typeWriter(messageDiv, fullText, speed = 1) {
                 let i = 0;
                 const typingCursor = document.createElement('span');
                 typingCursor.classList.add('typing-cursor');
@@ -1077,6 +3080,15 @@
                         if (chatMessages.scrollHeight > chatMessages.clientHeight + 50) {
                             chatMessages.classList.add('expanded');
                         }
+
+             
+                        try {
+                            localStorage.setItem('aliceskygarden_chat_history', chatMessages.innerHTML);
+                        } catch (e) {
+                            console.error("Error saving chat history to localStorage after bot reply:", e);
+                        }
+              
+
                     }
                 }
                 type();
@@ -1085,6 +3097,69 @@
                 const message = userInput.value.trim();
                 const imagesToSend = [...selectedImages];
                 const filesToSend = [...selectedFiles];
+
+
+                if (isImageGenMode) {
+                    if (!message) {
+                         alert(isEnglish ? "请输入图片描述。" : "Please enter a description for the image.");
+                         return;
+                    }
+
+  
+                    const userPrompt = message; 
+           
+            
+                    userInput.value = '';
+           
+
+                    showTyping(); 
+                    sendButton.disabled = true;
+
+               
+                    const promptMessageDiv = document.createElement('div');
+                    promptMessageDiv.classList.add('message', 'user-message');
+                    promptMessageDiv.innerHTML = `<p>${isEnglish ? 'Generating image for:' : '正在为以下内容生成图片：'}</p><p><em>${message}</em></p>`;
+                    chatMessages.appendChild(promptMessageDiv);
+                    smartScroll();
+
+                    try {
+               
+                        const response = await fetch(`${API_BASE_URL}/generate_image_async`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${userToken}` 
+                            },
+                            body: JSON.stringify({ prompt: message }) 
+                        });
+
+                        if (!response.ok) {
+                            const errorData = await response.json().catch(() => ({}));
+                            throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                        }
+
+                        const data = await response.json();
+                        const taskId = data.task_id;
+
+                        if (taskId) {
+       
+                       
+                            pollForImage(taskId, promptMessageDiv, userPrompt); 
+                        } else {
+                            throw new Error(isEnglish ? "Failed to get task ID from backend." : "无法从后端获取任务ID。");
+                        }
+
+                    } catch (error) {
+                        console.error('Error initiating image generation:', error);
+                        hideTyping();
+                        promptMessageDiv.innerHTML += `<br><span style="color: red;">${isEnglish ? 'Error initiating image generation:' : '启动图片生成时出错:'} ${error.message}</span>`;
+                        sendButton.disabled = false;
+                    }
+                    return; 
+                }
+        
+
+
                 if (!message && imagesToSend.length === 0 && filesToSend.length === 0) return;
                 addMessage(message, true, [...imagesToSend, ...filesToSend]);
                 userInput.value = '';
@@ -1094,13 +3169,10 @@
                 showTyping();
                 sendButton.disabled = true;
                 try {
-              
                     let requestBody;
                     let headers = {
                         'X-Session-ID': sessionId
                     };
-                    
-     
                     if (imagesToSend.length > 0 || filesToSend.length > 0) {
                         const formData = new FormData();
                         if (message) {
@@ -1113,36 +3185,30 @@
                             formData.append('file', file, file.name);
                         });
                         requestBody = formData;
-                       
-                
-                        delete headers['Content-Type'];
+                        delete headers['Content-Type']; 
                     } else {
-               
-                        requestBody = JSON.stringify({ 
-                            message: message 
+                        requestBody = JSON.stringify({
+                            message: message
                         });
                         headers['Content-Type'] = 'application/json';
                     }
-                    
+                 
                     const response = await fetch(API_URL, {
                         method: 'POST',
                         headers: headers,
-                        body: requestBody
+                        body: requestBody,
+                        credentials: 'include' 
                     });
-                    
+                
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
-                    
                     const data = await response.json();
                     hideTyping();
-                    
-        
                     if (data.session_id) {
                         sessionId = data.session_id;
                         localStorage.setItem('chat_session_id', sessionId);
                     }
-                    
                     let botReply = "";
                     if (data.reply) {
                         botReply = data.reply;
@@ -1188,6 +3254,34 @@
                 }
             });
             smartScroll();
+
+     
+            function restoreChatHistory() {
+                try {
+                    const savedHistory = localStorage.getItem('aliceskygarden_chat_history');
+                    if (savedHistory) {
+                        chatMessages.innerHTML = savedHistory;
+                       
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    } else {
+                    }
+                } catch (e) {
+                    console.error("Error restoring chat history from localStorage:", e);
+               
+                    chatMessages.innerHTML = '';
+                    const newInitialMessage = document.createElement('div');
+                    newInitialMessage.classList.add('message', 'bot-message');
+                    newInitialMessage.id = 'initialMessage';
+                    newInitialMessage.innerHTML = isEnglish ?
+                        "History cleared. New session started. <br>I am AliceSkyGarden Super LLM 😊 Mixed Qwen3 randomly launch, how to assist you? 😊<br><br>Add input and parsing function for images, PDF, Word, tables, scripts, web pages, etc files 😊 Add user login and account registration function 😊 Add chat history cache local browser function 😊 Add HD ultra image generation function 😊" :
+                        "历史已清除，开始新会话。<br>我是 AliceSkyGarden 超级模型 😊 与 Qwen3 一起随机上线，有什么可以帮你吗？😊<br><br>新增图片, PDF, Word, 表格, 脚本, 网页等文件输入解析功能 😊 新增用户登录和账号注册功能 😊 新增聊天记录缓存到本地浏览器功能 😊 新增HD超清图片生成功能 😊";
+                    chatMessages.appendChild(newInitialMessage);
+                }
+            }
+        
+            restoreChatHistory();
+        
+
         });
     </script>
 </body>
