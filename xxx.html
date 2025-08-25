@@ -1451,7 +1451,7 @@
             </div>
         </div>
     </div>
-        <div id="donateModal" class="bubble-modal" style="display: none;">
+        <div id="donateModal" class="bubble-modal">
             <div class="bubble-modal-content donate-modal-content">
                 <span class="bubble-close">&times;</span>
                 <div class="bubble-modal-header">
@@ -1489,7 +1489,7 @@
                 </div>
             </div>
         </div>
-        <div id="qrModal" class="bubble-modal" style="display: none;">
+        <div id="qrModal" class="bubble-modal">
             <div class="bubble-modal-content qr-modal-content">
                 <span class="bubble-close">&times;</span>
                 <div class="bubble-modal-header">
@@ -2280,12 +2280,12 @@
             }
 
             function openRegisterModal() {
-                    
+     
+                clearRegisterModalState();
+               
                 if (registerModal) {
                     registerModal.style.display = 'block';
                     registerModal.style.backgroundColor = '';
-
-                    clearRegisterModalState();
                 } else {
                     console.error("Register modal element not found!");
                 }
@@ -2469,8 +2469,8 @@
                         qrImage.src = url;
                         qrAmountValue.textContent = isEnglish ? `${amount} RMB` : `${amount} 元人民币`;
                         qrModal.style.display = 'block';
-                        qrModal.style.backgroundColor = '';
                         updateQrModalTexts(amount); 
+                        qrModal.style.backgroundColor = '';
                     } else {
                         alert(isEnglish ? "Invalid amount selected." : "选择了无效金额。");
                     }
