@@ -1077,7 +1077,7 @@
           }
           25% {
             clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); /* 保持完整 */
-            transform: scale(1.15); /* 轻微放大 */
+            transform: scale(1.125); /* 轻微放大 */
             opacity: 0.9;
             filter: blur(1px); /* 开始轻微模糊 */
           }
@@ -1088,7 +1088,7 @@
               90% 50%, 100% 100%, 50% 90%, 0 100%,
               10% 50%, 0 50%
             );
-            transform: scale(1.28);
+            transform: scale(1.25);
             opacity: 0.7;
             filter: blur(2px);
           }
@@ -1099,7 +1099,7 @@
               100% 100%, 70% 95%, 0 100%, 5% 70%,
               20% 40%, 40% 20%
             );
-            transform: scale(1.42);
+            transform: scale(1.375);
             opacity: 0.4;
             filter: blur(4px);
           }
@@ -2377,7 +2377,7 @@
                   modalContent.style.animation = '';
 
                   // 2. 应用关闭动画
-                  modalContent.style.animation = 'ashDisappear 0.25s ease-in forwards';
+                  modalContent.style.animation = 'ashDisappear 0.35s ease-in forwards';
 
                   // 3. 监听动画结束事件
                   modalContent.addEventListener('animationend', function handler() {
@@ -2483,12 +2483,42 @@
                 }
             }
 
-            // 关闭捐款模态框
+            // --- 修改后的 closeDonateModal 函数 ---
             function closeDonateModal() {
-                if (donateModal) {
+              // 检查 donateModal 元素是否存在
+              if (donateModal) {
+                // 1. 找到模态框的内容元素 (donate-modal-content)
+                const modalContent = donateModal.querySelector('.donate-modal-content');
+
+                // 2. 检查内容元素是否存在
+                if (modalContent) {
+                  // 3. 清除可能存在的旧动画
+                  modalContent.style.animation = '';
+
+                  // 4. 应用 ashDisappear 关闭动画
+                  modalContent.style.animation = 'ashDisappear 0.35s ease-in forwards';
+
+                  // 5. 监听动画结束事件
+                  modalContent.addEventListener('animationend', function handler() {
+                    // 动画结束后，移除监听器（防止内存泄漏）
+                    modalContent.removeEventListener('animationend', handler);
+
+                    // 动画结束后，隐藏模态框
                     donateModal.style.display = 'none';
+
+                    // 可选：重置内容动画样式
+                    modalContent.style.animation = '';
+                  }, { once: true }); // { once: true } 确保监听器只触发一次后自动移除
+                } else {
+                  // 如果找不到内容元素，直接隐藏（回退方案）
+                  console.warn('Donate modal content element not found for closing animation.');
+                  donateModal.style.display = 'none';
                 }
+              } else {
+                console.error("closeDonateModal: donateModal element is null or undefined.");
+              }
             }
+            // --- 修改结束 ---
 
             // 打开二维码模态框
             function openQrModal(amount) {
@@ -2507,12 +2537,45 @@
                 }
             }
 
-            // 关闭二维码模态框
+
+            // --- 修改后的 closeQrModal 函数 ---
             function closeQrModal() {
-                if (qrModal) {
+              // 检查 qrModal 元素是否存在
+              if (qrModal) {
+                // 1. 找到模态框的内容元素 (qr-modal-content)
+                const modalContent = qrModal.querySelector('.qr-modal-content');
+
+                // 2. 检查内容元素是否存在
+                if (modalContent) {
+                  // 3. 清除可能存在的旧动画
+                  modalContent.style.animation = '';
+
+                  // 4. 应用 ashDisappear 关闭动画
+                  modalContent.style.animation = 'ashDisappear 0.35s ease-in forwards';
+
+                  // 5. 监听动画结束事件
+                  modalContent.addEventListener('animationend', function handler() {
+                    // 动画结束后，移除监听器（防止内存泄漏）
+                    modalContent.removeEventListener('animationend', handler);
+
+                    // 动画结束后，隐藏模态框
                     qrModal.style.display = 'none';
+
+                    // 可选：重置内容动画样式
+                    modalContent.style.animation = '';
+                  }, { once: true }); // { once: true } 确保监听器只触发一次后自动移除
+                } else {
+                  // 如果找不到内容元素，直接隐藏（回退方案）
+                  console.warn('QR modal content element not found for closing animation.');
+                  qrModal.style.display = 'none';
                 }
+              } else {
+                console.error("closeQrModal: qrModal element is null or undefined.");
+              }
             }
+            // --- 修改结束 ---
+
+
 
             // 更新捐款模态框内的文本 (中英文)
             function updateDonateModalTexts() {
