@@ -1066,6 +1066,19 @@
         }
 
 
+        /* 新增：模态框关闭动画 - 与打开动画相反 */
+        @keyframes scaleOutFade {
+          0% {
+            transform: scale(1);
+            opacity: 1;
+          }
+          100% {
+            transform: scale(0.3); /* 结束时的缩放值与打开动画的起始值一致 */
+            opacity: 0;
+          }
+        }
+
+
 
         @media (max-width: 768px) {
             .top-nav {
@@ -2315,11 +2328,41 @@
                 }
             }
             // - 新增：关闭任意模态框 -
-            function closeModal(modal) {
-                if (modal) {
-                    modal.style.display = 'none';
+            // --- 修改后的 closeModal 函数 ---
+            function closeModal(modalElement) {
+              if (modalElement) {
+                const modalContent = modalElement.querySelector('.bubble-modal-content, .profile-modal-content'); // 选择模态框内容
+
+                if (modalContent) {
+                  // 1. 移除可能已存在的打开动画类（如果有的话）
+                  modalContent.style.animation = '';
+
+                  // 2. 应用关闭动画
+                  // 使用与打开动画相同的时长和缓动函数，但使用新的动画名称
+                  modalContent.style.animation = 'scaleOutFade 0.3s cubic-bezier(0.33, 1, 0.68, 1) forwards';
+
+                  // 3. 监听动画结束事件
+                  modalContent.addEventListener('animationend', function handler() {
+                    // 动画结束后，移除监听器（防止内存泄漏）
+                    modalContent.removeEventListener('animationend', handler);
+
+                    // 动画结束后，隐藏模态框
+                    modalElement.style.display = 'none';
+
+                    // 可选：重置内容动画样式，以便下次打开时能正确应用打开动画
+                    // (虽然通常下次打开时会重新设置 animation 属性覆盖，但重置是好习惯)
+                    modalContent.style.animation = '';
+                  }, { once: true }); // { once: true } 确保监听器只触发一次后自动移除
+                } else {
+                  // 如果找不到内容元素，直接隐藏
+                  console.warn('Modal content element not found for closing animation.');
+                  modalElement.style.display = 'none';
                 }
+              } else {
+                console.error("closeModal: modalElement is null or undefined.");
+              }
             }
+            // --- 修改结束 ---
             // - 新增：点击模态框外部区域关闭 -
             window.addEventListener('click', function(event) {
                 if (event.target === loginModal) {
