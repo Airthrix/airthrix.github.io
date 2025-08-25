@@ -2592,6 +2592,8 @@
                     profileModalTitle.textContent = "Profile";
                     logoutBtnProfileText.textContent = "Logout";
 
+                    clearRegisterModalState();
+
                 } else {
                     loginModalTitle.textContent = "登录AliceSkyGarden";
                     registerModalTitle.textContent = "注册AliceSkyGarden";
@@ -2606,13 +2608,9 @@
                     profileModalTitle.textContent = "个人中心";
                     logoutBtnProfileText.textContent = "登出";
 
-                }
+                    clearRegisterModalState();
 
-                const registerCountryCodeElement = document.getElementById('registerCountryCode');
-                if (registerCountryCodeElement) {
-                    registerCountryCodeElement.value = "+86";
                 }
-
             }
             // --- 新增结束 ---
 
