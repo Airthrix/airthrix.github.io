@@ -1829,15 +1829,7 @@
 
             function clearRegisterModalState() {
                 document.getElementById('registerUsername').value = '';
-                // --- 修改开始 ---
-                // 确保国家代码下拉框重置为默认选项 (+86)
-                const countryCodeSelect = document.getElementById('registerCountryCode');
-                if (countryCodeSelect && countryCodeSelect.options.length > 0) {
-                    countryCodeSelect.selectedIndex = 0; // 选中第一个选项，即 +86 (中国)
-                }
-                // --- 修改结束 ---
-                // document.getElementById('registerCountryCode').value = '+86'; // 旧的重置方式（已注释）
-
+                document.getElementById('registerCountryCode').value = '+86'; // 旧的重置方式（已注释）
                 document.getElementById('registerPhone').value = '';
                 document.getElementById('registerPassword').value = '';
                 document.getElementById('registerConfirmPassword').value = '';
@@ -2599,6 +2591,13 @@
                     registerConfirmPasswordLabel.textContent = "Confirm Password:";
                     profileModalTitle.textContent = "Profile";
                     logoutBtnProfileText.textContent = "Logout";
+
+                    // - 新增：设置英文状态下国家代码下拉框的默认值 -
+                    if (registerCountryCodeSelect) {
+                        registerCountryCodeSelect.value = "+86"; // 或者您希望的英文状态下的默认值
+                    }
+                    // - 新增结束 -
+
                 } else {
                     loginModalTitle.textContent = "登录AliceSkyGarden";
                     registerModalTitle.textContent = "注册AliceSkyGarden";
@@ -2612,6 +2611,13 @@
                     registerConfirmPasswordLabel.textContent = "确认密码:";
                     profileModalTitle.textContent = "个人中心";
                     logoutBtnProfileText.textContent = "登出";
+
+                    // - 新增：设置中文状态下国家代码下拉框的默认值 -
+                    if (registerCountryCodeSelect) {
+                        registerCountryCodeSelect.value = "+86"; // 或者您希望的中文状态下的默认值
+                    }
+                    // - 新增结束 -
+
                 }
             }
             // --- 新增结束 ---
