@@ -109,8 +109,8 @@
             height: 44px;
             text-align: center;
             white-space: nowrap;
-            overflow: hidden; /* 关键：隐藏溢出部分 */
-            text-overflow: ellipsis; /* 关键：用省略号替代溢出文字 */
+            overflow: hidden; 
+            text-overflow: ellipsis; 
             padding: 0 1.5rem;
             flex-shrink: 0;
             background: transparent;
@@ -130,7 +130,7 @@
             backdrop-filter: blur(5px);
             background: rgba(15, 15, 40, 0.4);
             overflow: hidden;
-            max-width: 130px; /* 关键：设置最大宽度，确保3个字符能被截断 */
+            max-width: 130px; 
             z-index: 10;
         }
         .nav-btn::after {
@@ -549,18 +549,18 @@
         .file-preview-remove:hover {
             color: #ff5555;
         }
-        /* --- 新增样式：登录/注册模态框 (气泡型) --- */
+
         .bubble-modal {
-            display: none; /* 默认隐藏 */
+            display: none; 
             position: fixed;
-            z-index: 1001; /* 高于其他内容 */
+            z-index: 1001; 
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0,0,0,0.5); /* 半透明背景 */
-            transition: background-color 0.3s ease, backdrop-filter 0.3s ease; /* 对背景色和背景滤镜应用过渡 */
+            background-color: rgba(0,0,0,0.5); 
+            transition: background-color 0.3s ease, backdrop-filter 0.3s ease; 
         }
         .bubble-modal-content {
             background-color: #0a0a2e;
@@ -574,7 +574,7 @@
             animation: scaleInFade 0.32s cubic-bezier(0.33, 1, 0.68, 1) forwards;
             backdrop-filter: blur(5px);
             position: relative;
-            /* 添加发光边框效果 - 渐变绿色 */
+    
             position: relative;
             overflow: hidden;
         }
@@ -587,9 +587,9 @@
             left: -1px;
             border: 1px solid transparent;
             border-radius: 20px;
-            /* 使用线性渐变作为内发光，创建边缘的绿色渐变效果 */
+        
             box-shadow: inset 0 0 30px linear-gradient(90deg, #00ff9d, #00f3ff);
-            /* 这个伪元素的尺寸比主体大1px，确保它能完全覆盖边框并产生发光效果 */
+          
             z-index: -1;
         }
         .bubble-close {
@@ -644,15 +644,15 @@
             border-color: #00ff9d;
             box-shadow: 0 0 5px rgba(0, 255, 157, 0.5);
         }
-        /* --- 新增：手机号输入框样式 --- */
+    
         .phone-input-group {
             display: flex;
             gap: 5px;
-            /* 确保整个组的宽度与其它表单控件（如 .form-control）一致 */
+         
             width: 100%;
         }
         .country-code-select {
-            width: 66px; /* 直接设置固定宽度 */
+            width: 66px; 
             padding: 4px 8px;
             border-radius: 5px;
             border: 1px solid #00ff9d;
@@ -675,14 +675,14 @@
             color: #e0e0ff;
             font-size: 1rem;
             transition: all 0.3s ease;
-            min-width: 0; /* 允许输入框在 flex 容器中收缩 */
+            min-width: 0; 
         }
         .phone-number-input:focus {
             outline: none;
             border-color: #00ff9d;
             box-shadow: 0 0 5px rgba(0, 255, 157, 0.5);
         }
-        /* --- 新增结束 --- */
+  
         .btn-primary {
             background-image: linear-gradient(90deg, #00ff9d, #00f3ff);
             color: #0a0a12;
@@ -719,15 +719,15 @@
             color: #ff0055;
             font-size: 0.9rem;
             margin-top: 5px;
-            display: none; /* 默认隐藏 */
+            display: none; 
         }
         .success-message {
             color: #00ff9d;
             font-size: 0.9rem;
             margin-top: 5px;
-            display: none; /* 默认隐藏 */
+            display: none; 
         }
-        /* --- 新增样式：个人中心模态框 (气泡型) --- */
+
         .profile-modal-content {
             background-color: #0a0a2e;
             margin: 15% auto;
@@ -740,7 +740,7 @@
             animation: scaleInFade 0.32s cubic-bezier(0.33, 1, 0.68, 1) forwards;
             backdrop-filter: blur(5px);
             position: relative;
-            /* 添加发光边框效果 - 渐变绿色 */
+
             position: relative;
             overflow: hidden;
         }
@@ -753,9 +753,9 @@
             left: -1px;
             border: 1px solid transparent;
             border-radius: 20px;
-            /* 使用线性渐变作为内发光，创建边缘的绿色渐变效果 */
+         
             box-shadow: inset 0 0 30px linear-gradient(90deg, #00ff9d, #00f3ff);
-            /* 这个伪元素的尺寸比主体大1px，确保它能完全覆盖边框并产生发光效果 */
+          
             z-index: -1;
         }
         .profile-modal-header {
@@ -770,34 +770,34 @@
         .profile-info {
             display: flex;
             flex-direction: column;
-            gap: 8px; /* 设置项目间的间距 */
-            margin-bottom: 20px; /* 增加与下方按钮的距离 */
+            gap: 8px; 
+            margin-bottom: 20px; 
         }
         .profile-info p span {
-            font-weight: bold; /* 加粗数字 */
-            color: var(--neon-green); /* 数字用霓虹绿 */
-            margin-left: 10px; /* 数字和标签间留点距离 */
+            font-weight: bold; 
+            color: var(--neon-green); 
+            margin-left: 10px; 
         }
         .profile-info p:hover {
-            background: rgba(0, 243, 255, 0.1); /* 鼠标悬停时背景变浅 */
-            transform: translateY(-2px); /* 微微上移 */
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2); /* 添加发光效果 */
+            background: rgba(0, 243, 255, 0.1); 
+            transform: translateY(-2px); 
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2); 
         }
         .profile-info h3 {
-            text-align: center; /* 让用户名居中 */
+            text-align: center; 
             margin-bottom: 10px;
             color: #00f3ff;
             font-size: 1.2rem;
         }
         .profile-info p {
             display: flex;
-            justify-content: space-between; /* 将文字和数字分开放置 */
-            align-items: center; /* 垂直居中对齐 */
-            padding: 8px 10px; /* 添加上下内边距 */
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* 添加底部细线分隔 */
-            color: #ffffff; /* 文字颜色 */
-            font-size: 0.9rem; /* 稍微减小字体 */
-            transition: all 0.3s ease; /* 添加过渡效果 */
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 8px 10px; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+            color: #ffffff; 
+            font-size: 0.9rem; 
+            transition: all 0.3s ease; 
         }
         .profile-actions {
             display: flex;
@@ -805,103 +805,103 @@
             gap: 10px;
         }
         .profile-btn {
-            /* 背景设为透明 */
+         
             background-color: transparent;
-            /* 默认文字颜色改为浅色，与模态框内文字一致 */
+          
             color: #c0c0ff;
-            /* 默认边框颜色改为浅蓝色 */
+          
             border: 1px solid rgba(0, 243, 255, 0.3);
             padding: 10px 15px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 1rem;
-            /* 添加过渡动画 */
+       
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            /* 默认状态下的浅蓝色微光 */
+       
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.3), inset 0 0 5px rgba(0, 243, 255, 0.3);
         }
         .profile-btn:hover {
-            /* 悬停时背景变为浅蓝色半透明 */
+      
             background-color: rgba(0, 243, 255, 0.2);
-            /* 悬停时文字变为亮蓝色 */
+      
             color: var(--neon-blue);
-            /* 悬停时边框变为亮蓝色 */
+        
             border-color: var(--neon-blue);
-            /* 悬停时增强光晕效果 */
+           
             box-shadow: 0 0 15px var(--neon-blue), inset 0 0 7px rgba(0, 243, 255, 0.5);
         }
         .profile-btn.vip {
-            /* VIP按钮背景在初始状态就设为深红色半透明 */
-            background-color: rgba(139, 0, 0, 0.2); /* 深红色半透明 */
-            /* VIP按钮文字和边框颜色 */
-            border-color: #8B0000; /* 深红色 */
-            color: #8B0000; /* 深红色 */
-            /* 字体加粗 */
+         
+            background-color: rgba(139, 0, 0, 0.2); 
+  
+            border-color: #8B0000; 
+            color: #8B0000; 
+
             font-weight: bold;
-            /* VIP按钮的微光效果 - 使用深红色 */
+      
             box-shadow: 0 0 10px #8B0000, inset 0 0 5px rgba(139, 0, 0, 0.3);
         }
         .profile-btn.vip:hover {
-            /* 悬停时背景变为更亮的红色 */
-            background-color: rgba(255, 0, 0, 0.3); /* 更亮的红色半透明 */
-            /* 悬停时文字和边框也变为更亮的红色 */
-            border-color: #ff0000; /* 亮红色 */
-            color: #ff0000; /* 亮红色 */
-            /* 悬停时增强红色光晕 */
+          
+            background-color: rgba(255, 0, 0, 0.3); 
+      
+            border-color: #ff0000; 
+            color: #ff0000; 
+      
             box-shadow: 0 0 15px #ff0000, inset 0 0 7px rgba(255, 0, 0, 0.5);
         }
         .profile-btn.logout {
-            /* 使用与登录按钮相同的渐变绿色作为背景 */
+        
             background-image: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
-            /* 文字颜色设为深色，与登录按钮一致 */
+        
             color: #0a0a12;
-            /* 边框颜色设为亮绿色，与登录按钮一致 */
+       
             border-color: var(--neon-green);
-            /* 添加与登录按钮类似的微光效果 */
+            
             box-shadow: 0 0 10px var(--neon-green), inset 0 0 5px rgba(0, 255, 157, 0.3);
-            /* 背景透明度设置为半透明，使其看起来像一个发光的按钮 */
+           
             background-color: rgba(0, 255, 157, 0.1);
         }
         .profile-btn.logout:hover {
-            /* 悬停时背景变为更亮的渐变绿色 */
+        
             background-image: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
-            /* 悬停时文字颜色不变，保持深色 */
+         
             color: #0a0a12;
-            /* 悬停时边框和光晕增强 */
+        
             border-color: var(--neon-green);
             box-shadow: 0 0 15px var(--neon-green), inset 0 0 7px rgba(0, 255, 157, 0.5);
-            /* 悬停时背景透明度略微增加 */
+         
             background-color: rgba(0, 255, 157, 0.2);
         }
-        /* --- 新增样式结束 --- */
 
 
-        /* --- 新增：生成图片按钮样式 --- */
+
+  
         .disabled-btn {
-            opacity: 0.5; /* 降低不透明度表示禁用 */
-            cursor: not-allowed; /* 鼠标指针变为禁止符号 */
-            background: rgba(50, 50, 80, 0.3) !important; /* 更暗的背景 */
-            color: #888888 !important; /* 更暗的文字/图标颜色 */
-            border-color: rgba(100, 100, 150, 0.3) !important; /* 更暗的边框 */
-            box-shadow: none !important; /* 移除光晕效果 */
+            opacity: 0.5; 
+            cursor: not-allowed; 
+            background: rgba(50, 50, 80, 0.3) !important; 
+            color: #888888 !important; 
+            border-color: rgba(100, 100, 150, 0.3) !important; 
+            box-shadow: none !important; 
         }
         .disabled-btn:hover {
-            /* 确保悬停时也不改变禁用状态的外观 */
+     
             opacity: 0.5;
             background: rgba(50, 50, 80, 0.3) !important;
             color: #888888 !important;
             border-color: rgba(100, 100, 150, 0.3) !important;
             box-shadow: none !important;
-            transform: none !important; /* 移除悬停时的上移效果 */
+            transform: none !important; 
         }
-        /* --- 新增结束 --- */
+  
 
 
-        /* --- 新增：图片生成模式激活状态按钮样式 --- */
+
         .active-image-mode {
             background-image: linear-gradient(90deg, var(--neon-green), var(--neon-blue)) !important;
             color: #0a0a12 !important;
@@ -909,10 +909,10 @@
             box-shadow: 0 0 10px var(--neon-green), inset 0 0 5px rgba(0, 255, 157, 0.3) !important;
             opacity: 1 !important;
             cursor: pointer !important;
-            /* 确保按钮内容区域也适应 flex 布局 */
+       
             display: flex !important;
             align-items: center !important;
-            justify-content: center !important; /* 如果希望内容居中 */
+            justify-content: center !important; 
         }
         .active-image-mode:hover {
             background-image: linear-gradient(90deg, var(--neon-green), var(--neon-blue)) !important;
@@ -922,10 +922,10 @@
             transform: translateY(-2px) !important;
             opacity: 1 !important;
         }
-        /* --- 新增结束 --- */
+  
 
 
-        /* - 新增：捐款模态框样式 - */
+     
         .donate-modal-content {
             max-width: 500px;
             width: 90%;
@@ -959,7 +959,7 @@
         }
 
         .donate-option-text span {
-             color: var(--neon-green); /* 高亮金额 */
+             color: var(--neon-green); 
         }
 
         .btn-secondary {
@@ -973,7 +973,7 @@
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 5px; /* 图标和文字间距 */
+            gap: 5px; 
         }
 
         .btn-secondary:hover {
@@ -990,52 +990,52 @@
         }
 
         .donate-note {
-            color: #ff9966; /* 警告色 */
+            color: #ff9966; 
             font-style: italic;
         }
-        /* - 新增结束 - */
+    
 
 
-        /* - 修改：二维码模态框样式 (更紧凑，图片更大，边距更小，居中) - */
+       
         .qr-modal-content {
             max-width: 350px;
             width: 80%;
             text-align: center;
-            /* 关键：移除默认的内边距，让内容紧贴边框 */
+       
             padding: 0;
         }
 
         .qr-modal-body {
-            /* 关键：将内边距设为非常小，实现 0.1rem 左右的边距效果 */
+   
             padding: 0.1rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 200px; /* 保持最小高度 */
+            min-height: 200px; 
             box-sizing: border-box;
-            /* 可选：如果上面的 padding 还是觉得大，可以尝试 padding: 1px; */
-            /* padding: 1px; */
+       
+
         }
 
         .qr-amount-value {
             font-size: 1.2rem;
             font-weight: bold;
             color: var(--neon-green);
-            /* 减小金额文本的上下边距 */
+       
             margin: 5px 0;
         }
 
         .qr-image {
             max-width: none;
-            /* 可选：稍微增大图片宽度以填充更多空间 */
-            /* width: 310px; */
-            width: 300px; /* 保持现有宽度 */
+         
+     
+            width: 300px; 
             height: auto;
-            /* 关键：减小边框宽度 */
+    
             border: 2px solid var(--neon-blue);
             border-radius: 15px;
-            /* 关键：减小图片的上下边距 */
+    
             margin: 5px auto;
             box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
             display: block;
@@ -1046,15 +1046,15 @@
         .qr-instruction {
             font-size: 0.9rem;
             color: #cccccc;
-            /* 减小说明文字的上边距 */
+        
             margin-top: 5px;
-            /* 可选：添加一点左右内边距，防止文字贴边 */
+     
             padding: 0 5px;
         }
-        /* - 修改结束 - */
+ 
 
 
-        /* 新增：手机App风格的模态框打开动画 - 从中心缩放淡入 */
+    
         @keyframes scaleInFade {
           0% {
             transform: scale(0.3);
@@ -1067,23 +1067,22 @@
         }
 
 
-        /* 新增：模态框关闭动画 - 与打开动画相反 */
-        /* 新增：模态框关闭动画 - 碎片化/灰烬溶解效果 */
+
         @keyframes ashDisappear {
           0% {
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); /* 起始：完整矩形 */
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); 
             transform: scale(1);
             opacity: 1;
-            filter: blur(0px); /* 无模糊 */
+            filter: blur(0px); 
           }
           25% {
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); /* 保持完整 */
-            transform: scale(0.75); /* 轻微放大 */
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); 
+            transform: scale(0.75); 
             opacity: 0.9;
-            filter: blur(1px); /* 开始轻微模糊 */
+            filter: blur(1px); 
           }
           50% {
-             /* 开始分解成碎片 */
+   
             clip-path: polygon(
               50% 50%, 50% 50%, 50% 50%, 50% 50%,
               50% 50%, 50% 50%, 50% 50%, 50% 50%,
@@ -1095,7 +1094,7 @@
             filter: blur(2px);
           }
           75% {
-            /* 进一步分解和偏移 */
+  
             clip-path: polygon(
               50% 50%, 50% 50%, 50% 50%, 50% 50%,
               50% 50%, 50% 50%, 50% 50%, 50% 50%,
@@ -1107,7 +1106,7 @@
             filter: blur(4px);
           }
           100% {
-            /* 最终碎片化并消失 */
+
             clip-path: polygon(
               50% 50%, 50% 50%, 50% 50%, 50% 50%,
               50% 50%, 50% 50%, 50% 50%, 50% 50%,
@@ -1116,7 +1115,7 @@
             );
             transform: scale(0.1);
             opacity: 0;
-            filter: blur(8px); /* 增加模糊度 */
+            filter: blur(8px); 
           }
         } 
 
@@ -1532,14 +1531,13 @@
             let selectedImages = [];
             let selectedFiles = [];
             let sessionId = localStorage.getItem('chat_session_id') || '';
-            let currentUser = null; // 用于存储当前登录用户信息
-            let userToken = null; // 用于存储从后端获取的 JWT Token
-            // --- 新增：API基础URL (请根据你的后端部署地址修改) ---
+            let currentUser = null; 
+            let userToken = null; 
+
             const API_BASE_URL = 'https://aliceskygarden-fxrfxmvaow.cn-hongkong.fcapp.run';
-            // --- 新增结束 ---
-            // --- 新增：用于本地存储的 JWT Token Key ---
+
             const JWT_TOKEN_KEY = 'jwt_token_aliceskygarden';
-            // --- 新增结束 ---
+
             particlesJS('particles-js', {
                 "particles": {
                     "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
@@ -1568,49 +1566,49 @@
 
 
 
-            // --- 新增：生成图片按钮逻辑 ---
+
             const generateImageBtn = document.getElementById('generateImageBtn');
-            let isImageGenMode = false; // 全局变量跟踪图片生成模式
-            let currentTaskId = null; // 存储当前任务ID用于轮询
-            let pollIntervalId = null; // 存储轮询定时器ID
+            let isImageGenMode = false; 
+            let currentTaskId = null; 
+            let pollIntervalId = null; 
 
             if (generateImageBtn) {
                 generateImageBtn.addEventListener('click', function() {
-                    // 1. 检查用户是否登录
+            
                     if (!currentUser) {
-                        // 用户未登录，直接打开登录窗口
+                      
                         openLoginModal();
                         return;
                     }
-                    // 2. 检查用户是否有剩余图片生成次数
+              
                     const imageCount = (currentUser.counts && currentUser.counts.image_count) || 0;
                     if (imageCount <= 0) {
                         alert(isEnglish ? "The number of Image Generated is insufficient. Please donate to obtain more times" : "图片生成次数不足，请通过捐款获取更多次数");
                         return;
                     }
 
-                    // 2. 切换状态
+          
                     isImageGenMode = !isImageGenMode;
 
                     if (isImageGenMode) {
-                        // 进入图片生成模式
+                 
                         generateImageBtn.classList.remove('disabled-btn');
-                        // --- 修改：添加激活状态类 ---
+                     
                         generateImageBtn.classList.add('active-image-mode');
-                        // --- 修改结束 ---
+                     
                         generateImageBtn.title = isEnglish ? "Exit Image Generation Mode" : "退出图片生成模式";
-                        // 可选：改变发送按钮文字以提示用户
+                    
                         sendButtonText.textContent = isEnglish ? "Generate Image" : "生成图片";
                     } else {
-                        // 退出图片生成模式
+               
                         generateImageBtn.classList.add('disabled-btn');
-                        // --- 修改：移除激活状态类 ---
+                    
                         generateImageBtn.classList.remove('active-image-mode');
-                        // --- 修改结束 ---
+                   
                         generateImageBtn.title = isEnglish ? "Generate Image(Sufficient remaining times are required)" : "生成图片(需要有充足的剩余次数)";
-                        // 恢复发送按钮文字
+                     
                         sendButtonText.textContent = isEnglish ? 'Send' : '发送';
-                        // 停止任何正在进行的轮询
+            
                         stopPolling();
                     }
                 });
@@ -1618,7 +1616,7 @@
                 console.error("Generate Image Button (id='generateImageBtn') not found in the DOM!");
             }
 
-            // 辅助函数：停止轮询
+  
             function stopPolling() {
                  if (pollIntervalId) {
                      clearInterval(pollIntervalId);
@@ -1627,10 +1625,10 @@
                  currentTaskId = null;
             }
 
-            // 辅助函数：轮询获取图片
+    
             async function pollForImage(taskId, promptMessageDiv, userPrompt) {
-                const maxAttempts = 30; // 最大尝试次数
-                const pollInterval = 3000; // 轮询间隔 (毫秒)
+                const maxAttempts = 30; 
+                const pollInterval = 3000; 
                 let attempts = 0;
 
                 const poll = async () => {
@@ -1672,28 +1670,21 @@
                             `;
 
                             promptMessageDiv.innerHTML = imageMessageHtml;
-                            // --- 新增：图片消息添加后立即保存聊天记录 ---
+                      
                             try {
                                 localStorage.setItem('aliceskygarden_chat_history', chatMessages.innerHTML);
                             } catch (e) {
                                 console.error("Error saving chat history (including new image) to localStorage:", e);
                             }
-                            // --- 新增结束 ---
+                
 
-
-                            // --- 新增：图片获取成功后，更新用户信息（次数） ---
-                            // 因为后端在任务成功时才扣减了次数，现在前端需要同步更新显示
-                            await fetchUserInfo(); // 等待 fetchUserInfo 完成
-                            // --- 新增结束 ---
+                            await fetchUserInfo(); 
+                  
 
 
                             sendButton.disabled = false;
-                            userInput.value = ''; // 清空输入框
-                            // 可选：生成后自动退出图片模式
-                            // isImageGenMode = false;
-                            // generateImageBtn.classList.add('disabled-btn');
-                            // generateImageBtn.title = isEnglish ? "Generate Image)" : "生成图片";
-                            // sendButtonText.textContent = isEnglish ? 'Send' : '发送';
+                            userInput.value = ''; 
+
                         } else if (data.status === 'FAILED') {
                             clearInterval(pollIntervalId);
                             pollIntervalId = null;
@@ -1701,7 +1692,7 @@
                             promptMessageDiv.innerHTML += `<br><span style="color: red;">${isEnglish ? 'Image generation failed:' : '图片生成失败:'} ${data.message || 'Unknown error'}</span>`;
                             sendButton.disabled = false;
                         } else if (data.status === 'RUNNING' || data.status === 'PENDING') {
-                            // 仍在进行中，继续轮询
+          
                         } else {
                              clearInterval(pollIntervalId);
                              pollIntervalId = null;
@@ -1712,23 +1703,17 @@
 
                     } catch (error) {
                         console.error('Error polling for image task:', error);
-                        // 可以选择继续轮询或停止
-                        // clearInterval(pollIntervalId);
-                        // pollIntervalId = null;
-                        // hideTyping();
-                        // promptMessageDiv.innerHTML += `<br><span style="color: red;">${isEnglish ? 'Error checking image status:' : '检查图片状态时出错:'} ${error.message}</span>`;
-                        // sendButton.disabled = false;
+
                     }
                 };
 
-                // 立即执行一次，然后开始定时轮询
+
                 await poll();
                 pollIntervalId = setInterval(poll, pollInterval);
             }
-            // --- 新增结束 ---
 
 
-            // --- 新增辅助函数：更新认证按钮文字 ---
+
             function updateAuthButtonText(buttonElement, status, type, isEnglish) {
                 const buttonTextMap = {
                     login: {
@@ -1745,46 +1730,46 @@
                     }
                 };
 
-                const texts = buttonTextMap[type]?.[status] || buttonTextMap.login.idle; // 默认回退到登录闲置
+                const texts = buttonTextMap[type]?.[status] || buttonTextMap.login.idle; 
                 buttonElement.textContent = isEnglish ? texts.en : texts.cn;
             }
-            // --- 新增结束 ---
 
 
-            // - 新增：获取用户信息并更新UI -
+
+     
             function fetchUserInfo() {
-                console.log("[fetchUserInfo] Function started."); // <-- 添加日志
-                // - 修改：首先尝试从 localStorage 恢复 Token -
+           
+         
                 const storedToken = localStorage.getItem(JWT_TOKEN_KEY);
-                console.log("[fetchUserInfo] Stored token from localStorage:", storedToken); // <-- 添加日志
+             
                 if (storedToken) {
                     userToken = storedToken;
-                    console.log("[fetchUserInfo] userToken set from localStorage:", userToken); // <-- 添加日志
+          
                 } else {
-                    console.log("[fetchUserInfo] No stored token found in localStorage."); // <-- 添加日志
+  
                 }
-                // - 修改结束 -
-                // 如果没有 Token，直接将按钮设为登录状态并返回
+           
+      
                 if (!userToken) {
                     document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
                     document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
                     return;
                 }
-                console.log("[fetchUserInfo] Proceeding with fetch request using token."); // <-- 添加日志
-                // 使用 JWT Token 获取用户信息
+          
+           
                 fetch(`${API_BASE_URL}/user_info`, {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Bearer ${userToken}` // 关键：将 Token 放入 Authorization 头
+                        'Authorization': `Bearer ${userToken}` 
                     }
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('[DEBUG] Fetch user info response data (in fetchUserInfo):', data); // <--- 确保这行在这里
+              
                     if (data && (typeof data.username === 'string' || typeof data.image_count === 'number')) {
 
-                        console.log('[DEBUG] Valid user data received, processing...');
-                        // 更新全局用户信息
+                     
+          
                         currentUser = {
                             username: data.username,
                             counts: {
@@ -1794,92 +1779,88 @@
                                 pdf_count: data.pdf_count || 0
                             }
                         };
-                        console.log('[DEBUG] currentUser updated in fetchUserInfo:', currentUser);
+                   
 
-                        // - 新增：强制触发 updateProfileCounts 并添加日志 -
+          
                         updateProfileCounts(currentUser.counts);
-                        console.log('[DEBUG] updateProfileCounts called in fetchUserInfo');
-                        // - 新增结束 -
-
-
-                        // --- 新增：刷新页面后，根据最新次数启用/禁用生图按钮 ---
+                
+                    
+         
                         if (generateImageBtn) {
                             if ((currentUser.counts.image_count || 0) > 0) {
-                                console.log('[DEBUG] Enabling generateImageBtn based on image_count:', currentUser.counts.image_count);
+                
                                 generateImageBtn.classList.remove('disabled-btn');
-                                // 如果当前处于图片生成模式，保持激活状态样式
+                        
                                 if (isImageGenMode) {
                                     generateImageBtn.classList.add('active-image-mode');
                                 }
                             } else {
-                                console.log('[DEBUG] Enabling generateImageBtn based on image_count:', currentUser.counts.image_count);
+             
                                 generateImageBtn.classList.add('disabled-btn');
 
-                                // --- 新增：如果次数为0，同时退出激活状态 ---
+                       
                                 if (isImageGenMode) {
-                                     isImageGenMode = false; // 更新全局状态变量
-                                     generateImageBtn.classList.remove('active-image-mode'); // 移除激活样式
-                                     // 可选：恢复发送按钮文字
+                                     isImageGenMode = false; 
+                                     generateImageBtn.classList.remove('active-image-mode'); 
+                          
                                      const sendButtonText = document.getElementById('sendButtonText');
                                      if (sendButtonText) {
                                          sendButtonText.textContent = isEnglish ? 'Send' : '发送';
                                      }
-                                     // 可选：更新按钮提示
+                                  
                                      generateImageBtn.title = isEnglish ? "Generate Image (Sufficient remaining times are required)" : "生成图片(需要有充足的剩余次数)";
                                 }
-                                // --- 新增结束 ---
+                          
 
                             }
                         }
-                        // --- 新增结束 ---
+       
 
 
-                        // 获取成功，更新用户信息和UI
+                  
                         document.getElementById('profileUsername').textContent = data.username;
-                        // 更新顶部按钮为个人中心按钮
-                        document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = data.username; // 显示用户名
+                 
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = data.username; 
                         document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user';
-                        // --- 新增：登录成功后缩小按钮上的用户名字体 ---
+                      -
                         document.getElementById('loginBtnNav').querySelector('.btn-text').style.whiteSpace = 'nowrap';
                         document.getElementById('loginBtnNav').querySelector('.btn-text').style.overflow = 'hidden';
                         document.getElementById('loginBtnNav').querySelector('.btn-text').style.textOverflow = 'ellipsis';
-                        document.getElementById('loginBtnNav').querySelector('.btn-text').style.maxWidth = '100px'; // 限制最大宽度以触发省略号
-                        // --- 新增结束 ---
+                        document.getElementById('loginBtnNav').querySelector('.btn-text').style.maxWidth = '100px'; 
+                  
                     } else {
-                        // Token 无效或过期，清除本地存储并更新UI
+                     
                         console.warn('User info request failed or invalid token:', data.error);
                         currentUser = null;
-                        userToken = null; // 清除无效的 token
-                        localStorage.removeItem(JWT_TOKEN_KEY); // 清除 localStorage 中的 token
+                        userToken = null; 
+                        localStorage.removeItem(JWT_TOKEN_KEY); 
                         document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
                         document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
                     }
                 })
                 .catch(error => {
                     console.error('获取用户信息失败 (可能未登录或Token无效):', error);
-                    // 请求失败也认为未登录
+              
                     currentUser = null;
-                    userToken = null; // 清除可能有问题的 token
-                    localStorage.removeItem(JWT_TOKEN_KEY); // 清除 localStorage 中的 token
+                    userToken = null; 
+                    localStorage.removeItem(JWT_TOKEN_KEY); 
                     document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
                     document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
                 });
             }
-            // 页面加载时获取用户信息
+       
             fetchUserInfo();
-            // --- 新增结束 ---
+       
 
 
-
-            // - 修改：登录/注册模态框逻辑 (气泡型) -
             const loginModal = document.getElementById('loginModal');
             const registerModal = document.getElementById('registerModal');
-            const profileModal = document.getElementById('profileModal'); // 个人中心模态框
-            const loginBtnNav = document.getElementById('loginBtnNav'); // 导航栏登录/个人按钮
+            const profileModal = document.getElementById('profileModal'); 
+            const loginBtnNav = document.getElementById('loginBtnNav'); 
             const showRegisterLink = document.getElementById('showRegisterLink');
-            const showLoginLink = document.getElementById('showLoginLink'); // 确保获取到 showLoginLink
+            const showLoginLink = document.getElementById('showLoginLink'); 
 
-            // --- 新增：辅助函数：清空模态框状态 ---
+
             function clearLoginModalState() {
                 document.getElementById('loginUsername').value = '';
                 document.getElementById('loginPassword').value = '';
@@ -1887,7 +1868,7 @@
                 document.getElementById('loginSuccess').style.display = 'none';
                 document.getElementById('loginError').textContent = '';
                 document.getElementById('loginSuccess').textContent = '';
-                // 恢复登录按钮文字
+      
                 const loginSubmitBtn = document.getElementById('loginSubmitBtn');
                 if (loginSubmitBtn) {
                      loginSubmitBtn.disabled = false;
@@ -1897,7 +1878,7 @@
 
             function clearRegisterModalState() {
                 document.getElementById('registerUsername').value = '';
-                document.getElementById('registerCountryCode').value = '+86'; // 旧的重置方式（已注释）
+                document.getElementById('registerCountryCode').value = '+86'; 
                 document.getElementById('registerPhone').value = '';
                 document.getElementById('registerPassword').value = '';
                 document.getElementById('registerConfirmPassword').value = '';
@@ -1905,16 +1886,16 @@
                 document.getElementById('registerSuccess').style.display = 'none';
                 document.getElementById('registerError').textContent = '';
                 document.getElementById('registerSuccess').textContent = '';
-                // 恢复注册按钮文字
+       
                 const registerSubmitBtn = document.getElementById('registerSubmitBtn');
                 if (registerSubmitBtn) {
                      registerSubmitBtn.disabled = false;
                      updateAuthButtonText(registerSubmitBtn, 'idle', 'register', isEnglish);
                 }
             }
-            // --- 新增结束 ---
+         
 
-            // - 修改：登录按钮事件 -
+            
             const loginSubmitBtn = document.getElementById('loginSubmitBtn');
             loginSubmitBtn.addEventListener('click', function() {
                 const username = document.getElementById('loginUsername').value;
@@ -1925,56 +1906,53 @@
                     return;
                 }
 
-                // --- 新增：修改按钮状态为正在处理 ---
-                loginSubmitBtn.disabled = true; // 禁用按钮
-                updateAuthButtonText(loginSubmitBtn, 'processing', 'login', isEnglish); // 更新按钮文字
-                // --- 新增结束 ---
+         
+                loginSubmitBtn.disabled = true; 
+                updateAuthButtonText(loginSubmitBtn, 'processing', 'login', isEnglish); 
 
-                // 使用 fetch 发送登录请求，不再依赖 credentials: 'include'
+
+           
                 fetch(`${API_BASE_URL}/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        // 不再需要 credentials: 'include'
+                   
                     },
                     body: JSON.stringify({ username, password }),
-                    // credentials: 'include' // 移除
+                   
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('[DEBUG] Fetch user info response data:', data); // <--- 正确位置
+     
                     if (data.error) {
-                        document.getElementById('loginError').textContent = isEnglish ? (data.error.includes('用户名或密码错误') ? 'Incorrect username or password' : data.error) : data.error; // 后端返回的错误信息
+                        document.getElementById('loginError').textContent = isEnglish ? (data.error.includes('用户名或密码错误') ? 'Incorrect username or password' : data.error) : data.error; 
                         document.getElementById('loginError').style.display = 'block';
                         document.getElementById('loginSuccess').style.display = 'none';
 
-                        // --- 新增：修改按钮状态为错误 ---
+                    
                         updateAuthButtonText(loginSubmitBtn, 'error', 'login', isEnglish);
                         setTimeout(() => {
                              loginSubmitBtn.disabled = false;
-                             updateAuthButtonText(loginSubmitBtn, 'idle', 'login', isEnglish); // 恢复按钮文字
-                        }, 1500); // 1.5秒后恢复
-                        // --- 新增结束 ---
+                             updateAuthButtonText(loginSubmitBtn, 'idle', 'login', isEnglish); 
+                        }, 1500); 
+          
 
                     } else {
                         document.getElementById('loginSuccess').textContent = data.message;
                         document.getElementById('loginSuccess').style.display = 'block';
                         document.getElementById('loginError').style.display = 'none';
 
-                        // --- 新增：修改按钮状态为成功 ---
+                  
                         updateAuthButtonText(loginSubmitBtn, 'success', 'login', isEnglish);
                         setTimeout(() => {
                              loginSubmitBtn.disabled = false;
-                             updateAuthButtonText(loginSubmitBtn, 'idle', 'login', isEnglish); // 恢复按钮文字
-                        }, 1000); // 1秒后恢复并关闭
-                        // --- 新增结束 ---
+                             updateAuthButtonText(loginSubmitBtn, 'idle', 'login', isEnglish); 
+                        }, 1000); 
+          
+    
+                        userToken = data.token; 
 
-                        // 关键修改：登录成功后，保存 JWT Token 和用户信息
-                        userToken = data.token; // 从后端响应中获取 token
 
-
-                        // 直接将 data 中的字段赋值给 currentUser
-                        // 更新全局用户信息
                         currentUser = {
                             username: data.username,
                             counts: {
@@ -1985,51 +1963,47 @@
                             }
                         };
 
-                        // - 新增：更新个人中心显示的次数 -
                         updateProfileCounts(currentUser.counts);
 
 
-                        // - 修改：将 Token 存入 localStorage -
                         localStorage.setItem(JWT_TOKEN_KEY, userToken);
-                        // - 修改结束 -
 
-                        // 更新UI
+
                         document.getElementById('profileUsername').textContent = data.username;
-                        // - 修改：更新次数显示 -
-                        updateProfileCounts(currentUser.counts);
-                        // - 修改结束 -
 
-                        // - 修改：根据图片生成次数启用/禁用生图按钮 -
+                        updateProfileCounts(currentUser.counts);
+
+
+
                         if (generateImageBtn) {
                             if ((currentUser.counts.image_count || 0) > 0) {
                                 generateImageBtn.classList.remove('disabled-btn');
                             } else {
                                 generateImageBtn.classList.add('disabled-btn');
 
-                                // --- 新增：如果次数为0，同时退出激活状态 ---
+
                                 if (isImageGenMode) {
-                                     isImageGenMode = false; // 更新全局状态变量
-                                     generateImageBtn.classList.remove('active-image-mode'); // 移除激活样式
-                                     // 可选：恢复发送按钮文字
+                                     isImageGenMode = false; 
+                                     generateImageBtn.classList.remove('active-image-mode'); 
+                          
                                      const sendButtonText = document.getElementById('sendButtonText');
                                      if (sendButtonText) {
                                          sendButtonText.textContent = isEnglish ? 'Send' : '发送';
                                      }
-                                     // 可选：更新按钮提示
+                        
                                      generateImageBtn.title = isEnglish ? "Generate Image (Sufficient remaining times are required)" : "生成图片(需要有充足的剩余次数)";
                                 }
-                                // --- 新增结束 ---
+                    
 
                             }
                         }
-                        // - 修改结束 -
+            
 
 
 
-                        // 更新顶部按钮为个人中心按钮
                         document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = data.username;
                         document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-user';
-                        // 1秒后自动关闭模态框
+          
                         setTimeout(() => {
                             closeModal(loginModal);
                         }, 1000);
@@ -2037,26 +2011,26 @@
                 })
                 .catch(error => {
                     console.error('登录请求失败:', error);
-                    // 原始代码中的错误处理保持不变
+           
                     document.getElementById('loginError').textContent = isEnglish ? 'Login request failed, please try again later.' : '登录请求失败，请稍后再试。';
                     document.getElementById('loginError').style.display = 'block';
                     document.getElementById('loginSuccess').style.display = 'none';
 
-                    // --- 新增：修改按钮状态为错误 (网络错误) ---
+          
                     updateAuthButtonText(loginSubmitBtn, 'error', 'login', isEnglish);
                     setTimeout(() => {
                          loginSubmitBtn.disabled = false;
-                         updateAuthButtonText(loginSubmitBtn, 'idle', 'login', isEnglish); // 恢复按钮文字
-                    }, 1500); // 1.5秒后恢复
-                    // --- 新增结束 ---
+                         updateAuthButtonText(loginSubmitBtn, 'idle', 'login', isEnglish); 
+                    }, 1500); 
+
 
                 });
             });
-            // - 修改：注册按钮事件 -
+
             const registerSubmitBtn = document.getElementById('registerSubmitBtn');
-            if (registerSubmitBtn) { // 确保元素存在再添加监听器
+            if (registerSubmitBtn) { 
                 registerSubmitBtn.addEventListener('click', function() {
-                    const username = document.getElementById('registerUsername').value.trim(); // 建议加上 .trim()
+                    const username = document.getElementById('registerUsername').value.trim(); 
                     const countryCode = document.getElementById('registerCountryCode').value;
                     const phone = document.getElementById('registerPhone').value.trim();
                     const password = document.getElementById('registerPassword').value;
@@ -2072,98 +2046,93 @@
                         return;
                     }
 
-                    // --- 新增：修改按钮状态为正在处理 ---
-                    registerSubmitBtn.disabled = true; // 禁用按钮
-                    updateAuthButtonText(registerSubmitBtn, 'processing', 'register', isEnglish); // 更新按钮文字
-                    // --- 新增结束 ---
+     
+                    registerSubmitBtn.disabled = true; 
+                    updateAuthButtonText(registerSubmitBtn, 'processing', 'register', isEnglish); 
 
-                    // 使用 fetch 发送注册请求，不再依赖 credentials: 'include'
-                    // --- 修改：打包手机号信息 ---
+
+
                     const registerData = { username, password };
                     if (phone) {
                         registerData.phone = `${countryCode}${phone}`;
                     }
-                    // --- 修改结束 ---
+     
                     fetch(`${API_BASE_URL}/register`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            // 不再需要 credentials: 'include'
+        
                         },
-                        body: JSON.stringify(registerData), // 发送包含手机号的数据
-                        // credentials: 'include' // 移除
+                        body: JSON.stringify(registerData), 
+                 
                     })
                     .then(response => {
                         return response.json();
                     })
                     .then(data => {
                         if (data.error) {
-                            // --- 修改：添加英文翻译 ---
+               
                             let errorMessage = data.error;
                             if (errorMessage.includes('用户名已存在')) {
                                 errorMessage = isEnglish ? 'Username already exists' : '用户名已存在';
                             }
-                            document.getElementById('registerError').textContent = errorMessage; // 后端返回的错误信息
-                            // --- 修改结束 ---
+                            document.getElementById('registerError').textContent = errorMessage; 
+                   
                             document.getElementById('registerError').style.display = 'block';
                             document.getElementById('registerSuccess').style.display = 'none';
 
-                            // --- 新增：修改按钮状态为错误 ---
+                        
                             updateAuthButtonText(registerSubmitBtn, 'error', 'register', isEnglish);
                             setTimeout(() => {
                                  registerSubmitBtn.disabled = false;
-                                 updateAuthButtonText(registerSubmitBtn, 'idle', 'register', isEnglish); // 恢复按钮文字
-                            }, 1500); // 1.5秒后恢复
-                            // --- 新增结束 ---
+                                 updateAuthButtonText(registerSubmitBtn, 'idle', 'register', isEnglish); 
+                            }, 1500); 
+                  
 
                         } else {
                             document.getElementById('registerSuccess').textContent = data.message;
                             document.getElementById('registerSuccess').style.display = 'block';
                             document.getElementById('registerError').style.display = 'none';
 
-                            // --- 新增：修改按钮状态为成功 ---
+                   
                             updateAuthButtonText(registerSubmitBtn, 'success', 'register', isEnglish);
                             setTimeout(() => {
                                  registerSubmitBtn.disabled = false;
-                                 updateAuthButtonText(registerSubmitBtn, 'idle', 'register', isEnglish); // 恢复按钮文字
-                                 // 注册成功后可以自动切换到登录框或直接关闭
+                                 updateAuthButtonText(registerSubmitBtn, 'idle', 'register', isEnglish); 
+            
                                  closeModal(registerModal);
-                                //document.getElementById('loginUsername').value = username;
-                                //document.getElementById('loginPassword').value = password;
-                                // - 修改：自动登录时填充用户名 -
+
                                 document.getElementById('loginUsername').value = username;
-                                // - 修改结束 -
-                                 openLoginModal(); // 打开登录框并填充用户名密码
-                            }, 1500); // 1.5秒后恢复并执行后续操作
-                            // --- 新增结束 ---
+                      
+                                 openLoginModal(); 
+                            }, 1500); 
+              
 
                         }
                     })
                     .catch(error => {
                         console.error('注册请求失败:', error);
-                        // 原始代码中的错误处理保持不变
+                 
                         document.getElementById('registerError').textContent = isEnglish ? 'Registration request failed, please try again later.' : '注册请求失败，请稍后再试。';
                         document.getElementById('registerError').style.display = 'block';
                         document.getElementById('registerSuccess').style.display = 'none';
 
-                        // --- 新增：修改按钮状态为错误 (网络错误) ---
+                 
                         updateAuthButtonText(registerSubmitBtn, 'error', 'register', isEnglish);
                         setTimeout(() => {
                              registerSubmitBtn.disabled = false;
-                             updateAuthButtonText(registerSubmitBtn, 'idle', 'register', isEnglish); // 恢复按钮文字
-                        }, 1500); // 1.5秒后恢复
-                        // --- 新增结束 ---
+                             updateAuthButtonText(registerSubmitBtn, 'idle', 'register', isEnglish); 
+                        }, 1500); 
+      
 
                     });
                 });
             } else {
                 console.error("Register Submit Button (id='registerSubmitBtn') not found in the DOM!");
             }
-            // - 修改结束：注册按钮事件 -
-            // --- 新增：个人中心按钮事件 ---
-            // 充值按钮事件
+
             const rechargeBtnProfile = document.getElementById('rechargeBtnProfile');
-            if (rechargeBtnProfile) { // 确保元素存在
+            if (rechargeBtnProfile) { 
                 rechargeBtnProfile.addEventListener('click', function() {
                      if (!currentUser) {
                          alert(isEnglish ? "Please log in to use the recharge function." : "请先登录以使用充值功能。");
@@ -2171,14 +2140,14 @@
                          openLoginModal();
                          return;
                      }
-                     // 调用充值接口
+         
                      fetch(`${API_BASE_URL}/recharge`, {
                          method: 'POST',
                          headers: {
                              'Content-Type': 'application/json',
-                             'Authorization': `Bearer ${userToken}` // 携带 JWT Token
+                             'Authorization': `Bearer ${userToken}`
                          },
-                         // credentials: 'include' // 不再需要
+              
                      })
                      .then(response => response.json())
                      .then(data => {
@@ -2186,7 +2155,7 @@
                              alert(`${isEnglish ? 'Recharge failed:' : '充值失败:'} ${data.error}`);
                          } else {
                              alert(`${isEnglish ? 'Recharge info:' : '充值信息:'} ${data.message}`);
-                             // 刷新用户信息，检查VIP状态是否更新
+                          
                              fetchUserInfo();
                          }
                      })
@@ -2196,112 +2165,95 @@
                      });
                 });
             }
-            // - 修改：登出按钮事件 -
+   
             const logoutBtnProfile = document.getElementById('logoutBtnProfile');
             if (logoutBtnProfile) {
                 logoutBtnProfile.addEventListener('click', function() {
-                    if (!currentUser || !userToken) { // 检查是否已登录
+                    if (!currentUser || !userToken) { 
                          console.warn("Logout requested but user is not logged in.");
-                         // 仍然执行清理和UI更新
+                 
                     }
-                    // 向后端发送登出请求 (虽然JWT是无状态的，但后端可能需要记录或清理)
-                    // 使用 fetch 发送登出请求，使用 Authorization 头携带 JWT Token
+
                     fetch(`${API_BASE_URL}/logout`, {
                         method: 'POST',
                         headers: {
-                            'Authorization': `Bearer ${userToken}` // 关键：携带 Token
-                            // 不再需要 credentials: 'include'
+                            'Authorization': `Bearer ${userToken}` 
+                       
                         },
-                        // credentials: 'include' // 移除
+    
                     })
                     .then(response => {
                          return response.json();
                     })
                     .then(data => {
-                        // 无论后端响应如何，前端都应清理本地状态
-                        // 关键修改：清除本地存储的用户信息和 token
+
                         currentUser = null;
                         userToken = null;
-                        // --- 修改：从 localStorage 移除 Token ---
+         
                         localStorage.removeItem(JWT_TOKEN_KEY);
-                        // --- 修改结束 ---
-                        // 更新 UI 回到未登录状态
+                
+                   
                         document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
                         document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
-                        // 关闭个人中心模态框
+          
                         closeModal(profileModal);
-                        // 可选：给出登出成功的提示
-                        // alert(isEnglish ? "Logged out successfully" : "登出成功");
+
                     })
                     .catch(error => {
                         console.error('登出请求失败 (但前端状态已清理):', error);
-                        // 即使后端请求失败，也应清理前端状态
+                     
                         currentUser = null;
                         userToken = null;
-                        // --- 修改：从 localStorage 移除 Token ---
+                     
                         localStorage.removeItem(JWT_TOKEN_KEY);
-                        // --- 修改结束 ---
+                   
                         document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = isEnglish ? 'Log in' : '登录';
                         document.getElementById('loginBtnNav').querySelector('i').className = 'fas fa-sign-in-alt';
-                        // --- 新增：登出后禁用生成图片按钮 ---
+       
                         if (generateImageBtn) {
                              generateImageBtn.classList.add('disabled-btn');
-                             isImageGenMode = false; // 重置模式
+                             isImageGenMode = false; 
                              generateImageBtn.title = isEnglish ? "Generate Image" : "生成图片";
                              sendButtonText.textContent = isEnglish ? 'Send' : '发送';
-                             stopPolling(); // 停止轮询
+                             stopPolling(); 
                         }
-                        // --- 新增结束 ---
+           
                         closeModal(profileModal);
-                        // alert(isEnglish ? "Logout communication with server failed, but local state is cleared." : "登出时与服务器通信失败，但本地已登出。");
+                      
                     });
                 });
             } else {
                  console.error("Logout Button (id='logoutBtnProfile') not found in the DOM!");
             }
-            // - 修改结束：登出按钮事件 -
+   
 
 
 
-
-            // - 修改：捐款按钮事件 (打开新的捐款模态框) -
             const donateBtnProfile = document.getElementById('donateBtnProfile');
             if (donateBtnProfile) {
                 donateBtnProfile.addEventListener('click', function() {
-                    // closeModal(profileModal); // 先关闭个人中心模态框
-                    openDonateModal(); // 打开捐款模态框
+       
+                    openDonateModal(); 
                 });
             } else {
                 console.error("Donate Button (id='donateBtnProfile') not found in the DOM!");
             }
-            // - 修改结束：捐款按钮事件 -
+    
 
-            // - 新增：更新用户次数显示的函数 -
+
             function updateProfileCounts(userCounts) {
-                console.log('[DEBUG] updateProfileCounts called with:', userCounts);
 
-                // --- 新增：添加调试日志 ---
-                console.log('[DEBUG] Elements found for text content:');
-                console.log('  imageCountText:', document.getElementById('imageCountText'));
-                console.log('  pptCountText:', document.getElementById('pptCountText'));
-                console.log('  wordCountText:', document.getElementById('wordCountText'));
-                console.log('  pdfCountText:', document.getElementById('pdfCountText'));
-                // --- 新增结束 ---
 
-                // 获取所有文本节点元素，如果不存在则返回 null
+
                 const imageCountText = document.getElementById('imageCountText');
                 const pptCountText = document.getElementById('pptCountText');
                 const wordCountText = document.getElementById('wordCountText');
                 const pdfCountText = document.getElementById('pdfCountText');
 
-                // --- 新增：添加调试日志 ---
-                console.log('[DEBUG] Setting text content:');
-                // --- 新增结束 ---
 
-                // 安全地设置计数文本
                 if (imageCountText) {
                     imageCountText.textContent = (userCounts && userCounts.image_count) || 0;
-                    console.log('[DEBUG] Set imageCountText.textContent to:', imageCountText.textContent);
+              
                 } else {
                     console.error('[ERROR] imageCountText element not found!');
                 }
@@ -2315,13 +2267,13 @@
                     pdfCountText.textContent = (userCounts && userCounts.pdf_count) || 0;
                 }
 
-                // 获取所有标签元素，如果不存在则返回 null
+ 
                 const imageCountLabel = document.getElementById('profileImageCount');
                 const pptCountLabel = document.getElementById('profilePPTCount');
                 const wordCountLabel = document.getElementById('profileWordCount');
                 const pdfCountLabel = document.getElementById('profilePDFCount');
 
-                // 安全地更新标签文字
+             
                 if (imageCountLabel && imageCountLabel.childNodes && imageCountLabel.childNodes.length > 0) {
                     imageCountLabel.childNodes[0].nodeValue = isEnglish ? "Residual HD-Image Generate: " : "剩余生成 HD超清图片 次数: ";
                 }
@@ -2329,19 +2281,15 @@
                 if (wordCountLabel) wordCountLabel.childNodes[0].nodeValue = isEnglish ? "Residual Word-File Generate: " : "剩余生成 Word文件 次数: ";
                 if (pdfCountLabel) pdfCountLabel.childNodes[0].nodeValue = isEnglish ? "Residual PDF-File Generate: " : "剩余生成 PDF文件 次数: ";
             }
-            // - 新增结束：更新用户次数显示的函数 -
 
 
 
 
 
-
-            // --- 确保以下模态框控制和事件绑定代码存在 ---
-            // - 新增：打开登录模态框 -
             function openLoginModal() {
-                // --- 新增：打开前清空状态 ---
+          
                 clearLoginModalState();
-                // --- 新增结束 ---
+        
                 if (loginModal) {
                     loginModal.style.display = 'block';
                     loginModal.style.backgroundColor = '';
@@ -2349,11 +2297,11 @@
                     console.error("Login modal element not found!");
                 }
             }
-            // - 新增：打开注册模态框 -
+
             function openRegisterModal() {
-                // --- 新增：打开前清空状态 ---
+     
                 clearRegisterModalState();
-                // --- 新增结束 ---
+               
                 if (registerModal) {
                     registerModal.style.display = 'block';
                     registerModal.style.backgroundColor = '';
@@ -2361,7 +2309,7 @@
                     console.error("Register modal element not found!");
                 }
             }
-            // - 新增：打开个人中心模态框 (如果需要) -
+  
             function openProfileModal() {
                 if (profileModal) {
                     profileModal.style.display = 'block';
@@ -2370,49 +2318,46 @@
                     console.error("Profile modal element not found!");
                 }
             }
-            // - 新增：关闭任意模态框 -
-            // --- 修改后的 closeModal 函数 ---
+
             function closeModal(modalElement) {
               if (modalElement) {
 
-                //    这会让背景在内容动画播放时就变亮
+            
                 modalElement.style.backgroundColor = 'rgba(0, 0, 0, 0)'; 
 
-                const modalContent = modalElement.querySelector('.bubble-modal-content, .profile-modal-content'); // 选择模态框内容
+                const modalContent = modalElement.querySelector('.bubble-modal-content, .profile-modal-content'); 
 
                 if (modalContent) {
-                  // 1. 移除可能已存在的打开动画类（如果有的话）
+
                   modalContent.style.animation = '';
 
-                  // 2. 应用关闭动画
+
                   modalContent.style.animation = 'ashDisappear 0.2s ease-in forwards';
 
-                  // 3. 监听动画结束事件
+        
                   modalContent.addEventListener('animationend', function handler() {
-                    // 动画结束后，移除监听器（防止内存泄漏）
+       
                     modalContent.removeEventListener('animationend', handler);
 
-                    // 动画结束后，隐藏模态框
+                
                     modalElement.style.display = 'none';
 
-                    // 可选：重置内容动画样式，以便下次打开时能正确应用打开动画
-                    // (虽然通常下次打开时会重新设置 animation 属性覆盖，但重置是好习惯)
+
                     modalContent.style.animation = '';
-                  }, { once: true }); // { once: true } 确保监听器只触发一次后自动移除
+                  }, { once: true }); 
                 } else {
-                  // 如果找不到内容元素，直接隐藏
+    
                   console.warn('Modal content element not found for closing animation.');
                   modalElement.style.display = 'none';
 
-                  // 并恢复背景色（虽然即将被隐藏）
+          
                   modalElement.style.backgroundColor = '';
                 }
               } else {
                 console.error("closeModal: modalElement is null or undefined.");
               }
             }
-            // --- 修改结束 ---
-            // - 新增：点击模态框外部区域关闭 -
+
             window.addEventListener('click', function(event) {
                 if (event.target === loginModal) {
                     closeModal(loginModal);
@@ -2424,59 +2369,56 @@
                     closeModal(profileModal);
                 }
             });
-            // --- 事件监听器：绑定按钮点击事件 ---
-            // 当点击顶部的登录/个人按钮时
+
             loginBtnNav.addEventListener('click', function() {
                 if (currentUser) {
-                    openProfileModal(); // 如果已登录，打开个人中心
+                    openProfileModal(); 
                 } else {
-                    openLoginModal(); // 如果未登录，打开登录框
+                    openLoginModal(); 
                 }
             });
-            // 当在登录框内点击“立即注册”链接时
+  
             showRegisterLink.addEventListener('click', function() {
-                closeModal(loginModal); // 关闭登录框
-                openRegisterModal();   // 打开注册框
+                closeModal(loginModal); 
+                openRegisterModal();   
             });
-            // 当在注册框内点击“立即登录”链接时
-            if (showLoginLink) { // 确保元素存在
+
+            if (showLoginLink) { 
                 showLoginLink.addEventListener('click', function() {
-                    closeModal(registerModal); // 关闭注册框
-                    openLoginModal();         // 打开登录框
+                    closeModal(registerModal);
+                    openLoginModal();        
                 });
             }
-            // 点击登录模态框的关闭按钮 (x) 时
+
             const loginClose = loginModal.querySelector('.bubble-close');
             if (loginClose) {
                 loginClose.addEventListener('click', function() {
                     closeModal(loginModal);
                 });
             }
-            // 点击注册模态框的关闭按钮 (x) 时
+        
             const registerClose = registerModal.querySelector('.bubble-close');
             if (registerClose) {
                 registerClose.addEventListener('click', function() {
                     closeModal(registerModal);
                 });
             }
-            // 点击个人中心模态框的关闭按钮 (x) 时
+ 
             const profileClose = profileModal.querySelector('.bubble-close');
             if (profileClose) {
                 profileClose.addEventListener('click', function() {
                     closeModal(profileModal);
                 });
             }
-            // --- 新增结束 ---
+  
 
 
-
-            // - 新增：捐款模态框相关元素和函数 -
             const donateModal = document.getElementById('donateModal');
             const qrModal = document.getElementById('qrModal');
             const qrImage = document.getElementById('qrImage');
             const qrAmountValue = document.getElementById('qrAmountValue');
 
-            // 金额到图片URL的映射
+     
             const qrCodeUrls = {
                 '0.08': 'https://hk-alice-file.oss-cn-hongkong.aliyuncs.com/0.08.jpg',
                 '1.0': 'https://hk-alice-file.oss-cn-hongkong.aliyuncs.com/1.0.jpg',
@@ -2484,61 +2426,61 @@
                 '9.9': 'https://hk-alice-file.oss-cn-hongkong.aliyuncs.com/9.9.jpg'
             };
 
-            // 打开捐款模态框
+       
             function openDonateModal() {
                 if (donateModal) {
                     donateModal.style.display = 'block';
-                    updateDonateModalTexts(); // 打开时更新文本
+                    updateDonateModalTexts(); 
                     donateModal.style.backgroundColor = '';
                 } else {
                     console.error("Donate modal element not found!");
                 }
             }
 
-            // --- 修改后的 closeDonateModal 函数 ---
+     
             function closeDonateModal() {
-              // 检查 donateModal 元素是否存在
+          
               if (donateModal) {
 
-                // 1. 立即修改模态框背景层的透明度
+  
                 donateModal.style.backgroundColor = 'rgba(0, 0, 0, 0)';
 
-                // 1. 找到模态框的内容元素 (donate-modal-content)
+    
                 const modalContent = donateModal.querySelector('.donate-modal-content');
 
-                // 2. 检查内容元素是否存在
+           
                 if (modalContent) {
-                  // 3. 清除可能存在的旧动画
+           
                   modalContent.style.animation = '';
 
-                  // 4. 应用 ashDisappear 关闭动画
+               
                   modalContent.style.animation = 'ashDisappear 0.2s ease-in forwards';
 
-                  // 5. 监听动画结束事件
+             
                   modalContent.addEventListener('animationend', function handler() {
-                    // 动画结束后，移除监听器（防止内存泄漏）
+              
                     modalContent.removeEventListener('animationend', handler);
 
-                    // 动画结束后，隐藏模态框
+              
                     donateModal.style.display = 'none';
 
-                    // 可选：重置内容动画样式
+               
                     modalContent.style.animation = '';
-                  }, { once: true }); // { once: true } 确保监听器只触发一次后自动移除
+                  }, { once: true }); 
                 } else {
-                  // 如果找不到内容元素，直接隐藏（回退方案）
+       
                   console.warn('Donate modal content element not found for closing animation.');
                   donateModal.style.display = 'none';
 
-                  donateModal.style.backgroundColor = ''; // 恢复，虽然即将隐藏
+                  donateModal.style.backgroundColor = ''; 
                 }
               } else {
                 console.error("closeDonateModal: donateModal element is null or undefined.");
               }
             }
-            // --- 修改结束 ---
 
-            // 打开二维码模态框
+
+
             function openQrModal(amount) {
                 if (qrModal && qrImage) {
                     const url = qrCodeUrls[amount];
@@ -2546,7 +2488,7 @@
                         qrImage.src = url;
                         qrAmountValue.textContent = isEnglish ? `${amount} RMB` : `${amount} 元人民币`;
                         qrModal.style.display = 'block';
-                        updateQrModalTexts(amount); // 打开时更新文本
+                        updateQrModalTexts(amount); 
                         qrModal.style.backgroundColor = '';
                     } else {
                         alert(isEnglish ? "Invalid amount selected." : "选择了无效金额。");
@@ -2557,58 +2499,58 @@
             }
 
 
-            // --- 修改后的 closeQrModal 函数 ---
+      
             function closeQrModal() {
-              // 检查 qrModal 元素是否存在
+     
               if (qrModal) {
 
-                // 1. 立即修改模态框背景层的透明度
+            
                 qrModal.style.backgroundColor = 'rgba(0, 0, 0, 0)';
 
-                // 1. 找到模态框的内容元素 (qr-modal-content)
+           
                 const modalContent = qrModal.querySelector('.qr-modal-content');
 
-                // 2. 检查内容元素是否存在
+         
                 if (modalContent) {
-                  // 3. 清除可能存在的旧动画
+             
                   modalContent.style.animation = '';
 
-                  // 4. 应用 ashDisappear 关闭动画
+           
                   modalContent.style.animation = 'ashDisappear 0.2s ease-in forwards';
 
-                  // 5. 监听动画结束事件
+                 
                   modalContent.addEventListener('animationend', function handler() {
-                    // 动画结束后，移除监听器（防止内存泄漏）
+             
                     modalContent.removeEventListener('animationend', handler);
 
-                    // 动画结束后，隐藏模态框
+                 
                     qrModal.style.display = 'none';
 
-                    // 可选：重置内容动画样式
+                  
                     modalContent.style.animation = '';
-                  }, { once: true }); // { once: true } 确保监听器只触发一次后自动移除
+                  }, { once: true }); 
                 } else {
-                  // 如果找不到内容元素，直接隐藏（回退方案）
+           
                   console.warn('QR modal content element not found for closing animation.');
                   qrModal.style.display = 'none';
 
-                  qrModal.style.backgroundColor = ''; // 恢复，虽然即将隐藏
+                  qrModal.style.backgroundColor = ''; 
                 }
               } else {
                 console.error("closeQrModal: qrModal element is null or undefined.");
               }
             }
-            // --- 修改结束 ---
+ 
 
 
 
-            // 更新捐款模态框内的文本 (中英文)
+      
             function updateDonateModalTexts() {
                 const donateModalTitle = document.getElementById('donateModalTitle');
                 const donateInstructionText = document.getElementById('donateInstructionText');
                 const donateNoteText = document.getElementById('donateNoteText');
 
-                // 选项文本
+          
                 const donateOption1Text = document.getElementById('donateOption1Text');
                 const donateOption1Desc = document.getElementById('donateOption1Desc');
                 const donateOption2Text = document.getElementById('donateOption2Text');
@@ -2618,7 +2560,7 @@
                 const donateOption4Text = document.getElementById('donateOption4Text');
                 const donateOption4Desc = document.getElementById('donateOption4Desc');
 
-                // 按钮文本
+        
                 const alipayBtnText1 = document.getElementById('alipayBtnText1');
                 const alipayBtnText2 = document.getElementById('alipayBtnText2');
                 const alipayBtnText3 = document.getElementById('alipayBtnText3');
@@ -2659,7 +2601,7 @@
                 }
             }
     
-            // 更新二维码模态框内的文本 (中英文)
+   
             function updateQrModalTexts(amount) {
                 const qrModalTitle = document.getElementById('qrModalTitle');
                 const qrAmountLabel = document.getElementById('qrAmountLabel');
@@ -2668,32 +2610,32 @@
                 if (isEnglish) {
                     if (qrModalTitle) qrModalTitle.textContent = "Alipay QR Code";
                     if (qrAmountLabel) qrAmountLabel.textContent = "Amount:";
-                    // qrAmountValue 在 openQrModal 中设置
+          
                     if (qrInstructionText) qrInstructionText.textContent = "Save this image and open it in Alipay app to scan and pay.";
                 } else {
                     if (qrModalTitle) qrModalTitle.textContent = "支付宝二维码";
                     if (qrAmountLabel) qrAmountLabel.textContent = "金额:";
-                    // qrAmountValue 在 openQrModal 中设置
+            
                     if (qrInstructionText) qrInstructionText.textContent = "保存此图片并在支付宝APP中打开扫描支付";
                 }
             }
 
 
-            // 为“显示二维码”按钮添加事件监听器 (修改版)
+
             document.addEventListener('click', function(event) {
                 if (event.target && (event.target.matches('.show-qr-btn') || event.target.closest('.show-qr-btn'))) {
-                    // 兼容事件委托，确保点击到按钮内部元素也能触发
+              
                     const button = event.target.closest('.show-qr-btn');
                     const amount = button.getAttribute('data-amount');
                     if (amount) {
-                        closeDonateModal(); // 关闭捐款选择模态框
-                        openQrModal(amount); // 打开二维码模态框
+                        closeDonateModal(); 
+                        openQrModal(amount); 
                     }
                 }
             });
 
 
-            // 点击捐款模态框的关闭按钮 (x) 时
+     
             if (donateModal) {
                 const donateClose = donateModal.querySelector('.bubble-close');
                 if (donateClose) {
@@ -2703,7 +2645,7 @@
                 }
             }
 
-            // 点击二维码模态框的关闭按钮 (x) 时
+  
             if (qrModal) {
                 const qrClose = qrModal.querySelector('.bubble-close');
                 if (qrClose) {
@@ -2713,7 +2655,7 @@
                 }
             }
 
-            // 点击模态框外部区域关闭 (捐款和二维码)
+
             window.addEventListener('click', function(event) {
                 if (event.target === donateModal) {
                     closeDonateModal();
@@ -2723,7 +2665,7 @@
                 }
             });
 
-            // - 新增结束 -
+
 
 
             const langBtn = document.getElementById('langBtn');
@@ -2740,7 +2682,7 @@
             const filePreviewContainer = document.getElementById('filePreviewContainer');
             const sendButtonText = document.getElementById('sendButtonText');
             const clearHistoryBtnText = document.getElementById('clearHistoryBtn').querySelector('.btn-text');
-            // 登录/注册模态框文本元素
+         
             const loginModalTitle = document.getElementById('loginModalTitle');
             const registerModalTitle = document.getElementById('registerModalTitle');
             const showRegisterLinkText = document.querySelector('.bubble-modal-footer a#showRegisterLink');
@@ -2750,15 +2692,15 @@
             const loginUsernameLabel = document.querySelector('#loginUsername').previousElementSibling;
             const loginPasswordLabel = document.querySelector('#loginPassword').previousElementSibling;
             const registerUsernameLabel = document.querySelector('#registerUsername').previousElementSibling;
-            const registerPhoneLabel = document.querySelector('#registerPhone').previousElementSibling; // 新增
+            const registerPhoneLabel = document.querySelector('#registerPhone').previousElementSibling; 
             const registerPasswordLabel = document.querySelector('#registerPassword').previousElementSibling;
             const registerConfirmPasswordLabel = document.querySelector('#registerConfirmPassword').previousElementSibling;
-            // 个人中心模态框文本元素
+    
             const profileModalTitle = document.getElementById('profileModalTitle');
             const rechargeBtnProfileText = document.getElementById('rechargeBtnProfileText');
             const logoutBtnProfileText = document.getElementById('logoutBtnProfileText');
 
-            // --- 新增：语言切换时更新模态框内的标签和链接文字 ---
+      
             function updateModalTexts() {
                 if (isEnglish) {
                     loginModalTitle.textContent = "Login AliceSkyGarden";
@@ -2768,7 +2710,7 @@
                     loginUsernameLabel.textContent = "Username:";
                     loginPasswordLabel.textContent = "Password:";
                     registerUsernameLabel.textContent = "Username:";
-                    registerPhoneLabel.textContent = "Phone Number:"; // 新增
+                    registerPhoneLabel.textContent = "Phone Number:"; 
                     registerPasswordLabel.textContent = "Password:";
                     registerConfirmPasswordLabel.textContent = "Confirm Password:";
                     profileModalTitle.textContent = "Profile";
@@ -2782,7 +2724,7 @@
                     loginUsernameLabel.textContent = "用户名:";
                     loginPasswordLabel.textContent = "密码:";
                     registerUsernameLabel.textContent = "用户名:";
-                    registerPhoneLabel.textContent = "手机号:"; // 新增
+                    registerPhoneLabel.textContent = "手机号:"; 
                     registerPasswordLabel.textContent = "密码:";
                     registerConfirmPasswordLabel.textContent = "确认密码:";
                     profileModalTitle.textContent = "个人中心";
@@ -2793,17 +2735,16 @@
 
         
 
-                // --- 强制修复：国家代码下拉框在语言切换后变空的问题 (通过重建选项) ---
                 const registerCountryCodeSelect = document.getElementById('registerCountryCode');
                 if (registerCountryCodeSelect) {
-                    // 1. 保存或设定要选中的值 (我们强制设为默认 "+86")
+            
                     const valueToSelect = "+86";
 
-                    // 2. 清空现有的所有选项
+              
                     registerCountryCodeSelect.innerHTML = '';
 
-                    // 3. 重新创建并添加选项 (使用您HTML中已有的选项数据)
-                    //    注意：HTML中有两个+86和+1，这里只保留一个实例，避免歧义
+               
+                  
                     const optionsData = [
                         { value: "+86", label: "+86 (中国)" },
                         { value: "+1", label: "+1 (美国)" },
@@ -2839,36 +2780,35 @@
                         { value: "+379", label: "+379 (梵蒂冈)" }
                     ];
 
-                    let selectedIndex = -1; // 记录默认选项的索引
+                    let selectedIndex = -1; 
                     optionsData.forEach((optData, index) => {
                         const optionElement = document.createElement('option');
                         optionElement.value = optData.value;
                         optionElement.textContent = optData.label;
                         if (optData.value === valueToSelect) {
                             optionElement.selected = true;
-                            selectedIndex = index; // 记录索引
+                            selectedIndex = index; 
                         }
                         registerCountryCodeSelect.appendChild(optionElement);
                     });
 
-                    // 4. (可选但推荐) 如果上面的 selected 没有生效，再强制设置一次 selectedIndex
+                 
                     if (selectedIndex !== -1) {
                         registerCountryCodeSelect.selectedIndex = selectedIndex;
                     }
 
-                    // 5. (可选) 为了确保 UI 和事件监听器正确更新，强制触发一次 'change' 事件
-                    // registerCountryCodeSelect.dispatchEvent(new Event('change'));
-                    console.log("[DEBUG] Register country code dropdown rebuilt and +86 selected.");
+
+            
                 } else {
                     console.warn("[DEBUG] registerCountryCode element not found during rebuild.");
                 }
-                // --- 强制修复结束 ---
+            
 
 
 
 
             }
-            // --- 新增结束 ---
+        
 
             langBtn.addEventListener('click', function() {
                 isEnglish = !isEnglish;
@@ -2876,7 +2816,7 @@
                 const uploadBtns = document.querySelectorAll('.upload-btn');
                 const agreementTextElements = document.querySelectorAll('.agreement-text');
                 if (isEnglish) {
-                    btnTextElements[0].textContent = 'Log in'; // 登录按钮 (如果未登录)
+                    btnTextElements[0].textContent = 'Log in'; 
                     btnTextElements[1].textContent = '中文';
                     clearHistoryBtnText.textContent = 'Clear History';
                     chatTitle.textContent = "Talk with AliceSkyGarden";
@@ -2891,29 +2831,26 @@
                     copyrightText.textContent = "© 2025 AliceSkyGarden Technology. All rights reserved";
                     uploadBtns[0].title = "Upload Image";
                     uploadBtns[1].title = "Upload File";
-                    // 更新协议文本
+                
                     document.querySelector('.cn-text').style.display = 'none';
                     document.querySelector('.en-text').style.display = 'inline';
-                    // - 新增：设置“生图模式”按钮为英文 -
+                  
                     if (document.getElementById('generateImageBtnText')) {
                         document.getElementById('generateImageBtnText').textContent = 'Img Mode';
                     }
-                    // - 新增结束 -
 
-                    // - 新增结束 -
-                    // - 新增：更新个人中心按钮文字为英文 -
                     if (document.getElementById('profileModalTitle')) document.getElementById('profileModalTitle').textContent = "Profile";
                     if (document.getElementById('donateBtnProfileText')) document.getElementById('donateBtnProfileText').textContent = "Donate";
                     if (document.getElementById('logoutBtnProfileText')) document.getElementById('logoutBtnProfileText').textContent = "Logout";
-                    // 更新次数标签文字 (调用函数)
+           
                     if (currentUser && currentUser.counts) {
                          updateProfileCounts(currentUser.counts);
                     }
-                    // - 新增结束 -
+          
 
 
                 } else {
-                    btnTextElements[0].textContent = '登录'; // 登录按钮 (如果未登录)
+                    btnTextElements[0].textContent = '登录'; 
                     btnTextElements[1].textContent = 'English';
                     clearHistoryBtnText.textContent = '清除历史';
                     chatTitle.textContent = "与 AliceSkyGarden 对话";
@@ -2928,35 +2865,35 @@
                     copyrightText.textContent = "© 2025 AliceSkyGarden Technology. 保留所有权利 All rights reserved";
                     uploadBtns[0].title = "上传图片";
                     uploadBtns[1].title = "上传文件";
-                    // 更新协议文本
+              
                     document.querySelector('.en-text').style.display = 'none';
                     document.querySelector('.cn-text').style.display = 'inline';
-                    // - 新增：设置“生图模式”按钮为中文 -
+                 
                     if (document.getElementById('generateImageBtnText')) {
                         document.getElementById('generateImageBtnText').textContent = '生图模式';
                     }
-                    // - 新增结束 -
+                  
 
-                    // - 新增：更新个人中心按钮文字为中文 -
+           
                     if (document.getElementById('profileModalTitle')) document.getElementById('profileModalTitle').textContent = "个人中心";
                     if (document.getElementById('donateBtnProfileText')) document.getElementById('donateBtnProfileText').textContent = "捐款";
                     if (document.getElementById('logoutBtnProfileText')) document.getElementById('logoutBtnProfileText').textContent = "登出";
-                    // 更新次数标签文字 (调用函数)
+
                     if (currentUser && currentUser.counts) {
                          updateProfileCounts(currentUser.counts);
                     }
-                    // - 新增结束 -
+             
 
                 }
-                // --- 新增：语言切换时更新模态框文本 ---
+             
                 updateModalTexts();
-                // --- 新增结束 ---
+          
 
-                updateDonateModalTexts(); // - 新增 -
-                updateQrModalTexts(document.querySelector('#qrAmountValue')?.textContent?.split(' ')[0] || '0.00'); // - 新增 (尝试保持当前金额显示) -
-                // - 新增结束 -
+                updateDonateModalTexts(); -
+                updateQrModalTexts(document.querySelector('#qrAmountValue')?.textContent?.split(' ')[0] || '0.00'); 
+          
 
-                // 更新用户信息显示区域的按钮文字 (如果已登录)
+                
                 if (currentUser) {
                     document.getElementById('loginBtnNav').querySelector('.btn-text').textContent = currentUser.username;
                 }
@@ -2970,20 +2907,20 @@
                 localStorage.removeItem('chat_session_id');
 
 
-                // --- 修改：清除聊天记录并从 localStorage 中移除 ---
+           
                 chatMessages.innerHTML = '';
                 try {
-                    localStorage.removeItem('aliceskygarden_chat_history'); // 关键修改
+                    localStorage.removeItem('aliceskygarden_chat_history'); 
                 } catch (e) {
                     console.error("Error removing chat history from localStorage:", e);
                 }
-                // --- 修改结束 ---
+          
 
 
-                // 3. 添加新的初始欢迎消息
+            
                 const newInitialMessage = document.createElement('div');
                 newInitialMessage.classList.add('message', 'bot-message');
-                // newInitialMessage.id = 'initialMessage'; // 可选：添加ID
+            
                 newInitialMessage.innerHTML = isEnglish ?
                     "History cleared. New session started. <br>I am AliceSkyGarden Super LLM 😊 Mixed Qwen3 randomly launch, how to assist you? 😊<br><br>Now evolved into Multimodal Model: Supporting images, PDF, Word, tables, scripts, web pages, etc files input😊" :
                     "历史已清除，开始新会话。<br>我是 AliceSkyGarden 超级模型 😊 与 Qwen3 一起随机上线，有什么可以帮你吗？😊<br><br>现已进化成多模态模型：支持图片, PDF, Word, 表格, 脚本, 网页等文件输入😊";
@@ -2994,7 +2931,7 @@
             const chatMessages = document.getElementById('chatMessages');
             const userInput = document.getElementById('userInput');
             const sendButton = document.getElementById('sendButton');
-            const API_URL = `${API_BASE_URL}/invoke`; // 使用新的API端点
+            const API_URL = `${API_BASE_URL}/invoke`; 
             imageInput.addEventListener('change', function() {
                 const files = Array.from(imageInput.files);
                 if (files.length > 0) {
@@ -3103,14 +3040,14 @@
                 chatMessages.appendChild(messageDiv);
                 smartScroll();
 
-                // --- 新增：保存聊天记录到 localStorage ---
+          
                 try {
                     localStorage.setItem('aliceskygarden_chat_history', chatMessages.innerHTML);
                 } catch (e) {
                     console.error("Error saving chat history to localStorage:", e);
-                    // 可选：如果存储失败（如空间不足），可以 alert 用户或采取其他措施
+                    
                 }
-                // --- 新增结束 ---
+              
 
                 return messageDiv;
             }
@@ -3163,13 +3100,13 @@
                             chatMessages.classList.add('expanded');
                         }
 
-                        // --- 新增：在打字动画完成后保存聊天记录 ---
+             
                         try {
                             localStorage.setItem('aliceskygarden_chat_history', chatMessages.innerHTML);
                         } catch (e) {
                             console.error("Error saving chat history to localStorage after bot reply:", e);
                         }
-                        // --- 新增结束 ---
+              
 
                     }
                 }
@@ -3179,35 +3116,25 @@
                 const message = userInput.value.trim();
                 const imagesToSend = [...selectedImages];
                 const filesToSend = [...selectedFiles];
-                // --- 修改逻辑：移除前端强制登录检查，允许未登录发送消息 ---
-                // if (!currentUser) {
-                //     alert(isEnglish ? "请先登录以发送消息。" : "Please log in to send a message.");
-                //     openLoginModal();
-                //     return; // 阻止发送
-                // }
-                // --- 修改逻辑结束 ---
 
 
-                // --- 新增：检查是否处于图片生成模式 ---
                 if (isImageGenMode) {
                     if (!message) {
                          alert(isEnglish ? "请输入图片描述。" : "Please enter a description for the image.");
                          return;
                     }
 
-
-                    // --- 新增：在开始生成流程前保存用户输入 ---
-                    const userPrompt = message; // 保存用户输入的描述文字
-                    // --- 新增结束 ---
-
-                    // --- 新增：在启动图片生成流程前清空输入框 ---
+  
+                    const userPrompt = message; 
+           
+            
                     userInput.value = '';
-                    // --- 新增结束 ---
+           
 
-                    showTyping(); // 显示“正在连接”指示器
+                    showTyping(); 
                     sendButton.disabled = true;
 
-                    // 先在聊天区域显示用户输入的提示词
+               
                     const promptMessageDiv = document.createElement('div');
                     promptMessageDiv.classList.add('message', 'user-message');
                     promptMessageDiv.innerHTML = `<p>${isEnglish ? 'Generating image for:' : '正在为以下内容生成图片：'}</p><p><em>${message}</em></p>`;
@@ -3215,14 +3142,14 @@
                     smartScroll();
 
                     try {
-                        // 调用新的后端图片生成端点 (异步)
+               
                         const response = await fetch(`${API_BASE_URL}/generate_image_async`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${userToken}` // 携带 JWT Token 进行身份和权限验证
+                                'Authorization': `Bearer ${userToken}` 
                             },
-                            body: JSON.stringify({ prompt: message }) // 发送图片描述
+                            body: JSON.stringify({ prompt: message }) 
                         });
 
                         if (!response.ok) {
@@ -3234,10 +3161,9 @@
                         const taskId = data.task_id;
 
                         if (taskId) {
-                            console.log("Image generation task started with ID:", taskId);
-
-                            // 开始轮询获取结果
-                            pollForImage(taskId, promptMessageDiv, userPrompt); // 将描述传给 pollForImage
+       
+                       
+                            pollForImage(taskId, promptMessageDiv, userPrompt); 
                         } else {
                             throw new Error(isEnglish ? "Failed to get task ID from backend." : "无法从后端获取任务ID。");
                         }
@@ -3248,9 +3174,9 @@
                         promptMessageDiv.innerHTML += `<br><span style="color: red;">${isEnglish ? 'Error initiating image generation:' : '启动图片生成时出错:'} ${error.message}</span>`;
                         sendButton.disabled = false;
                     }
-                    return; // 处理完图片生成后，不再执行普通消息发送逻辑
+                    return; 
                 }
-                // --- 修改结束：图片生成逻辑 ---
+        
 
 
                 if (!message && imagesToSend.length === 0 && filesToSend.length === 0) return;
@@ -3278,21 +3204,21 @@
                             formData.append('file', file, file.name);
                         });
                         requestBody = formData;
-                        delete headers['Content-Type']; // 让浏览器设置 multipart/form-data
+                        delete headers['Content-Type']; 
                     } else {
                         requestBody = JSON.stringify({
                             message: message
                         });
                         headers['Content-Type'] = 'application/json';
                     }
-                    // --- 修改 fetch 调用以包含 Cookie/Session ---
+                 
                     const response = await fetch(API_URL, {
                         method: 'POST',
                         headers: headers,
                         body: requestBody,
-                        credentials: 'include' // 重要：携带 Cookie/Session
+                        credentials: 'include' 
                     });
-                    // --- 修改结束 ---
+                
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
@@ -3348,19 +3274,19 @@
             });
             smartScroll();
 
-            // --- 新增：页面加载时恢复聊天记录 ---
+     
             function restoreChatHistory() {
                 try {
                     const savedHistory = localStorage.getItem('aliceskygarden_chat_history');
                     if (savedHistory) {
                         chatMessages.innerHTML = savedHistory;
-                        // 恢复后滚动到底部
+                       
                         chatMessages.scrollTop = chatMessages.scrollHeight;
                     } else {
                     }
                 } catch (e) {
                     console.error("Error restoring chat history from localStorage:", e);
-                    // 如果恢复失败，清空聊天区域，确保是干净的初始状态
+               
                     chatMessages.innerHTML = '';
                     const newInitialMessage = document.createElement('div');
                     newInitialMessage.classList.add('message', 'bot-message');
@@ -3371,9 +3297,9 @@
                     chatMessages.appendChild(newInitialMessage);
                 }
             }
-            // 调用恢复函数
+        
             restoreChatHistory();
-            // --- 新增结束 ---
+        
 
         });
     </script>
