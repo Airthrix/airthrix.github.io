@@ -737,6 +737,7 @@
             max-width: 400px;
             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); 
             animation: scaleInFade 0.3s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+            backdrop-filter: blur(5px);
             position: relative;
             /* 添加发光边框效果 - 渐变绿色 */
             position: relative;
@@ -1105,10 +1106,10 @@
           100% {
             /* 最终碎片化并消失 */
             clip-path: polygon(
-              20% 10%, 40% 5%, 60% 10%, 80% 5%,
-              90% 30%, 95% 50%, 90% 70%, 80% 90%,
-              60% 95%, 40% 90%, 20% 95%, 10% 70%,
-              5% 50%, 10% 30%
+              0% 0%, 0% 0%, 0% 0%, 0% 0%,
+              0% 0%, 0% 0%, 0% 0%, 0% 0%,
+              0% 0%, 0% 0%, 0% 0%, 0% 0%,
+              0% 0%, 0% 0%
             );
             transform: scale(1.5);
             opacity: 0;
