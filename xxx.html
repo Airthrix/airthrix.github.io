@@ -1281,7 +1281,7 @@
         <div class="bubble-modal-content">
             <span class="bubble-close">&times;</span>
             <div class="bubble-modal-header">
-                <h2 id="loginModalTitle">登录</h2>
+                <h2 id="loginModalTitle">登录AliceSkyGarden</h2>
             </div>
             <div class="bubble-modal-body">
                 <div class="form-group">
@@ -1307,7 +1307,7 @@
         <div class="bubble-modal-content">
             <span class="bubble-close">&times;</span>
             <div class="bubble-modal-header">
-                <h2 id="registerModalTitle">注册</h2>
+                <h2 id="registerModalTitle">注册AliceSkyGarden</h2>
             </div>
             <div class="bubble-modal-body">
                 <div class="form-group">
@@ -1338,7 +1338,6 @@
                             <option value="+48">+48 (波兰)</option>
                             <option value="+64">+64 (新西兰)</option>
                             <option value="+1">+1 (加拿大)</option>
-                            <option value="+86">+86 (中国)</option>
                             <option value="+30">+30 (希腊)</option>
                             <option value="+299">+299 (格陵兰)</option>
                             <option value="+852">+852 (香港)</option>
@@ -1830,7 +1829,15 @@
 
             function clearRegisterModalState() {
                 document.getElementById('registerUsername').value = '';
-                document.getElementById('registerCountryCode').value = '+86'; // 重置为默认值
+                // --- 修改开始 ---
+                // 确保国家代码下拉框重置为默认选项 (+86)
+                const countryCodeSelect = document.getElementById('registerCountryCode');
+                if (countryCodeSelect && countryCodeSelect.options.length > 0) {
+                    countryCodeSelect.selectedIndex = 0; // 选中第一个选项，即 +86 (中国)
+                }
+                // --- 修改结束 ---
+                // document.getElementById('registerCountryCode').value = '+86'; // 旧的重置方式（已注释）
+
                 document.getElementById('registerPhone').value = '';
                 document.getElementById('registerPassword').value = '';
                 document.getElementById('registerConfirmPassword').value = '';
@@ -2580,8 +2587,8 @@
             // --- 新增：语言切换时更新模态框内的标签和链接文字 ---
             function updateModalTexts() {
                 if (isEnglish) {
-                    loginModalTitle.textContent = "Login AliceSkyGarden Account";
-                    registerModalTitle.textContent = "Register AliceSkyGarden Account";
+                    loginModalTitle.textContent = "Login AliceSkyGarden";
+                    registerModalTitle.textContent = "Register AliceSkyGarden";
                     showRegisterLinkText.textContent = "Register Now";
                     if(showLoginLinkText) showLoginLinkText.textContent = "Login Now";
                     loginUsernameLabel.textContent = "Username:";
@@ -2593,8 +2600,8 @@
                     profileModalTitle.textContent = "Profile";
                     logoutBtnProfileText.textContent = "Logout";
                 } else {
-                    loginModalTitle.textContent = "登录AliceSkyGarden账号";
-                    registerModalTitle.textContent = "注册AliceSkyGarden账号";
+                    loginModalTitle.textContent = "登录AliceSkyGarden";
+                    registerModalTitle.textContent = "注册AliceSkyGarden";
                     showRegisterLinkText.textContent = "立即注册";
                     if(showLoginLinkText) showLoginLinkText.textContent = "立即登录";
                     loginUsernameLabel.textContent = "用户名:";
