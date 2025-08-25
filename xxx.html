@@ -570,7 +570,7 @@
             width: 80%;
             max-width: 400px;
             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-            animation: modalopen 0.4s;
+            animation: scaleInFade 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; /* 应用新的动画，使用贝塞尔曲线增加弹性 */
             backdrop-filter: blur(5px);
             position: relative;
             /* 添加发光边框效果 - 渐变绿色 */
@@ -1051,6 +1051,19 @@
             padding: 0 5px;
         }
         /* - 修改结束 - */
+
+
+        /* 新增：手机App风格的模态框打开动画 - 从中心缩放淡入 */
+        @keyframes scaleInFade {
+          0% {
+            transform: scale(0.7);
+            opacity: 0;
+          }
+          100% {
+            transform: scale(1);
+            opacity: 1;
+          }
+        }
 
 
 
@@ -2473,7 +2486,7 @@
                     if (alipayBtnText3) alipayBtnText3.textContent = "支付宝";
                     if (alipayBtnText4) alipayBtnText4.textContent = "支付宝";
                     if (donateInstructionText) donateInstructionText.textContent = "点击查看二维码，保存图片后在支付宝APP中扫描";
-                    if (donateNoteText) donateNoteText.textContent = "注意：捐款时请备注 用户名+手机号+邮箱(可不用)";
+                    if (donateNoteText) donateNoteText.textContent = "注意：捐款时请备注 用户名+手机号+(可不用)邮箱";
                 }
             }
     
