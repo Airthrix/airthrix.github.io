@@ -1535,7 +1535,7 @@
             let currentUser = null; // 用于存储当前登录用户信息
             let userToken = null; // 用于存储从后端获取的 JWT Token
             // --- 新增：API基础URL (请根据你的后端部署地址修改) ---
-            const API_BASE_URL = 'https://test-ffdbgoedhy.cn-hongkong.fcapp.run';
+            const API_BASE_URL = 'https://aliceskygarden-fxrfxmvaow.cn-hongkong.fcapp.run';
             // --- 新增结束 ---
             // --- 新增：用于本地存储的 JWT Token Key ---
             const JWT_TOKEN_KEY = 'jwt_token_aliceskygarden';
@@ -2994,7 +2994,6 @@
             const chatMessages = document.getElementById('chatMessages');
             const userInput = document.getElementById('userInput');
             const sendButton = document.getElementById('sendButton');
-            // const API_URL = 'https://test-ffdbgoedhy.cn-hongkong.fcapp.run'; // 原始API URL
             const API_URL = `${API_BASE_URL}/invoke`; // 使用新的API端点
             imageInput.addEventListener('change', function() {
                 const files = Array.from(imageInput.files);
