@@ -2592,8 +2592,6 @@
                     profileModalTitle.textContent = "Profile";
                     logoutBtnProfileText.textContent = "Logout";
 
-                    clearRegisterModalState();
-
                 } else {
                     loginModalTitle.textContent = "登录AliceSkyGarden";
                     registerModalTitle.textContent = "注册AliceSkyGarden";
@@ -2608,9 +2606,85 @@
                     profileModalTitle.textContent = "个人中心";
                     logoutBtnProfileText.textContent = "登出";
 
-                    clearRegisterModalState();
-
                 }
+
+
+        
+
+                // --- 强制修复：国家代码下拉框在语言切换后变空的问题 (通过重建选项) ---
+                const registerCountryCodeSelect = document.getElementById('registerCountryCode');
+                if (registerCountryCodeSelect) {
+                    // 1. 保存或设定要选中的值 (我们强制设为默认 "+86")
+                    const valueToSelect = "+86";
+
+                    // 2. 清空现有的所有选项
+                    registerCountryCodeSelect.innerHTML = '';
+
+                    // 3. 重新创建并添加选项 (使用您HTML中已有的选项数据)
+                    //    注意：HTML中有两个+86和+1，这里只保留一个实例，避免歧义
+                    const optionsData = [
+                        { value: "+86", label: "+86 (中国)" },
+                        { value: "+1", label: "+1 (美国)" },
+                        { value: "+44", label: "+44 (英国)" },
+                        { value: "+82", label: "+82 (韩国)" },
+                        { value: "+65", label: "+65 (新加坡)" },
+                        { value: "+61", label: "+61 (澳大利亚)" },
+                        { value: "+33", label: "+33 (法国)" },
+                        { value: "+49", label: "+49 (德国)" },
+                        { value: "+39", label: "+39 (意大利)" },
+                        { value: "+55", label: "+55 (巴西)" },
+                        { value: "+34", label: "+34 (西班牙)" },
+                        { value: "+31", label: "+31 (荷兰)" },
+                        { value: "+46", label: "+46 (瑞典)" },
+                        { value: "+47", label: "+47 (挪威)" },
+                        { value: "+45", label: "+45 (丹麦)" },
+                        { value: "+358", label: "+358 (芬兰)" },
+                        { value: "+48", label: "+48 (波兰)" },
+                        { value: "+64", label: "+64 (新西兰)" },
+                        { value: "+1", label: "+1 (加拿大)" },
+                        { value: "+30", label: "+30 (希腊)" },
+                        { value: "+299", label: "+299 (格陵兰)" },
+                        { value: "+852", label: "+852 (香港)" },
+                        { value: "+36", label: "+36 (匈牙利)" },
+                        { value: "+354", label: "+354 (冰岛)" },
+                        { value: "+353", label: "+353 (爱尔兰)" },
+                        { value: "+44", label: "+44 (马恩岛)" },
+                        { value: "+972", label: "+972 (以色列)" },
+                        { value: "+853", label: "+853 (澳门)" },
+                        { value: "+377", label: "+377 (摩纳哥)" },
+                        { value: "+41", label: "+41 (瑞士)" },
+                        { value: "+90", label: "+90 (土耳其)" },
+                        { value: "+379", label: "+379 (梵蒂冈)" }
+                    ];
+
+                    let selectedIndex = -1; // 记录默认选项的索引
+                    optionsData.forEach((optData, index) => {
+                        const optionElement = document.createElement('option');
+                        optionElement.value = optData.value;
+                        optionElement.textContent = optData.label;
+                        if (optData.value === valueToSelect) {
+                            optionElement.selected = true;
+                            selectedIndex = index; // 记录索引
+                        }
+                        registerCountryCodeSelect.appendChild(optionElement);
+                    });
+
+                    // 4. (可选但推荐) 如果上面的 selected 没有生效，再强制设置一次 selectedIndex
+                    if (selectedIndex !== -1) {
+                        registerCountryCodeSelect.selectedIndex = selectedIndex;
+                    }
+
+                    // 5. (可选) 为了确保 UI 和事件监听器正确更新，强制触发一次 'change' 事件
+                    // registerCountryCodeSelect.dispatchEvent(new Event('change'));
+                    console.log("[DEBUG] Register country code dropdown rebuilt and +86 selected.");
+                } else {
+                    console.warn("[DEBUG] registerCountryCode element not found during rebuild.");
+                }
+                // --- 强制修复结束 ---
+
+
+
+
             }
             // --- 新增结束 ---
 
