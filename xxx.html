@@ -1434,8 +1434,8 @@
                             </button>
                         </li>
                     </ul>
-                    <p class="donate-instruction" id="donateInstructionText">Click "Alipay" to view the QR code, save it, and pay via Alipay app.</p>
-                    <p class="donate-note" id="donateNoteText">Note: Please ensure the payment amount is correct.</p>
+                    <p class="donate-instruction" id="donateInstructionText">Click to view the QR code, save and pay via Alipay app</p>
+                    <p class="donate-note" id="donateNoteText">Note: Please ensure the payment amount is correct</p>
                 </div>
             </div>
         </div>
@@ -1451,7 +1451,7 @@
                     <p id="qrAmountLabel">Amount:</p>
                     <p id="qrAmountValue" class="qr-amount-value">0.00 RMB</p>
                     <img id="qrImage" src="" alt="Alipay QR Code" class="qr-image">
-                    <p class="qr-instruction" id="qrInstructionText">Save this image and open it in Alipay app to scan and pay.</p>
+                    <p class="qr-instruction" id="qrInstructionText">Save this image and open it in Alipay app to scan and pay</p>
                 </div>
             </div>
         </div>
@@ -2256,11 +2256,11 @@
 
                 // 安全地更新标签文字
                 if (imageCountLabel && imageCountLabel.childNodes && imageCountLabel.childNodes.length > 0) {
-                    imageCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining  HD-Image  Generations: " : "剩余生成 HD超清图片 次数: ";
+                    imageCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining HD-Image Generate: " : "剩余生成 HD超清图片 次数: ";
                 }
-                if (pptCountLabel) pptCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining  PPT-File  Generations: " : "剩余生成 PPT文件 次数: ";
-                if (wordCountLabel) wordCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining  Word-File  Generations: " : "剩余生成 Word文件 次数: ";
-                if (pdfCountLabel) pdfCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining  PDF-File  Generations: " : "剩余生成 PDF文件 次数: ";
+                if (pptCountLabel) pptCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining PPT-File Generate: " : "剩余生成 PPT文件 次数: ";
+                if (wordCountLabel) wordCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining Word-File Generate: " : "剩余生成 Word文件 次数: ";
+                if (pdfCountLabel) pdfCountLabel.childNodes[0].nodeValue = isEnglish ? "Remaining PDF-File Generate: " : "剩余生成 PDF文件 次数: ";
             }
             // - 新增结束：更新用户次数显示的函数 -
 
@@ -2473,8 +2473,8 @@
                     if (alipayBtnText2) alipayBtnText2.textContent = "支付宝";
                     if (alipayBtnText3) alipayBtnText3.textContent = "支付宝";
                     if (alipayBtnText4) alipayBtnText4.textContent = "支付宝";
-                    if (donateInstructionText) donateInstructionText.textContent = "点击支付宝查看二维码，保存图片后在支付宝APP中打开扫描";
-                    if (donateNoteText) donateNoteText.textContent = "注意：捐款时请备注 用户名+手机号+邮箱(若无邮箱可不用)";
+                    if (donateInstructionText) donateInstructionText.textContent = "点击查看二维码，保存图片后在支付宝APP中打开扫描";
+                    if (donateNoteText) donateNoteText.textContent = "注意：捐款时请备注 用户名+手机号+邮箱(可不用)";
                 }
             }
     
@@ -2493,7 +2493,7 @@
                     if (qrModalTitle) qrModalTitle.textContent = "支付宝二维码";
                     if (qrAmountLabel) qrAmountLabel.textContent = "金额:";
                     // qrAmountValue 在 openQrModal 中设置
-                    if (qrInstructionText) qrInstructionText.textContent = "保存此图片并在支付宝APP中打开扫描支付。";
+                    if (qrInstructionText) qrInstructionText.textContent = "保存此图片并在支付宝APP中打开扫描支付";
                 }
             }
 
@@ -2580,8 +2580,8 @@
             // --- 新增：语言切换时更新模态框内的标签和链接文字 ---
             function updateModalTexts() {
                 if (isEnglish) {
-                    loginModalTitle.textContent = "Login";
-                    registerModalTitle.textContent = "Register";
+                    loginModalTitle.textContent = "Login AliceSkyGarden Account";
+                    registerModalTitle.textContent = "Register AliceSkyGarden Account";
                     showRegisterLinkText.textContent = "Register Now";
                     if(showLoginLinkText) showLoginLinkText.textContent = "Login Now";
                     loginUsernameLabel.textContent = "Username:";
@@ -2593,8 +2593,8 @@
                     profileModalTitle.textContent = "Profile";
                     logoutBtnProfileText.textContent = "Logout";
                 } else {
-                    loginModalTitle.textContent = "登录";
-                    registerModalTitle.textContent = "注册";
+                    loginModalTitle.textContent = "登录AliceSkyGarden账号";
+                    registerModalTitle.textContent = "注册AliceSkyGarden账号";
                     showRegisterLinkText.textContent = "立即注册";
                     if(showLoginLinkText) showLoginLinkText.textContent = "立即登录";
                     loginUsernameLabel.textContent = "用户名:";
