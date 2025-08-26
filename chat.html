@@ -3024,29 +3024,17 @@
                     typingIndicator.remove();
                 }
             }
-            function typeWriter(messageDiv, fullText, speed = 1) {
+            function typeWriter(messageDiv, fullText, speed = 10) {
                 let i = 0;
                 const typingCursor = document.createElement('span');
                 typingCursor.classList.add('typing-cursor');
                 messageDiv.appendChild(typingCursor);
-                // --- 关键：预先创建并设置最终内容 ---
-                // 创建一个容器来存放完整的 HTML，避免 innerHTML = substring 的问题
-                const contentContainer = document.createElement('div');
-                contentContainer.innerHTML = fullText; // 一次性设置完整、正确的 HTML
-                messageDiv.appendChild(contentContainer);
-                contentContainer.style.visibility = 'hidden'; // 先隐藏
-                contentContainer.style.position = 'absolute'; // 脱离文档流
-                // --- 关键结束 ---
                 const textContainer = document.createElement('div');
                 messageDiv.appendChild(textContainer);
-
                 function type() {
                     if (i < fullText.length) {
-                        // --- 关键优化点：使用 textContent 显示纯文本片段 ---
-                        // 这样可以确保在打字过程中只显示纯文本，避免 HTML 解析问题
-                        textContainer.textContent = fullText.substring(0, i + 1);
-                        // --- 关键优化点结束 ---
-                        messageDiv.appendChild(typingCursor); // 确保光标在最后
+                        textContainer.innerHTML = fullText.substring(0, i + 1);
+                        messageDiv.appendChild(typingCursor);
                         i++;
                         const isNearBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight <= 100;
                         if (isNearBottom) {
@@ -3055,13 +3043,7 @@
                         setTimeout(type, speed);
                     } else {
                         typingCursor.remove();
-                        // --- 关键优化点：打字结束后显示完整格式化内容 ---
-                        // 移除临时的文本容器
-                        textContainer.remove();
-                        // 显示预先准备好的完整 HTML 容器
-                        contentContainer.style.visibility = ''; // 恢复可见性
-                        contentContainer.style.position = ''; // 恢复正常文档流
-                        // --- 关键优化点结束 ---
+                        messageDiv.innerHTML = fullText;
                         if (chatMessages.scrollHeight > chatMessages.clientHeight + 50) {
                             chatMessages.classList.add('expanded');
                         }
