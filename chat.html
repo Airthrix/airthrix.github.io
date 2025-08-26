@@ -3019,7 +3019,7 @@
                     typingIndicator.remove();
                 }
             }
-            function typeWriter(messageDiv, fullText, speed = 1) {
+            function typeWriter(messageDiv, fullText, speed = 3) {
                 let i = 0;
                 const typingCursor = document.createElement('span');
                 typingCursor.classList.add('typing-cursor');
@@ -3029,7 +3029,7 @@
                 function type() {
                     if (i < fullText.length) {
                         textContainer.innerHTML = fullText.substring(0, i + 1);
-
+                        messageDiv.appendChild(typingCursor);
                         i++;
                         const isNearBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight <= 100;
                         if (isNearBottom) {
