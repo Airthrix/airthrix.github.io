@@ -45,14 +45,6 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-        #particles-js {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 0;
-        }
         .glow {
             position: absolute;
             border-radius: 50%;
@@ -1259,7 +1251,6 @@
     </style>
 </head>
 <body>
-    <div id="particles-js"></div>
     <div class="glow glow-blue"></div>
     <div class="glow glow-purple"></div>
     <div class="grid-overlay"></div>
@@ -1503,7 +1494,6 @@
                 </div>
             </div>
         </div>
-    <script src="https://hk-alice-file.oss-cn-hongkong.aliyuncs.com/particles.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let scrollLock = false;
@@ -1518,34 +1508,6 @@
             const API_BASE_URL = 'https://aliceskygarden-fxrfxmvaow.cn-hongkong.fcapp.run';
 
             const JWT_TOKEN_KEY = 'jwt_token_aliceskygarden';
-
-            particlesJS('particles-js', {
-                "particles": {
-                    "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
-                    "color": { "value": "#00f3ff" },
-                    "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" } },
-                    "opacity": { "value": 0.5, "random": true, "anim": { "enable": true, "speed": 1, "opacity_min": 0.1, "sync": false } },
-                    "size": { "value": 3, "random": true, "anim": { "enable": true, "speed": 2, "size_min": 0.3, "sync": false } },
-                    "line_linked": { "enable": true, "distance": 150, "color": "#00f3ff", "opacity": 0.4, "width": 1 },
-                    "move": { "enable": true, "speed": 2, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": true, "rotateX": 600, "rotateY": 1200 } }
-                },
-                "interactivity": {
-                    "detect_on": "canvas",
-                    "events": {
-                        "onhover": { "enable": true, "mode": "grab" },
-                        "onclick": { "enable": true, "mode": "push" },
-                        "resize": true
-                    },
-                    "modes": {
-                        "grab": { "distance": 140, "line_linked": { "opacity": 1 } },
-                        "push": { "particles_nb": 4 }
-                    }
-                },
-                "retina_detect": true
-
-            });
-
-
 
 
             const generateImageBtn = document.getElementById('generateImageBtn');
