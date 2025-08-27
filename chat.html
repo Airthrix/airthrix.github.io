@@ -32,7 +32,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(270deg, #0a0a2e, #1a0a2e, #2d0b45, #4d0099, #1a0a2e);
             background-size: 600% 600%;
-            animation: gradientBG 12s ease infinite;
+            animation: gradientBG 15s ease infinite;
             color: #e0e0ff;
             min-height: 100vh;
             overflow-x: hidden;
@@ -42,10 +42,10 @@
         }
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
-            25% { background-position: 100% 50%; }
-            50% { background-position: 0% 50%; }
+            33.33% { background-position: 100% 50%; }
+            66.66% { background-position: 0% 50%; }
             100% { background-position: 100% 50%; }
-        } 
+        }
         .glow {
             position: absolute;
             border-radius: 50%;
@@ -293,14 +293,14 @@
             margin-bottom: 1.5rem;
             text-align: center;
             color: var(--neon-blue);
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
         .chat-messages {
             min-height: 600px;
             max-height: 99999999999999999999999999999px;
             overflow-y: auto;
             padding: 1rem;
-            background: rgba(10, 10, 25, 0.05);
+            background: rgba(10, 10, 25, 0.3);
             border-radius: 10px;
             margin-bottom: 1rem;
             display: flex;
@@ -335,7 +335,6 @@
             position: relative;
             overflow: hidden;
             font-size: 1rem;
-            background: rgba(15, 15, 40, 0.05);
         }
         .agreement-notice {
             text-align: center;
@@ -439,7 +438,7 @@
             padding-right: 1rem;
             border-radius: 30px;
             border: 1px solid rgba(0, 243, 255, 0.3);
-            background: rgba(10, 10, 25, 0.1);
+            background: rgba(10, 10, 25, 0.5);
             color: #e0e0ff;
             font-size: 1rem;
             resize: none;
