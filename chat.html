@@ -3026,8 +3026,9 @@
                     typingIndicator.remove();
                 }
             }
-            function typeWriter(messageDiv, fullText, speed = 0.1) {
+            function typeWriter(messageDiv, fullText, speed = 0.01) {
                 let i = 0;
+                const chunkSize = 5; 
                 const typingCursor = document.createElement('span');
                 typingCursor.classList.add('typing-cursor');
                 messageDiv.appendChild(typingCursor);
@@ -3035,9 +3036,9 @@
                 messageDiv.appendChild(textContainer);
                 function type() {
                     if (i < fullText.length) {
-                        textContainer.innerHTML = fullText.substring(0, i + 1);
+                        textContainer.innerHTML = fullText.substring(0, i + chunkSize);
                         messageDiv.appendChild(typingCursor);
-                        i++;
+                        i += chunkSize;
                         const isNearBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight <= 100;
                         if (isNearBottom) {
                             chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -3256,6 +3257,7 @@
     </script>
 </body>
 </html>
+
 
 
 
