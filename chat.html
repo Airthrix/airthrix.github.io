@@ -3042,7 +3042,7 @@
                         if (isNearBottom) {
                             chatMessages.scrollTop = chatMessages.scrollHeight;
                         }
-                        setTimeout(type, speed);
+                        requestAnimationFrame(type);
                     } else {
                         typingCursor.remove();
                         messageDiv.innerHTML = fullText;
@@ -3256,4 +3256,5 @@
     </script>
 </body>
 </html>
+
 
